@@ -1,0 +1,28 @@
+
+<app-select [objectName]="'Client'" [ObjectPropName]="'name'" [myList]="myList"  [initObj]="cli1" [objCaller]="this" onChangeCaller="onChange"  ></app-select> <p></p>
+
+<app-select [objectName]="'Client'" [ObjectPropName]="'name'" [myList]="myList"  [initObj]="cli2"  ></app-select> <p></p>
+
+<app-select [objectName]="'Client'" [ObjectPropName]="''" [myList]="myListStr"  [initObj]="cliStr2"  ></app-select> <p></p>
+
+<app-select [myList]="myListStr"  [initObj]="cliStr1"  ></app-select> <p></p>
+
+<app-select [myList]="myListStr" ></app-select> <p></p>
+
+--------------
+
+  cli1: Client = new Client("cli1", "desc1")
+  cli2: Client = new Client("cli2", "desc2")
+  myList : any = [this.cli1, this.cli2];
+
+  cliStr1: string = "cli str 1"
+  cliStr2: string = "cli str 2"
+  myListStr : any = [this.cliStr1, this.cliStr2];
+
+  objSel:any;
+
+  onChange(objSel: Client) {
+    //////////console.log("main onChange", objSel);
+  }
+
+  

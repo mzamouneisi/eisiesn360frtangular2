@@ -1,0 +1,25 @@
+<p>
+<b>{{title}} (max size={{sizeMax}})</b> 
+<input type="file" id="file" (change)="selectFile($event)" class="btn" #input>
+<span *ngIf="isError" class="alert-danger" > 
+	TODO There error 
+</span>
+<span *ngIf="isError" class="alert-success" > 
+	 DONE J'ai modifié le type du fichier vers TEXT avec l'annotation @Lob à la place de LONGTEXT (Class Back-end)
+</span>
+  
+  <table *ngIf="files && files.length>0" >
+  		<th> Name </th> <th> Size (oct) </th> <th> Date </th> <th> Image </th>  
+  		<th> Show <button (click)="showAllImg()" >All</button>  </th> 
+  		<th> Delete </th> 
+  		
+	   <tr *ngFor="let f of files; let i = index">
+	     <td> {{f.name}} </td> 
+	     <td> {{f.size}} </td>
+	     <td> {{f.dateFile | date : 'dd/MM/yyyy hh:mm:ss'}} </td>
+	     <td> <img src="" height="150" width="200" alt="Aperçu de l’image..." id="{{getImgId(i)}}" > </td>
+	     <td class="center"> <button (click)="selectImg(i)" > \/ </button> </td>
+	     <td class="center"> <button (click)="delete(i)" >X</button> </td> 
+	   </tr>
+	</table>
+  

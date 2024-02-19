@@ -1,0 +1,10 @@
+#myModal {
+    top: 50%;
+    margin: 0 auto;
+
+}
+
+.font_size_large {
+    margin-left: 10px;
+    font-size: large;
+}

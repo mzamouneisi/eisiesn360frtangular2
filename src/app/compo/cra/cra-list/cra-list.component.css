@@ -1,0 +1,36 @@
+.active {
+    border:3px solid black; 
+ }
+
+ .inactive {
+    border:0px solid black; 
+ }
+
+ .left {
+	float: left;
+	/* width: 100%; */
+	text-align: center;
+	/* border: 1px solid black; */
+}
+
+.right {
+	float: right;
+	/* width: 100%; */
+	text-align: right;
+	/* border: 1px solid black; */
+}
+
+.center {
+	float: center;
+	/* width: 100%; */
+	text-align: center;
+	/* border: 1px solid black; */
+}
+
+.bg-conge {
+	background: yellow;
+}
+
+
+
+

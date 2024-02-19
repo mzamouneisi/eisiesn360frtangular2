@@ -1,0 +1,75 @@
+.case {
+	width: 50px;
+	text-align: center;
+}
+.caseTitle {
+	min-width: 200px;
+	text-align: center;
+}
+.red {
+	background-color: darkgray;
+	color: crimson;
+	font-weight: bold;
+}
+
+.craDayActivity {
+	text-decoration: underline;
+	text-decoration-color: blue;
+	cursor: pointer;
+}
+
+.left {
+	float: left;
+	/* width: 100%; */
+	text-align: center;
+	/* border: 1px solid black; */
+}
+
+.right {
+	float: right;
+	/* width: 100%; */
+	text-align: right;
+	/* border: 1px solid black; */
+}
+
+.center {
+	float: center;
+	/* width: 100%; */
+	text-align: center;
+	/* border: 1px solid black; */
+}
+
+.holiday {
+	border: 1px solid red; 
+	color: crimson;
+	font-weight: bold;
+	width: 150px;
+}
+
+.conge {
+	background: yellow;
+}
+.free {
+	background: rgb(224, 222, 75);
+}
+
+.cal-cell-normal {
+		width: 150px;
+}
+
+ .event {
+      /* color: #fff !important; */
+/*       font-weight: bold;
+      text-decoration: none; */
+     width: 150px;
+  }
+  
+ .cal-cell {
+	width: 150px;
+} 
+
+.cal-cell-col {
+	border: 1px solid blue; 
+	width: 150px;
+}
+

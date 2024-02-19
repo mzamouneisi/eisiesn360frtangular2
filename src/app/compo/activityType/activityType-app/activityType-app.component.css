@@ -1,0 +1,20 @@
+.left {
+	float: left;
+	width: 45%;
+	text-align: center;
+	/* border: 1px solid black; */
+}
+
+.right {
+	float: right;
+	width: 45%;
+	text-align: center;
+	/* border: 1px solid black; */
+}
+
+.center {
+	float: center;
+	/* width: 100%; */
+	text-align: center;
+	/* border: 1px solid black; */
+}

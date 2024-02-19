@@ -1,0 +1,5 @@
+ Execute : git add . 
+........ 
+[develop fba6423] notification : showForm - affiche tjrs le 1er cra cliked npm install jw-angular-pagination : DONE
+ 13 files changed, 241 insertions(+), 142 deletions(-)
+ create mode 100644 showCra

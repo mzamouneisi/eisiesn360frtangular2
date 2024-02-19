@@ -1,0 +1,7 @@
+
+     <Host name="esn360" appBase="webapps" unpackWARs="true" autoDeploy="true">
+          <Context path="/esn360" docBase="d:/pgm/apache-tomcat-8.5.34/webapps/esn360">
+               <Valve className="org.apache.catalina.valves.rewrite.RewriteValve" />
+          </Context>
+     </Host>
+

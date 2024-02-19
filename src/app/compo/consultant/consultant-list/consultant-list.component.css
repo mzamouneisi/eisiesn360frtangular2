@@ -1,0 +1,12 @@
+caption {
+    padding: 10px;
+    caption-side: top;
+}
+
+.active {
+    border:3px solid black;
+ }
+
+ .inactive {
+    border:0px solid black;
+ }

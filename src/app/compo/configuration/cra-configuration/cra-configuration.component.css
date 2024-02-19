@@ -1,0 +1,10 @@
+
+.cal-cell-normal {
+  width: 150px;
+}
+.holiday {
+  border: 1px solid red;
+  color: crimson;
+  font-weight: bold;
+  width: 150px;
+}

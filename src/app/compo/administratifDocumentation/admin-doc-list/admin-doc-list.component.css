@@ -1,0 +1,20 @@
+.row {
+    display: flex;
+}
+
+.col1 {
+    flex: 1;
+    padding: 1em;
+    width: 650px;
+}
+.col2 {
+    flex: 1;
+    padding: 1em;
+    padding-left: 40%;
+}
+
+.add_new_document{
+    margin-left: -11px;
+    margin-bottom: 0px;
+    margin-top: -18px;
+}
