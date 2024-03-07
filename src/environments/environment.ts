@@ -13,7 +13,8 @@
 
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:8585/esn360/api',
+  apiUrl: 'https://eisicrasrvjava-1708093790794.azurewebsites.net/esn360/api',
+  //apiUrl: 'http://localhost:8585/esn360/api',
 };
 
 
