@@ -4,7 +4,7 @@
     "scripts": {
         "ng": "ng",
         "start": "ng serve --host 0.0.0.0 --disable-host-check",
-        "build": "export NODE_OPTIONS=--openssl-legacy-provider; ng build",
+        "build": "set NODE_OPTIONS=--openssl-legacy-provider; ng build",
         "watch": "ng build --watch --configuration development",
         "test": "ng test",
         "dev": "lite-server -c configs/lite-server.json --baseDir=dist/esn306",
