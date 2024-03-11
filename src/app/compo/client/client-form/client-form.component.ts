@@ -1,11 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {ClientService} from '../../../service/client.service';
-import {Client} from '../../../model/client';
-import {Address} from '../../../model/address';
-import {UtilsService} from 'src/app/service/utils.service';
-import { MereComponent } from '../../_utils/mere-component';
+import { Component, Input } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DataSharingService } from 'src/app/service/data-sharing.service';
+import { UtilsService } from 'src/app/service/utils.service';
+import { Address } from '../../../model/address';
+import { Client } from '../../../model/client';
+import { ClientService } from '../../../service/client.service';
+import { MereComponent } from '../../_utils/mere-component';
 
 @Component({
   selector: 'app-client-form',
@@ -55,11 +55,13 @@ export class ClientFormComponent extends MereComponent {
       if (clientP != null) this.myObj = clientP;
       else if (this.myObj == null) this.myObj = new Client();
     }
+    this.myObj.esn = this.getEsnCurrent();
   }
 
   onSubmit() {
     ////console.log(this.myObj);
     this.beforeCallServer("onSubmit");
+    this.myObj.esn = this.getEsnCurrent();
     this.clientService.save(this.myObj).subscribe(
       data => {
         this.afterCallServer("onSubmit", data)

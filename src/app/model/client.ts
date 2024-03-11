@@ -1,4 +1,5 @@
-import {Address} from "./address";
+import { Address } from "./address";
+import { Esn } from "./esn";
 
 export class Client {
 	  id: number;
@@ -12,4 +13,5 @@ export class Client {
     telResp: string;
     emailResp: string;
     comment: string;
+    esn: Esn;
 }
