@@ -62,7 +62,7 @@
 
     <div class="right" style="width: 50%;" *ngIf="nbCallServer == 0" >
 
-      <li class="list-inline-item"><a [routerLink]="['/client_form']" [queryParams]="{isAdd:true}" class="btn btn-info"
+      <li class="list-inline-item"><a id="addClient" [routerLink]="['/client_form']" [queryParams]="{isAdd:true}" class="btn btn-info"
         [appAuthorization]
         feature="CLIENT_MANAGEMENT"
         permission="CREATE">{{utils.tr('app.compo.client.list.table.action.add')}} Client</a></li>

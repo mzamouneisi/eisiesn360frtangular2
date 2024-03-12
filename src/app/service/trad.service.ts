@@ -229,7 +229,7 @@ export class TradService {
       "en": "Consultant Management",
     },
     "main.menu.navbar.navitem.activityType.title": {
-      "fr": "GestionType d'Activit\u00e9",
+      "fr": "Gestion Type d'Activit\u00e9",
       "en": "Activity Type Management",
     },
     "main.menu.navbar.navitem.activity.title": {

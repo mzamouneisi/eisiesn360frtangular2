@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy Node.js app to Azure Web App - esn360
+name: Build and deploy Node.js app to Azure Web App - Esn360web
 
 on:
   push:
@@ -56,7 +56,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'esn360'
+          app-name: 'Esn360web'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4F5E41E6C82843C9AFDDD72D2D988704 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_508061FB20E9442B854FFB09C6992A73 }}
           package: .

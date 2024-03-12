@@ -58,12 +58,12 @@
     </div>
     <div class="right" style="width: 50%;" *ngIf="nbCallServer == 0" >
 
-      <div style="float: right;"><a [routerLink]="['/cra_form']" [queryParams]="{isAdd:true,typeCra:'CONGE'}" class="btn btn-info bg-conge" [appAuthorization]
+      <div style="float: right;"><a id="addConge" [routerLink]="['/cra_form']" [queryParams]="{isAdd:true,typeCra:'CONGE'}" class="btn btn-info bg-conge" [appAuthorization]
         feature="CRA_MANAGEMENT"
         permission="CREATE">{{utils.tr("app.compo.cra.list.table.action.addConge")}}</a>
       </div>  
 
-      <div class="btn btn-info" style="float: right;" 
+      <div id="addCra" class="btn btn-info" style="float: right;" 
         [appAuthorization] feature="CRA_MANAGEMENT" permission="CREATE"
         (click)="addNewCra()"
       >

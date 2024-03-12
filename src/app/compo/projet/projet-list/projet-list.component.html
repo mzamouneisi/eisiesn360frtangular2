@@ -62,7 +62,7 @@
 
     <div class="right" style="width: 50%;" *ngIf="nbCallServer == 0" >
 
-      <li class="list-inline-item"><a [routerLink]="['/projet_form']" [queryParams]="{isAdd:true}" class="btn btn-info"
+      <li class="list-inline-item"><a id="addProject" [routerLink]="['/projet_form']" [queryParams]="{isAdd:true}" class="btn btn-info"
         [appAuthorization]
         feature="PROJECT_MANAGEMENT"
         permission="CREATE">{{utils.tr('app.compo.project.list.table.action.add')}}</a></li>
