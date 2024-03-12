@@ -1,0 +1,8 @@
+{
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/eb1c1199-52bd-496e-92b8-c6ac5a011a93/resourceGroups/EisiAngular/providers/Microsoft.Web/sites/esn360",
+    "appService.deploySubpath": "."
+}
