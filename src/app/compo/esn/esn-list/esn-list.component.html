@@ -82,7 +82,7 @@
 
     <div class="right" style="width: 50%;" *ngIf="nbCallServer == 0" >
 
-      <li class="list-inline-item"><a [routerLink]="['/esn_form']" [queryParams]="{isAdd:true}" class="btn btn-info"
+      <li class="list-inline-item"><a id="addEsn" [routerLink]="['/esn_form']" [queryParams]="{isAdd:true}" class="btn btn-info"
         [appAuthorization]
         feature="ESN_MANAGEMENT"
         permission="CREATE">{{utils.tr('app.compo.esn.list.table.action.add')}}</a></li>     

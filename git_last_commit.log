@@ -1,0 +1,17 @@
+
+[main 4f1dba4] debogage
+ 14 files changed, 567 insertions(+), 366 deletions(-)
+  rewrite angular.json (97%)
+   create mode 100755 angular_copy.json
+    create mode 100644 copy_all.tmp.sh
+     create mode 100755 copy_to_github.sh
+      rewrite karma.conf.js (92%)
+       rewrite package.json (99%)
+        rewrite src/app/layout/header/header.component.html (91%)
+	remote:
+	remote: GitHub found 82 vulnerabilities on mzamouneisi/eisiesn360frtangular2's default branch (11 critical, 42 high, 27 moderate, 2 low). To find out more, visit:
+	remote:      https://github.com/mzamouneisi/eisiesn360frtangular2/security/dependabot
+	remote:
+	To https://github.com/mzamouneisi/eisiesn360frtangular2.git
+	   4b0851e..4f1dba4  main -> main
+
