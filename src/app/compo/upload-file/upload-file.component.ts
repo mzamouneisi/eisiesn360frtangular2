@@ -28,6 +28,9 @@ export class UploadFileComponent extends MereComponent {
 	public sizeMax: number;
 	
 	private idUniq : number = 0 ;
+
+	@Input() 
+	inputId: string;
 	
 	@ViewChild('input', {static: false}) input: any;
 	

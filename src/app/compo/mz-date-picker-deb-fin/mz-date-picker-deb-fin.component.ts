@@ -23,6 +23,9 @@ export class MzDatePickerDebFinComponent implements OnInit {
   @Input() onChangeCallerDeb!: string; 
   @Input() onChangeCallerFin!: string; 
 
+  @Input() startDateId: string;
+  @Input() endDateId: string;
+
   @Output() myDatePickerChangeDeb:EventEmitter<Date> =new EventEmitter<Date>(); 
   @Output() myDatePickerChangeFin:EventEmitter<Date> =new EventEmitter<Date>(); 
 
