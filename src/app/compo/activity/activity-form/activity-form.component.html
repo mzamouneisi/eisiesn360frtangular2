@@ -1,80 +1,63 @@
 <!-- <infors #infors></infors> -->
-<div class="card my-5" *ngIf="myObj" >
-  <div class="card-body">
-    <h3 class="card-title text-center py-3">{{ title }} {{ myObj.id }}</h3>
-    <form (ngSubmit)="onSubmit()" #activityForm="ngForm">
-        <label for="typeActivityList">{{
+<div class="card my-5" *ngIf="myObj">
+    <div class="card-body">
+        <h3 class="card-title text-center py-3">{{ title }} {{ myObj.id }}</h3>
+        <form (ngSubmit)="onSubmit()" #activityForm="ngForm">
+            <label for="typeActivityList">{{
           utils.tr('app.compo.activity.form.input.type')
         }}</label>
 
-        <app-select #compoSelectActivityType [objectName]="'ActivityType'"  [myList]="activityTypes" [initObj]="myObj.type"  [objCaller]="this" onChangeCaller="onSelectActivityType" [ObjectPropName]="'name'" ></app-select>
+            <app-select #compoSelectActivityType [objectName]="'ActivityType'" [selectId]="'activity-type'" [myList]="activityTypes" [initObj]="myObj.type" [objCaller]="this" onChangeCaller="onSelectActivityType" [ObjectPropName]="'name'"></app-select>
 
-      <div *ngIf="myObj.type != null">
-        <div
-          class="form-group"
-          *ngIf="isTypeMission() || isTypeInterContrat()"
-        >
-          {{ utils.tr('app.compo.activity.form.input.project') }}
+            <div *ngIf="myObj.type != null">
+                <div class="form-group" *ngIf="isTypeMission() || isTypeInterContrat()">
+                    {{ utils.tr('app.compo.activity.form.input.project') }}
 
-          <app-select #compoSelectProject [objectName]="'Project'"  [myList]="projects" [initObj]="myObj.project"  [objCaller]="this" onChangeCaller="onSelectProject" [ObjectPropName]="'name'" ></app-select>     
+                    <app-select #compoSelectProject [objectName]="'Project'" [selectId]="'project'" [myList]="projects" [initObj]="myObj.project" [objCaller]="this" onChangeCaller="onSelectProject" [ObjectPropName]="'name'"></app-select>
 
-        </div>
+                </div>
 
-        <div class="form-group">
-            <label
-              >{{ utils.tr('app.compo.activity.form.input.startDate') }} :
+                <div class="form-group">
+                    <label>{{ utils.tr('app.compo.activity.form.input.startDate') }} :
               <!-- <span class="badge badge-secondary">{{
                 myObj.dateDeb | date: "dd-MM-yyyy"
               }}</span> -->
             </label>
 
-            <label
-              >{{ utils.tr('app.compo.activity.form.input.endDate') }} :
+                    <label>{{ utils.tr('app.compo.activity.form.input.endDate') }} :
               <!-- <span class="badge badge-secondary">{{
                 myObj.dateFin | date: "dd-MM-yyyy"
               }}</span> -->
             </label>
-            <app-mz-date-picker-deb-fin
-              placeHolderDeb="Choix date debut" [myDatePickerDeb]="myObj.dateDeb" [onChangeCallerDeb]="'onStartDateChanged'"
-              placeHolderFin="Choix date fin"   [myDatePickerFin]="myObj.dateFin" [onChangeCallerFin]="'onEndDateChanged'"
-              [objCaller]="this"
-            ></app-mz-date-picker-deb-fin>
+                    <app-mz-date-picker-deb-fin placeHolderDeb="Choix date debut" [startDateId]="'start-date-id'" [myDatePickerDeb]="myObj.dateDeb" [onChangeCallerDeb]="'onStartDateChanged'" placeHolderFin="Choix date fin" [myDatePickerFin]="myObj.dateFin" [endDateId]="'end-date-id'"
+                        [onChangeCallerFin]="'onEndDateChanged'" [objCaller]="this"></app-mz-date-picker-deb-fin>
 
-            <div [hidden]="myObj.dateDeb" class="badge badge-danger">
-              DateDeb is required
-            </div>
-            <div [hidden]="myObj.dateFin" class="badge badge-danger">
-              DateFin is required
-            </div>
+                    <div [hidden]="myObj.dateDeb" class="badge badge-danger">
+                        DateDeb is required
+                    </div>
+                    <div [hidden]="myObj.dateFin" class="badge badge-danger">
+                        DateFin is required
+                    </div>
 
-        </div>
+                </div>
 
-        <div class="form-group" *ngIf="isActivityLabelVisible()">
-          <label for="name">{{ getActivityLabel() }}</label>
-          <input
-            type="text"
-            [(ngModel)]="myObj.name"
-            class="form-control"
-            id="name"
-            name="name"
-            required
-            #name="ngModel"
-          />
-          <div [hidden]="name.valid" class="badge badge-danger">
-            {{ getActivityLabel() }} is required
-          </div>
-        </div>
+                <div class="form-group" *ngIf="isActivityLabelVisible()">
+                    <label for="name">{{ getActivityLabel() }}</label>
+                    <input type="text" [(ngModel)]="myObj.name" class="form-control" name="name" id="activity-label" required #name="ngModel" />
+                    <div [hidden]="name.valid" class="badge badge-danger">
+                        {{ getActivityLabel() }} is required
+                    </div>
+                </div>
 
-        <div class="form-group">
-          <label for="description"
-            >{{
+                <div class="form-group">
+                    <label for="description">{{
               utils.tr('app.compo.activity.form.input.description')
             }}:</label
           >
           <textarea
             name="description"
-            id="description"
             class="form-control"
+            id="description"
             [(ngModel)]="myObj.description"
             rows="3"
             #description="ngModel"
@@ -91,6 +74,7 @@
             [files]="myObj.files"
             [sizeMax]="10 * 1024 * 1024"
             [title]="'Upload Files: '"
+            [inputId]="'activity-file'"
           >
           </app-upload-file>
         </div>
@@ -104,7 +88,7 @@
               utils.tr('app.compo.activity.form.input.consultant')
             }}:</label
           >
-          <app-select #compoSelectConsultant [objectName]="'Consultant'"  [myList]="consultants" [initObj]="myObj.consultant"  [objCaller]="this" onChangeCaller="onSelectConsultant" [ObjectPropName]="'fullName'" ></app-select>
+          <app-select #compoSelectConsultant [objectName]="'Consultant'" [selectId]="'activity-consultant'"  [myList]="consultants" [initObj]="myObj.consultant"  [objCaller]="this" onChangeCaller="onSelectConsultant" [ObjectPropName]="'fullName'" ></app-select>
 
           <div [hidden]="myObj.consultant" class="badge badge-danger">
             {{ utils.tr('app.compo.activity.form.input.consultant') }} is
@@ -116,27 +100,23 @@
           <label for="valid">{{
             utils.tr('app.compo.activity.form.input.valid')
           }}</label>
-          <input type="checkbox" [(ngModel)]="myObj.valid" class="form-check-input" style="margin-left: 10px;" id="valid" name="valid" #valid="ngModel" />
-        </div>
+                    <input type="checkbox" [(ngModel)]="myObj.valid" class="form-check-input" style="margin-left: 10px;" name="valid" id="valid" #valid="ngModel" />
+                </div>
 
-        <br />
-        <ul class="right">
-          <li class="list-inline-item">
-            <button
-              type="submit"
-              [disabled]="!activityForm.form.valid"
-              class="btn btn-info"
-            >
+                <br />
+                <ul class="right">
+                    <li class="list-inline-item">
+                        <button type="submit" id="btn-activity-save" [disabled]="!activityForm.form.valid" class="btn btn-info">
               {{ btnSaveTitle }}
             </button>
-          </li>
-          <li class="list-inline-item">
-            <a [routerLink]="['/activity_app']" class="btn btn-info">{{
+                    </li>
+                    <li class="list-inline-item">
+                        <a [routerLink]="['/activity_app']" class="btn btn-info">{{
               utils.tr('app.compo.activity.form.button.list')
             }}</a>
-          </li>
-        </ul>
-      </div>
-    </form>
-  </div>
+                    </li>
+                </ul>
+            </div>
+        </form>
+    </div>
 </div>

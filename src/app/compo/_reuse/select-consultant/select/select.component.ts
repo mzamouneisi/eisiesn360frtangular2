@@ -13,7 +13,8 @@ export class SelectComponent implements OnInit {
   @Input() initObj: any;  //on create select 
   @Input() objCaller!: any; 
   @Input() onChangeCaller!: string; 
-  @Input() disbaleit: any;  //on create select 
+  @Input() disbaleit: any;  //on create select
+  @Input() selectId: string;
   selectedObjId: number = 0;       //when change selection
   selectedObj: any = null;       //when change selection
 
