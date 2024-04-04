@@ -1,7 +1,8 @@
 #!/bin/sh
 
-d1=~/bitbucket/eisiesn360frtangular
-d2=~/github/eisiesn360frtangular2
+DIR_DEV=/cygdrive/d/dev
+d1=$DIR_DEV/bitbucket/eisiesn360frtangular
+d2=$DIR_DEV/github/eisiesn360frtangular2
 
 files=("configs" "src")
 exts=("md" "sh" "json" "txt" "js" "config" "xml" "prop" "cli")
@@ -19,7 +20,7 @@ for f in *; do
 done 
 
 
-file_out=copy_all.tmp.sh
+file_out=/tmp/copy_all.tmp.sh
 echo > $file_out 
 mycopy() {
     echo "$*" >> $file_out 

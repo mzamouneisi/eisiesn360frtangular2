@@ -1,17 +1,17 @@
-import {Injectable, OnInit} from '@angular/core';
+import { Injectable } from '@angular/core';
 
-import {BehaviorSubject, Observable, of} from "rxjs";
-import {UtilsService} from "./utils.service";
-import {Consultant} from "../model/consultant";
-import {CraStateService, ServiceLocator} from "../core/core";
-import {CraContext} from "../core/model/cra-context";
-import { Cra } from '../model/cra';
 import { Router } from '@angular/router';
-import { HeaderComponent } from '../layout/header/header.component';
-import { MyError } from '../resource/MyError';
+import { BehaviorSubject, Observable, of } from "rxjs";
 import { MereComponent } from '../compo/_utils/mere-component';
-import { ConsultantService } from './consultant.service';
+import { CraStateService, ServiceLocator } from "../core/core";
+import { CraContext } from "../core/model/cra-context";
+import { HeaderComponent } from '../layout/header/header.component';
+import { Consultant } from "../model/consultant";
+import { Cra } from '../model/cra';
 import { NoteFrais } from '../model/noteFrais';
+import { MyError } from '../resource/MyError';
+import { ConsultantService } from './consultant.service';
+import { UtilsService } from "./utils.service";
 // import { CraService } from './cra.service';
 
 /**
@@ -38,6 +38,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
   craContext: BehaviorSubject<CraContext> = new BehaviorSubject<CraContext>(null);
   public serviceRegistry: Map<string, any> = new Map<string, any>();
   public static userConnected: Consultant;
+  public userSelectedActivity: Consultant;
 
   listInfos : Array<string> = [];
 	listErrors: MyError[] = [];

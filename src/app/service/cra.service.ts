@@ -1,18 +1,18 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
-import {Cra} from '../model/cra';
-import {Observable, of} from 'rxjs';
-import {environment} from '../../environments/environment';
-import {GenericResponse} from "../model/response/genericResponse";
-import {CraDay} from "../model/cra-day";
-import {CraDayActivity} from "../model/cra-day-activity";
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { Cra } from '../model/cra';
+import { CraDay } from "../model/cra-day";
+import { CraDayActivity } from "../model/cra-day-activity";
+import { GenericResponse } from "../model/response/genericResponse";
 
-import {UtilsService} from "./utils.service";
-import {Consultant} from '../model/consultant';
-import {Activity} from '../model/activity';
+import { Activity } from '../model/activity';
+import { Consultant } from '../model/consultant';
+import { UtilsService } from "./utils.service";
 
-import {CalendarEvent} from 'angular-calendar';
-import {DataSharingService} from "./data-sharing.service";
+import { CalendarEvent } from 'angular-calendar';
+import { DataSharingService } from "./data-sharing.service";
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'})

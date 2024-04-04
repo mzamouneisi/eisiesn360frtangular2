@@ -1,29 +1,26 @@
 import {
   Component,
   Input,
-  OnInit,
-  TemplateRef,
-  ViewChild,
+  ViewChild
 } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import * as frLocale from "date-fns/locale/fr";
-import { ActivityService } from "../../../service/activity.service";
-import { Activity } from "../../../model/activity";
-import { CraFormsService } from "../../../service/cra-forms.service";
-import { ProjetService } from "src/app/service/projet.service";
+import { ActivityType } from "src/app/model/activityType";
+import { Consultant } from "src/app/model/consultant";
+import { Msg } from "src/app/model/msg";
 import { Project } from "src/app/model/project";
+import { ActivityTypeService } from "src/app/service/activityType.service";
 import { ConsultantService } from "src/app/service/consultant.service";
 import { MsgService } from "src/app/service/msg.service";
-import { Consultant } from "src/app/model/consultant";
-import { UtilsService } from "../../../service/utils.service";
-import { ActivityTypeService } from "src/app/service/activityType.service";
-import { ActivityType } from "src/app/model/activityType";
-import { Msg } from "src/app/model/msg";
+import { ProjetService } from "src/app/service/projet.service";
+import { Activity } from "../../../model/activity";
+import { ActivityService } from "../../../service/activity.service";
+import { CraFormsService } from "../../../service/cra-forms.service";
 import { DataSharingService } from "../../../service/data-sharing.service";
+import { UtilsService } from "../../../service/utils.service";
 
 import { UploadFileComponent } from "src/app/compo/upload-file/upload-file.component";
-import { MereComponent } from "../../_utils/mere-component";
 import { SelectComponent } from "../../_reuse/select-consultant/select/select.component";
+import { MereComponent } from "../../_utils/mere-component";
 
 @Component({
   selector: "app-activity-form",
@@ -46,6 +43,7 @@ export class ActivityFormComponent extends MereComponent {
   consultants: Consultant[];
 
   userConnected: Consultant = DataSharingService.userConnected;
+  @Input()
   consultantSelected: Consultant;
 
   @ViewChild("uploadFile", { static: false }) uploadFile: UploadFileComponent;
@@ -63,6 +61,7 @@ export class ActivityFormComponent extends MereComponent {
     , protected dataSharingService: DataSharingService
   ) {
     super(utils, dataSharingService);
+
 }
 
   ngOnInit() {
@@ -73,7 +72,7 @@ export class ActivityFormComponent extends MereComponent {
     ////console.log('initByActivity')
 
     this.getProjets();
-    this.getConsultants();
+    // this.getConsultants();
     this.getActivityTypes();
 
     if (this.isAdd == null) {
@@ -107,6 +106,15 @@ export class ActivityFormComponent extends MereComponent {
     if (this.uploadFile != null) {
       this.uploadFile.ngOnInit();
     }
+
+    if(this.consultantSelected == null) {
+      this.consultantSelected = this.dataSharingService.userSelectedActivity;
+    }    
+
+    if(this.consultantSelected == null) {
+      this.consultantSelected = this.userConnected;
+    }
+    this.myObj.consultant = this.consultantSelected 
   }
 
   /////////////////
@@ -146,38 +154,38 @@ export class ActivityFormComponent extends MereComponent {
 
   //////////////////
 
-  getConsultants() {
-    ////////////console.log("getConsultants:");
-    this.beforeCallServer("getConsultants");
-    this.consultantService.findNotAdminConsultant().subscribe(
-      (data) => {
-        this.afterCallServer("getConsultants", data)
-        this.consultants = data.body.result;
-        if (data == undefined) {
-          this.consultants = new Array();
-        }
-        if (this.isAdd != "true") {
-        }
+  // getConsultants() {
+  //   console.log("+++++++++++++++++++getConsultants: myObj : ", this.myObj);
+  //   this.beforeCallServer("getConsultants");
+  //   this.consultantService.findNotAdminConsultant().subscribe(
+  //     (data) => {
+  //       this.afterCallServer("getConsultants", data)
+  //       this.consultants = data.body.result;
+  //       if (data == undefined) {
+  //         this.consultants = new Array();
+  //       }
+  //       if (this.isAdd != "true") {
+  //       }
 
-      },
-      (error) => {
-        this.addErrorFromErrorOfServer("getConsultants", error);
-        ////console.log(error);
-      }
-    );
-    ////////////console.log("getConsultants:END");
-  }
+  //     },
+  //     (error) => {
+  //       this.addErrorFromErrorOfServer("getConsultants", error);
+  //       ////console.log(error);
+  //     }
+  //   );
+  //   ////////////console.log("getConsultants:END");
+  // }
   
-  onSelectConsultant(consultant: Consultant) {
-    this.myObj.consultant = consultant;
-    if (this.myObj.consultant == null) this.myObj.consultant = new Consultant();
-    this.consultantSelected = this.myObj.consultant;
-  }
+  // onSelectConsultant(consultant: Consultant) {
+  //   this.myObj.consultant = consultant;
+  //   if (this.myObj.consultant == null) this.myObj.consultant = new Consultant();
+  //   this.consultantSelected = this.myObj.consultant;
+  // }
 
-  @ViewChild('compoSelectConsultant', {static:false}) compoSelectConsultant:SelectComponent ;
-  selectConsultant(consultant:Consultant){
-      this.compoSelectConsultant.selectedObj = consultant;
-  }  
+  // @ViewChild('compoSelectConsultant', {static:false}) compoSelectConsultant:SelectComponent ;
+  // selectConsultant(consultant:Consultant){
+  //     this.compoSelectConsultant.selectedObj = consultant;
+  // }  
 
   /////////////////////////////////
   /***

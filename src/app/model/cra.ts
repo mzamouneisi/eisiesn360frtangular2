@@ -1,9 +1,9 @@
-import {Consultant} from "./consultant";
-import {CraDay} from "./cra-day";
+import { CraDay } from "./cra-day";
 
 export class Cra {
   id: number;
   month: Date;
+  monthStr: string;
   taskRealized: string;
   comment: string;
   status: string;

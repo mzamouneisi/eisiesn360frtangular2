@@ -14,6 +14,7 @@ export class MzDatePickerComponent implements OnInit {
   picker:any;
   @Input() objCaller!: any; 
   @Input() onChangeCaller!: string; 
+  @Input() dateInputId: string;
 
   constructor(private dateAdapter: DateAdapter<Date>) {
     //  this.dateAdapter.setLocale('en-GB'); // dd/MM/yyyy

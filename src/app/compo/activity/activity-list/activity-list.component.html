@@ -87,7 +87,7 @@
 
 </div>
 
-<app-activity-form #myObjEditView [myObj]="myObj" *ngIf="myObj != null" [appAuthorization]
+<app-activity-form #myObjEditView [myObj]="myObj" [consultantSelected]="consultant" *ngIf="myObj != null" [appAuthorization]
                    feature="ACTIVITY_MANAGEMENT"
                    permission="UPDATE"></app-activity-form>
 

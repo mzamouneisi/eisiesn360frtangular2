@@ -1,43 +1,47 @@
 import {
-  Component, Input, ViewChild, ChangeDetectionStrategy,
-  TemplateRef, ElementRef
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  Input,
+  TemplateRef,
+  ViewChild
 } from '@angular/core';
 
-import {ActivatedRoute, Data, Router} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import {CraService} from '../../../service/cra.service';
-import {ActivityService} from '../../../service/activity.service';
-import {CraDay} from "../../../model/cra-day";
-import {Cra} from "../../../model/cra";
-import {ActivityType} from "../../../model/activityType";
+import { ActivityType } from "../../../model/activityType";
+import { Cra } from "../../../model/cra";
+import { CraDay } from "../../../model/cra-day";
+import { ActivityService } from '../../../service/activity.service';
+import { CraService } from '../../../service/cra.service';
 
-import {
-  startOfDay,
-  endOfDay,
-} from 'date-fns';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
   CalendarEvent,
   CalendarView
 } from 'angular-calendar';
+import {
+  endOfDay,
+  startOfDay,
+} from 'date-fns';
 
-import {CraDayActivity} from "../../../model/cra-day-activity";
-import {Activity} from "../../../model/activity";
-import {UtilsService} from "../../../service/utils.service";
-import {Subject} from "rxjs";
-import {Consultant} from 'src/app/model/consultant';
-import {DataSharingService} from "../../../service/data-sharing.service";
+import { Subject } from "rxjs";
+import { Consultant } from 'src/app/model/consultant';
+import { Activity } from "../../../model/activity";
+import { CraDayActivity } from "../../../model/cra-day-activity";
+import { DataSharingService } from "../../../service/data-sharing.service";
+import { UtilsService } from "../../../service/utils.service";
 // import {NotifierService} from "angular-notifier";
-import {CraObservable, CraObserver} from "../../../core/core";
-import {AddMultiDateComponent} from "../add-multi-date/add-multi-date.component";
-import {CraReportActivity} from "../../../model/cra-report-activity";
-import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
-import { Notification } from 'src/app/model/notification';
-import { DashboardService } from 'src/app/service/dashboard.service';
-import { MereComponent } from '../../_utils/mere-component';
-import { SelectComponent } from '../../_reuse/select-consultant/select/select.component';
 import { DatePipe } from '@angular/common';
 import { CraContext } from 'src/app/core/model/cra-context';
+import { Notification } from 'src/app/model/notification';
+import { DashboardService } from 'src/app/service/dashboard.service';
+import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
+import { CraObservable, CraObserver } from "../../../core/core";
+import { CraReportActivity } from "../../../model/cra-report-activity";
+import { SelectComponent } from '../../_reuse/select-consultant/select/select.component';
+import { MereComponent } from '../../_utils/mere-component';
+import { AddMultiDateComponent } from "../add-multi-date/add-multi-date.component";
 
 const colors: any = {
   red: {
@@ -196,7 +200,7 @@ export class CraFormCalComponent  extends MereComponent implements CraObserver {
 
     this.userConnected = this.dataSharingService.getCurrentUserFromLocaleStorage();
 
-    if(!this.viewDate) this.viewDate = new Date();
+    if(this.notADate(this.viewDate)) this.viewDate = new Date();
     this.viewDate = this.utils.getDate(this.viewDate);
 
     this.initParams();
@@ -227,7 +231,7 @@ export class CraFormCalComponent  extends MereComponent implements CraObserver {
         this.currentCra = context.cra;
         this.events = context.events;
         this.viewDate = context.viewDate;
-        if(!this.viewDate) this.viewDate = new Date();
+        if(this.notADate(this.viewDate)) this.viewDate = new Date();
         this.viewDate = this.utils.getDate(this.viewDate);
         this.dataSharingService.onCraDestroy();
 
@@ -332,7 +336,7 @@ export class CraFormCalComponent  extends MereComponent implements CraObserver {
     if (currentCra != null && currentCra.craDays != null) {
       this.deleteCraDayActivitiesOfActivityNullInCra(currentCra)
       this.viewDate = currentCra.month;
-      if(!this.viewDate) this.viewDate = new Date();
+      if(this.notADate(this.viewDate)) this.viewDate = new Date();
       this.viewDate = this.utils.getDate(this.viewDate);
       ////////console.log("+++ initCra deb viewDate", this.viewDate);
       this.events = [];
@@ -399,6 +403,15 @@ export class CraFormCalComponent  extends MereComponent implements CraObserver {
     return cd;
   }
 
+  notADate(date : Date) : boolean {
+    return !date || date+"" == "Invalid Date" ;
+  }
+
+  setMonthCurentCraIfNull() {
+    if(this.notADate(this.viewDate)) this.viewDate = new Date();
+    if(this.notADate(this.currentCra.month)) this.currentCra.month = this.viewDate;
+  }
+
   viewDateChange(isClearInfos: boolean) {
 
     console.log("viewDateChange deb viewDate:", this.viewDate)
@@ -408,7 +421,7 @@ export class CraFormCalComponent  extends MereComponent implements CraObserver {
     let label = "viewDateChange"
     this.btnActionTitle = "SAVE " + this.getLabelByType();
 
-    if(!this.viewDate) this.viewDate = new Date();
+    if(this.notADate(this.viewDate)) this.viewDate = new Date();
     this.viewDate = this.utils.getDate(this.viewDate);
 
     console.log("viewDateChange after : viewDate:", this.viewDate)
@@ -421,7 +434,9 @@ export class CraFormCalComponent  extends MereComponent implements CraObserver {
      */
 
     let craInDateView : Cra = this.craService.getCraInDate(this.viewDate, this.dataSharingService.listCra);
-    if(craInDateView) {
+    console.log("viewDateChange craInDateView", craInDateView)
+
+    if(craInDateView != null ) {
       console.log("showCra valide deb")
 
       this.showCra(craInDateView);
@@ -431,18 +446,27 @@ export class CraFormCalComponent  extends MereComponent implements CraObserver {
       console.log("showCra valide fin")
 
     }else {
+      // console.log("before beforeCallServer : label ", label)
       this.beforeCallServer(label)
+      console.log("before getNewCraOfDate : viewDate ", this.viewDate)
       this.craService.getNewCraOfDate(this.viewDate).subscribe(
         data => {
+          console.log("viewDateChange : viewDate, data : ", this.viewDate, data)
           this.afterCallServer(label, data)
-          if(data && data.body && data.body.result) {
-            // we have a new cra from initCra du server 
+          if(data != null && data.body != null  && data.body.result != null ) {
+            console.log("we have a new cra from initCra du server. data", data)
             this.currentCra = data.body.result;
+            // console.log("monthStr = " + this.currentCra.monthStr )
+            // this.currentCra.month = new Date(this.currentCra.monthStr);
+            this.setMonthCurentCraIfNull();
           }else {
+            console.log("set new Cra of this viewDate ", this.viewDate)
             this.currentCra = new Cra();
-            this.currentCra.month = this.viewDate;
+            this.setMonthCurentCraIfNull();
             this.events = [];
           }
+
+          console.log("viewDateChange currentCra : ", this.currentCra)
   
           if (!this.getError() || this.getError().length == 0 ) {
             // this.addActivitiesValidOfThisMonth();
@@ -450,6 +474,8 @@ export class CraFormCalComponent  extends MereComponent implements CraObserver {
   
             ////////console.log(label+" goto showCra", this.currentCra)
             // this.dataSharingService.showCra(this.currentCra);
+
+            this.setMonthCurentCraIfNull();
   
             let craContext: CraContext = new CraContext();
             let month = this.utils.getDate(this.currentCra.month);
@@ -477,7 +503,10 @@ export class CraFormCalComponent  extends MereComponent implements CraObserver {
         })
     }
 
+    console.log("viewDateChange fin currentCra ", this.currentCra)
+
   }
+
   showCra(cra: Cra) {
 
     this.currentCra = cra;
@@ -857,6 +886,8 @@ export class CraFormCalComponent  extends MereComponent implements CraObserver {
    */
   saveCra(redirectToList: boolean, isSendNotification:boolean, title, message): void {
 
+    this.setMonthCurentCraIfNull();
+
     console.log("saveCra deb this.currentCra:", this.currentCra)
 
     if(this.typeCra == 'CONGE'){
@@ -1030,9 +1061,11 @@ export class CraFormCalComponent  extends MereComponent implements CraObserver {
 
     for(let i = 0; i<nbJoursDiff+1; i++) {
       let date = this.utils.getDatePlusNbJour(dateDeb,  i);
+      console.log("addActivityInDates: currentCra, date", this.currentCra, date )
       this.craDay = this.craService.getCraDayByDate(this.currentCra, date);
+      console.log("addActivityInDates: craDay", this.craDay )
       // this.craService.setDayProps(this.craDay);
-      //console.log("addActivityInDates: date, craDay: ", date, this.craDay)
+      console.log("addActivityInDates: craService, craDayActivity: ", this.craService, craDayActivity)
       if(this.craService.canAddActivity(this.craDay, craDayActivity)) {
         if(this.craService.isCraDayOpen(this.craDay) ) {
           //console.log("addActivityInDates: can add OK")
@@ -1087,6 +1120,7 @@ export class CraFormCalComponent  extends MereComponent implements CraObserver {
   ////////////
 
   isTimeToModify() : boolean {
+    this.setMonthCurentCraIfNull();
     let dateCra = this.utils.getDate(this.currentCra.month);
     let moisPrec = this.utils.getDateLastMonthFirstDay();
 
@@ -1447,6 +1481,7 @@ export class CraFormCalComponent  extends MereComponent implements CraObserver {
   downloadPDF(craReportActivity: CraReportActivity) {
     const linkSource = `data:application/pdf;base64,${craReportActivity.pdfData}`;
     const downloadLink = document.createElement("a");
+    this.setMonthCurentCraIfNull();
     const fileName = this.currentCra.consultantUsername.split("@")[0] + "_" + craReportActivity.activity.replace(" ", "_").toLowerCase() + "_" + this.currentCra.month + ".pdf";
     downloadLink.href = linkSource;
     downloadLink.download = fileName;
@@ -1491,10 +1526,10 @@ export class CraFormCalComponent  extends MereComponent implements CraObserver {
   }
 
   refreshMe() {
-    console.log("**** refreshMe deb")
+    console.log("**** refreshMe deb this.viewDate : ", this.viewDate)
 
     setTimeout( () => {
-      if(!this.viewDate) this.viewDate = new Date();
+      if(this.notADate(this.viewDate)) this.viewDate = new Date();
       this.viewDate = this.utils.getDate(this.viewDate);
       // ////////console.log("**** refreshMe av refresh")
       try {

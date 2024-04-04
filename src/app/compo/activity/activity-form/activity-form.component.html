@@ -104,12 +104,13 @@
               utils.tr('app.compo.activity.form.input.consultant')
             }}:</label
           >
-          <app-select #compoSelectConsultant [objectName]="'Consultant'"  [myList]="consultants" [initObj]="myObj.consultant"  [objCaller]="this" onChangeCaller="onSelectConsultant" [ObjectPropName]="'fullName'" ></app-select>
+          <h4>{{consultantSelected?.fullName}}</h4>
+          <!-- <app-select #compoSelectConsultant [objectName]="'Consultant'"  [myList]="consultants" [initObj]="myObj.consultant"  [objCaller]="this" onChangeCaller="onSelectConsultant" [ObjectPropName]="'fullName'" ></app-select>
 
           <div [hidden]="myObj.consultant" class="badge badge-danger">
             {{ utils.tr('app.compo.activity.form.input.consultant') }} is
             required
-          </div>
+          </div> -->
         </div>
 
         <div class="form-group" *ngIf="isActivityValidVisible()">

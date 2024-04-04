@@ -1,17 +1,15 @@
-import {Component, OnInit, ViewChild, Input, TemplateRef} from '@angular/core';
-import {Activity} from '../../../model/activity';
-import {ActivityFormComponent} from '../activity-form/activity-form.component';
-import {ActivityService} from '../../../service/activity.service';
-import {Router} from '@angular/router';
-import {UtilsService} from 'src/app/service/utils.service';
-import {MyError} from 'src/app/resource/MyError';
-import {UtilsIhmService} from 'src/app/service/utilsIhm.service';
-import {ConsultantService} from "../../../service/consultant.service";
-import {Cra} from "../../../model/cra";
-import {Consultant} from "../../../model/consultant";
-import {DataSharingService} from "../../../service/data-sharing.service";
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import { Component, Input, TemplateRef, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { UtilsService } from 'src/app/service/utils.service';
+import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
+import { Activity } from '../../../model/activity';
+import { Consultant } from "../../../model/consultant";
+import { ActivityService } from '../../../service/activity.service';
+import { ConsultantService } from "../../../service/consultant.service";
+import { DataSharingService } from "../../../service/data-sharing.service";
 import { MereComponent } from '../../_utils/mere-component';
+import { ActivityFormComponent } from '../activity-form/activity-form.component';
 
 @Component({
   selector: 'app-activity-list',
@@ -48,6 +46,9 @@ export class ActivityListComponent extends MereComponent {
     if (this.myObjEditView != null) {
       this.myObjEditView.myObj = null;
     }
+
+    // console.log("+++++++++++++++++ ngOninit : consultant : ", this.consultant)
+    this.dataSharingService.userSelectedActivity = this.consultant
   }
 
   getTitle() {

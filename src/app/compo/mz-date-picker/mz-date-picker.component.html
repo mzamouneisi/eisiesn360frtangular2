@@ -1,11 +1,11 @@
 <mat-form-field>
-    <input matInput [matDatepicker]="picker" placeholder="{{placeHolder}}" [(ngModel)]="myDatePicker" (dateInput)="onUpdateDate($event)">
-    <mat-datepicker-toggle matSuffix [for]="picker" ></mat-datepicker-toggle>
-    <mat-datepicker #picker ></mat-datepicker>
-  
-  </mat-form-field>
-  
-  <!--
+    <input matInput [matDatepicker]="picker" id="{{dateInputId}}" placeholder="{{placeHolder}}" [(ngModel)]="myDatePicker" (dateInput)="onUpdateDate($event)">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+
+</mat-form-field>
+
+<!--
   
   ang_add_component.sh mz-date-picker
   
@@ -15,8 +15,8 @@
   npm install @angular-material-components/datetime-picker
   
   -->
-  
-  <!--
+
+<!--
   
   call: 
   <app-mz-date-picker placeHolder="Choix de date" [(myDatePicker)]="myDatePicker" ></app-mz-date-picker>
@@ -31,4 +31,3 @@
   }
   
   -->
-  
