@@ -11,12 +11,12 @@
  */
 // import 'zone.js/dist/zone-error';  // Included with Angular CLI.
 
-// https://esn360app.azurewebsites.net/esn360/
+// https://esn360.azurewebsites.net/esn360/
 
 export const environment = {
   production: true,
   // apiUrl: 'http://localhost:80/esn360/api',
-  apiUrl: 'https://esn360app.azurewebsites.net/esn360/api',
+  apiUrl: 'https://esn360.azurewebsites.net/esn360/api',
 };
 
 
