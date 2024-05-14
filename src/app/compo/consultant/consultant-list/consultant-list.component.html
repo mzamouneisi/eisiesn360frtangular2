@@ -22,7 +22,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let element of myList | paginate: {itemsPerPage, currentPage}" (click)="displayConsultantsOfManager($event, element)" [className]="element.id == getIdOfCurentObj() ? 'active' : 'inactive'">
+                <tr *ngFor="let element of myList | paginate: {itemsPerPage, currentPage}; let i = index" id="consultant-list-tr-{{i}}" (click)="displayConsultantsOfManager($event, element)" [className]="element.id == getIdOfCurentObj() ? 'active' : 'inactive'">
                     <td>{{ element.id }}</td>
                     <td><b>{{ element.fullName }}</b></td>
                     <td>{{ element.username }}</td>
@@ -31,9 +31,9 @@
                     <td>{{ element.esn?.name }}</td>
                     <td>{{ element.role}}</td>
                     <td>
-                        <button (click)="showForm(element)" class='btn btn-primary mr-1' [appAuthorization] feature="CONSULTANT_MANAGEMENT" permission="UPDATE">{{utils.tr('Edit')}}
+                        <button (click)="showForm(element)" id="btn-update-consultant-list-{{i}}" class='btn btn-primary mr-1' [appAuthorization] feature="CONSULTANT_MANAGEMENT" permission="UPDATE">{{utils.tr('Edit')}}
           </button>
-                        <button (click)="delete(element)" class='btn btn-danger mr-1' [appAuthorization] feature="CONSULTANT_MANAGEMENT" permission="DELETE">{{utils.tr('Delete')}}
+                        <button (click)="delete(element)" id="btn-delete-consultant-list-{{i}}" class='btn btn-danger mr-1' [appAuthorization] feature="CONSULTANT_MANAGEMENT" permission="DELETE">{{utils.tr('Delete')}}
           </button>
                         <!-- <button *ngIf="element.admin" (click)="displayConsultantsOfManager(element)" class='btn btn-outline-dark mr-1'>
             View</button> -->

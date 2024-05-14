@@ -1,12 +1,11 @@
-import {Injectable} from '@angular/core';
-import {FormBuilder, FormGroup} from "@angular/forms";
-import {MyError} from '../resource/MyError';
+import { Injectable } from '@angular/core';
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { MyError } from '../resource/MyError';
 // import {NotifierService} from "angular-notifier";
-import {IMyDpOptions} from "mydatepicker";
-import {CraDayActivity} from "../model/cra-day-activity";
-import { splitAtColon } from '@angular/compiler/src/util';
-import { TradService } from './trad.service';
 import { Router } from '@angular/router';
+import { IMyDpOptions } from "mydatepicker";
+import { CraDayActivity } from "../model/cra-day-activity";
+import { TradService } from './trad.service';
 
 @Injectable({
   providedIn: 'root'
@@ -585,10 +584,12 @@ export class UtilsService {
 
 		let list = []
 
+    console.log("searchStr : ", searchStr )
     for(let el of myList) {
       let s = JSON.stringify(el);
       s = s.toLowerCase()
       if(s.includes(searchStr)) {
+        console.log("s contains : searchStr : ", s )
         list.push(el)
       }
     }

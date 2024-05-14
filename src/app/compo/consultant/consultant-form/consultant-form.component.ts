@@ -1,17 +1,16 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {ConsultantService} from '../../../service/consultant.service';
-import {EsnService} from 'src/app/service/esn.service';
-import {Esn} from '../../../model/esn';
-import {Consultant} from '../../../model/consultant';
-import {Constants} from "../../../model/constants/constants";
-import {UtilsService} from 'src/app/service/utils.service';
-import {MyError} from 'src/app/resource/MyError';
-import {DataSharingService} from "../../../service/data-sharing.service";
-import {IMyDateModel, IMyDpOptions} from "mydatepicker";
-import { MereComponent } from '../../_utils/mere-component';
+import { Component, Input, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { IMyDpOptions } from "mydatepicker";
+import { MyError } from 'src/app/resource/MyError';
+import { EsnService } from 'src/app/service/esn.service';
+import { UtilsService } from 'src/app/service/utils.service';
+import { Constants } from "../../../model/constants/constants";
+import { Consultant } from '../../../model/consultant';
+import { Esn } from '../../../model/esn';
+import { ConsultantService } from '../../../service/consultant.service';
+import { DataSharingService } from "../../../service/data-sharing.service";
 import { SelectComponent } from '../../_reuse/select-consultant/select/select.component';
-import { Role } from 'src/app/model/role';
+import { MereComponent } from '../../_utils/mere-component';
 
 @Component({
   selector: 'app-consultant-form',
@@ -108,7 +107,9 @@ export class ConsultantFormComponent extends MereComponent {
     } else {
       let consultantP: Consultant = this.consultantService.getConsultant();
 
-      if (consultantP != null) this.myObj = consultantP;
+      if (consultantP != null) {
+        this.myObj = consultantP;
+      }
       else if (this.myObj == null) this.myObj = new Consultant();
     }
   }
@@ -168,12 +169,16 @@ export class ConsultantFormComponent extends MereComponent {
   @ViewChild('compoSelectEsn', {static:false}) compoSelectEsn:SelectComponent ;
   selectEsn(esn:Esn){
     this.myObj.esn = esn;
-    this.compoSelectEsn.selectedObj = esn;
-    this.compoSelectEsn.onChange00(esn.id);
+    if(this.compoSelectEsn != null) {
+      this.compoSelectEsn.selectedObj = esn;
+      if(esn != null) {
+        this.compoSelectEsn.onChange00(esn.id);
+      }
+    }
     
   } 
   
-  onSelectRole(role: string) {
+  public onSelectRole(role: string) {
     //////////console.log("onSelectRole:", this, this.myObj)
     this.myObj.role = role;
     this.myObj.admin = (this.myObj.role == Constants.MANAGER || this.myObj.role == Constants.RESPONSIBLE_ESN);
@@ -182,7 +187,15 @@ export class ConsultantFormComponent extends MereComponent {
 
   @ViewChild('compoSelectRole', {static:false}) compoSelectRole:SelectComponent ;
   selectRole(role:string){
+
+    var compoSelect: HTMLSelectElement = document.getElementById(this.compoSelectRole.selectId) as HTMLSelectElement;
+      // console.log("selectRole compoSelect:", compoSelect)
+
       this.compoSelectRole.selectedObj = role;
+      var id = this.roles != null ? this.roles.indexOf(role) : -1
+
+      // id = 0 : est "Select Role"
+      compoSelect.selectedIndex = id+1;
   }  
 
   resetPassword() {
@@ -222,35 +235,45 @@ export class ConsultantFormComponent extends MereComponent {
    * This method aims to load all roles form back end side
    */
   private loadRoles() {
-    let label = "loadRoles";
-    this.beforeCallServer(label);
-    this.consultantService.getRoles().subscribe(data => {
-      this.afterCallServer(label, data)
-      if (data == undefined) this.roles = new Array();
-      else {
-        this.roles = data.body.result;
-      }
 
-    }, error => {
-      this.addErrorFromErrorOfServer(label, error);
-    })
+    if(this.roles == null ) {
+
+      let label = "loadRoles";
+      this.beforeCallServer(label);
+      this.consultantService.getRoles().subscribe(data => {
+        this.afterCallServer(label, data)
+        if (data == undefined) this.roles = new Array();
+        else {
+          this.roles = data.body.result;
+        }
+  
+      }, error => {
+        this.addErrorFromErrorOfServer(label, error);
+      })
+    }
+
   }
 
   private loadEsns() {
-    let label = "loadEsns";
-    this.beforeCallServer(label);
-    this.esnService.findAll().subscribe(data => {
-      this.afterCallServer(label, data)
-      if (!data) this.esns = new Array();
-      else {
-        this.esns = data.body.result;
 
-        this.esns.sort(this.compareEsnLast);
-      }
+    if(this.esns == null) {
 
-    }, error => {
-      this.addErrorFromErrorOfServer(label, error);
-    })
+      let label = "loadEsns";
+      this.beforeCallServer(label);
+      this.esnService.findAll().subscribe(data => {
+        this.afterCallServer(label, data)
+        if (!data) this.esns = new Array();
+        else {
+          this.esns = data.body.result;
+  
+          this.esns.sort(this.compareEsnLast);
+        }
+  
+      }, error => {
+        this.addErrorFromErrorOfServer(label, error);
+      })
+    }
+
   }
 
   compareEsnLast( a:Esn, b:Esn ) {

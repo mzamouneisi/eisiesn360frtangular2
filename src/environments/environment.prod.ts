@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://eisicrasrvjava-1708093790794.azurewebsites.net/esn360/api',
-  extractUrl: 'https://eisicrasrvjava-1708093790794.azurewebsites.net:8300',
+  apiUrl: 'https://esn360app.azurewebsites.net/esn360/api',
+  extractUrl: 'https://esn360app.azurewebsites.net:8300',
 };

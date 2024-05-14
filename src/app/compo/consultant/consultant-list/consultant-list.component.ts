@@ -1,12 +1,12 @@
-import {Component, OnInit, ViewChild, Input} from '@angular/core';
-import {FormGroup, FormBuilder, FormControl} from '@angular/forms';
-import {Consultant} from '../../../model/consultant';
-import {ConsultantService} from '../../../service/consultant.service';
-import {Router} from '@angular/router';
-import {UtilsService} from 'src/app/service/utils.service';
-import { MereComponent } from '../../_utils/mere-component';
+import { Component, ViewChild } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { DataSharingService } from 'src/app/service/data-sharing.service';
+import { UtilsService } from 'src/app/service/utils.service';
 import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
+import { Consultant } from '../../../model/consultant';
+import { ConsultantService } from '../../../service/consultant.service';
+import { MereComponent } from '../../_utils/mere-component';
 import { ConsultantFormComponent } from '../consultant-form/consultant-form.component';
 
 @Component({
@@ -114,11 +114,20 @@ export class ConsultantListComponent extends MereComponent {
     @ViewChild('myObjEditView', {static:false}) myObjEditView:ConsultantFormComponent ;
     showForm(myObj: Consultant) {
         this.myObj = myObj;
+        this.consultantService.setConsultant(myObj)
+        // console.log("role", myObj.role)
         if(this.myObjEditView != null) {
-                this.myObjEditView.myObj = this.myObj
+
+                this.myObjEditView.myObj = myObj
                 this.myObjEditView.isAdd = 'false';
                 this.myObjEditView.ngOnInit()
-        }        
+
+                this.myObjEditView.selectRole(myObj.role)
+                this.myObjEditView.selectEsn(myObj.esn)
+
+        }
+
+        // console.log("myObjEditView : ", this.myObjEditView)
     }
 
     /***

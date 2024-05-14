@@ -35,10 +35,11 @@
 
             <div class="form-group">
                 <label for="email">{{utils.tr('app.compo.consultant.form.input.email')}}</label>
-                <input type="email" [(ngModel)]="myObj.email" [disabled]="myObj.role == 'RESPONSIBLE_ESN'" class="form-control" id="email" name="email" placeholder="{{utils.tr('app.form.input.placeholder.prefix')}}  {{utils.tr('app.compo.consultant.form.input.email') | lowercase}}"
+                <input type="email" [(ngModel)]="myObj.email" [disabled]="myObj.role == 'RESPONSIBLE_ESN'" class="form-control" id="email" name="email" 
+                    placeholder="{{utils.tr('app.form.input.placeholder.prefix')}}  {{utils.tr('app.compo.consultant.form.input.email') | lowercase}}"
                     required #email="ngModel" [pattern]="emailPattern">
             </div>
-            <div [hidden]="email.valid" class="badge badge-danger">{{utils.tr('app.compo.consultant.form.input.email')}} {{utils.tr('app.badge.required')}}</div>
+            <div [hidden]="email.valid || (myObj.role == 'RESPONSIBLE_ESN' && myObj.email != '' )" class="badge badge-danger">{{utils.tr('app.compo.consultant.form.input.email')}} {{utils.tr('app.badge.required')}}</div>
 
             <div class="form-group">
                 <label>{{utils.tr('app.compo.consultant.form.input.birthDay')}} : 

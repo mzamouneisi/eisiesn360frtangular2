@@ -1,21 +1,21 @@
-import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {Activity} from "../../../model/activity";
-import {UtilsService} from "../../../service/utils.service";
-import {Project} from "../../../model/project";
-import {ActivityType} from "../../../model/activityType";
-import {Consultant} from "../../../model/consultant";
-import {ActivatedRoute, Router} from "@angular/router";
-import {CraFormsService} from "../../../service/cra-forms.service";
-import {ProjetService} from "../../../service/projet.service";
-import {ConsultantService} from "../../../service/consultant.service";
-import {ActivityService} from "../../../service/activity.service";
-import {ActivityTypeService} from "../../../service/activityType.service";
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {DataSharingService} from "../../../service/data-sharing.service";
-import {ActivityListComponent} from "../activity-list/activity-list.component";
-import {ActivityOverTime} from "../../../model/activity-over-time";
-import { MereComponent } from '../../_utils/mere-component';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from "@angular/router";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { Activity } from "../../../model/activity";
+import { ActivityOverTime } from "../../../model/activity-over-time";
+import { ActivityType } from "../../../model/activityType";
+import { Consultant } from "../../../model/consultant";
+import { Project } from "../../../model/project";
+import { ActivityService } from "../../../service/activity.service";
+import { ActivityTypeService } from "../../../service/activityType.service";
+import { ConsultantService } from "../../../service/consultant.service";
+import { CraFormsService } from "../../../service/cra-forms.service";
+import { DataSharingService } from "../../../service/data-sharing.service";
+import { ProjetService } from "../../../service/projet.service";
+import { UtilsService } from "../../../service/utils.service";
 import { SelectComponent } from '../../_reuse/select-consultant/select/select.component';
+import { MereComponent } from '../../_utils/mere-component';
+import { ActivityListComponent } from "../activity-list/activity-list.component";
 
 @Component({
   selector: 'app-add-multiple-activity',

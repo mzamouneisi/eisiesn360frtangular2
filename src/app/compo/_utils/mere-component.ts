@@ -1,10 +1,9 @@
-import {Component, OnInit, Input, ViewChild, ElementRef} from '@angular/core';
-import {DataSharingService} from "../../service/data-sharing.service";
-import {MyError} from 'src/app/resource/MyError';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Consultant } from 'src/app/model/consultant';
-import { UtilsService } from 'src/app/service/utils.service';
 import { Esn } from 'src/app/model/esn';
-import { Search } from 'angular2-multiselect-dropdown/lib/menu-item';
+import { MyError } from 'src/app/resource/MyError';
+import { UtilsService } from 'src/app/service/utils.service';
+import { DataSharingService } from "../../service/data-sharing.service";
 
 @Component({
   selector: 'infors',
@@ -102,9 +101,15 @@ export class MereComponent implements OnInit {
   }
 
   getEsnId() {
+    let id = -1;
     let esn:Esn = this.getEsnCurrent();
-    if(esn) return esn.id;
-    else return -1;
+    if(esn) id = esn.id;
+    console.log("++++ getEsnId : " , id )
+    return id;
+  }
+
+  isAdmin(): boolean {
+    return this.userConnected.admin;
   }
 
   updateInfosObserver() {

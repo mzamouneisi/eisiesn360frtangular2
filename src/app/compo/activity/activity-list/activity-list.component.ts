@@ -142,6 +142,10 @@ export class ActivityListComponent extends MereComponent {
       this.myObjEditView.myObj = this.myObj
       this.myObjEditView.isAdd = 'false';
       this.myObjEditView.ngOnInit()
+
+      this.myObjEditView.selectProject(myObj.project)
+
+      this.myObjEditView.selectActivityType(myObj.type)
     }
   }
 

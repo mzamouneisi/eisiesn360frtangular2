@@ -1,93 +1,83 @@
 <!-- <infors #infors></infors> -->
 <app-add-multiple-activity #addMultipleActivityComponent></app-add-multiple-activity>
 <div class="card my-5">
-  <div class="card-body">
-    <h3 class="card-title text-center py-3">{{getTitle()}}</h3>
+    <div class="card-body">
+        <h3 class="card-title text-center py-3">{{getTitle()}}</h3>
 
-    <div class="right" style="width: 40%;" name="searchDiv" >
-      <input id="searchStr" class="form-control left" style="width: 90%;"  type="text" placeholder="search" name="searchStr" [(ngModel)]="searchStr" 
-      (keyup)="search()" 
-      >
-      <button class="right" style="width: 10%; height: 40px; text-align: center;" (click)="clearSearch()">X</button>
-    </div>
+        <div class="right" style="width: 40%;" name="searchDiv">
+            <input id="searchStr" class="form-control left" style="width: 90%;" type="text" placeholder="search" name="searchStr" [(ngModel)]="searchStr" (keyup)="search()">
+            <button class="right" style="width: 10%; height: 40px; text-align: center;" (click)="clearSearch()">X</button>
+        </div>
 
-    <table class="table table-bordered table-striped">
-      <thead class="thead-dark">
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">{{utils.tr('app.compo.activity.list.table.thead.name')}}</th>
-        <th scope="col">{{utils.tr('app.compo.activity.list.table.thead.type')}}</th>
-        <th scope="col">{{utils.tr('app.compo.activity.list.table.thead.project')}}</th>
-        <th scope="col">{{utils.tr('app.compo.activity.list.table.thead.client')}}</th>
-        <th scope="col">{{utils.tr('app.compo.activity.list.table.thead.startDate')}}</th>
-        <th scope="col">{{utils.tr('app.compo.activity.list.table.thead.endDate')}}</th>
-        <th scope="col">{{utils.tr('app.compo.activity.list.table.thead.consultant')}}</th>
-        <th scope="col">{{utils.tr('app.compo.activity.list.table.thead.valid')}}</th>
-        <th scope="col">{{utils.tr('app.compo.activity.list.table.thead.action')}}</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let element of myList | paginate: {itemsPerPage, currentPage}"
-          [className]="element.id == getIdOfCurentObj() ? 'active' : 'inactive'">
-        <td>{{ element.id }}</td>
-        <td>{{ element.name }}</td>
-        <td>
-          {{element.type?.name}}
-        </td>
-        <td>
-          {{ element.project?.name }}
-        </td>
-        <td>
-          {{ element.project?.client?.name }}
-        </td>
-        <td>
-          {{element.dateDeb | date:'dd/MM/yyyy'}}
-        </td>
-        <td>
-          {{element.dateFin | date:'dd/MM/yyyy'}}
-        </td>
-        <td>
-          {{ element.consultant?.fullName }}
-        </td>
-        <td>
-          {{ element.valid }}
-        </td>      
-        <td>
-          <!-- <button (click)="edit(element)" class='btn btn-info'>Edit</button> -->
-          <button (click)="showForm(element)" class='btn btn-primary' [appAuthorization] feature="ACTIVITY_MANAGEMENT"
-                  permission="UPDATE">{{utils.tr('Edit')}}
-          </button>          
-          <button (click)="delete(element)" class='btn btn-danger' [appAuthorization] feature="ACTIVITY_MANAGEMENT"
-                  permission="DELETE">{{utils.tr('Delete')}}
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">{{utils.tr('app.compo.activity.list.table.thead.name')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.activity.list.table.thead.type')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.activity.list.table.thead.project')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.activity.list.table.thead.client')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.activity.list.table.thead.startDate')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.activity.list.table.thead.endDate')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.activity.list.table.thead.consultant')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.activity.list.table.thead.valid')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.activity.list.table.thead.action')}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let element of myList | paginate: {itemsPerPage, currentPage}" [className]="element.id == getIdOfCurentObj() ? 'active' : 'inactive'">
+                    <td>{{ element.id }}</td>
+                    <td>{{ element.name }}</td>
+                    <td>
+                        {{element.type?.name}}
+                    </td>
+                    <td>
+                        {{ element.project?.name }}
+                    </td>
+                    <td>
+                        {{ element.project?.client?.name }}
+                    </td>
+                    <td>
+                        {{element.dateDeb | date:'dd/MM/yyyy'}}
+                    </td>
+                    <td>
+                        {{element.dateFin | date:'dd/MM/yyyy'}}
+                    </td>
+                    <td>
+                        {{ element.consultant?.fullName }}
+                    </td>
+                    <td>
+                        {{ element.valid }}
+                    </td>
+                    <td>
+                        <!-- <button (click)="edit(element)" class='btn btn-info'>Edit</button> -->
+                        <button (click)="showForm(element)" class='btn btn-primary' [appAuthorization] feature="ACTIVITY_MANAGEMENT" id="btn-update-activity" permission="UPDATE">{{utils.tr('Edit')}}
           </button>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+                        <button (click)="delete(element)" class='btn btn-danger' [appAuthorization] feature="ACTIVITY_MANAGEMENT" id="btn-delete-activity" permission="DELETE">{{utils.tr('Delete')}}
+          </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
-    <div class="left" style="width: 50%;">
-      <pagination-controls (pageChange)="currentPage = $event"></pagination-controls>
-    </div>
+        <div class="left" style="width: 50%;">
+            <pagination-controls (pageChange)="currentPage = $event"></pagination-controls>
+        </div>
 
-    <div class="right" *ngIf="nbCallServer == 0" >
-      <li class="list-inline-item" [appAuthorization] feature="ACTIVITY_MANAGEMENT" permission="CREATE">
-        <a type="button" class="btn btn-info" (click)="gotoActivityForm()">{{utils.tr('app.compo.activity.list.button.add')}}</a>
-      </li>
-  
-      <button type="button" class="btn btn-outline-success"
-              [appAuthorization] feature="ACTIVITY_MANAGEMENT" permission="CREATE"
-              (click)="openModalPopup(addMultipleActivityComponent.addMultipleActivityView)">
+        <div class="right" *ngIf="nbCallServer == 0">
+            <li class="list-inline-item" [appAuthorization] feature="ACTIVITY_MANAGEMENT" permission="CREATE">
+                <a type="button" class="btn btn-info" id="btn-activity-form" (click)="gotoActivityForm()">{{utils.tr('app.compo.activity.list.button.add')}}</a>
+            </li>
+
+            <button type="button" class="btn btn-outline-success" [appAuthorization] feature="ACTIVITY_MANAGEMENT" permission="CREATE" (click)="openModalPopup(addMultipleActivityComponent.addMultipleActivityView)">
               {{utils.tr('app.compo.activity.list.button.addMultiple')}}
       </button>
-    </div>
+        </div>
 
-  </div>
+    </div>
 
 
 
 </div>
 
-<app-activity-form #myObjEditView [myObj]="myObj" [consultantSelected]="consultant" *ngIf="myObj != null" [appAuthorization]
-                   feature="ACTIVITY_MANAGEMENT"
-                   permission="UPDATE"></app-activity-form>
-
+<app-activity-form #myObjEditView [myObj]="myObj" [consultantSelected]="consultant" *ngIf="myObj != null" [appAuthorization] feature="ACTIVITY_MANAGEMENT" permission="UPDATE"></app-activity-form>

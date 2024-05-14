@@ -1,4 +1,4 @@
-import { Component, OnInit , Input} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-select',
@@ -21,6 +21,7 @@ export class SelectComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    // console.log("ngOnInit ObjectPropName, initObj", this.ObjectPropName, this.initObj)
     if(this.ObjectPropName) {
       this.selectedObjId = this.initObj ? this.initObj.id : 0;
       // this.onChange(this.selectedObjId);
@@ -32,6 +33,7 @@ export class SelectComponent implements OnInit {
     else {
       this.selectedObjId = this.initObj;
     }
+    // console.log("ngOnInit selectedObjId", this.selectedObjId)
   }
 
   getObjDisplay(obj:any){
@@ -44,24 +46,37 @@ export class SelectComponent implements OnInit {
   }
 
   getObjValue(obj:any){
+    // console.log("getObjValue deb obj", obj)
+    var val = null ;
     if(this.ObjectPropName) {
-      return obj ? obj.id : -1;
+      val = obj ? obj.id : -1;
     }
     else {
-      return obj;
+      val = obj;
     }
+
+    // console.log("getObjValue fin val", val)
+
+    return val;
+
   }
 
    onChange00(event:any){
+
+    // console.log("onChange00 deb event, ObjectPropName", event, this.ObjectPropName)
 
     this.selectedObjId=event;
     this.selectedObj = this.ObjectPropName ? null : event;
     if(this.ObjectPropName && this.myList) {
       this.selectedObj = this.getObjFromId(event);
     }
+
+    // console.log("onChange00 fin selectedObjId, selectedObj", this.selectedObjId, this.selectedObj)
   } 
 
   onChange(event:any){
+
+    // console.log("onChange deb event", event)
 
     this.onChange00(event)
 
@@ -82,6 +97,7 @@ export class SelectComponent implements OnInit {
         if(obj.id == id) {objSel = obj; break;}
       }
     }
+    // console.log("getObjFromId id", id)
     return objSel;
   }
 

@@ -1,7 +1,7 @@
 <div id="myModal">
-    <div class="modal-header" >
+    <div class="modal-header">
         <h4 class="modal-title">{{title}}</h4>
-        <button type="button" class="close" aria-label="Close" (click)="dismiss()">
+        <button type="button" id="btn-modal-dismiss" class="close" aria-label="Close" (click)="dismiss()">
         <span aria-hidden="true">&times;</span>
         </button>
     </div>
@@ -9,7 +9,7 @@
         <h6> {{content}}</h6>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline-dark" (click)="ok()">Ok</button>
-        <button *ngIf="showCancel" type="button" class="btn btn-outline-dark" (click)="cancel()">Cancel</button>
+        <button type="button" id="btn-modal-ok" class="btn btn-outline-dark" (click)="ok()">Ok</button>
+        <button *ngIf="showCancel" id="btn-modal-dismiss" type="button" class="btn btn-outline-dark" (click)="cancel()">Cancel</button>
     </div>
 </div>

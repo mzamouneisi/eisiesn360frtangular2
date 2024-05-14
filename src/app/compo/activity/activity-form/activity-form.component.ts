@@ -62,7 +62,7 @@ export class ActivityFormComponent extends MereComponent {
   ) {
     super(utils, dataSharingService);
 
-}
+  }
 
   ngOnInit() {
     this.initByActivity();
@@ -107,39 +107,42 @@ export class ActivityFormComponent extends MereComponent {
       this.uploadFile.ngOnInit();
     }
 
-    if(this.consultantSelected == null) {
+    if (this.consultantSelected == null) {
       this.consultantSelected = this.dataSharingService.userSelectedActivity;
-    }    
+    }
 
-    if(this.consultantSelected == null) {
+    if (this.consultantSelected == null) {
       this.consultantSelected = this.userConnected;
     }
-    this.myObj.consultant = this.consultantSelected 
+    this.myObj.consultant = this.consultantSelected
   }
 
   /////////////////
 
   getProjets() {
-    ////////////console.log("getProjets:", this.myObj);
-    this.beforeCallServer("getProjets");
-    this.projetService.findAll().subscribe(
-      (data) => {
-        this.afterCallServer("getProjets", data)
-        this.projects = data.body.result;
-        if (data == undefined) {
-          this.projects = new Array();
-        }
+    if (this.projects == null) {
 
-        if (this.isAdd != "true") {
-          let id = this.myObj.project != null ? this.myObj.project.id : -1;
+      ////////////console.log("getProjets:", this.myObj);
+      this.beforeCallServer("getProjets");
+      this.projetService.findAll().subscribe(
+        (data) => {
+          this.afterCallServer("getProjets", data)
+          this.projects = data.body.result;
+          if (data == undefined) {
+            this.projects = new Array();
+          }
+
+          if (this.isAdd != "true") {
+            let id = this.myObj.project != null ? this.myObj.project.id : -1;
+          }
+        },
+        (error) => {
+          this.addErrorFromErrorOfServer("getProjets", error);
+          ////console.log(error);
         }
-      },
-      (error) => {
-        this.addErrorFromErrorOfServer("getProjets", error);
-        ////console.log(error);
-      }
-    );
-    ////////////console.log("getProjets:END");
+      );
+      ////////////console.log("getProjets:END");
+    }
   }
 
   onSelectProject(project: Project) {
@@ -147,10 +150,28 @@ export class ActivityFormComponent extends MereComponent {
     if (this.myObj.project == null) this.myObj.project = new Project();
   }
 
-  @ViewChild('compoSelectProject', {static:false}) compoSelectProject:SelectComponent ;
-  selectProject(project:Project){
-      this.compoSelectProject.selectedObj = project;
-  }  
+  @ViewChild('compoSelectProject', { static: false }) compoSelectProject: SelectComponent;
+  selectProject(project: Project) {
+
+    this.myObj.project = project;
+
+    var compoSelect: HTMLSelectElement = document.getElementById('project') as HTMLSelectElement;
+    if (compoSelect != null) {
+
+      var id = -1
+      if (this.projects != null) {
+        for (var p of this.projects) {
+          id++
+          if (p.name == project.name) {
+            break;
+          }
+        }
+      }
+      // id = 0 : est 'Select Project'
+      compoSelect.selectedIndex = id + 1;
+    }
+
+  }
 
   //////////////////
 
@@ -175,7 +196,7 @@ export class ActivityFormComponent extends MereComponent {
   //   );
   //   ////////////console.log("getConsultants:END");
   // }
-  
+
   // onSelectConsultant(consultant: Consultant) {
   //   this.myObj.consultant = consultant;
   //   if (this.myObj.consultant == null) this.myObj.consultant = new Consultant();
@@ -192,51 +213,79 @@ export class ActivityFormComponent extends MereComponent {
    * used to initialize the component activity types
    */
   private getActivityTypes() {
-    ////////////console.log("getActivityTypes:");
-    this.beforeCallServer("getActivityTypes");
-    this.activityTypeService.findAll(this.getEsnId()).subscribe(
-      (data) => {
-        this.afterCallServer("getActivityTypes", data)
-        ////console.log(data);
-        this.activityTypes = data.body.result;
-        ////console.log(this.activityTypes);
-        if (data == undefined) {
-          this.activityTypes = new Array();
-        }
+    if (this.activityTypes == null) {
 
-        //les consultants ne voient que les conges
-        if (this.isConsultant() && this.activityTypes.length > 0) {
-          let conges: ActivityType[] = [];
-          let j = 0;
-          for (let i = 0; i < this.activityTypes.length; i++) {
-            if (this.activityTypes[i].congeDay) {
-              conges[j++] = this.activityTypes[i];
-            }
+      ////////////console.log("getActivityTypes:");
+      this.beforeCallServer("getActivityTypes");
+      this.activityTypeService.findAll(this.getEsnId()).subscribe(
+        (data) => {
+          this.afterCallServer("getActivityTypes", data)
+          ////console.log(data);
+          this.activityTypes = data.body.result;
+          ////console.log(this.activityTypes);
+          if (data == undefined) {
+            this.activityTypes = new Array();
           }
 
-          this.activityTypes = conges;
+          //les consultants ne voient que les conges
+          if (this.isConsultant() && this.activityTypes.length > 0) {
+            let conges: ActivityType[] = [];
+            let j = 0;
+            for (let i = 0; i < this.activityTypes.length; i++) {
+              if (this.activityTypes[i].congeDay) {
+                conges[j++] = this.activityTypes[i];
+              }
+            }
+
+            this.activityTypes = conges;
+          }
+
+          if (this.isAdd != "true") {
+
+          }
+
+        },
+        (error) => {
+          //console.log(error);
+          this.addErrorFromErrorOfServer("getActivityTypes", error);
         }
+      );
+      ////////////console.log("getProjets:END");
 
-        if (this.isAdd != "true") {
-
-        }
-
-      },
-      (error) => {
-        //console.log(error);
-        this.addErrorFromErrorOfServer("getActivityTypes", error);
-      }
-    );
-    ////////////console.log("getProjets:END");
+    }
   }
 
   onSelectActivityType(obj: ActivityType) {
     this.myObj.type = obj;
   }
-  @ViewChild('compoSelectActivityType', {static:false}) compoSelectActivityType:SelectComponent ;
-  selectActivityType(activityType:ActivityType){
-      this.compoSelectActivityType.selectedObj = activityType;
-  }  
+  @ViewChild('compoSelectActivityType', { static: false }) compoSelectActivityType: SelectComponent;
+  selectActivityType(activityType: ActivityType) {
+
+    // this.myObj.activitytype = activitytype;
+
+    var compoSelect: HTMLSelectElement = document.getElementById('activity-type') as HTMLSelectElement;
+    // var id = this.activitytypes != null ? this.activitytypes.indexOf(activitytype) : -1
+    // console.log('compoSelect', compoSelect)
+    if (compoSelect != null) {
+
+      var id = -1
+      if (this.activityTypes != null) {
+        for (var p of this.activityTypes) {
+          id++
+          // console.log('p.name', p.name)
+          if (p.name == activityType.name) {
+            break;
+          }
+        }
+      }
+
+      // console.log('id, activitytype', id, activitytype)
+
+      // id = 0 : est 'Select ActivityType'
+      compoSelect.selectedIndex = id + 1;
+    }
+
+  }
 
   isTypeMission(): boolean {
     ////////////console.log("isTypeMission", this.myObj)
@@ -294,17 +343,17 @@ export class ActivityFormComponent extends MereComponent {
     if (!this.myObj.name) {
       this.myObj.name = this.myObj.type.name;
     }
-    
+
     if (!this.isForMyConsultants()) {
       this.myObj.consultant = this.consultantSelected;
     }
-    
+
     this.beforeCallServer("onSubmit");
     this.activityService.save(this.myObj).subscribe(
       (data) => {
         this.afterCallServer("onSubmit", data)
         this.sendMsgToManager();
-        
+
         if (!this.getError()) this.gotoActivityList();
       },
       (error) => {
@@ -335,7 +384,7 @@ export class ActivityFormComponent extends MereComponent {
         ////////////console.log("data:"+data);
         this.afterCallServer("sendMsgToManager", data)
         ////////////console.log("error:", this.error );
-        
+
         if (!this.isError()) this.gotoActivityList();
       },
       (error) => {
@@ -347,10 +396,10 @@ export class ActivityFormComponent extends MereComponent {
 
 
   errorDates = "";
-  onStartDateChanged(date: Date, error:string ) {
+  onStartDateChanged(date: Date, error: string) {
     this.myObj.dateDeb = date;
     this.errorDates = error;
-    if(error) {
+    if (error) {
       this.utils.showNotification(
         "error",
         "The end date of project you have been above of the start date !"
@@ -358,7 +407,7 @@ export class ActivityFormComponent extends MereComponent {
     }
   }
 
-  onEndDateChanged(date: Date, error:string ) {
+  onEndDateChanged(date: Date, error: string) {
     this.myObj.dateFin = date;
     this.errorDates = error;
     this.utils.showNotification(

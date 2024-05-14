@@ -1,21 +1,20 @@
-
 <!-- <h5>Choix de date debut et fin</h5> -->
 <form [formGroup]="myForm" (ngSubmit)="onFormSubmit()">
-  <mat-form-field>
-    <!-- <mat-label>Select dates : </mat-label> -->
-    <mat-date-range-input [rangePicker]="myDateRangePicker"  formGroupName="myDateRange">
-      <input matStartDate formControlName="startDate" placeholder="Start date" #dateRangeStart>
-      <input matEndDate formControlName="endDate" placeholder="End date" #dateRangeEnd (dateChange)="dateRangeChange(dateRangeStart, dateRangeEnd)">
-    </mat-date-range-input>
-    <mat-datepicker-toggle matSuffix [for]="myDateRangePicker"></mat-datepicker-toggle>
-    <mat-date-range-picker #myDateRangePicker></mat-date-range-picker>
+    <mat-form-field>
+        <!-- <mat-label>Select dates : </mat-label> -->
+        <mat-date-range-input [rangePicker]="myDateRangePicker" formGroupName="myDateRange">
+            <input matStartDate formControlName="start-date" id="startDate" placeholder="Start date" #dateRangeStart>
+            <input matEndDate formControlName="end-date" id="endDate" placeholder="End date" #dateRangeEnd (dateChange)="dateRangeChange(dateRangeStart, dateRangeEnd)">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="myDateRangePicker"></mat-datepicker-toggle>
+        <mat-date-range-picker #myDateRangePicker></mat-date-range-picker>
 
-    <mat-error *ngIf="myForm.get('myDateRange').get('startDate').hasError('matStartDateInvalid')">
-      Invalid start date
-    </mat-error>
-    <mat-error *ngIf="myForm.get('myDateRange').get('endDate').hasError('matEndDateInvalid')">
-      Invalid end date
-    </mat-error>    
-  </mat-form-field>
-  <!-- <button mat-raised-button>Submit</button> -->
-</form> 
+        <mat-error *ngIf="myForm.get('myDateRange').get('startDate').hasError('matStartDateInvalid')">
+            Invalid start date
+        </mat-error>
+        <mat-error *ngIf="myForm.get('myDateRange').get('endDate').hasError('matEndDateInvalid')">
+            Invalid end date
+        </mat-error>
+    </mat-form-field>
+    <!-- <button mat-raised-button>Submit</button> -->
+</form>

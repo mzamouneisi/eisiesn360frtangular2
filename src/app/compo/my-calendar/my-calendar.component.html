@@ -1,4 +1,4 @@
-<div id="myModal" >
+<div id="myModal">
     <div class="modal-header" style="width: 100%;">
         <h3 style="text-align: center; width: 100%;">{{selectedDateStr}}</h3>
         <button type="button" class="close" aria-label="Close" (click)="dismiss()">
@@ -6,8 +6,7 @@
         </button>
     </div>
     <div class="modal-body">
-        <mat-calendar #calendar [(selected)]="selectedDate" 
-                (selectedChange)="dateChanged($event)">
+        <mat-calendar id="my-calendar-date-change" #calendar [(selected)]="selectedDate" (selectedChange)="dateChanged($event)">
         </mat-calendar>
     </div>
     <!-- <div class="modal-footer">
@@ -15,7 +14,3 @@
         <button type="button" class="btn btn-outline-dark" (click)="cancel()">Cancel</button>
     </div> -->
 </div>
-
-
-
-

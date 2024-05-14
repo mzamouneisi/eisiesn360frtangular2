@@ -10,9 +10,7 @@
         <td *ngIf="!load">
             <div class="list_consultant">
                 <span>Consultant: </span>
-                <app-select style="font-size: 11px;" #compoSelectConsultant [objectName]="'Consultant'"
-                    [myList]="myList" [initObj]="elementSelected" [objCaller]="this" onChangeCaller="onSelectConsultant"
-                    ObjectPropName="fullName">
+                <app-select style="font-size: 11px;" [selectId]="'fee-fep-perconsultant-slect-consultant'" #compoSelectConsultant [objectName]="'Consultant'" [myList]="myList" [initObj]="elementSelected" [objCaller]="this" onChangeCaller="onSelectConsultant" ObjectPropName="fullName">
                 </app-select>
             </div>
             <highcharts-chart [Highcharts]="highchartss" [options]="chartOptionss">
@@ -25,9 +23,7 @@
         <td *ngIf="load">
             <div class="list_consultant_loading">
                 <span>Consultant: </span>
-                <app-select style="font-size: 11px;" #compoSelectConsultant [objectName]="'Consultant'"
-                    [myList]="myList" [initObj]="elementSelected" [objCaller]="this" onChangeCaller="onSelectConsultant"
-                    ObjectPropName="fullName">
+                <app-select style="font-size: 11px;" [selectId]="'fee-fep-perconsultant-slect-consultant'" #compoSelectConsultant [objectName]="'Consultant'" [myList]="myList" [initObj]="elementSelected" [objCaller]="this" onChangeCaller="onSelectConsultant" ObjectPropName="fullName">
                 </app-select>
             </div>
             <div style="margin-top: 25%;">

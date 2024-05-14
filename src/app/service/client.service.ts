@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Client} from '../model/client';
-import {Observable} from 'rxjs';
-import {environment} from '../../environments/environment';
-import {GenericResponse} from "../model/response/genericResponse";
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { Client } from '../model/client';
+import { GenericResponse } from "../model/response/genericResponse";
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'})
@@ -29,6 +29,10 @@ export class ClientService {
 
   public findAll(esnId: number): Observable<GenericResponse> {
     return this.http.get<GenericResponse>(this.clientUrl + "esn/" + esnId);
+  }
+
+  public findAllAll(): Observable<GenericResponse> {
+    return this.http.get<GenericResponse>(this.clientUrl );
   }
 
   public findById(id: number): Observable<GenericResponse> {
