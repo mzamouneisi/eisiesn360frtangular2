@@ -1,18 +1,17 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {Cra} from '../../../model/cra';
-import {CraService} from '../../../service/cra.service';
-import {Data, Router} from '@angular/router';
-import {Consultant} from 'src/app/model/consultant';
-import {CraFormCalComponent} from '../cra-form/cra-form-cal.component';
-import {UtilsService} from 'src/app/service/utils.service';
-import {ConsultantService} from "../../../service/consultant.service";
-import {DataSharingService} from "../../../service/data-sharing.service";
-import {DatePipe} from "@angular/common";
-import { MereComponent } from '../../_utils/mere-component';
-import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
-import { SelectComponent } from '../../_reuse/select-consultant/select/select.component';
+import { DatePipe } from "@angular/common";
+import { Component, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { Consultant } from 'src/app/model/consultant';
 import { DashboardService } from 'src/app/service/dashboard.service';
-import { MyError } from 'src/app/resource/MyError';
+import { UtilsService } from 'src/app/service/utils.service';
+import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
+import { Cra } from '../../../model/cra';
+import { ConsultantService } from "../../../service/consultant.service";
+import { CraService } from '../../../service/cra.service';
+import { DataSharingService } from "../../../service/data-sharing.service";
+import { SelectComponent } from '../../_reuse/select-consultant/select/select.component';
+import { MereComponent } from '../../_utils/mere-component';
+import { CraFormCalComponent } from '../cra-form/cra-form-cal.component';
 
 @Component({
   selector: 'app-cra-list',
@@ -46,6 +45,8 @@ export class CraListComponent extends MereComponent {
               , private datePipe: DatePipe) {
 
               super(utils, dataSharingService);
+
+              this.colsSearch = ["consultantUsername", "month", "createdDate", "lastModifiedDate"]
   }
 
   ngOnInit() {

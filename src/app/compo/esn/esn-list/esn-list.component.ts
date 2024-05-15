@@ -1,12 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Esn } from '../../../model/esn';
-import { EsnFormComponent } from '../esn-form/esn-form.component';
-import { EsnService } from '../../../service/esn.service';
+import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { UtilsService } from 'src/app/service/utils.service';
-import { MereComponent } from '../../_utils/mere-component';
 import { DataSharingService } from 'src/app/service/data-sharing.service';
+import { UtilsService } from 'src/app/service/utils.service';
 import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
+import { Esn } from '../../../model/esn';
+import { EsnService } from '../../../service/esn.service';
+import { MereComponent } from '../../_utils/mere-component';
+import { EsnFormComponent } from '../esn-form/esn-form.component';
 
 @Component({
 	selector: 'app-esn-list',
@@ -26,6 +26,8 @@ export class EsnListComponent extends MereComponent {
 		, protected utilsIhm: UtilsIhmService
 		, protected dataSharingService: DataSharingService) {
 		super(utils, dataSharingService);
+
+		this.colsSearch = ["name", "metier", "address", "webSite", "tel", "email", "responsableUsername"]
 	}
 
 	getIdOfCurentObj() {

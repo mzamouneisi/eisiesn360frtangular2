@@ -39,6 +39,8 @@ export class ActivityListComponent extends MereComponent {
     , protected dataSharingService: DataSharingService
   ) {
     super(utils, dataSharingService);
+
+    this.colsSearch = ["name", "type", "project", "dateDeb", "dateFin", "consultant", "valid"]
   }
 
   ngOnInit() {

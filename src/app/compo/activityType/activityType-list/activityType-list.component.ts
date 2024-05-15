@@ -1,14 +1,14 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {ActivityType} from '../../../model/activityType';
-import {ActivityTypeFormComponent} from '../activityType-form/activityType-form.component';
-import {ActivityTypeService} from '../../../service/activityType.service';
-import {Router} from '@angular/router';
-import {UtilsService} from 'src/app/service/utils.service';
-import { MereComponent } from '../../_utils/mere-component';
-import { DataSharingService } from 'src/app/service/data-sharing.service';
-import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
+import { Component, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { Esn } from 'src/app/model/esn';
+import { DataSharingService } from 'src/app/service/data-sharing.service';
 import { EsnService } from 'src/app/service/esn.service';
+import { UtilsService } from 'src/app/service/utils.service';
+import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
+import { ActivityType } from '../../../model/activityType';
+import { ActivityTypeService } from '../../../service/activityType.service';
+import { MereComponent } from '../../_utils/mere-component';
+import { ActivityTypeFormComponent } from '../activityType-form/activityType-form.component';
 
 
 @Component({
@@ -34,6 +34,9 @@ export class ActivityTypeListComponent extends MereComponent {
     , private esnService: EsnService
     ) {
     super(utils, dataSharingService);
+
+    this.colsSearch = ["name", "workDay", "billDay", "congeDay", "formaDay", "esn"]
+
   }
 
   ngOnInit() {

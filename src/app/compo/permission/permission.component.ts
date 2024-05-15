@@ -1,12 +1,11 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {PermissionService} from "../../service/permission.service";
-import {Permission} from "../../model/permission";
-import {ConsultantService} from "../../service/consultant.service";
-import {UtilsService} from "../../service/utils.service";
-import {AuthorizationService} from "../../authorization/service/authorization.service";
-import { MereComponent } from '../_utils/mere-component';
+import { Component, ViewChild } from '@angular/core';
 import { DataSharingService } from 'src/app/service/data-sharing.service';
+import { Permission } from "../../model/permission";
+import { ConsultantService } from "../../service/consultant.service";
+import { PermissionService } from "../../service/permission.service";
+import { UtilsService } from "../../service/utils.service";
 import { SelectComponent } from '../_reuse/select-consultant/select/select.component';
+import { MereComponent } from '../_utils/mere-component';
 
 @Component({
   selector: 'app-permission',
@@ -24,6 +23,8 @@ export class PermissionComponent extends MereComponent {
     , protected dataSharingService: DataSharingService
     ) {
       super(utils, dataSharingService);
+
+      this.colsSearch = ["featureId"]
 
   }
 

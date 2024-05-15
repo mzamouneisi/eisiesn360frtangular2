@@ -1,13 +1,13 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {Router} from '@angular/router';
+import { Component, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 
-import {Project} from '../../../model/project';
-import { ProjetFormComponent } from '../projet-form/projet-form.component';
-import {ProjetService} from '../../../service/projet.service';
-import { UtilsService } from 'src/app/service/utils.service';
-import { MereComponent } from '../../_utils/mere-component';
 import { DataSharingService } from 'src/app/service/data-sharing.service';
+import { UtilsService } from 'src/app/service/utils.service';
 import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
+import { Project } from '../../../model/project';
+import { ProjetService } from '../../../service/projet.service';
+import { MereComponent } from '../../_utils/mere-component';
+import { ProjetFormComponent } from '../projet-form/projet-form.component';
 
 @Component({
   selector: 'app-projet-list',
@@ -27,6 +27,8 @@ export class ProjetListComponent extends MereComponent {
     , protected utilsIhm: UtilsIhmService
     , protected dataSharingService: DataSharingService) {
     super(utils, dataSharingService);
+
+    this.colsSearch = ["name", "description", "teamNumber", "teamDesc", "method", "client"]
   }
 
   ngOnInit() {

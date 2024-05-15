@@ -1,19 +1,19 @@
-import { Component, ComponentFactoryResolver, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { NoteFrais } from '../../../model/noteFrais';
-import { ActivatedRoute, Router } from '@angular/router';
-import { UtilsService } from '../../../service/utils.service';
-import { NoteFraisService } from '../../../service/note-frais.service';
-import { NotefraisFormComponent } from '../notefrais-form/notefrais-form.component';
-import { Consultant } from "../../../model/consultant";
-import { DataSharingService } from "../../../service/data-sharing.service";
-import { ConsultantService } from "../../../service/consultant.service";
-import { MereComponent } from '../../_utils/mere-component';
-import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
-import { SelectComponent } from '../../_reuse/select-consultant/select/select.component';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { Notification } from 'src/app/model/notification';
 import { DashboardService } from 'src/app/service/dashboard.service';
-import { NgxSpinnerService } from 'ngx-spinner';
+import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
+import { Consultant } from "../../../model/consultant";
+import { NoteFrais } from '../../../model/noteFrais';
+import { ConsultantService } from "../../../service/consultant.service";
+import { DataSharingService } from "../../../service/data-sharing.service";
+import { NoteFraisService } from '../../../service/note-frais.service';
+import { UtilsService } from '../../../service/utils.service';
+import { SelectComponent } from '../../_reuse/select-consultant/select/select.component';
+import { MereComponent } from '../../_utils/mere-component';
+import { NotefraisFormComponent } from '../notefrais-form/notefrais-form.component';
 
 @Component({
   selector: 'app-notefrais-list',
@@ -60,6 +60,8 @@ export class NotefraisListComponent extends MereComponent {
     super(utils, dataSharingService);
     // console.log("here 2");
     // this.loadingComponenet = true;
+
+    this.colsSearch = ["title", "date", "category", "brand_name", "vat", "pretax_amount", "amount"]
   }
 
   ngOnInit(): void {

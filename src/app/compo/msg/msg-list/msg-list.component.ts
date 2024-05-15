@@ -1,12 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { DataSharingService } from 'src/app/service/data-sharing.service';
+import { UtilsService } from 'src/app/service/utils.service';
+import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
 import { Msg } from '../../../model/msg';
 import { MsgService } from '../../../service/msg.service';
-import { MsgFormComponent } from '../msg-form/msg-form.component';
-import { Router } from '@angular/router';
-import { UtilsService } from 'src/app/service/utils.service';
 import { MereComponent } from '../../_utils/mere-component';
-import { DataSharingService } from 'src/app/service/data-sharing.service';
-import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
+import { MsgFormComponent } from '../msg-form/msg-form.component';
 
 @Component({
 	selector: 'app-msg-list',
@@ -27,6 +27,8 @@ export class MsgListComponent extends MereComponent {
 		, protected utilsIhm: UtilsIhmService
 		, protected dataSharingService: DataSharingService) {
 		super(utils, dataSharingService);
+
+		this.colsSearch = ["msg", "type", "typeId", "from", "to", "isReadByTo"]
 	}	
 
 	getIdOfCurentObj() {

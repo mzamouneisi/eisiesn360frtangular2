@@ -1,12 +1,12 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {Router} from '@angular/router';
-import {UtilsService} from '../../../service/utils.service';
-import {PayementMode} from '../../../model/payementMode';
-import {PayementmodeFormComponent} from '../payementmode-form/payementmode-form.component';
-import {PayementModeService} from '../../../service/payement-mode.service';
-import { MereComponent } from '../../_utils/mere-component';
+import { Component, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { DataSharingService } from 'src/app/service/data-sharing.service';
 import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
+import { PayementMode } from '../../../model/payementMode';
+import { PayementModeService } from '../../../service/payement-mode.service';
+import { UtilsService } from '../../../service/utils.service';
+import { MereComponent } from '../../_utils/mere-component';
+import { PayementmodeFormComponent } from '../payementmode-form/payementmode-form.component';
 
 @Component({
   selector: 'app-payementmode-list',
@@ -26,6 +26,8 @@ export class PayementmodeListComponent extends MereComponent {
               , protected utilsIhm: UtilsIhmService
               , protected dataSharingService: DataSharingService) {
                 super(utils, dataSharingService);
+
+                this.colsSearch = ["name"]
   }
   ngOnInit() {
     this.findAll();

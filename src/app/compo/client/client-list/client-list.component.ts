@@ -1,12 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Client } from '../../../model/client';
-import { ClientFormComponent } from '../client-form/client-form.component';
-import { ClientService } from '../../../service/client.service';
+import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { UtilsService } from 'src/app/service/utils.service';
-import { MereComponent } from '../../_utils/mere-component';
 import { DataSharingService } from 'src/app/service/data-sharing.service';
+import { UtilsService } from 'src/app/service/utils.service';
 import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
+import { Client } from '../../../model/client';
+import { ClientService } from '../../../service/client.service';
+import { MereComponent } from '../../_utils/mere-component';
+import { ClientFormComponent } from '../client-form/client-form.component';
 
 @Component({
 	selector: 'app-client-list',
@@ -39,6 +39,9 @@ export class ClientListComponent extends MereComponent {
 		, protected utilsIhm: UtilsIhmService
 		, protected dataSharingService: DataSharingService) {
 		super(utils, dataSharingService);
+
+		this.colsSearch = ["name ", "metier", "address", "webSite", "nameResp", "telResp", "emailResp"]
+
 	}
 
 	ngOnInit() {

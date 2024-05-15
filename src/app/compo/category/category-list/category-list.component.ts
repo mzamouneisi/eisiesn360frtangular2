@@ -1,12 +1,12 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {Router} from '@angular/router';
-import {UtilsService} from '../../../service/utils.service';
-import {CategoryService} from '../../../service/category.service';
-import {CategoryFormComponent} from '../category-form/category-form.component';
-import {Category} from '../../../model/category';
-import { MereComponent } from '../../_utils/mere-component';
+import { Component, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { DataSharingService } from 'src/app/service/data-sharing.service';
 import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
+import { Category } from '../../../model/category';
+import { CategoryService } from '../../../service/category.service';
+import { UtilsService } from '../../../service/utils.service';
+import { MereComponent } from '../../_utils/mere-component';
+import { CategoryFormComponent } from '../category-form/category-form.component';
 
 @Component({
   selector: 'app-category-list',
@@ -26,6 +26,8 @@ export class CategoryListComponent extends MereComponent {
     , protected utilsIhm: UtilsIhmService
     , protected dataSharingService: DataSharingService) {
     super(utils, dataSharingService);
+
+    this.colsSearch = ["name"]
   }
 
   ngOnInit() {

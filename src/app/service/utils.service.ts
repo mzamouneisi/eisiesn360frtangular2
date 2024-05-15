@@ -576,7 +576,14 @@ export class UtilsService {
     return tab ;
   }
 
-  search(myList: any[], searchStr: string): any[] {
+  /**
+   * 
+   * @param myList 
+   * @param searchStr 
+   * @param cols 
+   * @returns 
+   */
+  search(myList: any[], searchStr: string, cols : string[] = null ): any[] {
 
     if(!myList || !searchStr) return myList;
 
@@ -586,7 +593,14 @@ export class UtilsService {
 
     console.log("searchStr : ", searchStr )
     for(let el of myList) {
-      let s = JSON.stringify(el);
+      let s = "";
+      if(cols == null || cols.length == 0) {
+        s = JSON.stringify(el);
+      }else {
+        for(var c of cols ) {
+          s += JSON.stringify(el[c]) + "," ;
+        }
+      }
       s = s.toLowerCase()
       if(s.includes(searchStr)) {
         console.log("s contains : searchStr : ", s )

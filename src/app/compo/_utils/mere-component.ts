@@ -14,6 +14,7 @@ export class MereComponent implements OnInit {
 
   searchStr: string = "";
 	protected myList00 = null;
+  protected colsSearch : string [] = null ;
 
   listInfos : Array<string> = [];
 	listErrors: MyError[];
@@ -258,7 +259,7 @@ export class MereComponent implements OnInit {
 		// this.searchStr = this.searchStr.trim();
 		// console.log("this.searchStr="+this.searchStr)
 		if(!this.searchStr) { this.setMyList( this.myList00); }
-		else {this.setMyList( this.utils.search(this.myList00, this.searchStr) );}
+		else {this.setMyList( this.utils.search(this.myList00, this.searchStr, this.colsSearch ) );}
 	}
 
   clearSearch() {
