@@ -591,7 +591,7 @@ export class UtilsService {
 
 		let list = []
 
-    console.log("searchStr : ", searchStr )
+    // console.log("searchStr : ", searchStr )
     for(let el of myList) {
       let s = "";
       if(cols == null || cols.length == 0) {
@@ -603,7 +603,7 @@ export class UtilsService {
       }
       s = s.toLowerCase()
       if(s.includes(searchStr)) {
-        console.log("s contains : searchStr : ", s )
+        // console.log("s contains : searchStr : ", s )
         list.push(el)
       }
     }
