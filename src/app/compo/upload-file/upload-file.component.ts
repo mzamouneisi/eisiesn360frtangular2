@@ -1,10 +1,9 @@
-import { Component, OnInit, Input, ViewChild} from '@angular/core';
-import { HttpResponse, HttpEventType } from '@angular/common/http';
-import { FileUpload } from '../../model/FileUpload';
-import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
-import { MereComponent } from '../_utils/mere-component';
+import { Component, Input, ViewChild } from '@angular/core';
 import { DataSharingService } from 'src/app/service/data-sharing.service';
 import { UtilsService } from 'src/app/service/utils.service';
+import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
+import { FileUpload } from '../../model/FileUpload';
+import { MereComponent } from '../_utils/mere-component';
 /**
  * HOW TO USE UploadFileComponent as child component:
 voir doc/compo-upload-file.txt
@@ -33,7 +32,7 @@ export class UploadFileComponent extends MereComponent {
 	
 	constructor(protected utilsIhm: UtilsIhmService
 		, public utils: UtilsService
-		, protected dataSharingService: DataSharingService) {	
+		, public dataSharingService: DataSharingService) {	
 			super(utils, dataSharingService);
 
 		}

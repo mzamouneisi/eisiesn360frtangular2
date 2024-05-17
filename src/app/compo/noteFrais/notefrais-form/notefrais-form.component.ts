@@ -1,22 +1,21 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 
-import { NoteFrais } from '../../../model/noteFrais';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NoteFraisService } from '../../../service/note-frais.service';
-import { UtilsService } from '../../../service/utils.service';
-import { ActivityService } from '../../../service/activity.service';
-import { Consultant } from '../../../model/consultant';
-import { DataSharingService } from '../../../service/data-sharing.service';
-import { CategoryService } from '../../../service/category.service';
-import { Category } from '../../../model/category';
-import { PayementMode } from '../../../model/payementMode';
-import { PayementModeService } from '../../../service/payement-mode.service';
-import { Activity } from '../../../model/activity';
-import { MereComponent } from '../../_utils/mere-component';
-import { SelectComponent } from '../../_reuse/select-consultant/select/select.component';
 import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
 import { createWorker } from 'tesseract.js';
-import { DateAdapter } from '@angular/material/core';
+import { Activity } from '../../../model/activity';
+import { Category } from '../../../model/category';
+import { Consultant } from '../../../model/consultant';
+import { NoteFrais } from '../../../model/noteFrais';
+import { PayementMode } from '../../../model/payementMode';
+import { ActivityService } from '../../../service/activity.service';
+import { CategoryService } from '../../../service/category.service';
+import { DataSharingService } from '../../../service/data-sharing.service';
+import { NoteFraisService } from '../../../service/note-frais.service';
+import { PayementModeService } from '../../../service/payement-mode.service';
+import { UtilsService } from '../../../service/utils.service';
+import { SelectComponent } from '../../_reuse/select-consultant/select/select.component';
+import { MereComponent } from '../../_utils/mere-component';
 
 @Component({
   selector: 'app-notefrais-form',
@@ -50,7 +49,7 @@ export class NotefraisFormComponent extends MereComponent {
     , private payementModeService: PayementModeService
     , public utils: UtilsService
     , private utilsIhm: UtilsIhmService
-    , protected dataSharingService: DataSharingService) {
+    , public dataSharingService: DataSharingService) {
     super(utils, dataSharingService);
 
   }

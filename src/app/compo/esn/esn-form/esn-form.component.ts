@@ -1,11 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {IDatePickerConfig, IDatePickerDirectiveConfig} from 'ng2-date-picker';
-import {EsnService} from '../../../service/esn.service';
-import {Esn} from '../../../model/esn';
-import {UtilsService} from 'src/app/service/utils.service';
-import { MereComponent } from '../../_utils/mere-component';
+import { Component, Input } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DataSharingService } from 'src/app/service/data-sharing.service';
+import { UtilsService } from 'src/app/service/utils.service';
+import { Esn } from '../../../model/esn';
+import { EsnService } from '../../../service/esn.service';
+import { MereComponent } from '../../_utils/mere-component';
 
 @Component({
   selector: 'app-esn-form',
@@ -24,7 +23,7 @@ export class EsnFormComponent extends MereComponent {
   telPattern: string =   UtilsService.TEL_PATTERN;
 
   constructor(private route: ActivatedRoute, private router: Router, private esnService: EsnService     , public utils: UtilsService
-    , protected dataSharingService: DataSharingService) {
+    , public dataSharingService: DataSharingService) {
     super(utils, dataSharingService
       );
 

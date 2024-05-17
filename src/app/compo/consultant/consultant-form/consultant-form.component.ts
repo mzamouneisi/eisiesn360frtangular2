@@ -47,7 +47,7 @@ export class ConsultantFormComponent extends MereComponent {
     , private consultantService: ConsultantService
     , private esnService: EsnService
     , public utils: UtilsService
-    , protected dataSharingService: DataSharingService
+    , public dataSharingService: DataSharingService
   ) {
     super(utils, dataSharingService);
 

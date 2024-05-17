@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import { FraisCategoryDashboard } from 'src/app/model/fraisCategoryDashboard';
-import { FraisConsultantDashboard } from 'src/app/model/fraisConsultantDashboard';
 import { DataSharingService } from 'src/app/service/data-sharing.service';
 import { NoteFraisDashboardService } from 'src/app/service/note-frais-dashboard.service';
 import { UtilsService } from 'src/app/service/utils.service';
@@ -22,7 +21,7 @@ export class FeeDepensePercategoryDashComponent extends MereComponent {
   constructor(
     private noteFraisDashboardService: NoteFraisDashboardService,
     public utils: UtilsService,
-    protected dataSharingService: DataSharingService
+    public dataSharingService: DataSharingService
   ) {
     super(utils, dataSharingService);
   }

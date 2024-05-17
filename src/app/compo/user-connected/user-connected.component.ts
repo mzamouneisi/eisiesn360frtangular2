@@ -1,11 +1,11 @@
-import {Component, OnInit, Inject} from '@angular/core';
+import { Component, Inject } from '@angular/core';
 
-import {Consultant} from 'src/app/model/consultant';
-import {AuthService} from 'src/app/auth/services/auth.service';
-import {ConsultantService} from 'src/app/service/consultant.service';
-import {UtilsService} from 'src/app/service/utils.service';
-import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {DataSharingService} from "../../service/data-sharing.service";
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { AuthService } from 'src/app/auth/services/auth.service';
+import { Consultant } from 'src/app/model/consultant';
+import { ConsultantService } from 'src/app/service/consultant.service';
+import { UtilsService } from 'src/app/service/utils.service';
+import { DataSharingService } from "../../service/data-sharing.service";
 import { MereComponent } from '../_utils/mere-component';
 
 @Component({
@@ -24,7 +24,7 @@ export class UserConnectedComponent extends MereComponent {
     , private authService: AuthService
     , private consultantService: ConsultantService
     , public utils: UtilsService
-    , protected dataSharingService: DataSharingService) {
+    , public dataSharingService: DataSharingService) {
       super(utils, dataSharingService);
 
   }

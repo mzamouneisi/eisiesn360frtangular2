@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import { FraisPerDateDashboard } from 'src/app/model/fraisPerDateDashboard';
 import { DataSharingService } from 'src/app/service/data-sharing.service';
@@ -25,7 +25,7 @@ export class FeeDepensePeryearDashComponent extends MereComponent {
   constructor(
     private noteFraisDashboardService: NoteFraisDashboardService,
     public utils: UtilsService,
-    protected dataSharingService: DataSharingService
+    public dataSharingService: DataSharingService
     
   ) {
     super(utils, dataSharingService);

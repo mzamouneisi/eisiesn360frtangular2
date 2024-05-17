@@ -37,7 +37,7 @@ export class ClientListComponent extends MereComponent {
 	constructor(private clientService: ClientService, private router: Router
 		, public utils: UtilsService
 		, protected utilsIhm: UtilsIhmService
-		, protected dataSharingService: DataSharingService) {
+		, public dataSharingService: DataSharingService) {
 		super(utils, dataSharingService);
 
 		this.colsSearch = ["name ", "metier", "address", "webSite", "nameResp", "telResp", "emailResp"]

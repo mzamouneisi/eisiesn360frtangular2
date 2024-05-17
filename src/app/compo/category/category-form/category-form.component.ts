@@ -1,10 +1,10 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {Category} from '../../../model/category';
-import {ActivatedRoute, Router} from '@angular/router';
-import {UtilsService} from '../../../service/utils.service';
-import {CategoryService} from '../../../service/category.service';
-import { MereComponent } from '../../_utils/mere-component';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DataSharingService } from 'src/app/service/data-sharing.service';
+import { Category } from '../../../model/category';
+import { CategoryService } from '../../../service/category.service';
+import { UtilsService } from '../../../service/utils.service';
+import { MereComponent } from '../../_utils/mere-component';
 
 @Component({
   selector: 'app-category-form',
@@ -25,7 +25,7 @@ export class CategoryFormComponent extends MereComponent {
               private router: Router,
               private categoryService: CategoryService
               , public utils: UtilsService
-              , protected dataSharingService: DataSharingService) { 
+              , public dataSharingService: DataSharingService) { 
                 super(utils, dataSharingService);
               }
 

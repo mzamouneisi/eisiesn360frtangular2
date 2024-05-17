@@ -2,9 +2,9 @@ import { Component, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { MereComponent } from 'src/app/compo/_utils/mere-component';
 import { NotificationComponent } from 'src/app/compo/notification/notification.component';
 import { UserConnectedComponent } from 'src/app/compo/user-connected/user-connected.component';
-import { MereComponent } from 'src/app/compo/_utils/mere-component';
 import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
 import { DataSharingService } from "../../service/data-sharing.service";
 import { UtilsService } from "../../service/utils.service";
@@ -29,7 +29,7 @@ export class HeaderComponent extends MereComponent {
   constructor(private authService: AuthService
     , private router: Router
     , public utils: UtilsService
-    , protected dataSharingService: DataSharingService
+    , public dataSharingService: DataSharingService
     , private utilsIhm: UtilsIhmService
     , private dialog: MatDialog
     ) {
@@ -83,6 +83,8 @@ export class HeaderComponent extends MereComponent {
   menuUserConnected() {
     if (this.authService.isLoggedIn()) {
 
+      this.dataSharingService.isDisableSearchStrInput = true ;
+
       const dialogConfig = new MatDialogConfig();
 
       dialogConfig.disableClose = false;
@@ -91,7 +93,9 @@ export class HeaderComponent extends MereComponent {
       dialogConfig.height = "570px";
       //dialogConfig.data = this.userConnected;
 
+
       let dialogRef = this.dialog.open(UserConnectedComponent, dialogConfig);
+
     }
   }
 

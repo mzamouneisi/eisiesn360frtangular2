@@ -1,20 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { IDropdownSettings } from 'ng-multiselect-dropdown';
+import { FileUpload } from 'src/app/model/FileUpload';
+import { CategoryDoc } from 'src/app/model/categoryDoc';
 import { Consultant } from 'src/app/model/consultant';
+import { ConsultantDoc } from 'src/app/model/consultantDoc';
 import { Document } from 'src/app/model/document';
+import { Notification } from 'src/app/model/notification';
+import { CategoryDocService } from 'src/app/service/category-doc.service';
 import { ConsultantService } from 'src/app/service/consultant.service';
+import { DashboardService } from 'src/app/service/dashboard.service';
 import { DataSharingService } from 'src/app/service/data-sharing.service';
+import { DocumentService } from 'src/app/service/document.service';
 import { UtilsService } from 'src/app/service/utils.service';
 import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
 import { MereComponent } from '../../_utils/mere-component';
-import { IDropdownSettings } from 'ng-multiselect-dropdown';
-import { CategoryDocService } from 'src/app/service/category-doc.service';
-import { CategoryDoc } from 'src/app/model/categoryDoc';
-import { ConsultantDoc } from 'src/app/model/consultantDoc';
-import { FileUpload } from 'src/app/model/FileUpload';
-import { DocumentService } from 'src/app/service/document.service';
-import { Notification } from 'src/app/model/notification';
-import { DashboardService } from 'src/app/service/dashboard.service';
 
 @Component({
   selector: 'app-admin-doc-form',
@@ -46,7 +46,7 @@ export class AdminDocFormComponent extends MereComponent {
   constructor(
     private consultantService: ConsultantService,
     public utils: UtilsService,
-    protected dataSharingService: DataSharingService,
+    public dataSharingService: DataSharingService,
     private utilsIhm: UtilsIhmService,
     private categoryDocService: CategoryDocService,
     private documentService: DocumentService,

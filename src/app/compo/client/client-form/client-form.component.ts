@@ -24,7 +24,7 @@ export class ClientFormComponent extends MereComponent {
   telPattern: string =   UtilsService.TEL_PATTERN;
 
   constructor(private route: ActivatedRoute, private router: Router, private clientService: ClientService     , public utils: UtilsService
-    , protected dataSharingService: DataSharingService) {
+    , public dataSharingService: DataSharingService) {
       super(utils, dataSharingService);
   }
 

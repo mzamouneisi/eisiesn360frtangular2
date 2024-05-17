@@ -20,7 +20,7 @@ export class PermissionComponent extends MereComponent {
 
   constructor(private permissionService: PermissionService, private consultantService: ConsultantService
     , public utils: UtilsService
-    , protected dataSharingService: DataSharingService
+    , public dataSharingService: DataSharingService
     ) {
       super(utils, dataSharingService);
 

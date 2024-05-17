@@ -32,7 +32,7 @@ export class ConsultantListComponent extends MereComponent {
     constructor(private consultantService: ConsultantService, private router: Router
         , public utils: UtilsService
         , protected utilsIhm: UtilsIhmService
-        , protected dataSharingService: DataSharingService) {
+        , public dataSharingService: DataSharingService) {
         super(utils, dataSharingService);
 
         filtre: consultantService.AFF_ALL;

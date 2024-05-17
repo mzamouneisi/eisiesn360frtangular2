@@ -1,14 +1,14 @@
-import {AfterViewInit, Component, Input, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {DashboardService} from "../../service/dashboard.service";
-import {UtilsService} from "../../service/utils.service";
-import {Notification} from "../../model/notification";
-import { MereComponent } from '../_utils/mere-component';
-import { DataSharingService } from 'src/app/service/data-sharing.service';
+import { AfterViewInit, Component, Input, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { NoteFrais } from 'src/app/model/noteFrais';
 import { Document } from 'src/app/model/document';
+import { NoteFrais } from 'src/app/model/noteFrais';
+import { DataSharingService } from 'src/app/service/data-sharing.service';
+import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
+import { Notification } from "../../model/notification";
+import { DashboardService } from "../../service/dashboard.service";
+import { UtilsService } from "../../service/utils.service";
+import { MereComponent } from '../_utils/mere-component';
 
 @Component({
   selector: 'app-notification',
@@ -44,7 +44,7 @@ export class NotificationComponent extends MereComponent implements AfterViewIni
   
   constructor(
     public utils: UtilsService
-    , protected dataSharingService: DataSharingService
+    , public dataSharingService: DataSharingService
     , protected utilsIhm: UtilsIhmService
     , private dashboardService: DashboardService
     , private dialog: MatDialog

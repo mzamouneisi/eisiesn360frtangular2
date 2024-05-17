@@ -1,19 +1,19 @@
-import {Component, Input, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {FormControl, FormGroup} from "@angular/forms";
-import {Activity} from "../../../model/activity";
-import {UtilsService} from "../../../service/utils.service";
-import {MultiDateActivity} from "../../../model/multi-date-activity";
-import {ActivityService} from "../../../service/activity.service";
-import {Cra} from "../../../model/cra";
-import {CraDayActivity} from "../../../model/cra-day-activity";
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {CraObservable, CraObserver} from "../../../core/core";
-import {CraFormCalComponent} from "../cra-form/cra-form-cal.component";
-import {DataSharingService} from "../../../service/data-sharing.service";
-import {DatePipe} from "@angular/common";
-import { MereComponent } from '../../_utils/mere-component';
+import { DatePipe } from "@angular/common";
+import { Component, Input, TemplateRef, ViewChild } from '@angular/core';
+import { FormControl, FormGroup } from "@angular/forms";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { CraObservable, CraObserver } from "../../../core/core";
+import { Activity } from "../../../model/activity";
+import { Cra } from "../../../model/cra";
+import { CraDayActivity } from "../../../model/cra-day-activity";
+import { MultiDateActivity } from "../../../model/multi-date-activity";
+import { ActivityService } from "../../../service/activity.service";
+import { DataSharingService } from "../../../service/data-sharing.service";
+import { UtilsService } from "../../../service/utils.service";
 import { SelectComponent } from '../../_reuse/select-consultant/select/select.component';
+import { MereComponent } from '../../_utils/mere-component';
 import { MzDatePickerDebFinComponent } from '../../mz-date-picker-deb-fin/mz-date-picker-deb-fin.component';
+import { CraFormCalComponent } from "../cra-form/cra-form-cal.component";
 
 @Component({
   selector: 'app-add-multi-date',
@@ -39,7 +39,7 @@ export class AddMultiDateComponent extends MereComponent implements CraObservabl
 
   constructor(private activityService: ActivityService
     , public utils: UtilsService
-    , protected dataSharingService: DataSharingService
+    , public dataSharingService: DataSharingService
     , private datePipe: DatePipe
     , private modal: NgbModal
   ) {

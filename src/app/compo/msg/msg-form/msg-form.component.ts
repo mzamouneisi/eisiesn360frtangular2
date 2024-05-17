@@ -1,11 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IDatePickerConfig, IDatePickerDirectiveConfig } from 'ng2-date-picker';
-import {UtilsService} from 'src/app/service/utils.service';
-import { MsgService } from '../../../service/msg.service';
-import { Msg } from '../../../model/msg';
-import { MereComponent } from '../../_utils/mere-component';
+import { IDatePickerDirectiveConfig } from 'ng2-date-picker';
 import { DataSharingService } from 'src/app/service/data-sharing.service';
+import { UtilsService } from 'src/app/service/utils.service';
+import { Msg } from '../../../model/msg';
+import { MsgService } from '../../../service/msg.service';
+import { MereComponent } from '../../_utils/mere-component';
 
 @Component({
   selector: 'app-msg-form',
@@ -24,7 +24,7 @@ export class MsgFormComponent extends MereComponent {
   dateOptions: IDatePickerDirectiveConfig  = {format: "YYYY-MM-DDTHH:mm:ss.SSSZ",};
  
   constructor(private route: ActivatedRoute, private router: Router, private msgService: MsgService     , public utils: UtilsService
-    , protected dataSharingService: DataSharingService) {
+    , public dataSharingService: DataSharingService) {
       super(utils, dataSharingService);
 
   }

@@ -30,7 +30,7 @@ export class ActivityTypeListComponent extends MereComponent {
   constructor(private activityTypeService: ActivityTypeService, private router: Router
     , public utils: UtilsService
     , protected utilsIhm: UtilsIhmService
-    , protected dataSharingService: DataSharingService
+    , public dataSharingService: DataSharingService
     , private esnService: EsnService
     ) {
     super(utils, dataSharingService);

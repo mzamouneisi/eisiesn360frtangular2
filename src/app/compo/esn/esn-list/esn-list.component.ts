@@ -24,7 +24,7 @@ export class EsnListComponent extends MereComponent {
 	constructor(private esnService: EsnService, private router: Router
 		, public utils: UtilsService
 		, protected utilsIhm: UtilsIhmService
-		, protected dataSharingService: DataSharingService) {
+		, public dataSharingService: DataSharingService) {
 		super(utils, dataSharingService);
 
 		this.colsSearch = ["name", "metier", "address", "webSite", "tel", "email", "responsableUsername"]

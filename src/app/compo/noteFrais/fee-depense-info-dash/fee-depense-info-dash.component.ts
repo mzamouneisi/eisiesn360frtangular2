@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FeeDepensesGeneral } from 'src/app/model/feeDepensesGeneral';
 import { DataSharingService } from 'src/app/service/data-sharing.service';
 import { NoteFraisDashboardService } from 'src/app/service/note-frais-dashboard.service';
@@ -18,7 +18,7 @@ export class FeeDepenseInfoDashComponent extends MereComponent {
   constructor(
     private noteFraisDashboardService: NoteFraisDashboardService,
     public utils: UtilsService,
-    protected dataSharingService: DataSharingService
+    public dataSharingService: DataSharingService
   ) {
     super(utils, dataSharingService);
   }

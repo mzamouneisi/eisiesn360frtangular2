@@ -1,11 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IDatePickerConfig, IDatePickerDirectiveConfig } from 'ng2-date-picker';
-import {UtilsService} from 'src/app/service/utils.service';
-import { MsgHistoService } from '../../../service/msgHisto.service';
-import { MsgHisto } from '../../../model/msgHisto';
-import { MereComponent } from '../../_utils/mere-component';
+import { IDatePickerDirectiveConfig } from 'ng2-date-picker';
 import { DataSharingService } from 'src/app/service/data-sharing.service';
+import { UtilsService } from 'src/app/service/utils.service';
+import { MsgHisto } from '../../../model/msgHisto';
+import { MsgHistoService } from '../../../service/msgHisto.service';
+import { MereComponent } from '../../_utils/mere-component';
 
 @Component({
   selector: 'app-msgHisto-form',
@@ -24,7 +24,7 @@ export class MsgHistoFormComponent extends MereComponent {
   dateOptions: IDatePickerDirectiveConfig  = {format: "YYYY-MM-DDTHH:mm:ss.SSSZ",};
  
   constructor(private route: ActivatedRoute, private router: Router, private msgHistoService: MsgHistoService     , public utils: UtilsService
-    , protected dataSharingService: DataSharingService) {
+    , public dataSharingService: DataSharingService) {
       super(utils, dataSharingService);
 
   }

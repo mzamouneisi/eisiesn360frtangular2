@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from "@angular/router";
+import { DataSharingService } from 'src/app/service/data-sharing.service';
 import { UtilsService } from "../../../service/utils.service";
 import { MereComponent } from '../../_utils/mere-component';
-import { DataSharingService } from 'src/app/service/data-sharing.service';
 
 
 @Component({
@@ -14,7 +14,7 @@ export class NotefraisDashboardComponent extends MereComponent {
 
   constructor(private router: Router,
     public utils: UtilsService,
-    protected dataSharingService: DataSharingService  ) {
+    public dataSharingService: DataSharingService  ) {
       super(utils, dataSharingService);
 
   }

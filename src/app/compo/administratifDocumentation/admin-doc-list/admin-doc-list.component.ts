@@ -1,12 +1,12 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
+import { FileUpload } from 'src/app/model/FileUpload';
 import { CategoryDoc } from 'src/app/model/categoryDoc';
 import { Consultant } from 'src/app/model/consultant';
 import { ConsultantDoc } from 'src/app/model/consultantDoc';
 import { Document } from 'src/app/model/document';
-import { FileUpload } from 'src/app/model/FileUpload';
 import { Notification } from 'src/app/model/notification';
 import { CategoryDocService } from 'src/app/service/category-doc.service';
 import { ConsultantService } from 'src/app/service/consultant.service';
@@ -60,7 +60,7 @@ export class AdminDocListComponent extends MereComponent {
   constructor(
     private consultantService: ConsultantService,
     public utils: UtilsService,
-    protected dataSharingService: DataSharingService,
+    public dataSharingService: DataSharingService,
     private categoryDocService: CategoryDocService,
     private documentService: DocumentService,
     private modal: NgbModal,

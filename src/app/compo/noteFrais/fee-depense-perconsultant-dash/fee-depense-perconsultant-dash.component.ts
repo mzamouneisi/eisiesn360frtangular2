@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import { Consultant } from 'src/app/model/consultant';
 import { FraisConsultantDashboard } from 'src/app/model/fraisConsultantDashboard';
@@ -6,7 +6,6 @@ import { ConsultantService } from 'src/app/service/consultant.service';
 import { DataSharingService } from 'src/app/service/data-sharing.service';
 import { NoteFraisDashboardService } from 'src/app/service/note-frais-dashboard.service';
 import { UtilsService } from 'src/app/service/utils.service';
-import { SelectConsultantComponent } from '../../_reuse/select-consultant/select-consultant.component';
 import { MereComponent } from '../../_utils/mere-component';
 
 @Component({
@@ -34,7 +33,7 @@ export class FeeDepensePerconsultantDashComponent extends MereComponent {
   constructor(
     private noteFraisDashboardService: NoteFraisDashboardService,
     public utils: UtilsService,
-    protected dataSharingService: DataSharingService,
+    public dataSharingService: DataSharingService,
     private consultantService: ConsultantService
   ) {
     super(utils, dataSharingService);

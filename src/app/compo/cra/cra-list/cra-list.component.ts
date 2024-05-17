@@ -38,7 +38,7 @@ export class CraListComponent extends MereComponent {
   constructor(private craService: CraService,
               private router: Router
               , public utils: UtilsService
-              , protected dataSharingService: DataSharingService
+              , public dataSharingService: DataSharingService
               , private dashboardService: DashboardService
               , protected utilsIhm: UtilsIhmService
               , private consultantService: ConsultantService

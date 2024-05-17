@@ -1,12 +1,11 @@
-import {Component, OnInit, ViewChild, Input, TemplateRef} from '@angular/core';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {FormGroup, FormBuilder, FormControl} from '@angular/forms';
-import {Consultant} from '../../model/consultant';
-import {Msg} from '../../model/msg';
-import {MsgService} from '../../service/msg.service';
-import {Router} from '@angular/router';
-import {UtilsService} from 'src/app/service/utils.service';
-import {DataSharingService} from "src/app/service/data-sharing.service";
+import { Component, Input, TemplateRef, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DataSharingService } from "src/app/service/data-sharing.service";
+import { UtilsService } from 'src/app/service/utils.service';
+import { Consultant } from '../../model/consultant';
+import { Msg } from '../../model/msg';
+import { MsgService } from '../../service/msg.service';
 import { MereComponent } from '../_utils/mere-component';
 
 @Component({
@@ -29,7 +28,7 @@ export class MsgNotificationsComponent extends MereComponent {
     constructor(private msgService: MsgService
     		, private router: Router
             , public utils: UtilsService
-            , protected dataSharingService: DataSharingService
+            , public dataSharingService: DataSharingService
     		, private modal: NgbModal) {
                 super(utils, dataSharingService);
     }

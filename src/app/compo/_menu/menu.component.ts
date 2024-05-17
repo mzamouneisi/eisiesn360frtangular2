@@ -1,10 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Consultant } from 'src/app/model/consultant';
 import { EsnService } from 'src/app/service/esn.service';
 import { PermissionService } from 'src/app/service/permission.service';
 import { UtilsService } from 'src/app/service/utils.service';
-import {DataSharingService} from "../../service/data-sharing.service";
+import { DataSharingService } from "../../service/data-sharing.service";
 import { MereComponent } from '../_utils/mere-component';
 
 @Component({
@@ -22,7 +22,7 @@ export class MenuComponent extends MereComponent {
   dirImg = "assets/images/"
   menuImg = this.dirImg + "menu.png";
 
-  constructor(protected dataSharingService: DataSharingService, public utils: UtilsService,
+  constructor(public dataSharingService: DataSharingService, public utils: UtilsService,
     private router: Router
     , private esnService: EsnService
     , private permissionService: PermissionService

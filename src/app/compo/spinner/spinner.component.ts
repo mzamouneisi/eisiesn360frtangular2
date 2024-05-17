@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { DataSharingService } from 'src/app/service/data-sharing.service';
 import { UtilsService } from 'src/app/service/utils.service';
 import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
@@ -14,7 +14,7 @@ export class SpinnerComponent extends MereComponent {
   @Input() title: string = "Chargement...";
 
   constructor(public utils: UtilsService
-    , protected dataSharingService: DataSharingService
+    , public dataSharingService: DataSharingService
     , private utilsIhm: UtilsIhmService
   ) {
     super(utils, dataSharingService);

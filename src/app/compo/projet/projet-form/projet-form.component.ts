@@ -1,14 +1,14 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {IDatePickerDirectiveConfig} from 'ng2-date-picker';
-import {ProjetService} from '../../../service/projet.service';
-import {Project} from '../../../model/project';
-import {Client} from 'src/app/model/client';
-import {ClientService} from 'src/app/service/client.service';
-import {UtilsService} from 'src/app/service/utils.service';
-import { MereComponent } from '../../_utils/mere-component';
+import { Component, Input, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { IDatePickerDirectiveConfig } from 'ng2-date-picker';
+import { Client } from 'src/app/model/client';
+import { ClientService } from 'src/app/service/client.service';
 import { DataSharingService } from 'src/app/service/data-sharing.service';
+import { UtilsService } from 'src/app/service/utils.service';
+import { Project } from '../../../model/project';
+import { ProjetService } from '../../../service/projet.service';
 import { SelectComponent } from '../../_reuse/select-consultant/select/select.component';
+import { MereComponent } from '../../_utils/mere-component';
 
 @Component({
   selector: 'app-projet-form',
@@ -33,7 +33,7 @@ export class ProjetFormComponent extends MereComponent {
     , private projetService: ProjetService
     , private clientService: ClientService
     , public utils: UtilsService
-    , protected dataSharingService: DataSharingService  ) {
+    , public dataSharingService: DataSharingService  ) {
       super(utils, dataSharingService);
 
   }

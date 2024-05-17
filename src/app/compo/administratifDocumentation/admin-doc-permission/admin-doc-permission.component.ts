@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CategoryDoc } from 'src/app/model/categoryDoc';
 import { CategoryDocService } from 'src/app/service/category-doc.service';
 import { DataSharingService } from 'src/app/service/data-sharing.service';
@@ -18,7 +18,7 @@ export class AdminDocPermissionComponent extends MereComponent {
 
   constructor(
     public utils: UtilsService,
-    protected dataSharingService: DataSharingService,
+    public dataSharingService: DataSharingService,
     private categoryDocService: CategoryDocService,
     protected utilsIhm: UtilsIhmService,
   ) {

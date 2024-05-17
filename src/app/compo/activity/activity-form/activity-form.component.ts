@@ -1,7 +1,7 @@
 import {
-  Component,
-  Input,
-  ViewChild
+    Component,
+    Input,
+    ViewChild
 } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ActivityType } from "src/app/model/activityType";
@@ -58,7 +58,7 @@ export class ActivityFormComponent extends MereComponent {
     private activityService: ActivityService,
     private activityTypeService: ActivityTypeService
     , public utils: UtilsService
-    , protected dataSharingService: DataSharingService
+    , public dataSharingService: DataSharingService
   ) {
     super(utils, dataSharingService);
 

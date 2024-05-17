@@ -1,10 +1,10 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {PayementMode} from "../../../model/payementMode";
-import {ActivatedRoute, Router} from "@angular/router";
-import {UtilsService} from "../../../service/utils.service";
-import {PayementModeService} from "../../../service/payement-mode.service";
-import { MereComponent } from '../../_utils/mere-component';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from "@angular/router";
 import { DataSharingService } from 'src/app/service/data-sharing.service';
+import { PayementMode } from "../../../model/payementMode";
+import { PayementModeService } from "../../../service/payement-mode.service";
+import { UtilsService } from "../../../service/utils.service";
+import { MereComponent } from '../../_utils/mere-component';
 
 @Component({
   selector: 'app-payementmode-form',
@@ -26,7 +26,7 @@ export class PayementmodeFormComponent extends MereComponent {
               private router: Router,
               private payementModeService: PayementModeService
               , public utils: UtilsService
-              , protected dataSharingService: DataSharingService ) { 
+              , public dataSharingService: DataSharingService ) { 
                 super(utils, dataSharingService);
               }
 

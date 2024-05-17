@@ -35,9 +35,11 @@ export class MereComponent implements OnInit {
 
   @ViewChild('clearInfosBtn', {static: false}) clearInfosBtn: ElementRef;
 
+  @ViewChild('searchStrInput') searchStrInput: ElementRef<HTMLInputElement>;
+
 	userConnected: Consultant = DataSharingService.userConnected;
 
-  constructor(public utils: UtilsService, protected dataSharingService: DataSharingService) { 
+  constructor(public utils: UtilsService, public dataSharingService: DataSharingService) { 
     if(!this.listErrors) this.listErrors = []
    }
 
@@ -262,9 +264,31 @@ export class MereComponent implements OnInit {
 		else {this.setMyList( this.utils.search(this.myList00, this.searchStr, this.colsSearch ) );}
 	}
 
+  searchStrClick() {
+    console.log("disabsearchStrClick searchStrInput : ", this.searchStrInput)
+    this.enableInputSearchStr();
+  }
+
+
   clearSearch() {
     this.searchStr = "";
     this.search();
+  }
+
+  disableInputSearchStr() {
+    // console.log("disableInputSearchStr DEB searchStrInput : ", this.constructor.name, this.searchStrInput)
+    if(this.searchStrInput != null) {
+      let inputElement = this.searchStrInput.nativeElement;
+      inputElement.disabled = true;
+    }
+  }
+
+  enableInputSearchStr() {
+    // console.log("enableInputSearchStr DEB searchStrInput : ", this.constructor.name, this.searchStrInput)
+    if(this.searchStrInput != null) {
+      let inputElement = this.searchStrInput.nativeElement;
+      inputElement.disabled = false;
+    }
   }
 
 }

@@ -1,11 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Consultant} from "../../model/consultant";
-import {ActivatedRoute, Router} from "@angular/router";
-import {ConsultantService} from "../../service/consultant.service";
-import {UtilsService} from "../../service/utils.service";
-import {DataSharingService} from "../../service/data-sharing.service";
-import {AuthService} from "../../auth/services/auth.service";
-import {IMyDateModel, IMyDpOptions} from "mydatepicker";
+import { Component } from '@angular/core';
+import { Router } from "@angular/router";
+import { IMyDpOptions } from "mydatepicker";
+import { AuthService } from "../../auth/services/auth.service";
+import { Consultant } from "../../model/consultant";
+import { ConsultantService } from "../../service/consultant.service";
+import { DataSharingService } from "../../service/data-sharing.service";
+import { UtilsService } from "../../service/utils.service";
 import { MereComponent } from '../_utils/mere-component';
 
 @Component({
@@ -23,7 +23,7 @@ export class ProfileComponent extends MereComponent {
     , private consultantService: ConsultantService,
               private authService: AuthService
               , public utils: UtilsService
-              , protected dataSharingService: DataSharingService  ) {
+              , public dataSharingService: DataSharingService  ) {
                 super(utils, dataSharingService);
 
   }

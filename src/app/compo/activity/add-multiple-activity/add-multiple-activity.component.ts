@@ -41,7 +41,7 @@ export class AddMultipleActivityComponent extends MereComponent {
     , private activityService: ActivityService
     , private activityTypeService: ActivityTypeService
     , public utils: UtilsService
-    , protected dataSharingService: DataSharingService
+    , public dataSharingService: DataSharingService
     , private modal: NgbModal) {
       super(utils, dataSharingService);
   }

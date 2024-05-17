@@ -1,18 +1,18 @@
 import { Component } from '@angular/core';
+import { FileUpload } from 'src/app/model/FileUpload';
+import { CategoryDoc } from 'src/app/model/categoryDoc';
 import { Consultant } from 'src/app/model/consultant';
+import { ConsultantDoc } from 'src/app/model/consultantDoc';
+import { ConsultantFileUpload } from 'src/app/model/consultant_FileUpload';
 import { Document } from 'src/app/model/document';
+import { Notification } from 'src/app/model/notification';
+import { CategoryDocService } from 'src/app/service/category-doc.service';
 import { ConsultantService } from 'src/app/service/consultant.service';
+import { DashboardService } from 'src/app/service/dashboard.service';
 import { DataSharingService } from 'src/app/service/data-sharing.service';
+import { DocumentService } from 'src/app/service/document.service';
 import { UtilsService } from 'src/app/service/utils.service';
 import { MereComponent } from '../../_utils/mere-component';
-import { CategoryDocService } from 'src/app/service/category-doc.service';
-import { CategoryDoc } from 'src/app/model/categoryDoc';
-import { ConsultantDoc } from 'src/app/model/consultantDoc';
-import { FileUpload } from 'src/app/model/FileUpload';
-import { DocumentService } from 'src/app/service/document.service';
-import { ConsultantFileUpload } from 'src/app/model/consultant_FileUpload';
-import { Notification } from 'src/app/model/notification';
-import { DashboardService } from 'src/app/service/dashboard.service';
 
 @Component({
   selector: 'app-admin-doc-multiple',
@@ -39,7 +39,7 @@ export class AdminDocMultipleComponent extends MereComponent {
   constructor(
     private consultantService: ConsultantService,
     public utils: UtilsService,
-    protected dataSharingService: DataSharingService,
+    public dataSharingService: DataSharingService,
     private categoryDocService: CategoryDocService,
     private documentService: DocumentService,
     private dashboardService: DashboardService

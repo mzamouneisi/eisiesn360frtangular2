@@ -52,7 +52,7 @@ export class NotefraisListComponent extends MereComponent {
     , private router: Router
     , public utils: UtilsService
     , protected utilsIhm: UtilsIhmService
-    , protected dataSharingService: DataSharingService
+    , public dataSharingService: DataSharingService
     , private consultantService: ConsultantService
     , private modal: NgbModal
     , private dashboardService: DashboardService

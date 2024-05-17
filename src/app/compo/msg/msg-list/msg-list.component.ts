@@ -25,7 +25,7 @@ export class MsgListComponent extends MereComponent {
 	constructor(private msgService: MsgService, private router: Router
 		, public utils: UtilsService
 		, protected utilsIhm: UtilsIhmService
-		, protected dataSharingService: DataSharingService) {
+		, public dataSharingService: DataSharingService) {
 		super(utils, dataSharingService);
 
 		this.colsSearch = ["msg", "type", "typeId", "from", "to", "isReadByTo"]

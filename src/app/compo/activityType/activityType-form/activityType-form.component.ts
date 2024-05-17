@@ -1,11 +1,11 @@
-import {Component, OnInit, Input, ViewChild, ElementRef} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import {UtilsService} from 'src/app/service/utils.service';
-import {ActivityTypeService} from '../../../service/activityType.service';
-import {ActivityType} from '../../../model/activityType';
-import { MereComponent } from '../../_utils/mere-component';
 import { DataSharingService } from 'src/app/service/data-sharing.service';
+import { UtilsService } from 'src/app/service/utils.service';
+import { ActivityType } from '../../../model/activityType';
+import { ActivityTypeService } from '../../../service/activityType.service';
+import { MereComponent } from '../../_utils/mere-component';
 
 @Component({
   selector: 'app-activityType-form',
@@ -25,7 +25,7 @@ export class ActivityTypeFormComponent extends MereComponent {
 
   constructor(private route: ActivatedRoute, private router: Router, private activityTypeService: ActivityTypeService
     , public utils: UtilsService
-    , protected dataSharingService: DataSharingService
+    , public dataSharingService: DataSharingService
     ) {
       super(utils, dataSharingService);
   }

@@ -1,14 +1,14 @@
-import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {CalendarEvent, CalendarView} from "angular-calendar";
-import {Subject} from "rxjs";
-import {UtilsService} from "../../../service/utils.service";
-import {CraConfigurationService} from "../../../service/cra-configuration.service";
-import {DatePipe} from "@angular/common";
-import {CraConfiguration} from "../../../model/cra-configuration";
-import {endOfDay, startOfDay} from "date-fns";
-import {MonthViewDay} from "calendar-utils";
-import { MereComponent } from '../../_utils/mere-component';
+import { DatePipe } from "@angular/common";
+import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { CalendarEvent, CalendarView } from "angular-calendar";
+import { MonthViewDay } from "calendar-utils";
+import { endOfDay, startOfDay } from "date-fns";
+import { Subject } from "rxjs";
 import { DataSharingService } from 'src/app/service/data-sharing.service';
+import { CraConfiguration } from "../../../model/cra-configuration";
+import { CraConfigurationService } from "../../../service/cra-configuration.service";
+import { UtilsService } from "../../../service/utils.service";
+import { MereComponent } from '../../_utils/mere-component';
 
 @Component({
   selector: 'app-cra-configuration',
@@ -27,7 +27,7 @@ export class CraConfigurationComponent extends MereComponent {
   @ViewChild('customCellTemplate', {static: true}) customCellTemplate: TemplateRef<any>;
 
   constructor(private craConfigurationService: CraConfigurationService     , public utils: UtilsService
-    , protected dataSharingService: DataSharingService, private datePipe: DatePipe) {
+    , public dataSharingService: DataSharingService, private datePipe: DatePipe) {
       super(utils, dataSharingService);
   }
 

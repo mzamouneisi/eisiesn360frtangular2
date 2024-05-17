@@ -36,7 +36,7 @@ export class ActivityListComponent extends MereComponent {
     , public utils: UtilsService
     , protected utilsIhm: UtilsIhmService
     , protected modal: NgbModal
-    , protected dataSharingService: DataSharingService
+    , public dataSharingService: DataSharingService
   ) {
     super(utils, dataSharingService);
 

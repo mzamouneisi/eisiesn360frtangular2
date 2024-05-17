@@ -1,10 +1,10 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
-import {ConsultantService} from "../../../service/consultant.service";
-import {Consultant} from "../../../model/consultant";
-import {UtilsService} from 'src/app/service/utils.service';
-import {UtilsIhmService} from 'src/app/service/utilsIhm.service';
-import { MereComponent } from '../../_utils/mere-component';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { DataSharingService } from 'src/app/service/data-sharing.service';
+import { UtilsService } from 'src/app/service/utils.service';
+import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
+import { Consultant } from "../../../model/consultant";
+import { ConsultantService } from "../../../service/consultant.service";
+import { MereComponent } from '../../_utils/mere-component';
 import { SelectComponent } from './select/select.component';
 
 @Component({
@@ -26,7 +26,7 @@ export class SelectConsultantComponent extends MereComponent {
 
   constructor(private consultantService: ConsultantService
     , public utils: UtilsService
-    , protected dataSharingService: DataSharingService
+    , public dataSharingService: DataSharingService
           , private utilsIhm: UtilsIhmService	
           ) { 
 			super(utils, dataSharingService);

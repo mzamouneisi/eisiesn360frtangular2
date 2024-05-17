@@ -49,6 +49,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
   currentCra: Cra;
   currentFee: NoteFrais;
   fromNotif: boolean;
+  isDisableSearchStrInput: boolean = false ;
 
   constructor(private router: Router
     // , private craService: CraService
