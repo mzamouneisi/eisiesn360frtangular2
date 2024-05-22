@@ -286,8 +286,7 @@ export class MereComponent implements OnInit {
   enableInputSearchStr() {
     // console.log("enableInputSearchStr DEB searchStrInput : ", this.constructor.name, this.searchStrInput)
     if(this.searchStrInput != null) {
-      let inputElement = this.searchStrInput.nativeElement;
-      inputElement.disabled = false;
+      this.dataSharingService.isDisableSearchStrInput = false ;
     }
   }
 

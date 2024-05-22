@@ -5,7 +5,7 @@
         <h3 class="card-title text-center py-3">{{getTitle()}}</h3>
 
         <div class="right" style="width: 40%;" name="searchDiv">
-            <input id="searchStr" #searchStrInput class="form-control left" style="width: 90%;" type="text" placeholder="search" name="searchStr" [(ngModel)]="searchStr" (keyup)="search()" (mouseover)="enableInputSearchStr()" [disabled]="dataSharingService.isDisableSearchStrInput"  >
+            <input id="searchStr" #searchStrInput class="form-control left" style="width: 90%;" type="text" placeholder="search" name="searchStr" [(ngModel)]="searchStr" (keyup)="search()" (mouseover)="enableInputSearchStr()" [readonly]="dataSharingService.isDisableSearchStrInput"  >
             <button class="right" style="width: 10%; height: 40px; text-align: center;" (click)="clearSearch()">X</button>
         </div>
 

@@ -17,23 +17,23 @@ import { UtilsService } from "../../service/utils.service";
 export class HeaderComponent extends MereComponent {
   title0 = "Notifications"
   language: string;
-  notifications : Notification[]
+  notifications: Notification[]
   nbNotificationNotViewed = 0
   dateStr = ""
   timeStr = ""
 
   // @ViewChild('infors', {static: false}) infors: MereComponent;
 
-  @ViewChild('notificationCompo', {static:false}) notificationCompo:NotificationComponent ;
+  @ViewChild('notificationCompo', { static: false }) notificationCompo: NotificationComponent;
 
   constructor(private authService: AuthService
     , private router: Router
     , public utils: UtilsService
     , public dataSharingService: DataSharingService
     , private utilsIhm: UtilsIhmService
-    , private dialog: MatDialog
-    ) {
-      super(utils, dataSharingService);
+    , public dialog: MatDialog
+  ) {
+    super(utils, dataSharingService);
   }
 
   ngOnInit() {
@@ -47,7 +47,7 @@ export class HeaderComponent extends MereComponent {
         let tab = dateHeure.split(' ');
         this.dateStr = tab[0]
         this.timeStr = tab[1]
-      },1000
+      }, 1000
     )
   }
 
@@ -63,16 +63,16 @@ export class HeaderComponent extends MereComponent {
 
   public getListNotifications() {
     // //////////console.log("getListNotifications")
-    
-    if(this.notificationCompo) this.notificationCompo.getNotifications();
-    this.notifications = this.notificationCompo? this.notificationCompo.myList : new Array() ;
-    if(!this.notifications) this.notifications = new Array();
+
+    if (this.notificationCompo) this.notificationCompo.getNotifications();
+    this.notifications = this.notificationCompo ? this.notificationCompo.myList : new Array();
+    if (!this.notifications) this.notifications = new Array();
     return this.notifications;
   }
   getNbNotifications() {
     // //////////console.log("getNbNotifications")
     // this.getListNotifications();
-    this.nbNotificationNotViewed = this.notificationCompo? this.notificationCompo.nbNotification : 0;
+    this.nbNotificationNotViewed = this.notificationCompo ? this.notificationCompo.nbNotification : 0;
     return this.nbNotificationNotViewed;
   }
 
@@ -80,10 +80,11 @@ export class HeaderComponent extends MereComponent {
   //   this.notificationCompo.getNotViewedNotifications( ); 
   // }
 
+  //ICON USER
   menuUserConnected() {
     if (this.authService.isLoggedIn()) {
 
-      this.dataSharingService.isDisableSearchStrInput = true ;
+      this.dataSharingService.isDisableSearchStrInput = true;
 
       const dialogConfig = new MatDialogConfig();
 
@@ -91,9 +92,7 @@ export class HeaderComponent extends MereComponent {
       dialogConfig.autoFocus = true;
       dialogConfig.width = "580px";
       dialogConfig.height = "570px";
-      //dialogConfig.data = this.userConnected;
-
-
+  
       let dialogRef = this.dialog.open(UserConnectedComponent, dialogConfig);
 
     }

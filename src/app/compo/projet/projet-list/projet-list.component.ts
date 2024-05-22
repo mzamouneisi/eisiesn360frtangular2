@@ -57,7 +57,7 @@ export class ProjetListComponent extends MereComponent {
 
   findAll() {
     this.beforeCallServer("findAll")
-    this.projetService.findAll().subscribe(
+    this.projetService.findAll(this.getEsnId()).subscribe(
       data => {
         this.afterCallServer("findAll", data)
         this.myList = data.body.result;

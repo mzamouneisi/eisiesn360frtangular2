@@ -54,7 +54,7 @@ export class AddMultipleActivityComponent extends MereComponent {
 
   getProjects() {
     this.beforeCallServer("getProjects");
-    this.projetService.findAll().subscribe(
+    this.projetService.findAll(this.getEsnId()).subscribe(
       data => {
         this.afterCallServer("getProjects", data)
         this.projects = data.body.result;

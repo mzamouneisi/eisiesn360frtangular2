@@ -1,7 +1,7 @@
 import {
-    Component,
-    Input,
-    ViewChild
+  Component,
+  Input,
+  ViewChild
 } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ActivityType } from "src/app/model/activityType";
@@ -124,7 +124,7 @@ export class ActivityFormComponent extends MereComponent {
 
       ////////////console.log("getProjets:", this.myObj);
       this.beforeCallServer("getProjets");
-      this.projetService.findAll().subscribe(
+      this.projetService.findAll(this.getEsnId()).subscribe(
         (data) => {
           this.afterCallServer("getProjets", data)
           this.projects = data.body.result;

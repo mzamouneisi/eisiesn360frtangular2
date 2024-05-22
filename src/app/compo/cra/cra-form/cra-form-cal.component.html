@@ -58,8 +58,8 @@
                         <tr>
                             <th>Week Number:</th>
                         </tr>
-                        <tr *ngFor="let w of utils.getWeekNumbersOfMonth(currentCra.month)">
-                            <td style="padding: 40px;"> <b>S-{{w}}</b> </td>
+                        <tr *ngFor="let w of utils.getWeekNumbersOfMonth(currentCra.month); let i = index">
+                            <td style="padding: 40px;" id="cells-{{w}}-{{i}}"> <b>S-{{w}}</b> </td>
                         </tr>
                     </table>
                 </div>
@@ -68,7 +68,7 @@
                 <!-- [refresh]="refresh" genere une erreur de date sur un undefined-->
 
                 <mwl-calendar-month-view [headerTemplate]="defaultTemplate" [viewDate]="viewDate" [events]="events" [refresh]="refresh" [weekStartsOn]="1" (dayClicked)="dayClicked($event.day, events, $event)" [cellTemplate]="customCellTemplate">
-
+                    <a id="test"></a>
                 </mwl-calendar-month-view>
 
                 <br>

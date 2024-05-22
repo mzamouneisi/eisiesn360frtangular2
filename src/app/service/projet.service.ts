@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Project } from '../model/project';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import {GenericResponse} from "../model/response/genericResponse";
+import { Project } from '../model/project';
+import { GenericResponse } from "../model/response/genericResponse";
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -27,8 +27,8 @@ export class ProjetService {
 		this.projetUrl = environment.apiUrl+'/project/';
 	}
 
-	public findAll(): Observable<GenericResponse> {
-		return this.http.get<GenericResponse>(this.projetUrl);
+	public findAll(esnId: number): Observable<GenericResponse> {
+		return this.http.get<GenericResponse>(this.projetUrl+ "esn/" + esnId);
 	}
 
 	public findById(id: number): Observable<GenericResponse> {
