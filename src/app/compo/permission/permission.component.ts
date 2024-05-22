@@ -32,32 +32,38 @@ export class PermissionComponent extends MereComponent {
     this.loadRoles();
   }
 
+  ind(i:number) {
+    return (this.currentPage - 1) * this.itemsPerPage + i 
+  }
 
   /***
    * used to update item page element selected
    * @param i
    */
   updateList(i: number, action: string, event: any) {
+    var checked = event.target.checked 
+    console.log("updateList : i, action, checked, this.myList, event : ", i, action, checked, this.myList, event)
+
     if ('all' == action) {
-      this.myList[i].view = event.target.checked;
-      this.myList[i].add = event.target.checked
-      this.myList[i].update = event.target.checked
-      this.myList[i].delete = event.target.checked
+      this.myList[i].view = checked;
+      this.myList[i].add = checked
+      this.myList[i].update = checked
+      this.myList[i].delete = checked
     }
     if ('isView' == action) {
-      this.myList[i].view = event.target.checked;
+      this.myList[i].view = checked;
     }
     if ('isAdd' == action) {
-      this.myList[i].add = event.target.checked
+      this.myList[i].add = checked
 
     }
     if ('isUpdate' == action) {
-      this.myList[i].update = event.target.checked
+      this.myList[i].update = checked
     }
     if ('isDelete' == action) {
-      this.myList[i].delete = event.target.checked
+      this.myList[i].delete = checked
     }
-    if (event.target.checked && this.myList[i].view == false) {
+    if (checked && this.myList[i].view == false) {
       this.myList[i].view = true;
     }
   }

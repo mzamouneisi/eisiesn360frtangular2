@@ -24,22 +24,22 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let element of myList | paginate: {itemsPerPage, currentPage}; let i = index">
+                <tr *ngFor="let element of myList | paginate: {itemsPerPage, currentPage}; let i = index ">
                     <td>{{ element.featureId.featureName }}</td>
                     <td>
-                        <input type="checkbox" id="permission-update-all-{{i}}" (click)="updateList(i,'all',$event)" class="form-check-input" style="margin-left: 10px;">
+                        <input type="checkbox" id="permission-update-all-{{ind(i)}}" (click)="updateList(ind(i),'all',$event)" class="form-check-input" style="margin-left: 10px;">
                     </td>
                     <td>
-                        <input type="checkbox" id="permission-update-view-{{i}}" [checked]="element.view" (click)="updateList(i,'isView',$event)" class="form-check-input" style="margin-left: 10px;">
+                        <input type="checkbox" id="permission-update-view-{{ind(i)}}" [checked]="element.view" (click)="updateList(ind(i),'isView',$event)" class="form-check-input" style="margin-left: 10px;">
                     </td>
                     <td>
-                        <input type="checkbox" id="permission-update-add-{{i}}" [checked]="element.add" (click)="updateList(i,'isAdd',$event)" class="form-check-input" style="margin-left: 10px;">
+                        <input type="checkbox" id="permission-update-add-{{ind(i)}}" [checked]="element.add" (click)="updateList(ind(i),'isAdd',$event)" class="form-check-input" style="margin-left: 10px;">
                     </td>
                     <td>
-                        <input type="checkbox" id="permission-update-isUpdate-{{i}}" [checked]="element.update" (click)="updateList(i,'isUpdate',$event)" class="form-check-input" style="margin-left: 10px;">
+                        <input type="checkbox" id="permission-update-isUpdate-{{ind(i)}}" [checked]="element.update" (click)="updateList(ind(i),'isUpdate',$event)" class="form-check-input" style="margin-left: 10px;">
                     </td>
                     <td>
-                        <input type="checkbox" id="permission-update-delete-{{i}}" [checked]="element.delete" (click)="updateList(i,'isDelete',$event)" class="form-check-input" style="margin-left: 10px;">
+                        <input type="checkbox" id="permission-update-delete-{{ind(i)}}" [checked]="element.delete" (click)="updateList(ind(i),'isDelete',$event)" class="form-check-input" style="margin-left: 10px;">
                     </td>
                 </tr>
             </tbody>
