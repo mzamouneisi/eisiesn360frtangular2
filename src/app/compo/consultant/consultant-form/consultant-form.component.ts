@@ -78,7 +78,7 @@ export class ConsultantFormComponent extends MereComponent {
       if(this.esnIdStr) {
         this.esnId = Number.parseInt(this.esnIdStr);
       }
-    }    
+    }
 
   }
 
@@ -112,6 +112,7 @@ export class ConsultantFormComponent extends MereComponent {
       }
       else if (this.myObj == null) this.myObj = new Consultant();
     }
+
   }
   
   typeUser() {
@@ -159,8 +160,7 @@ export class ConsultantFormComponent extends MereComponent {
 
     if(esn) {
      this.myObj.esn = esn;
-     this.myObj.email = esn.responsableUsername;
-     this.myObj.username = this.myObj.email    
+     this.myObj.username = this.myObj.email
      this.selectEsn(esn)
     }
 
@@ -206,6 +206,9 @@ export class ConsultantFormComponent extends MereComponent {
   onSubmit() {
     this.myObj.username = this.myObj.email;
     this.myObj.adminConsultantUsername = this.manager.username;
+    if(this.myObj.role == "RESPONSIBLE_ESN") {
+      this.myObj.adminConsultantUsername = this.myObj.username;
+    }
     this.setEsn();
     console.log("onSubmit obj", this.myObj);
     let label = "onSubmit"
@@ -284,6 +287,15 @@ export class ConsultantFormComponent extends MereComponent {
       return 1;
     }
     return 0;
+  }
+
+  emailFocus() {
+    console.log("emailFocus", this.myObj)
+    if( this.utils.isEmpty (this.myObj.email)  ) {
+      if( !this.utils.isEmpty (this.myObj.firstName) && !this.utils.isEmpty (this.myObj.lastName) && !this.utils.isEmpty (this.myObj.esn?.name) ) {
+        this.myObj.email = (this.myObj.firstName+"."+this.myObj.lastName+"@"+this.myObj.esn?.name+".com").toLowerCase();
+      }
+    }
   }
 
   //////////////end meths

@@ -622,7 +622,9 @@ export class UtilsService {
 
   ///////////
 
-
+  isEmpty(obj: Object) {
+    return obj == null || obj == "" || obj == "null" ;
+  }
 
   // end methodes ////////////
 

@@ -37,7 +37,6 @@ app.compo.esn.form.input.country=Country
 app.compo.esn.form.input.webSite=WebSite
 app.compo.esn.form.input.tel=Tel
 app.compo.esn.form.input.email=Email
-app.compo.esn.form.input.responsableUsername=RespName
 app.compo.esn.form.button.list=Back to list
 app.compo.client.list.table.thead.name=Name
 app.compo.client.list.table.thead.profession=Profession

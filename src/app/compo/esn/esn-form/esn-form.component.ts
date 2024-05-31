@@ -47,7 +47,7 @@ export class EsnFormComponent extends MereComponent {
       this.btnSaveTitle = this.utils.tr("Save")
       this.title = this.utils.tr("Edit") + " ESN" ;
       let esnP: Esn = this.esnService.getEsn();
-      ////console.log('esnP='+esnP);
+      console.log('esn-form : esnP=', esnP);
 
       if (esnP != null) this.myObj = esnP;
       else if (this.myObj == null) this.myObj = new Esn();
@@ -58,16 +58,17 @@ export class EsnFormComponent extends MereComponent {
   onSubmit() {
     console.log( "onSubmit: ", this.myObj);
     this.beforeCallServer("onSubmit");
+    // this.esnService.setEsn(this.myObj);
     this.esnService.save(this.myObj).subscribe(
       data => {
         this.afterCallServer("onSubmit", data)
         console.log( "onSubmit: isError:", this.isError());
         if (!this.isError()) {
           // this.gotoEsnList()
-          // console.info("data: " , data)
+          console.info("data: " , data)
           if(data && data.body && data.body.result) {
-            this.myObj = data.body.result
-            this.gotoAddResponsibleEsn(this.myObj);
+            // this.myObj = data.body.result
+            // this.gotoAddResponsibleEsn(this.myObj);
           }
         }
       },
@@ -79,10 +80,10 @@ export class EsnFormComponent extends MereComponent {
     );
   }
 
-  gotoAddResponsibleEsn(esn: Esn) {
-    this.clearInfos();
-    this.utils.navigateToUrl('/consultant_form', {isAdd:true, role:'resp', esnIdStr:esn.id});
-  }
+  // gotoAddResponsibleEsn(esn: Esn) {
+  //   this.clearInfos();
+  //   this.utils.navigateToUrl('/consultant_form', {isAdd:true, role:'resp', esnIdStr:esn.id});
+  // }
 
   gotoEsnList() {
     this.clearInfos();

@@ -43,7 +43,7 @@ export class ConsultantListComponent extends MereComponent {
 
         this.loadRoles();
 
-        this.colsSearch = ["fullName", "username", "tel", "email", "esn", "role"]
+        this.colsSearch = ["fullName", "username", "tel", "email", "esn", "role", "level"]
 
     }
 

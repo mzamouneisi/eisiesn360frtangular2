@@ -1,4 +1,5 @@
-import {Address} from "./address";
+import { Address } from "./address";
+import { Consultant } from "./consultant";
 
 export class Esn {
   id: number;
@@ -8,5 +9,5 @@ export class Esn {
   tel: string;
   webSite: string;
   email: string;
-  responsableUsername: string;
+  listResp : Consultant[];
 }

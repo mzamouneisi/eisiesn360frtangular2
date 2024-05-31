@@ -18,6 +18,7 @@
                     <th scope="col">{{utils.tr('app.compo.consultant.list.table.thead.email')}}</th>
                     <th scope="col">{{utils.tr('app.compo.consultant.list.table.thead.esn')}}</th>
                     <th scope="col">{{utils.tr('Role')}}</th>
+                    <th scope="col">{{utils.tr('Level')}}</th>
                     <th scope="col">{{utils.tr('app.compo.consultant.list.table.thead.action')}}</th>
                 </tr>
             </thead>
@@ -30,6 +31,7 @@
                     <td>{{ element.email }}</td>
                     <td>{{ element.esn?.name }}</td>
                     <td>{{ element.role}}</td>
+                    <td>{{ element.level}}</td>
                     <td>
                         <button (click)="showForm(element)" id="btn-update-consultant-list-{{i}}" class='btn btn-primary mr-1' [appAuthorization] feature="CONSULTANT_MANAGEMENT" permission="UPDATE">{{utils.tr('Edit')}}
           </button>

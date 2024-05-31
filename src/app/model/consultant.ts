@@ -1,6 +1,6 @@
-import {Esn} from './esn';
-import {Address} from "./address";
-import {Activity} from './activity';
+import { Activity } from './activity';
+import { Address } from "./address";
+import { Esn } from './esn';
 
 export class Consultant {
     id: number;
@@ -21,6 +21,7 @@ export class Consultant {
     active: boolean;
     activities: Activity[];
     admin: boolean;
+    level : BigInteger;
 
     //call : obj.toString
     get toString(): string {

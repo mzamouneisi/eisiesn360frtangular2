@@ -73,6 +73,7 @@ export class ActivityTypeFormComponent extends MereComponent {
   onSubmit() {
     //////////console.log("onSubmit: myObj=", this.myObj);
     this.beforeCallServer("onSubmit");
+    this.myObj.esn = this.getEsnCurrent();
     this.activityTypeService.save(this.myObj).subscribe(
       data => {
         this.afterCallServer("onSubmit", data)

@@ -372,10 +372,6 @@ export class TradService {
       "fr": "Email de l'ESN",
       "en": "ESN Email",
     },
-    "app.compo.esn.form.input.responsableUsername": {
-      "fr": "Email du responsable",
-      "en": "Responsible Mail",
-    },
     "app.compo.esn.form.button.list": {
       "fr": "Retour \u00e0 la liste",
       "en": "Back to list",
@@ -595,6 +591,10 @@ export class TradService {
     "app.compo.consultant.form.input.email": {
       "fr": "Email",
       "en": "Email",
+    },
+    "app.compo.consultant.form.input.level": {
+      "fr": "Niveau",
+      "en": "Level",
     },
     "app.compo.consultant.form.input.birthDay": {
       "fr": "Date de naissance",

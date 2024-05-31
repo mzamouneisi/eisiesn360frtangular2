@@ -27,7 +27,7 @@ export class EsnListComponent extends MereComponent {
 		, public dataSharingService: DataSharingService) {
 		super(utils, dataSharingService);
 
-		this.colsSearch = ["name", "metier", "address", "webSite", "tel", "email", "responsableUsername"]
+		this.colsSearch = ["name", "metier", "address", "webSite", "tel", "email"]
 	}
 
 	getIdOfCurentObj() {
@@ -35,6 +35,7 @@ export class EsnListComponent extends MereComponent {
 	}
      showForm(myObj: Esn) {
 			this.myObj = myObj;
+			this.esnService.setEsn(myObj);
 			if(this.myObjEditView != null) {
 					this.myObjEditView.myObj = this.myObj
 					this.myObjEditView.isAdd = 'false';
@@ -60,6 +61,7 @@ export class EsnListComponent extends MereComponent {
 				this.afterCallServer("findAll", data)
 				this.myList = data.body.result;
 				this.myList00 = this.myList;
+				console.log("findAll Esn : " , this.myList)
 			}, error => {
 	            this.addErrorFromErrorOfServer("findAll", error);
 			 	////console.log(error);
@@ -73,6 +75,7 @@ export class EsnListComponent extends MereComponent {
 
 	edit(esn: Esn) {
 		this.clearInfos();
+		console.log("esn-list set esn", esn )
 		this.esnService.setEsn(esn);
 		this.router.navigate(['/esn_form']);
 	}

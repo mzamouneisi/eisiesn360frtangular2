@@ -35,16 +35,22 @@
 
             <div class="form-group">
                 <label for="email">{{utils.tr('app.compo.consultant.form.input.email')}}</label>
-                <input type="email" [(ngModel)]="myObj.email" [disabled]="myObj.role == 'RESPONSIBLE_ESN'" class="form-control" id="email" name="email" 
+                <input type="email" [(ngModel)]="myObj.email" class="form-control" id="email" name="email" 
                     placeholder="{{utils.tr('app.form.input.placeholder.prefix')}}  {{utils.tr('app.compo.consultant.form.input.email') | lowercase}}"
-                    required #email="ngModel" [pattern]="emailPattern">
+                    required #email="ngModel" [pattern]="emailPattern" (click)="emailFocus()" (keyup)="emailFocus()"  >
             </div>
             <div [hidden]="email.valid || (myObj.role == 'RESPONSIBLE_ESN' && myObj.email != '' )" class="badge badge-danger">{{utils.tr('app.compo.consultant.form.input.email')}} {{utils.tr('app.badge.required')}}</div>
 
             <div class="form-group">
+                <label for="level">{{utils.tr('app.compo.consultant.form.input.level')}}</label>
+                <input type="level" [(ngModel)]="myObj.level" class="form-control" id="level" name="level" placeholder="{{utils.tr('app.form.input.placeholder.prefix')}}  {{utils.tr('app.compo.consultant.form.input.level') | lowercase}}" required #level="ngModel" >
+            </div>
+            <div [hidden]="level.valid" class="badge badge-danger">{{utils.tr('app.compo.consultant.form.input.level')}} {{utils.tr('app.badge.required')}}</div>
+
+            <div class="form-group">
                 <label>{{utils.tr('app.compo.consultant.form.input.birthDay')}} : 
-          <!-- <span class="badge badge-dark">{{myObj.birthDay | date :'dd-MM-yyyy'}}</span>  -->
-        </label>
+                <!-- <span class="badge badge-dark">{{myObj.birthDay | date :'dd-MM-yyyy'}}</span>  -->
+                </label>
                 <app-mz-date-picker placeHolder="Choix de date" [dateInputId]="'date-naissance'" [(myDatePicker)]="myObj.birthDay"></app-mz-date-picker>
             </div>
             <!--  <div [hidden]="birthday.valid" class="badge badge-danger ">Birthday is required</div>-->
@@ -84,7 +90,7 @@
 
             <div class="form-group">
                 <label for="manager">{{utils.tr('app.compo.consultant.form.input.manager')}}</label>
-                <input type="text" [value]="manager.username" class="form-control" id="manager" name="manager" disabled>
+                <input type="text" [value]="myObj.adminConsultantUsername" class="form-control" id="manager" name="manager" [disabled]="manager.role != 'ADMIN'">
             </div>
             <div class="form-group">
                 <label for="username">{{utils.tr('app.compo.consultant.form.input.username')}}</label>
