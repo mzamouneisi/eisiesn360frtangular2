@@ -13,7 +13,7 @@ import { MereComponent } from '../../_utils/mere-component';
 })
 export class FeeDepensePercategoryDashComponent extends MereComponent {
   highcharts = Highcharts;
-  chartOptions: Highcharts.Options
+  chartOptions: any
   fraisCategory: FraisCategoryDashboard[];
   error: any;
   currentYear: number = (new Date()).getFullYear();

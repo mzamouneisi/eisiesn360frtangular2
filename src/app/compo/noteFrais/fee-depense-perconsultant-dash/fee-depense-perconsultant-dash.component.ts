@@ -15,10 +15,7 @@ import { MereComponent } from '../../_utils/mere-component';
 })
 export class FeeDepensePerconsultantDashComponent extends MereComponent {
   highcharts = Highcharts;
-  chartOptions: Highcharts.Options
-
-  highchartss = Highcharts;
-  chartOptionss: Highcharts.Options
+  chartOptions: any
 
   fraisConsultant: FraisConsultantDashboard[];
   error: any;
@@ -128,7 +125,7 @@ export class FeeDepensePerconsultantDashComponent extends MereComponent {
         //getting data from the server
         this.fraisPerMonth = data.body.result;
         //mapping data in the dashboard
-        this.chartOptionss = {
+        this.chartOptions = {
           chart: {
             plotBackgroundColor: '#fbeaf3	',
             plotBorderWidth: 2,

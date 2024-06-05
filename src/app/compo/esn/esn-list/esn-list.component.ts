@@ -36,6 +36,7 @@ export class EsnListComponent extends MereComponent {
      showForm(myObj: Esn) {
 			this.myObj = myObj;
 			this.esnService.setEsn(myObj);
+			this.getListResp(myObj);
 			if(this.myObjEditView != null) {
 					this.myObjEditView.myObj = this.myObj
 					this.myObjEditView.isAdd = 'false';
@@ -77,7 +78,22 @@ export class EsnListComponent extends MereComponent {
 		this.clearInfos();
 		console.log("esn-list set esn", esn )
 		this.esnService.setEsn(esn);
+		this.getListResp(esn);
 		this.router.navigate(['/esn_form']);
+	}
+
+	getListResp(esn: Esn) {
+		this.beforeCallServer("getListResp")
+		this.esnService.getListResp(esn).subscribe(
+			data => {
+				this.afterCallServer("getListResp", data)
+				this.myObj.listResp = data.body.result;
+				console.log("getListResp Esn : " , this.myObj.listResp)
+			}, error => {
+	            this.addErrorFromErrorOfServer("getListResp", error);
+			 	////console.log(error);
+		 	}
+		 );
 	}
 
 	delete(myObj) {

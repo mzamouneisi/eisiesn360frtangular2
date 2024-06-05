@@ -69,4 +69,40 @@
 
         </form>
     </div>
+
+    <div style="margin-left: 20px;">
+        <h3>Sous Elements de {{ myObj.name }}: </h3>
+        <div>
+            <ul style="margin-left: 20px;">
+              <li *ngFor="let consultant of myObj.listResp">
+                <div>
+                    <h5>{{consultant.fullName}} : {{consultant.role}} <button (click)="getListConsultants(consultant)">List Managers</button> </h5> 
+                    <div [hidden]="consultant.hideSSConsultants" style="margin-left: 20px;">
+                        <li *ngFor="let manager of consultant.listConsultants">
+                            <div>
+                                <h6> {{manager.fullName}} : {{manager.role}} <button (click)="getListConsultants(manager)">List Consultants</button>  </h6>
+                                <div [hidden]="manager.hideSSConsultants" style="margin-left: 20px;">
+                                    <li *ngFor="let child of manager.listConsultants">
+                                        <div>
+                                            <h6> {{child.fullName}} : {{child.role}} <button (click)="getListCra(child)">List Cra</button>  </h6>
+                                        </div>
+                                    </li>
+                                </div>
+                            </div>
+                        </li>
+                    </div>
+                </div>
+                <ul>
+                  <li *ngFor="let cra of consultant.listCra">
+                    {{ cra.month | date: 'MMMM yyyy' }}
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+          
+
+    </div>
+    
+
 </div>

@@ -1,5 +1,6 @@
 import { Activity } from './activity';
 import { Address } from "./address";
+import { Cra } from './cra';
 import { Esn } from './esn';
 
 export class Consultant {
@@ -22,6 +23,10 @@ export class Consultant {
     activities: Activity[];
     admin: boolean;
     level : BigInteger;
+    listCra : Cra[];
+    hideSSConsultants : boolean = true ;
+    hideListCra: boolean = true ;
+    listConsultants : Consultant[]
 
     //call : obj.toString
     get toString(): string {

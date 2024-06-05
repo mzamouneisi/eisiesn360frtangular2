@@ -13,7 +13,7 @@ import { MereComponent } from '../../_utils/mere-component';
 })
 export class FeeDepensePeryearDashComponent extends MereComponent {
   highcharts = Highcharts;
-  chartOptions: Highcharts.Options
+  chartOptions: any
   fraisPerYear: FraisPerDateDashboard[];
   error: any;
   list1: Array<any>=[];

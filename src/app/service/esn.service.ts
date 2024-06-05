@@ -1,11 +1,11 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Esn} from '../model/esn';
-import {Observable} from 'rxjs';
-import {environment} from '../../environments/environment';
-import {GenericResponse} from "../model/response/genericResponse";
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { Esn } from '../model/esn';
+import { GenericResponse } from "../model/response/genericResponse";
 
-@Injectable({providedIn:'root'})
+@Injectable({ providedIn: 'root' })
 export class EsnService {
 
   private esnUrl: string;
@@ -24,6 +24,10 @@ export class EsnService {
 
   public findAll(): Observable<GenericResponse> {
     return this.http.get<GenericResponse>(this.esnUrl);
+  }
+
+  public getListResp(esn: Esn): Observable<GenericResponse> {
+    return this.http.get<GenericResponse>(this.esnUrl + 'listResp/' + esn.id);
   }
 
   public findById(id: number): Observable<GenericResponse> {

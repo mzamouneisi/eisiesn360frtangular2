@@ -1,10 +1,9 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {Consultant} from '../model/consultant';
-import {Observable} from 'rxjs';
-import {environment} from '../../environments/environment';
-import {GenericResponse} from "../model/response/genericResponse";
-import {ConsultantFilter} from '../model/ConsultantFilter';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { Consultant } from '../model/consultant';
+import { GenericResponse } from "../model/response/genericResponse";
 
 @Injectable({providedIn:'root'})
 export class ConsultantService {
@@ -50,6 +49,10 @@ export class ConsultantService {
    */
   public findAll(): Observable<GenericResponse> {
     return this.http.get<GenericResponse>(this.consultantUrl);
+  }
+
+  public findAllChildConsultants(resp : Consultant): Observable<GenericResponse> {
+    return this.http.get<GenericResponse>(this.consultantUrl + '/childs/' + resp.id );
   }
 
   /***
