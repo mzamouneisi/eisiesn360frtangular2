@@ -1,0 +1,166 @@
+<div style="float: left; " class="bgcolor_tranp00" style="margin-left: 15px;">
+
+    <div style="float: left; " *ngIf="isUserLoggedIn">
+
+        <div style="float: left; " class="bgcolor_tranp00">
+            <button id="myNavbar" type="button" class="btn btn-light " data-toggle="dropdown" aria-haspopup="true">
+                <img src="{{menuImg}}" width="30" height="30" id="myNavbarImg" />
+            </button>
+
+            <div class="dropdown-menu navbar-left " aria-labelledby="myNavbar"
+                style="overflow-y: auto; max-height: 500px;">
+                <ul class="nav navbar-nav bgcolor_tranp00">
+
+                    <li class="nav-item pcoded-menu-caption" style="background-color: cadetblue; width: 100%;">
+                        <label>General</label>
+                    </li>
+
+                    <li class="nav-item " [appAuthorization] feature="ESN_MANAGEMENT" permission="VIEW">
+                        <a routerLink="#" class="nav-link " id="addEsnDemo" (click)="addEsnDemo();">
+                            <span class="pcoded-micon"> <i class="feather icon-home"></i></span>
+                            <span class="pcoded-mtext">Add Esn demo</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item " [appAuthorization] feature="PERMISSION_MANAGEMENT" permission="VIEW">
+                        <a routerLink="#" class="nav-link " id="setDefaultPermissions"
+                            (click)="setDefaultPermissions();">
+                            <span class="pcoded-micon"> <i class="feather icon-home"></i></span>
+                            <span class="pcoded-mtext">Set default permissions</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item pcoded-menu-caption" style="background-color: cadetblue; width: 100%;">
+                        <label>{{utils.tr('main.menu.navbar.navitem.caption.navigation.label')}}</label>
+                    </li>
+
+                    <li class="nav-item " [appAuthorization] feature="ESN_MANAGEMENT" permission="VIEW">
+                        <a routerLink="/esn_app" class="nav-link " id="esnAppLink"><span class="pcoded-micon"><i
+                                    class="feather icon-home"></i></span><span
+                                class="pcoded-mtext">{{utils.tr('main.menu.navbar.navitem.esn.title')}}</span></a>
+                    </li>
+                    <li class="nav-item " [appAuthorization] feature="CLIENT_MANAGEMENT" permission="VIEW">
+                        <a routerLink="/client_app" class="nav-link " id="clientAppLink"><span class="pcoded-micon"><i
+                                    class="feather icon-user-plus"></i></span><span
+                                class="pcoded-mtext">{{utils.tr('main.menu.navbar.navitem.client.title')}}</span></a>
+                    </li>
+                    <li class="nav-item " [appAuthorization] feature="PROJECT_MANAGEMENT" permission="VIEW">
+                        <a routerLink="/project_app" class="nav-link " id="projectAppLink"><span class="pcoded-micon"><i
+                                    class="feather icon-book"></i></span><span
+                                class="pcoded-mtext">{{utils.tr('main.menu.navbar.navitem.project.title')}}</span></a>
+                    </li>
+                    <li class="nav-item " [appAuthorization] feature="CONSULTANT_MANAGEMENT" permission="VIEW">
+                        <a routerLink="/consultant_app" class="nav-link" id="consultantAppLink"><span
+                                class="pcoded-micon"><i class="feather icon-bell"></i></span><span
+                                class="pcoded-mtext">{{utils.tr('main.menu.navbar.navitem.consultant.title')}}</span></a>
+                    </li>
+                    <li class="nav-item " [appAuthorization] feature="ACTIVITY_TYPE_MANAGEMENT" permission="VIEW">
+                        <a routerLink="/activityType_app" class="nav-link " id="activityTypeAppLink"><span
+                                class="pcoded-micon"><i class="feather icon-cpu"></i></span><span
+                                class="pcoded-mtext">{{utils.tr('main.menu.navbar.navitem.activityType.title')}}</span></a>
+                    </li>
+
+
+                    <li class="nav-item " [appAuthorization] feature="ACTIVITY_MANAGEMENT" permission="VIEW">
+                        <a routerLink="/activity_app" class="nav-link" id="activityAppLink"><span
+                                class="pcoded-micon"><i class="feather icon-cpu"></i></span><span
+                                class="pcoded-mtext">{{utils.tr('main.menu.navbar.navitem.activity.title',
+                                {title:getActivityName()})
+                                }}</span></a>
+                    </li>
+                    <li class="nav-item" [appAuthorization] feature="CRA_MANAGEMENT" permission="VIEW">
+                        <a routerLink="/cra_app" class="nav-link " id="craAppLink"><span class="pcoded-micon"><i
+                                    class="feather icon-activity"></i></span><span
+                                class="pcoded-mtext">{{utils.tr('main.menu.navbar.navitem.cra.title')}}</span></a>
+                    </li>
+
+                    <li class="nav-item pcoded-menu-caption" style="background-color: cadetblue; width: 100%;">
+                        <label>{{utils.tr('main.menu.navbar.navitem.caption.fee.label')}}</label>
+                    </li>
+
+                    <li class="nav-item " [appAuthorization] feature="FEE_CATEGORY_MANAGEMENT" permission="VIEW">
+                        <a routerLink="/category_list" class="nav-link " id="feeCategoryLink">
+                            <span class="pcoded-micon"><i class="feather icon-cpu"></i></span>
+                            <span class="pcoded-mtext">
+                                {{utils.tr('main.menu.navbar.navitem.fee.category.title')}}</span></a>
+                    </li>
+
+                    <li class="nav-item " [appAuthorization] feature="PAYMENT_MODE_MANAGEMENT" permission="VIEW">
+                        <a routerLink="/payementmode_form" class="nav-link " [queryParams]="{isAdd:true}"
+                            id="paymentModeLink"><span class="pcoded-micon"><i class="feather icon-cpu"></i></span><span
+                                class="pcoded-mtext">{{utils.tr('main.menu.navbar.navitem.setting.payment.mode.title')}}</span></a>
+                    </li>
+
+                    <li class="nav-item" [appAuthorization] feature="FEE_MANAGEMENT" permission="VIEW">
+                        <a routerLink="/notefrais_app" class="nav-link " id="feeNoteLink"><span class="pcoded-micon"><i
+                                    class="feather icon-activity"></i></span><span class="pcoded-mtext">
+                                {{utils.tr('main.menu.navbar.navitem.fee.note.title')}}</span></a>
+                    </li>
+
+                    <li class="nav-item" [appAuthorization] feature="CONSULTANT_MANAGEMENT" permission="CREATE">
+                        <a routerLink="/notefrais_dashboard" class="nav-link " id="feeDashboardLink"><span
+                                class="pcoded-micon"><i class="feather icon-activity"></i></span><span
+                                class="pcoded-mtext">
+                                {{utils.tr('main.menu.navbar.navitem.fee.dashboard.title')}}</span></a>
+                    </li>
+
+                    <li class="nav-item pcoded-menu-caption" style="background-color: cadetblue; width: 100%;">
+                        <label>Document Administratif</label>
+                    </li>
+
+                    <li class="nav-item ">
+                        <a routerLink="/categoryDoc_app" class="nav-link " id="addCategoryDocumentLink"><span
+                                class="pcoded-micon"><i class="feather icon-activity"></i></span><span
+                                class="pcoded-mtext">Category Document</span></a>
+                    </li>
+                    <li class="nav-item ">
+                        <a routerLink="/admindoc_form" class="nav-link " id="addDocumentLink"><span
+                                class="pcoded-micon"><i class="feather icon-activity"></i></span><span
+                                class="pcoded-mtext">Ajouter Document</span></a>
+                    </li>
+                    <li class="nav-item" [appAuthorization] feature="PAY_SHEETS_MANAGEMENT" permission="CREATE">
+                        <a routerLink="/admindoc_multiple" class="nav-link " id="multipleDocumentsLink"><span
+                                class="pcoded-micon"><i class="feather icon-cpu"></i></span><span
+                                class="pcoded-mtext">Documents Multiples</span></a>
+                    </li>
+                    <li class="nav-item ">
+                        <a routerLink="/admindoc_list" class="nav-link " id="documentListLink"><span
+                                class="pcoded-micon"><i class="feather icon-cpu"></i></span><span
+                                class="pcoded-mtext">Document List</span></a>
+                    </li>
+                    <li class="nav-item" [appAuthorization] feature="PERMISSION_MANAGEMENT" permission="CREATE">
+                        <a routerLink="/admindoc_permission" class="nav-link " id="documentPermissionLink"><span
+                                class="pcoded-micon"><i class="feather icon-cpu"></i></span><span
+                                class="pcoded-mtext">Document Permission</span></a>
+                    </li>
+
+                    <li class="nav-item pcoded-menu-caption" style="background-color: cadetblue; width: 100%;">
+                        <label>{{utils.tr('main.menu.navbar.navitem.caption.setting.label')}}</label>
+                    </li>
+
+                    <li class="nav-item " [appAuthorization] feature="PERMISSION_MANAGEMENT" permission="VIEW">
+                        <a routerLink="/permission" class="nav-link " id="permissionLink"><span class="pcoded-micon"><i
+                                    class="feather icon-activity"></i></span><span
+                                class="pcoded-mtext">{{utils.tr('main.menu.navbar.navitem.setting.permission.title')}}</span></a>
+                    </li>
+                    <li class="nav-item" [appAuthorization] feature="HOLIDAY_MANAGEMENT" permission="VIEW">
+                        <a routerLink="/cra-configuration" class="nav-link " id="holidayLink"><span
+                                class="pcoded-micon"><i class="feather icon-cpu"></i></span><span
+                                class="pcoded-mtext">{{utils.tr('main.menu.navbar.navitem.setting.holiday.title')}}</span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <div style="float: left; margin-top: 5px" class="bgcolor_tranp00">
+        <div class="navbar-brand ">
+            <a href="" class="b-brand" id="esn360TitleLink">
+                <div class="b-bg">
+                </div>
+                <span id="icon_app" class="b-title ">{{title}}</span>
+            </a>
+        </div>
+    </div>
+</div>

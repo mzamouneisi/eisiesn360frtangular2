@@ -1,0 +1,72 @@
+<!-- <infors #infors></infors> -->
+<div class="card my-5">
+    <div class="card-body">
+        <h3 class="card-title text-center py-3">{{ title }} {{myObj.id}} : {{ myObj.name }}</h3>
+        <form (ngSubmit)="onSubmit()" #projectForm="ngForm">
+
+            <div class="form-group">
+                <label for="name">{{utils.tr('app.compo.project.form.input.name')}}</label>
+                <input type="text" placeholder="{{utils.tr('app.form.input.placeholder.prefix')}} {{utils.tr('app.compo.project.form.input.name') | lowercase}}" [(ngModel)]="myObj.name" class="form-control" id="name" name="name" required #name="ngModel">
+            </div>
+            <div [hidden]="name.valid" class="badge badge-danger">{{utils.tr('app.compo.project.form.input.name')}} {{utils.tr('app.badge.required')}}</div>
+
+            <div class="form-group">
+                <label for="desc">{{utils.tr('app.compo.project.form.input.description')}}</label>
+                <input type="text" placeholder="{{utils.tr('app.form.input.placeholder.prefix')}} {{utils.tr('app.compo.project.form.input.description') | lowercase}}" [(ngModel)]="myObj.description" class="form-control" id="desc" name="desc" required #desc="ngModel">
+            </div>
+            <div [hidden]="desc.valid" class="badge badge-danger">{{utils.tr('app.compo.project.form.input.description')}} {{utils.tr('app.badge.required')}}</div>
+
+            <div class="form-group">
+                <label for="adresse">Team</label>
+                <div class="form-group" style="padding-left: 20px;">
+                    <div class="form-row">
+                        <label for="teamNumber" class="col-form-label col-sm-1">{{utils.tr('app.compo.project.form.input.teamNumber')}}: </label>
+                        <input type="number" [(ngModel)]="myObj.teamNumber" class="form-control col-sm-10" id="teamNumber" name="teamNumber" placeholder="{{utils.tr('app.form.input.placeholder.prefix')}} {{utils.tr('app.compo.project.form.input.teamNumber') | lowercase}}" required
+                            #teamNumber="ngModel">
+                    </div>
+                    <div [hidden]="teamNumber.valid" class="badge badge-danger">{{utils.tr('app.compo.project.form.input.teamNumber')}} {{utils.tr('app.badge.required')}}</div>
+
+                    <div class="form-row">
+                        <label for="teamDesc" class="col-form-label col-sm-1">{{utils.tr('app.compo.project.form.input.teamDesc')}} : </label>
+                        <input type="text" [(ngModel)]="myObj.teamDesc" class="form-control col-sm-10" id="teamDesc" name="teamDesc" placeholder="{{utils.tr('app.form.input.placeholder.prefix')}} {{utils.tr('app.compo.project.form.input.teamDesc') | lowercase}}" required #teamDesc="ngModel">
+                    </div>
+                    <div [hidden]="teamDesc.valid" class="badge badge-danger">{{utils.tr('app.compo.project.form.input.teamDesc')}} {{utils.tr('app.badge.required')}}</div>
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="methode">{{utils.tr('app.compo.project.form.input.method')}} </label>
+                <input type="text" placeholder="{{utils.tr('app.form.input.placeholder.prefix')}} {{utils.tr('app.compo.project.form.input.method') | lowercase}}" [(ngModel)]="myObj.method" class="form-control" id="methode" name="methode" required #methode="ngModel">
+            </div>
+            <div [hidden]="methode.valid" class="badge badge-danger">{{utils.tr('app.compo.project.form.input.method')}} {{utils.tr('app.badge.required')}}</div>
+
+            <div class="form-group">
+                <label for="env">{{utils.tr('app.compo.project.form.input.environment')}}</label>
+                <input type="text" placeholder="{{utils.tr('app.form.input.placeholder.prefix')}} {{utils.tr('app.compo.project.form.input.environment') | lowercase}}" [(ngModel)]="myObj.env" class="form-control" id="env" name="env" required #env="ngModel">
+            </div>
+            <div [hidden]="env.valid" class="badge badge-danger">{{utils.tr('app.compo.project.form.input.environment')}} {{utils.tr('app.badge.required')}}</div>
+
+            <div class="form-group"> {{utils.tr('app.compo.project.form.input.client')}}
+                <app-select #compoSelectClient [selectId]="'project-select-client'" [objectName]="'Client'" [myList]="clients" [initObj]="myObj.client" [objCaller]="this" onChangeCaller="onSelectClient" [ObjectPropName]="'name'"></app-select>
+                <div [hidden]="myObj.client" class="badge badge-danger"> {{utils.tr('app.compo.project.form.input.client')}} {{utils.tr('app.badge.required')}}</div>
+            </div>
+
+            <!-- <div [hidden]="clientList.valid" class="badge badge-danger">Project is required</div>		 -->
+
+            <div class="form-group">
+                <label for="desc">  {{utils.tr('app.compo.project.form.input.comment')}}</label>
+                <input type="text" placeholder="{{utils.tr('app.form.input.placeholder.prefix')}} {{utils.tr('app.compo.project.form.input.comment') | lowercase}}" [(ngModel)]="myObj.comment" class="form-control" id="comment" name="comment" #comment="ngModel">
+            </div>
+
+            <br/>
+            <ul class="right">
+                <li class="list-inline-item">
+                    <button type="submit" id="btn-project-save" [disabled]="!projectForm.form.valid || !myObj.client" class="btn btn-info">{{btnSaveTitle}}</button>
+                </li>
+                <li class="list-inline-item"><a [routerLink]="['/project_list']" class="btn btn-info">{{utils.tr('app.compo.project.form.button.list')}}</a></li>
+            </ul>
+
+        </form>
+    </div>
+</div>

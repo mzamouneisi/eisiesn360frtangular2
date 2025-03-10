@@ -1,0 +1,21 @@
+<!-- <infors #infors></infors> -->
+<div class="card my-5">
+    <div class="card-body">
+        <h3 class="card-title text-center py-3">{{ title }} {{myObj.id}} : {{ myObj.name }}</h3>
+        <form (ngSubmit)="onSubmit()" #activityTypeForm="ngForm" class="form form-register">
+
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" placeholder="Enter payement mode" [(ngModel)]="myObj.name" class="form-control" id="name" name="name" required #name="ngModel" #nameHtml autofocus>
+            </div>
+            <div [hidden]="name.valid" class="alert alert-danger">Name is required</div>
+
+            <br/>
+            <ul class="right">
+                <li class="list-inline-item"> <button type="submit" id="btn-payementmode-save" [disabled]="!activityTypeForm.form.valid" class="btn btn-info">{{btnSaveTitle}}</button> </li>
+                <li class="list-inline-item"><a [routerLink]="['/payementmode_list']" class="btn btn-info">List PayementMode</a></li>
+            </ul>
+
+        </form>
+    </div>
+</div>

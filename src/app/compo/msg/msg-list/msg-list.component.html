@@ -1,0 +1,63 @@
+<!-- <infors #infors></infors> -->
+<div class="card my-5">
+    <div class="card-body">
+        <h3 class="card-title text-center py-3">{{ title }}</h3>
+
+        <div class="right" style="width: 40%;" name="searchDiv">
+            <input id="searchStr" #searchStrInput class="form-control left" style="width: 90%;" type="text" placeholder="search" name="searchStr" [(ngModel)]="searchStr" (keyup)="search()" (mouseover)="enableInputSearchStr()" [readonly]="dataSharingService.isDisableSearchStrInput">
+            <button class="right" style="width: 10%; height: 40px; text-align: center;" (click)="clearSearch()">X</button>
+        </div>
+
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Msg</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">TypeId</th>
+                    <th scope="col">From</th>
+                    <th scope="col">To</th>
+                    <th scope="col">IsReadByTo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let element of myList; let i = index">
+                    <td>{{ element.id }}</td>
+                    <td>
+                        {{ element.msg }}
+                    </td>
+                    <td>
+                        {{ element.type }}
+                    </td>
+                    <td>
+                        {{ element.typeId }}
+                    </td>
+                    <td>
+                        {{ element.from?.username }}
+                    </td>
+                    <td>
+                        {{ element.to?.username }}
+                    </td>
+                    <td>
+                        {{ element.isReadByTo }}
+                    </td>
+                    <!-- <button (click)="edit(element)" class='btn btn-info'>Edit</button> -->
+                    <button (click)="delete(element)" id="btn-msg-list-delete{{i}}" class='btn btn-primary' [appAuthorization] feature="Msg_MANAGEMENT" permission="DELETE">Delete
+          </button>
+                </tr>
+            </tbody>
+        </table>
+        <div class="left" style="width: 50%;">
+            <pagination-controls (pageChange)="currentPage = $event"></pagination-controls>
+        </div>
+
+        <div class="right" style="width: 50%;" *ngIf="nbCallServer == 0">
+
+            <li class="list-inline-item"><a [routerLink]="['/msg_form']" id="msg-list-add-msg" [queryParams]="{isAdd:true}" class="btn btn-info" [appAuthorization] feature="Msg_MANAGEMENT" permission="CREATE">Add Msg</a></li>
+
+        </div>
+
+    </div>
+</div>
+
+<app-msg-form #myObjEditView [myObj]="myObj" *ngIf="myObj != null" [appAuthorization] feature="Msg_MANAGEMENT" permission="UPDATE"></app-msg-form>

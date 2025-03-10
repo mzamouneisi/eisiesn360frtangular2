@@ -1,0 +1,114 @@
+<div class="card my-5" *ngIf="myObj">
+  <div class="card-body">
+    <h3 class="card-title text-center py-3">{{ title }} {{ myObj.id }} : {{ myObj.name }} </h3>
+    <form (ngSubmit)="onSubmit()" #activityForm="ngForm">
+      <label for="typeActivityList">{{
+        utils.tr('app.compo.activity.form.input.type')
+        }}</label>
+
+      <app-select #compoSelectActivityType [objectName]="'ActivityType'" [selectId]="'activity-type'"
+        [myList]="activityTypes" [initObj]="myObj.type"  [objCaller]="this" onChangeCaller="onSelectActivityType"
+        [ObjectPropName]="'name'"></app-select>
+
+      <div *ngIf="myObj.type != null">
+        <div class="form-group" *ngIf="isTypeMission() || isTypeInterContrat()">
+          {{ utils.tr('app.compo.activity.form.input.project') }}
+
+          <app-select #compoSelectProject [objectName]="'Project'" [selectId]="'project'" [myList]="projects"
+            [initObj]="myObj.project"  [objCaller]="this" onChangeCaller="onSelectProject"
+            [ObjectPropName]="'name'"></app-select>
+
+        </div>
+
+        <div class="form-group">
+          <label>{{ utils.tr('app.compo.activity.form.input.startDate') }} -
+          </label>
+
+          <label>{{ utils.tr('app.compo.activity.form.input.endDate') }} :
+          </label>
+<!-- 
+          <app-mz-date-picker-deb-fin placeHolderDeb="Choix date debut" [myDatePickerDeb]="myObj.dateDeb"
+            [onChangeCallerDeb]="'onStartDateChanged'" placeHolderFin="Choix date fin" [myDatePickerFin]="myObj.dateFin"
+            [onChangeCallerFin]="'onEndDateChanged'" [objCaller]="this"></app-mz-date-picker-deb-fin> -->
+
+            <mat-form-field appearance="fill">
+              <mat-label>{{ utils.tr('app.compo.activity.form.input.startDate') }}</mat-label>
+              <input id="pickerDeb" matInput [matDatepicker]="pickerDeb" [(ngModel)]="myObj.dateDeb" (dateChange)="onChangeDateDebFin()">
+              <mat-datepicker-toggle matSuffix [for]="pickerDeb"></mat-datepicker-toggle>
+              <mat-datepicker #pickerDeb></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>{{ utils.tr('app.compo.activity.form.input.endDate') }}</mat-label>
+              <input id="pickerFin" matInput [matDatepicker]="pickerFin" [(ngModel)]="myObj.dateFin" (dateChange)="onChangeDateDebFin()">
+              <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
+              <mat-datepicker #pickerFin></mat-datepicker>
+            </mat-form-field>
+
+          
+
+          <div [hidden]="myObj.dateDeb" class="badge badge-danger">
+            DateDeb is required
+          </div>
+          <div [hidden]="myObj.dateFin" class="badge badge-danger">
+            DateFin is required
+          </div>
+
+        </div>
+
+        <div class="form-group" *ngIf="isActivityLabelVisible()">
+          <label for="name">{{ getActivityLabel() }}</label>
+          <input type="text" [(ngModel)]="myObj.name" class="form-control" id="name" name="name" required
+            #name="ngModel" />
+          <div [hidden]="name.valid" class="badge badge-danger">
+            {{ getActivityLabel() }} is required
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="description">{{
+            utils.tr('app.compo.activity.form.input.description')
+            }}:</label>
+          <textarea name="description" id="description" class="form-control" [(ngModel)]="myObj.description" rows="3"
+            #description="ngModel">
+        </textarea>
+        </div>
+
+        <div class="form-group">
+          <label>{{ utils.tr('app.compo.activity.form.input.files') }}:</label>
+          <app-upload-file #uploadFile [files]="myObj.files" [sizeMax]="10 * 1024 * 1024" [title]="'Upload Files: '">
+          </app-upload-file>
+        </div>
+
+        <div *ngIf="isForMyConsultants()" class="form-group">
+          <label for="consultantList">{{
+            utils.tr('app.compo.activity.form.input.consultant')
+            }}:</label>
+          <h4>{{consultantSelected?.fullName}}</h4>
+        </div>
+
+        <div class="form-group" *ngIf="isActivityValidVisible()">
+          <label for="valid">{{
+            utils.tr('app.compo.activity.form.input.valid')
+            }}</label>
+          <input type="checkbox" [(ngModel)]="myObj.valid" class="form-check-input" style="margin-left: 10px;"
+            id="valid" name="valid" #valid="ngModel" />
+        </div>
+
+        <br />
+        <ul class="right">
+          <li class="list-inline-item">
+            <button type="submit" id="btn-save-activity" [disabled]="!activityForm.form.valid" class="btn btn-info">
+              {{ btnSaveTitle }}
+            </button>
+          </li>
+          <li class="list-inline-item">
+            <a [routerLink]="['/activity_app']" class="btn btn-info">{{
+              utils.tr('app.compo.activity.form.button.list')
+              }}</a>
+          </li>
+        </ul>
+      </div>
+    </form>
+  </div>
+</div>

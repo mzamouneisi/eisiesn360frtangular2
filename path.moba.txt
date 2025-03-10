@@ -1,0 +1,60 @@
+/home/mobaxterm/bin
+/home/mobaxterm/bin/bin_file
+/home/mobaxterm/bin/bin_python
+/home/mobaxterm/bin/bin_maven
+/home/mobaxterm/bin/bin_git
+/home/mobaxterm/bin/bin_spring
+/home/mobaxterm/bin/bin_angular
+/home/mobaxterm/bin/bin_react
+/home/mobaxterm/bin/bin_divers
+/home/mourad/data/pgm/maven/bin
+/cygdrive/c/pgm/nodejs-14.20.0
+/cygdrive/c/pgm/apache-ant-1.10.15/bin
+/cygdrive/c/pgm/apache-maven-3.9.9/bin
+/cygdrive/c/pgm/java/jdk-17.0.11/bin
+/cygdrive/c/pgm/git-2.46.1-64
+/cygdrive/c/pgm/git-2.46.1-64/bin
+/cygdrive/c/pgm/spring-3.3.4/bin
+/cygdrive/c/pgm/Heroku/bin
+/cygdrive/c/pgm/LibreOffice/program
+/cygdrive/c/pgm/apache-tomcat-9.0.95/bin
+/cygdrive/d/cygwin64_2/bin
+/cygdrive/d/cygwin64_2/slash/bin
+/cygdrive/c/Users/eisi-mz/AppData/Roaming/npm
+/cygdrive/c/pgm/vscode
+/cygdrive/c/pgm/vscode/bin
+/cygdrive/c/pgm/sqlite-tools-win32-x86-3300000
+/cygdrive/c/pgm/Python/Python37-32/bin
+/cygdrive/c/pgm/PostgreSQL/12/bin
+/cygdrive/c/pgm/Python/Python37-32
+/cygdrive/c/pgm/eclipse/jee-2021-06
+/cygdrive/c/Program Files/Mozilla Firefox
+/bin
+/usr/bin
+/drives/c/Users/mza/DOCUME~1/slash/bin
+/drives/c/WINDOWS
+/drives/c/WINDOWS/system32
+/drives/c/pgm/nodejs-14.20.0
+/drives/c/Program Files/Common Files/Oracle/Java/javapath
+/drives/c/pgm/java/jdk-17.0.11/bin
+/drives/c/pgm/apache-maven-3.9.9/bin
+/drives/c/pgm/vscode
+/drives/c/pgm/git-2.46.1-64/bin
+/drives/c/pgm/spring-3.3.4/bin
+/drives/c/Python312/Scripts
+/drives/c/Python312
+/drives/c/Windows/system32
+/drives/c/Windows
+/drives/c/Windows/System32/Wbem
+/drives/c/Windows/System32/WindowsPowerShell/v1.0
+/drives/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common
+/drives/c/Program Files/NVIDIA Corporation/NVIDIA NvDLISR
+/drives/c/WINDOWS/System32/Wbem
+/drives/c/WINDOWS/System32/WindowsPowerShell/v1.0
+/drives/c/Program Files/dotnet
+/drives/c/ProgramData/chocolatey/bin
+/drives/c/pgm/Docker/Docker/resources/bin
+/drives/c/Users/mza/AppData/Local/Microsoft/WindowsApps
+/drives/c/pgm/vscode/bin
+/drives/c/Users/mza/AppData/Roaming/npm
+/drives/c/WINDOWS/sysnative

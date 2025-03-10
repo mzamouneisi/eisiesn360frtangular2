@@ -1,0 +1,75 @@
+<div class="card my-5">
+    <div class="card-body">
+        <h3 class="card-title text-center py-3">{{ titre }}</h3>
+        <form (ngSubmit)="onSubmit()" #adminDocForm="ngForm">
+            <span>Document Catégories: </span><br>
+            <select [(ngModel)]="selectedCategoryDoc" id="select-doc-type" (ngModelChange)="onSelectCategoryDoc($event)" style="width: 100%;height: 34px;" #compoSelectCategory id="category" name="category">
+                <option [ngValue]="null" disabled [selected]="true">Choisir une catégorie</option>
+                <option *ngFor="let obj of categoryDocList" [ngValue]="obj">  {{obj.name}}</option>
+            </select>
+            <div [hidden]="selectedCategoryDoc" class="badge badge-danger">Selectionner une catégorie</div>
+
+            <div *ngIf="showAddingCategoryName" class="form-group">
+                <label for="category_name">Préciser la catégorie :</label>
+                <input type="text" [(ngModel)]="myObj.category_name" class="form-control" id="category_name" name="category_name" placeholder="Titre du document" required #category_name="ngModel">
+            </div>
+            <div *ngIf="showAddingCategoryName" [hidden]="myObj.category_name" class="badge badge-danger">Entrez le nom du categorie</div>
+
+            <!-- <div *ngIf="isSuperior">
+                <span>Consultant: </span>
+                <ng-multiselect-dropdown [placeholder]="'Selectionnez consultant'" [settings]="dropdownConsultantSettings" [data]="consultantsList" [(ngModel)]="selectedItems" (onSelect)="onSelectConsultant($event)" (onSelectAll)="onSelectAllConsultant($event)" (onDeSelect)="onDeSelectConsultant($event)"
+                    #consultant="ngModel" id="selected-consultants" name="consultant">
+                </ng-multiselect-dropdown>
+            </div>
+            <div [hidden]="isSelectedConsultant" class="badge badge-danger">Selectionner un consultant</div> -->
+
+            <!-- <div *ngIf="!isSuperior">
+                <label for="sharedWith">Partager avec:</label>
+                <input type="text" [(ngModel)]="connectedUser.adminConsultantId" class="form-control" id="shared-with" name="sharedWith" placeholder="Titre du document" disabled #sharedWith="ngModel">
+            </div> -->
+
+            <div class="form-group">
+                <label for="title">Titre :</label>
+                <input type="text" [(ngModel)]="myObj.title" class="form-control" id="title" name="title" placeholder="Titre du document" required #title="ngModel">
+            </div>
+            <div [hidden]="title.valid" class="badge badge-danger">Entrez le titre du document</div>
+
+            <div class="form-group">
+                <label>Date d'expiration :</label>
+                <app-mz-date-picker placeHolder="Date d'expiration" id="expired-date" [(myDatePicker)]="myObj.expired_date">
+                </app-mz-date-picker>
+            </div>
+
+            <ul class="right">
+                <li class="list-inline-item">
+                    <button type="submit" id="btn-add-doc" [disabled]="!adminDocForm.form.valid" class="btn btn-info">Save</button>
+                </li>
+                <li class="list-inline-item">
+                    <button  id="btn-goto_doc_list" (click)="navigateTo('admindoc_list')" class="btn btn-info">List Docs</button>
+                </li>
+            </ul>
+            <ul class="left">
+                <li class="list-inline-item">
+                    <input type="file" id="file" accept=".jpg, .png, .pdf" class="btn btn-outline-dark" (change)="onFileSelect($event)" name="ADD ATTACHMENT" id="attachment" required />
+                </li>
+                <div [hidden]="listSelectedFiles && listSelectedFiles.length > 0" class="badge badge-danger">Choisissez un fichier</div>
+            </ul>
+        </form>
+
+    </div>
+    <table *ngIf="listSelectedFiles.length">
+        <thead>
+            <tr>
+                <th colspan="2">Tous les fichiers séléctionner</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let file of listSelectedFiles">
+                <td>{{file.name}}</td>
+                <td class="td_icon">
+                    <i (click)="removeFile(file)" class="far fa-trash-alt"></i>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,30 @@
+<!-- <infors #infors></infors> -->
+<div class="card my-5">
+    <div class="card-body">
+        <h3 class="card-title text-center py-3">Nouvelle Categorie de Document</h3>
+        <form (ngSubmit)="onSubmit()" #activityTypeForm="ngForm" class="form form-register">
+
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" placeholder="Enter category name" [(ngModel)]="myObj.name" class="form-control" id="name" name="name" required #name="ngModel" #nameHtml autofocus>
+            </div>
+            <div [hidden]="name.valid" class="alert alert-danger">Name is required</div>
+
+            <div class="form-group">
+                <label for="name">Activé pour admin</label>
+                <input type="checkbox" [(ngModel)]="myObj.enabled_for_admin" id="enabledForAdmin" name="enabledForAdmin" style="width: 38px;height: 15px;">
+            </div>
+
+            <div class="form-group">
+                <label for="name">Activé pour consultant</label>
+                <input type="checkbox" [(ngModel)]="myObj.enabled_for_consultant" id="enabledForConsultant" name="enabledForAdmin" style="width: 38px;height: 15px;">
+            </div>
+            <br/>
+            <ul class="right">
+                <li class="list-inline-item"> <button type="submit" id="btn-save-category" [disabled]="!activityTypeForm.form.valid" class="btn btn-info">Add</button> </li>
+                <li class="list-inline-item"><a [routerLink]="['/categoryDoc_list']" class="btn btn-info">{{titleList}}</a></li>
+            </ul>
+
+        </form>
+    </div>
+</div>

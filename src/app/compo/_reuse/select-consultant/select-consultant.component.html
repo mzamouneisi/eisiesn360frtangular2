@@ -1,0 +1,12 @@
+
+	<h4>
+	<label for="myList"> {{title}} </label>
+	</h4> 
+
+<app-select #compoSelectConsultant [objectName]="'Consultant'" [myList]="myList" 
+	[initObj]="elementSelected" 
+	[objCaller]="this" 
+	onChangeCaller="onSelectConsultant" 
+	ObjectPropName="fullName">
+</app-select>
+

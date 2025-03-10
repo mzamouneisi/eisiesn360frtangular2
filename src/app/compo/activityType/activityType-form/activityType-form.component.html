@@ -1,0 +1,50 @@
+<!-- <infors #infors></infors> -->
+<div class="card my-5">
+    <div class="card-body">
+        <h3 class="card-title text-center py-3">{{ title }} {{myObj.id}} : {{ myObj.name }}</h3>
+        <form (ngSubmit)="onSubmit()" #activityTypeForm="ngForm" class="form form-register">
+
+            <div class="form-group">
+                <label for="name">{{utils.tr('app.compo.activityType.form.input.name')}}</label>
+                <input type="text" placeholder="{{utils.tr('app.form.input.placeholder.prefix')}} {{utils.tr('app.compo.activityType.form.input.name') | lowercase}}" [(ngModel)]="myObj.name" class="form-control" id="name" name="name" required #name="ngModel" #nameHtml
+                    autofocus>
+            </div>
+            <div [hidden]="name.valid" class="alert alert-danger">{{utils.tr('app.compo.activityType.form.input.name')}} {{utils.tr('app.badge.required')}}</div>
+
+            <div class="form-group">
+                <label for="isWorkDay">{{utils.tr('app.compo.activityType.form.input.isWorkDay')}}</label>
+                <input type="checkbox" [(ngModel)]="myObj.workDay" class="form-check-input" style="margin-left: 10px;" id="isWorkDay" name="isWorkDay" #isWorkDay="ngModel">
+
+                <div [hidden]="isWorkDay.valid" class="alert alert-danger">{{utils.tr('app.compo.activityType.form.input.isWorkDay')}} {{utils.tr('app.badge.required')}}</div>
+            </div>
+
+            <div class="form-group">
+                <label for="isBillDay">{{utils.tr('app.compo.activityType.form.input.isBillDay')}}</label>
+                <input type="checkbox" [(ngModel)]="myObj.billDay" class="form-check-input" style="margin-left: 10px;" id="isBillDay" name="isBillDay" #isBillDay="ngModel">
+
+                <div [hidden]="isBillDay.valid" class="alert alert-danger">{{utils.tr('app.compo.activityType.form.input.isBillDay')}} {{utils.tr('app.badge.required')}}</div>
+            </div>
+
+            <div class="form-group">
+                <label for="isCongeDay">{{utils.tr('app.compo.activityType.form.input.isHolidayDay')}}</label>
+                <input type="checkbox" [(ngModel)]="myObj.congeDay" class="form-check-input" style="margin-left: 10px;" id="isCongeDay" name="isCongeDay" #isCongeDay="ngModel">
+
+                <div [hidden]="isCongeDay.valid" class="alert alert-danger">{{utils.tr('app.compo.activityType.form.input.isHolidayDay')}} {{utils.tr('app.badge.required')}}</div>
+            </div>
+
+            <div class="form-group">
+                <label for="isFormaDay">{{utils.tr('app.compo.activityType.form.input.isTrainingDay')}} </label>
+                <input type="checkbox" [(ngModel)]="myObj.formaDay" class="form-check-input" style="margin-left: 10px;" id="isFormaDay" name="isFormaDay" #isFormaDay="ngModel">
+
+                <div [hidden]="isFormaDay.valid" class="alert alert-danger">{{utils.tr('app.compo.activityType.form.input.isTrainingDay')}} {{utils.tr('app.badge.required')}}</div>
+            </div>
+
+            <br/>
+            <ul class="right">
+                <li class="list-inline-item"> <button type="submit" id="btn-add-activity-type" [disabled]="!activityTypeForm.form.valid" class="btn btn-info">{{btnSaveTitle}}</button> </li>
+                <li class="list-inline-item"><a [routerLink]="['/activityType_list']" class="btn btn-info">{{utils.tr('app.compo.activityType.form.button.list')}}</a></li>
+            </ul>
+
+        </form>
+    </div>
+</div>

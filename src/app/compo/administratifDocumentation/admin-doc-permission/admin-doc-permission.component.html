@@ -1,0 +1,40 @@
+<div class="card my-5">
+    <div class="card-body">
+        <app-spinner *ngIf="load"></app-spinner>
+
+        <h3 class="card-title text-center py-3">Manage Document Permissions</h3>
+
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col" class="center">Categorie Document</th>
+                    <th scope="col" class="center">Management Name</th>
+                    <th scope="col" class="center">Date Création</th>
+                    <th scope="col" class="center">Activé pour Manager</th>
+                    <th scope="col" class="center">Activé pour Consultant</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let element of categoryDocList; let i = index">
+                    <td>{{ element.id }}</td>
+                    <td>{{ element.name }}</td>
+                    <td>{{ element.management_name }}</td>
+                    <td>{{ element.created_date }}</td>
+                    <td>
+                        <input type="checkbox" [checked]="element.enabled_for_admin" id="check-enabled-admin-{{i}}" (click)="updateList(i,'enabled_for_admin',$event)" class="form-check-input" style="margin-left: 10px;">
+                    </td>
+                    <td>
+                        <input type="checkbox" [checked]="element.enabled_for_consultant" id="check-enabled-consultant-{{i}}" (click)="updateList(i,'enabled_for_consultant',$event)" class="form-check-input" style="margin-left: 10px;">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="right" style="width: 50%;">
+            <li class="list-inline-item"><a (click)="updatePermissions()" id="btn-save-admin-doc-permission" class="btn btn-info">UPDATE</a>
+            </li>
+        </div>
+
+    </div>
+</div>

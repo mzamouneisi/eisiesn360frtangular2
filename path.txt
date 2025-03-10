@@ -1,0 +1,67 @@
+/c/pgm/chromedriver-win64
+/mingw64/bin
+/usr/bin
+/c/Users/mza/DOCUME~1/home/bin
+/c/pgm/java/jdk-17.0.11/bin
+/c/pgm/nodejs-14.20.0
+/c/pgm/apache-ant-1.10.15/bin
+/c/pgm/apache-maven-3.9.9/bin
+/c/pgm/java/jdk-17.0.11/bin
+/
+/bin
+/c/pgm/spring-3.3.4/bin
+/c/pgm/Heroku/bin
+/c/pgm/LibreOffice/program
+/c/pgm/apache-tomcat-9.0.95/bin
+/d/cygwin64_2/bin
+/d/cygwin64_2/slash/bin
+/c/Users/eisi-mz/AppData/Roaming/npm
+/c/pgm/vscode
+/c/pgm/vscode/bin
+/c/pgm/sqlite-tools-win32-x86-3300000
+/c/pgm/Python/Python37-32/bin
+/c/pgm/PostgreSQL/12/bin
+/d/cygwin64_2/bin
+/c/pgm/Python/Python37-32
+/c/pgm/eclipse/jee-2021-06
+/c/Program Files/Mozilla Firefox
+/c/Users/mza/Documents/slash/bin
+/c/Users/mza/DOCUME~1/home/bin
+/c/Users/mza/DOCUME~1/home/bin/bin_file
+/c/Users/mza/DOCUME~1/home/bin/bin_python
+/c/Users/mza/DOCUME~1/home/bin/bin_maven
+/c/Users/mza/DOCUME~1/home/bin/bin_git
+/c/Users/mza/DOCUME~1/home/bin/bin_spring
+/c/Users/mza/DOCUME~1/home/bin/bin_angular
+/c/Users/mza/DOCUME~1/home/bin/bin_react
+/c/Users/mza/DOCUME~1/home/bin/bin_divers
+/c/Users/mza/Documents/slash/home/mourad/data/pgm/maven/bin
+/c/Users/mza/Documents/slash/bin
+/c/Users/mza/Documents/slash/bin
+/c/Users/mza/DOCUME~1/slash/bin
+/c/WINDOWS
+/c/WINDOWS/system32
+/c/pgm/nodejs-14.20.0
+/c/Program Files/Common Files/Oracle/Java/javapath
+/c/pgm/java/jdk-17.0.11/bin
+/c/pgm/apache-maven-3.9.9/bin
+/c/pgm/vscode
+/bin
+/c/pgm/spring-3.3.4/bin
+/c/Python312/Scripts
+/c/Python312
+/c/Windows/system32
+/c/Windows
+/c/Windows/System32/Wbem
+/c/Windows/System32/WindowsPowerShell/v1.0
+/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common
+/c/Program Files/NVIDIA Corporation/NVIDIA NvDLISR
+/c/WINDOWS/System32/Wbem
+/c/WINDOWS/System32/WindowsPowerShell/v1.0
+/c/Program Files/dotnet
+/c/ProgramData/chocolatey/bin
+/c/pgm/Docker/Docker/resources/bin
+/c/Users/mza/AppData/Local/Microsoft/WindowsApps
+/c/pgm/vscode/bin
+/c/Users/mza/AppData/Roaming/npm
+/c/WINDOWS/sysnative

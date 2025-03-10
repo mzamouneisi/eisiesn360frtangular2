@@ -1,0 +1,45 @@
+<!-- <infors #infors></infors> -->
+<div class="card my-5">
+    <div class="card-body">
+        <h3 id="title_list" class="card-title text-center py-3">{{getTitle()}}</h3>>
+
+        <div class="right" style="width: 40%;" name="searchDiv">
+            <input id="searchStr" #searchStrInput class="form-control left" style="width: 90%;" type="text" placeholder="search" name="searchStr" [(ngModel)]="searchStr" (keyup)="search()" (mouseover)="enableInputSearchStr()" [readonly]="dataSharingService.isDisableSearchStrInput">
+            <button class="right" style="width: 10%; height: 40px; text-align: center;" (click)="clearSearch()">X</button>
+        </div>
+
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Enabel For Admin</th>
+                    <th scope="col">Enabel For Consultant</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let element of myList | paginate: {itemsPerPage, currentPage}; let i = index" [className]="element.id == getIdOfCurentObj() ? 'active' : 'inactive'">
+                    <td>{{ element.id }}</td>
+                    <td> {{ element.name }} </td>
+                    <td> <input type="checkbox" [(ngModel)]="element.enabled_for_admin" id="enabledForAdmin" name="enabledForAdmin" style="width: 38px;height: 15px;">
+                    </td>
+                    <td> <input type="checkbox" [(ngModel)]="element.enabled_for_consultant" id="enabledForConsultant" name="enabledForAdmin" style="width: 38px;height: 15px;">
+                    </td>
+                    <td>
+                        <button (click)="update(element)" class='btn btn-primary' id="btn-update-{{i}}" [appAuthorization] feature="ACTIVITY_MANAGEMENT" permission="UPDATE">{{utils.tr('Edit')}}
+        </button>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="left" style="width: 50%;" *ngIf="nbCallServer == 0">
+            <pagination-controls (pageChange)="currentPage = $event"></pagination-controls>
+        </div>
+        <li class="list-inline-item right" [appAuthorization] feature="ACTIVITY_MANAGEMENT" permission="CREATE">
+            <a [routerLink]="['/categoryDoc_form']" [queryParams]="{isAdd:true}" class="btn btn-info">{{utils.tr('Add')}}</a>
+        </li>
+    </div>
+</div>

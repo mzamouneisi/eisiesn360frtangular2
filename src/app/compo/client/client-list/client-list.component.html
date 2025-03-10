@@ -1,0 +1,65 @@
+<!-- <infors #infors></infors> -->
+<div class="card my-5">
+    <div class="card-body">
+        <h3 id="title_list" class="card-title text-center py-3">{{getTitle()}}</h3>
+
+        <div class="right" style="width: 40%;" name="searchDiv">
+            <input id="searchStr" #searchStrInput class="form-control left" style="width: 90%;" type="text" placeholder="search" name="searchStr" [(ngModel)]="searchStr" (keyup)="search()" (mouseover)="enableInputSearchStr()" [readonly]="dataSharingService.isDisableSearchStrInput">
+            <button class="right" style="width: 10%; height: 40px; text-align: center;" (click)="clearSearch()">X</button>
+        </div>
+
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">{{utils.tr('app.compo.client.list.table.thead.name')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.client.list.table.thead.profession')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.client.list.table.thead.street')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.client.list.table.thead.zipCode')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.client.list.table.thead.city')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.client.list.table.thead.country')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.client.list.table.thead.webSite')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.client.list.table.thead.respName')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.client.list.table.thead.tel')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.client.list.table.thead.email')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.client.list.table.thead.action')}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let element of myList | paginate: {itemsPerPage, currentPage, id:'list1'}; let i = index" [className]="element.id == getIdOfCurentObj() ? 'active' : 'inactive'">
+                    <td>{{ element.id }}</td>
+                    <td>{{ element.name }}</td>
+                    <td>{{ element.metier }}</td>
+                    <td>{{ element.address.street }}</td>
+                    <td>{{ element.address.zipCode}}</td>
+                    <td>{{ element.address.city }}</td>
+                    <td>{{ element.address.country }}</td>
+                    <td>{{ element.webSite }}</td>
+                    <td>{{ element.nameResp }}</td>
+                    <td>{{ element.telResp }}</td>
+                    <td>{{ element.emailResp }}</td>
+                    <td>
+                        <!-- <button (click)="edit(element)" class='btn btn-info'>Edit</button> -->
+                        <button (click)="showForm(element)" class='btn btn-primary' id="btn-update-client-{{i}}" [appAuthorization] feature="CLIENT_MANAGEMENT" permission="UPDATE">{{utils.tr('Edit')}}
+          </button>
+                        <button (click)="delete(element)" class='btn btn-danger' id="btn-delete-client-{{i}}" [appAuthorization] feature="CLIENT_MANAGEMENT" permission="DELETE">{{utils.tr('Delete')}}
+  </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="left" style="width: 50%;" *ngIf="nbCallServer == 0">
+            <pagination-controls (pageChange)="currentPage = $event" id="list1"></pagination-controls>
+        </div>
+
+        <div class="right" style="width: 50%;" *ngIf="nbCallServer == 0">
+
+            <li class="list-inline-item"><a id="addClient" [routerLink]="['/client_form']" [queryParams]="{isAdd:true}" class="btn btn-info" [appAuthorization] feature="CLIENT_MANAGEMENT" permission="CREATE">{{utils.tr('app.compo.client.list.table.action.add')}} Client</a></li>
+
+        </div>
+
+    </div>
+</div>
+
+<app-client-form #myObjEditView [myObj]="myObj" *ngIf="myObj != null" [appAuthorization] feature="CLIENT_MANAGEMENT" permission="UPDATE"></app-client-form>

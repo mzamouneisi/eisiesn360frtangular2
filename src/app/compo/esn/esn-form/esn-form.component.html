@@ -1,0 +1,111 @@
+<!-- <infors #infors></infors> -->
+<div class="card my-5">
+    <div class="card-body">
+        <h3 class="card-title text-center py-3">{{ title }} {{myObj.id}} : {{ myObj.name }}</h3>
+        <form (ngSubmit)="onSubmit()" #esnForm="ngForm">
+
+            <div class="form-group">
+                <label for="name">{{utils.tr('app.compo.esn.form.input.name')}}</label>
+                <input type="text"
+                    placeholder="{{utils.tr('app.form.input.placeholder.prefix')}} {{utils.tr('app.compo.esn.form.input.name') | lowercase}}"
+                    [(ngModel)]="myObj.name" class="form-control" id="name" name="name" required #name="ngModel">
+            </div>
+            <div [hidden]="name.valid" class="badge badge-danger">{{utils.tr('app.compo.esn.form.input.name')}}
+                {{utils.tr('app.badge.required')}}</div>
+
+            <div class="form-group">
+                <label for="metier">{{utils.tr('app.compo.esn.form.input.profession')}}</label>
+                <input type="text"
+                    placeholder="{{utils.tr('app.form.input.placeholder.prefix')}} {{utils.tr('app.compo.esn.form.input.profession') | lowercase}}"
+                    [(ngModel)]="myObj.metier" class="form-control" id="metier" name="metier" required
+                    #metier="ngModel">
+            </div>
+            <div [hidden]="metier.valid" class="badge badge-danger">{{utils.tr('app.compo.esn.form.input.profession')}}
+                {{utils.tr('app.badge.required')}}</div>
+
+            <div class="form-group">
+                <label for="street">{{utils.tr('app.compo.esn.form.input.street')}}</label>
+                <input type="text" placeholder="Enter your street" [(ngModel)]="myObj.address.street"
+                    class="form-control" id="street" name="street" required #street="ngModel">
+            </div>
+            <div [hidden]="street.valid" class="badge badge-danger">{{utils.tr('app.compo.esn.form.input.street')}}
+                {{utils.tr('app.badge.required')}}</div>
+
+            <div class="form-group">
+                <label for="zipCode">{{utils.tr('app.compo.esn.form.input.zipCode')}}</label>
+                <input type="number"
+                    placeholder="{{utils.tr('app.form.input.placeholder.prefix')}} {{utils.tr('app.compo.esn.form.input.zipCode') | lowercase}}"
+                    [(ngModel)]="myObj.address.zipCode" class="form-control" id="zipCode" name="zipCode" required
+                    #zipCode="ngModel">
+            </div>
+            <div [hidden]="zipCode.valid" class="badge badge-danger">{{utils.tr('app.compo.esn.form.input.zipCode')}}
+                {{utils.tr('app.badge.required')}}</div>
+
+
+            <div class="form-group">
+                <label for="city">{{utils.tr('app.compo.esn.form.input.city')}}</label>
+                <input type="text"
+                    placeholder="{{utils.tr('app.form.input.placeholder.prefix')}} {{utils.tr('app.compo.esn.form.input.city') | lowercase}}"
+                    [(ngModel)]="myObj.address.city" class="form-control" id="city" name="city" required
+                    #city="ngModel">
+            </div>
+            <div [hidden]="city.valid" class="badge badge-danger">{{utils.tr('app.compo.esn.form.input.city')}}
+                {{utils.tr('app.badge.required')}}</div>
+
+
+            <div class="form-group">
+                <label for="country">{{utils.tr('app.compo.esn.form.input.country')}}</label>
+                <input type="text"
+                    placeholder="{{utils.tr('app.form.input.placeholder.prefix')}} {{utils.tr('app.compo.esn.form.input.country') | lowercase}}"
+                    [(ngModel)]="myObj.address.country" class="form-control" id="country" name="country" required
+                    #country="ngModel">
+            </div>
+            <div [hidden]="country.valid" class="badge badge-danger">{{utils.tr('app.compo.esn.form.input.country')}}
+                {{utils.tr('app.badge.required')}}</div>
+
+            <div class="form-group">
+                <label for="tel">{{utils.tr('app.compo.esn.form.input.tel')}}</label>
+                <input type="text"
+                    placeholder="{{utils.tr('app.form.input.placeholder.prefix')}} {{utils.tr('app.compo.esn.form.input.tel') | lowercase}}"
+                    [(ngModel)]="myObj.tel" class="form-control" id="tel" name="tel" required #tel="ngModel"
+                    [pattern]="telPattern">
+            </div>
+            <div [hidden]="tel.valid" class="badge badge-danger">{{utils.tr('app.compo.esn.form.input.tel')}}
+                {{utils.tr('app.badge.required')}}</div>
+
+            <div class="form-group">
+                <label for="siteWeb">{{utils.tr('app.compo.esn.form.input.webSite')}}</label>
+                <input type="text"
+                    placeholder="{{utils.tr('app.form.input.placeholder.prefix')}} {{utils.tr('app.compo.esn.form.input.webSite') | lowercase}}"
+                    [(ngModel)]="myObj.webSite" class="form-control" id="siteWeb" name="siteWeb">
+            </div>
+
+            <div class="form-group">
+                <label for="email">{{utils.tr('app.compo.esn.form.input.email')}}</label>
+                <input type="text"
+                    placeholder="{{utils.tr('app.form.input.placeholder.prefix')}} {{utils.tr('app.compo.esn.form.input.email') | lowercase}}"
+                    [(ngModel)]="myObj.email" class="form-control" id="email" name="email" required #email="ngModel"
+                    [pattern]="emailPattern">
+            </div>
+            <div [hidden]="email.valid" class="badge badge-danger">{{utils.tr('app.compo.esn.form.input.email')}}
+                {{utils.tr('app.badge.required')}}</div>
+
+            <br />
+            <ul class="right">
+                <li class="list-inline-item">
+                    <button type="submit" id="btn-esn-form-save" [disabled]="!esnForm.form.valid"
+                        class="btn btn-info">{{btnSaveTitle}}</button>
+                </li>
+                <li class="list-inline-item"><a [routerLink]="['/esn_list']"
+                        class="btn btn-info">{{utils.tr('app.compo.esn.form.button.list')}}</a></li>
+            </ul>
+
+        </form>
+    </div>
+
+    <div style="margin-left: 20px;">
+        <app-esn-arbo [esn]="myObj" ></app-esn-arbo>
+    </div>
+
+
+</div>

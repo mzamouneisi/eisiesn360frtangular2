@@ -1,0 +1,69 @@
+<!-- <infors #infors></infors> -->
+<div class="card my-5">
+    <div class="card-body">
+        <h3 id="title_list" class="card-title text-center py-3">{{getTitle()}}</h3>>
+
+        <div class="form-group left">
+            <label for="esnList" style="margin-right: 10px;">Esn : </label> 
+            <span *ngIf="esnCurrent == null">
+                <app-select #compoSelectEsn [objectName]="'Esn'" [selectId]="'esn-selected'" [myList]="esnList" [initObj]="esnCurrent" [objCaller]="this" onChangeCaller="onSelectEsn" [ObjectPropName]="'name'"></app-select>
+            </span>
+            <span *ngIf="esnCurrent != null">
+                {{esnCurrent.name}}
+            </span>
+
+        </div>
+
+        <div class="right" style="width: 40%;" name="searchDiv">
+            <input id="searchStr" #searchStrInput class="form-control left" style="width: 90%;" type="text" placeholder="search" name="searchStr" [(ngModel)]="searchStr" (keyup)="search()" (mouseover)="enableInputSearchStr()" [readonly]="dataSharingService.isDisableSearchStrInput">
+            <button class="right" style="width: 10%; height: 40px; text-align: center;" (click)="clearSearch()">X</button>
+        </div>
+
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">{{utils.tr('app.compo.activityType.list.table.thead.name')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.activityType.list.table.thead.isWorkDay')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.activityType.list.table.thead.isBillDay')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.activityType.list.table.thead.isHolidayDay')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.activityType.list.table.thead.isTrainingDay')}}</th>
+                    <th scope="col">{{utils.tr('Esn')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.activityType.list.table.thead.action')}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let element of myList | paginate: {itemsPerPage, currentPage}; let i = index" [className]="element.id == getIdOfCurentObj() ? 'active' : 'inactive'">
+                    <td>{{ element.id }}</td>
+                    <td> {{ element.name }} </td>
+                    <td> {{ element.workDay }} </td>
+                    <td> {{ element.billDay }} </td>
+                    <td> {{ element.congeDay }} </td>
+                    <td> {{ element.formaDay }} </td>
+                    <td> {{ element.esnName }} </td>
+
+                    <td>
+                        <!-- <button (click)="edit(element)" class='btn btn-info' >Edit</button>  -->
+                        <button (click)="showForm(element)" id="btn-update-activity-type" class='btn btn-primary' [appAuthorization] feature="ACTIVITY_TYPE_MANAGEMENT" permission="UPDATE">{{utils.tr('Edit')}}
+          </button>
+                        <button (click)="delete(element)" id="btn-delete-activity-type" class='btn btn-danger' [appAuthorization] feature="ACTIVITY_TYPE_MANAGEMENT" permission="DELETE">{{utils.tr('Delete')}}
+          </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="left" style="width: 50%;">
+            <pagination-controls (pageChange)="currentPage = $event"></pagination-controls>
+        </div>
+
+        <div class="right" style="width: 50%;" *ngIf="nbCallServer == 0">
+
+            <li class="list-inline-item"><a [routerLink]="['/activityType_form']" [queryParams]="{isAdd:true}" class="btn btn-info" [appAuthorization] feature="ACTIVITY_TYPE_MANAGEMENT" permission="CREATE">{{utils.tr('app.compo.activityType.list.button.add')}}</a></li>
+
+        </div>
+
+    </div>
+</div>
+
+<app-activityType-form #activityTypeDetail *ngIf="myObj != null" [myObj]="myObj" [appAuthorization] feature="ACTIVITY_TYPE_MANAGEMENT" permission="UPDATE"></app-activityType-form>

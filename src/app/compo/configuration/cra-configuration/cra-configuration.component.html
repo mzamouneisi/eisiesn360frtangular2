@@ -1,0 +1,46 @@
+<div class="card my-5">
+    <div class="card-header">
+        <div class="left">
+            <div class="btn-group">
+                <div class="btn btn-primary" id="cra-config-view-date1" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate" (click)="viewDateChange()">
+                    Previous
+                </div>
+                <div class="btn btn-secondary" id="cra-config-view-date2" mwlCalendarToday [(viewDate)]="viewDate" (click)="viewDateChange()">
+                    Today
+                </div>
+                <div class="btn btn-primary" id="cra-config-view-date3" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate" (click)="viewDateChange()">
+                    Next
+                </div>
+            </div>
+        </div>
+        <div class="right">
+            <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+        </div>
+    </div>
+    <div class="card-body">
+        <mwl-calendar-month-view id="cra-config-calendar-month-view" [headerTemplate]="defaultTemplate" [viewDate]="viewDate" [events]="events" [refresh]="refresh" [weekStartsOn]="1" (dayClicked)="dayClicked($event.day, events)">
+            <!--  (dayClicked)="dayClicked($event.day, events)" [cellTemplate]="customCellTemplate"-->
+        </mwl-calendar-month-view>
+    </div>
+    <div class="card-footer">
+        <button class="btn btn-primary right" id="cra-config-update" (click)="update()" [appAuthorization] feature="HOLIDAY_MANAGEMENT" permission="UPDATE">UPDATE</button>
+    </div>
+</div>
+
+<ng-template #defaultTemplate let-days="days" let-locale="locale" let-trackByWeekDayHeaderDate="trackByWeekDayHeaderDate">
+    <div class="cal-cell-row cal-header">
+        <div class="cal-cell" *ngFor="let day of days; trackBy: trackByWeekDayHeaderDate" [class.cal-past]="day.isPast" [class.cal-today]="day.isToday" [class.cal-future]="day.isFuture" [class.cal-weekend]="day.isWeekend" [ngClass]="day.cssClass">
+            <div *ngIf="day.isWeekend; else calHeader">
+                <div style="width:150px;">
+                    {{ day.date | calendarDate: 'monthViewColumnHeader':locale }}
+                </div>
+                <span class="cal-day-badge bg-danger">WEEK</span>
+            </div>
+            <ng-template #calHeader>
+                <div style="width:150px;">
+                    {{ day.date | calendarDate: 'monthViewColumnHeader':locale }}
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</ng-template>

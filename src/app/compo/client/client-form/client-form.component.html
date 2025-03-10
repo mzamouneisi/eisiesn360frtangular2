@@ -1,0 +1,106 @@
+<!-- <infors #infors></infors> -->
+<div class="card my-5">
+    <div class="card-body">
+        <h3 class="card-title text-center py-3">{{ title }} {{myObj.id}} : {{myObj.name}} </h3>
+        <form (ngSubmit)="onSubmit()" #clientForm="ngForm">
+
+            <div class="form-group">
+                <label for="name">{{utils.tr('app.compo.client.form.input.name')}}</label>
+                <input type="text" [(ngModel)]="myObj.name" class="form-control" id="name" name="name" placeholder="{{utils.tr('app.form.input.placeholder.prefix')}} {{utils.tr('app.compo.client.form.input.name') | lowercase}}" required #name="ngModel">
+            </div>
+            <div [hidden]="name.valid" class="badge badge-danger">{{utils.tr('app.compo.client.form.input.name')}} {{utils.tr('app.badge.required')}}
+            </div>
+
+            <div class="form-group">
+                <label for="email">{{utils.tr('app.compo.client.form.input.email')}}</label>
+                <input type="text" [(ngModel)]="myObj.email" class="form-control" id="email" name="email" placeholder="{{utils.tr('app.form.input.placeholder.prefix')}} {{utils.tr('app.compo.client.form.input.email') | lowercase}}" [pattern]="emailPattern" required #email="ngModel">
+            </div>
+            <div [hidden]="email.valid" class="badge badge-danger">{{utils.tr('app.compo.client.form.input.email')}} {{utils.tr('app.badge.required')}}
+            </div>
+
+
+            <div class="form-group">
+                <label for="tel">{{utils.tr('app.compo.client.form.input.tel')}}</label>
+                <input type="text" [(ngModel)]="myObj.tel" class="form-control" id="tel" name="tel" placeholder="{{utils.tr('app.form.input.placeholder.prefix')}} {{utils.tr('app.compo.client.form.input.tel') | lowercase}}" required #tel="ngModel" [pattern]="telPattern">
+            </div>
+            <div [hidden]="tel.valid" class="badge badge-danger">{{utils.tr('app.compo.client.form.input.tel')}} {{utils.tr('app.badge.required')}}
+            </div>
+
+
+            <div class="form-group">
+                <label for="metier">{{utils.tr('app.compo.client.form.input.profession')}}</label>
+                <input type="text" [(ngModel)]="myObj.metier" class="form-control" id="metier" name="metier" placeholder="{{utils.tr('app.form.input.placeholder.prefix')}} {{utils.tr('app.compo.client.form.input.profession') | lowercase}}" required #metier="ngModel">
+            </div>
+            <div [hidden]="metier.valid" class="badge badge-danger">{{utils.tr('app.compo.client.form.input.profession')}} {{utils.tr('app.badge.required')}}
+            </div>
+
+            <div class="form-group">
+                <label for="adresse">Adresse</label>
+                <div class="form-group" style="padding-left: 20px;">
+                    <div class="form-row">
+                        <label for="adresse_street" class="col-form-label col-sm-1">{{utils.tr('app.compo.client.form.input.street')}} : </label>
+                        <input type="text" [(ngModel)]="myObj.address.street" class="form-control col-sm-10" id="adresse_street" name="adresse_street" placeholder="{{utils.tr('app.form.input.placeholder.prefix')}} {{utils.tr('app.compo.client.form.input.street') | lowercase}}"
+                            required #adresse_street="ngModel">
+                    </div>
+                    <div [hidden]="adresse_street.valid" class="badge badge-danger">{{utils.tr('app.compo.client.form.input.street')}} {{utils.tr('app.badge.required')}}
+                    </div>
+
+                    <div class="form-row">
+                        <label for="adresse_city" class="col-form-label col-sm-1">{{utils.tr('app.compo.client.form.input.city')}}: </label>
+                        <input type="text" [(ngModel)]="myObj.address.city" class="form-control col-sm-10" id="adresse_city" name="adresse_city" placeholder="{{utils.tr('app.form.input.placeholder.prefix')}} {{utils.tr('app.compo.client.form.input.city') | lowercase}}" required
+                            #adresse_city="ngModel">
+                    </div>
+                    <div [hidden]="adresse_city.valid" class="badge badge-danger">{{utils.tr('app.compo.client.form.input.city')}} {{utils.tr('app.badge.required')}}</div>
+
+                    <div class="form-row">
+                        <label for="adresse_zipCode" class="col-form-label col-sm-1">{{utils.tr('app.compo.client.form.input.zipCode')}}: </label>
+                        <input type="number" [(ngModel)]="myObj.address.zipCode" class="form-control col-sm-10" id="adresse_zipCode" name="adresse_zipCode" placeholder="{{utils.tr('app.form.input.placeholder.prefix')}} {{utils.tr('app.compo.client.form.input.zipCode') | lowercase}}"
+                            required #adresse_zipCode="ngModel">
+                    </div>
+                    <div [hidden]="adresse_zipCode.valid" class="badge badge-danger">{{utils.tr('app.compo.client.form.input.zipCode')}} {{utils.tr('app.badge.required')}}</div>
+
+                    <div class="form-row">
+                        <label for="adresse_country" class="col-form-label col-sm-1">{{utils.tr('app.compo.client.form.input.country')}}: </label>
+                        <input type="text" [(ngModel)]="myObj.address.country" class="form-control col-sm-10" id="adresse_country" name="adresse_country" placeholder="{{utils.tr('app.form.input.placeholder.prefix')}} {{utils.tr('app.compo.client.form.input.country') | lowercase}}"
+                            required #adresse_country="ngModel">
+                    </div>
+                    <div [hidden]="adresse_country.valid" class="badge badge-danger">{{utils.tr('app.compo.client.form.input.country')}} {{utils.tr('app.badge.required')}}</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="siteWeb">{{utils.tr('app.compo.client.form.input.webSite')}}</label>
+                <input type="text" [(ngModel)]="myObj.webSite" class="form-control" id="siteWeb" name="siteWeb" placeholder="{{utils.tr('app.form.input.placeholder.prefix')}} {{utils.tr('app.compo.client.form.input.webSite') | lowercase}}">
+            </div>
+
+            <div class="form-group">
+                <label for="nomResp">{{utils.tr('app.compo.client.form.input.respName')}}</label>
+                <input type="text" [(ngModel)]="myObj.nameResp" class="form-control" id="nomResp" name="nomResp" placeholder="{{utils.tr('app.form.input.placeholder.prefix')}} {{utils.tr('app.compo.client.form.input.respName') | lowercase}}" required #nomResp="ngModel">
+            </div>
+            <div [hidden]="nomResp.valid" class="badge badge-danger">{{utils.tr('app.compo.client.form.input.respName')}} {{utils.tr('app.badge.required')}}</div>
+
+            <div class="form-group">
+                <label for="telResp">{{utils.tr('app.compo.client.form.input.tel')}}</label>
+                <input type="tel" [(ngModel)]="myObj.telResp" class="form-control" id="telResp" name="telResp" placeholder="{{utils.tr('app.form.input.placeholder.prefix')}} {{utils.tr('app.compo.client.form.input.tel') | lowercase}}" required #telResp="ngModel" [pattern]="telPattern">
+            </div>
+            <div [hidden]="telResp.valid" class="badge badge-danger">{{utils.tr('app.compo.client.form.input.tel')}} {{utils.tr('app.badge.required')}}</div>
+
+            <div class="form-group">
+                <label for="emailResp">{{utils.tr('app.compo.client.form.input.email')}}</label>
+                <input type="email" [(ngModel)]="myObj.emailResp" class="form-control" id="emailResp" name="emailResp" placeholder="{{utils.tr('app.form.input.placeholder.prefix')}} {{utils.tr('app.compo.client.form.input.email') | lowercase}}" required #emailResp="ngModel"
+                    [pattern]="emailPattern">
+            </div>
+            <div [hidden]="emailResp.valid" class="badge badge-danger">{{utils.tr('app.compo.client.form.input.email')}} {{utils.tr('app.badge.required')}}</div>
+
+            <br/>
+            <ul class="right">
+                <li class="list-inline-item">
+                    <button type="submit" id="btn-save-client" [disabled]="!clientForm.form.valid" class="btn btn-info">{{btnSaveTitle}}</button>
+                </li>
+                <li class="list-inline-item"><a [routerLink]="['/client_list']" class="btn btn-info">{{utils.tr('app.compo.client.form.button.list')}}</a></li>
+
+            </ul>
+
+        </form>
+    </div>
+</div>

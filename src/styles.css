@@ -1,0 +1,90 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "../node_modules/angular-calendar/css/angular-calendar.css";
+@import '~bootstrap/dist/css/bootstrap.min.css';   
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.left {
+	float: left;
+	/* width: 100%; */
+	text-align: left;
+	/* border: 1px solid black; */
+}
+
+.right {
+	float: right;
+	/* width: 100%; */
+	text-align: right;
+	/* border: 1px solid black; */
+}
+
+.center {
+	float: center;
+	/* width: 100%; */
+	text-align: center;
+	/* border: 1px solid black; */
+}
+
+.head {
+    font-size: 20px;
+    color: white;
+    background: #343a40; /* #343a40; */
+    width:100%;
+}
+
+.title100pct {
+	border: 1px solid red;
+	color: white;
+	font-weight: bold;
+	font-size: larger;
+	width: 100%;
+  }
+
+.bgcolor_tranp {
+	color: black;
+	font-weight: bolder;
+    background-color: #cccccc;
+    border-radius: 5px 0px 0px 5px;
+	background: linear-gradient(to bottom right, transparent, white 10%, rgb(0, 162, 255, 0.5) 90%);
+}
+
+.bgcolor_tranp_blue {
+	background:hsla(200, 100%, 50%, 0.2);   
+	/* 50% opaque blue */
+}
+
+.bgcolor_tranp_grad_blue {
+	color: black;
+	font-weight: bolder;
+    background-color: #cccccc;
+    border-radius: 5px 0px 0px 5px;
+	background: linear-gradient(to bottom right, transparent, white 10%, rgb(0, 162, 255, 0.5) 90%);
+}
+
+.h_scroll {
+    overflow-y: auto;
+    max-height: 600px;
+}
+
+.hidden {
+    display: none;
+}
+
+.badge_bg {
+	background: rgb(208, 223, 230);
+	color: black;
+	/* padding: 10px 20px; */
+	min-width: 30px;
+	min-height: 20px;
+
+	border-radius: 5px 0px 0px 5px;
+	font-weight: bolder;
+	text-align: center;
+	display: block;
+	float: right;
+}
+
+.cdk-global-overlay-wrapper, .cdk-overlay-container { z-index: 9999!important; } 

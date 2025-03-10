@@ -1,0 +1,57 @@
+<!-- <infors #infors></infors> -->
+<div class="card ">
+    <div class="card-body">
+        <h3 id="title_list" class="card-title text-center py-3">{{getTitle()}}</h3>
+
+        <div class="right" style="width: 40%;" name="searchDiv">
+            <input id="searchStr" #searchStrInput class="form-control left" style="width: 90%;" type="text" placeholder="search" name="searchStr" [(ngModel)]="searchStr" (keyup)="search()" (mouseover)="enableInputSearchStr()" [readonly]="dataSharingService.isDisableSearchStrInput">
+            <button class="right" style="width: 10%; height: 40px; text-align: center;" (click)="clearSearch()">X</button>
+        </div>
+
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col" style="max-width: 50px;">#</th>
+                    <th scope="col">{{utils.tr('app.compo.consultant.list.table.thead.name')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.consultant.list.table.thead.username')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.consultant.list.table.thead.tel')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.consultant.list.table.thead.email')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.consultant.list.table.thead.esn')}}</th>
+                    <th scope="col">{{utils.tr('Role')}}</th>
+                    <th scope="col">{{utils.tr('Level')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.consultant.list.table.thead.action')}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let element of myList | paginate: {itemsPerPage, currentPage}; let i = index" id="consultant-list-tr-{{i}}" (click)="displayConsultantsOfManager($event, element)" [className]="element.id == getIdOfCurentObj() ? 'active' : 'inactive'">
+                    <td>{{ element.id }}</td>
+                    <td><b>{{ element.fullName }}</b></td>
+                    <td>{{ element.username }}</td>
+                    <td>{{ element.tel }}</td>
+                    <td>{{ element.email }}</td>
+                    <td>{{ element.esnName }}</td>
+                    <td>{{ element.role}}</td>
+                    <td>{{ element.level}}</td>
+                    <td>
+                        <button (click)="showForm(element)" id="btn-consultant-edit-{{i}}" class='btn btn-primary mr-1' [appAuthorization] feature="CONSULTANT_MANAGEMENT" permission="UPDATE">{{utils.tr('Edit')}}
+          </button>
+                        <button (click)="delete(element)" id="btn-delete-consultant-list-{{i}}" class='btn btn-danger mr-1' [appAuthorization] feature="CONSULTANT_MANAGEMENT" permission="DELETE">{{utils.tr('Delete')}}
+          </button>
+                        <!-- <button *ngIf="element.admin" (click)="displayConsultantsOfManager(element)" class='btn btn-outline-dark mr-1'>
+            View</button> -->
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="left" style="width: 50%;" *ngIf="nbCallServer == 0">
+            <pagination-controls (pageChange)="currentPage = $event"></pagination-controls>
+
+        </div>
+        <a href="#" [routerLink]="['/consultant_form']" id="btn-add-consultant-form" [queryParams]="{isAdd:true}" class='btn btn-outline-primary right' [appAuthorization] feature="CONSULTANT_MANAGEMENT" permission="CREATE">
+      {{utils.tr('app.compo.consultant.list.button.add')}} </a>
+    </div>
+
+</div>
+
+<app-consultant-form #myObjEditView [myObj]="myObj" *ngIf="myObj != null" [appAuthorization] feature="CONSULTANT_MANAGEMENT" permission="UPDATE"> </app-consultant-form>

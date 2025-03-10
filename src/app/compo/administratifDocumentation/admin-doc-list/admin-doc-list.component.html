@@ -1,0 +1,250 @@
+<!-- <infors #infors></infors> -->
+
+<div class="card my-5">
+    <div class="card-body">
+
+        <h3 class="card-title text-center py-3">{{title}}</h3>
+        <div style="float: right;">
+            <button (click)="shangeShowedListDocument()" id="btn-my-documents" class={{myDocumentButtonStyle}}
+                style="margin-right: -5px;">
+                <i style="margin-right: 5px;font-size: 23px;vertical-align: text-bottom;"
+                    class="fas fa-id-card-alt"></i>Mes Documents
+            </button>
+            <button (click)="shangeShowedListDocument()" id="btn-shared-documents" class={{documentSharedButoonStyle}}
+                style="margin-right: 0px;">
+                <i style="margin-right: 5px;font-size: 23px;vertical-align: text-bottom;"
+                    class="fab fa-creative-commons-share"></i>Partagés
+            </button>
+        </div>
+        <app-spinner *ngIf="load"></app-spinner>
+
+        <div *ngIf="!load" style="clear: right;">
+            <ol class="list-group list-group-numbered">
+                <ul *ngFor="let category of categoryDocList">
+                    <div class="ms-2 me-auto" style="width: 100%;">
+                        <div class="fw-bold">
+                            <h2>
+                                Catégorie : {{category.name}}
+                            </h2>
+                            <!-- <span class="badge bg-primary rounded-pill">{{category.documentList.length}}</span> -->
+                        </div><br>
+
+                        <p>
+                            <button *ngIf="!category.showingDocumentList" id="btn3-admin-doc"
+                                (click)="showDocumentsOfCategory(category)" class='btn btn-primary'><i
+                                    style="margin-right: 0px;" class="fas fa-angle-double-right"></i>
+                            </button>
+                            <button *ngIf="category.showingDocumentList" id="btn4-admin-doc"
+                                (click)="hideDocumentsOfCategory(category)" class='btn btn-primary'><i
+                                    style="margin-right: 0px;" class="fas fa-angle-double-down"></i>
+                            </button>
+                        </p>
+
+
+                        <div *ngIf="category.showingDocumentList">
+
+                            <h4 style="margin-bottom: 20px;">Documents : </h4>
+
+                            <!-- <button *ngIf="category.enabled_for_consultant && !isManager"
+                                (click)="showAddingDocumentModal(category)" id="btn1-admin-doc"
+                                class="btn btn-info add_new_document">
+                                <i class="fas fa-plus-circle"></i>Ajouter {{category.name}}
+                            </button>
+                            <button *ngIf="category.enabled_for_admin && isManager"
+                                (click)="showAddingDocumentModal(category)" id="btn2-admin-doc"
+                                class="btn btn-info add_new_document">
+                                <i class="fas fa-plus-circle"></i>Ajouter {{category.name}}
+                            </button> -->
+
+                            <li *ngFor="let document of category.documentList || []; let i = index" 
+                                >
+                                <div class="list-group-item list-group-item-secondary row" style="width: 100%;padding: 1px; " >
+
+                                    <div class="col1" [ngClass]="classDateExpired(document)">
+                                        {{ document.title }} : {{ getFilesName(document) }}
+                                    </div>
+    
+                                    <div class="col2">
+                                        <button (click)="downloadFiles(document)" id="btn-download-{{i}}"
+                                            class='btn btn-primary'><i class="fas fa-download" title="Download"></i> Download
+                                        </button>
+                                        <button (click)="shareDoc(category, document)" id="btn-shareDoc-{{i}}"
+                                            class='btn btn-primary'><i class="fas fa-angle-double-right" title="Share"></i> Share 
+                                        </button>
+
+                                        <button *ngIf="isShowingMyDocuments" id="btn-delete-{{i}}"
+                                            (click)="deleteDocument(document)" class='btn btn-danger' title="Delete"> <i
+                                                class="fas fa-trash-alt"></i>Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            </li>
+                            <p style="width: 100%; text-align: center;">
+                                <button id="doc-list-goto-add-doc" (click)="navigateTo('/admindoc_form')"
+                                    class='btn btn-primary'> Add Document
+                                </button>
+                            </p>
+                        </div>
+                    </div>
+
+                </ul>
+            </ol>
+        </div>
+
+
+
+
+
+
+
+        <!--shareDocumentView start-->
+        <ng-template #shareDocumentView let-modal>
+            <div class="modal-header">
+                <h5 class="modal-title">Share document </h5>
+                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="card-body">
+                    <form (ngSubmit)="onShareDocument()" #adminDocForm="ngForm">
+
+                        <div>
+                            <span>Consultant: </span>
+                            <ng-multiselect-dropdown [placeholder]="'Selectionnez consultant'"
+                                [settings]="dropdownConsultantSettings" [data]="consultantsList"
+                                [(ngModel)]="selectedConsultants" (onSelect)="onSelectConsultant($event)"
+                                (onSelectAll)="onSelectAllConsultant($event)"
+                                (onDeSelect)="onDeSelectConsultant($event)" #consultant="ngModel"
+                                id="select-consultants-modal" name="consultant">
+                            </ng-multiselect-dropdown>
+                        </div>
+                        <div [hidden]="isSelectedConsultant" class="badge badge-danger">Ajouter un consultant
+                        </div>
+
+                        <ul class="right">
+                            <li class="list-inline-item">
+                                <button type="submit" id="btn-save-modal" [disabled]="!adminDocForm.form.valid"
+                                    class="btn btn-info">Save</button>
+                            </li>
+                        </ul>
+                    </form>
+
+                </div>
+            </div>
+        </ng-template>
+        <!--shareDocumentView end-->
+
+
+
+        <!--addingNewDocumentView start-->
+        <ng-template #addingNewDocumentView let-modal>
+            <div class="modal-header">
+                <h5 class="modal-title">Ajouter document </h5>
+                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="card-body">
+                    <form (ngSubmit)="onSubmit()" #adminDocForm="ngForm">
+                        <div>
+                            <span>Document Catégories: </span><br>
+                            <input type="text" [(ngModel)]="myObj.category.name" class="form-control"
+                                id="category-modal" name="category" placeholder="Nom du categorie" disabled
+                                #category="ngModel">
+                        </div>
+                        <div [hidden]="myObj.category" class="badge badge-danger">Selectionner une catégorie</div>
+
+                        <div *ngIf="showAddingCategoryName" class="form-group">
+                            <label for="category_name">Préciser la catégorie :</label>
+                            <input type="text" [(ngModel)]="myObj.category_name" class="form-control"
+                                id="category-name-modal" name="category_name" placeholder="Nom du categorie" required
+                                #category_name="ngModel">
+                        </div>
+                        <div *ngIf="showAddingCategoryName" [hidden]="myObj.category_name" class="badge badge-danger">
+                            Entrez le nom du categorie</div>
+
+                        <div *ngIf="manager.admin">
+                            <span>Consultant: </span>
+                            <ng-multiselect-dropdown [placeholder]="'Selectionnez consultant'"
+                                [settings]="dropdownConsultantSettings" [data]="consultantsList"
+                                [(ngModel)]="selectedConsultants" (onSelect)="onSelectConsultant($event)"
+                                (onSelectAll)="onSelectAllConsultant($event)"
+                                (onDeSelect)="onDeSelectConsultant($event)" #consultant="ngModel"
+                                id="select-consultants-modal" name="consultant">
+                            </ng-multiselect-dropdown>
+                        </div>
+                        <div [hidden]="isSelectedConsultant" class="badge badge-danger">Entrez le titre du document
+                        </div>
+
+                        <div *ngIf="!manager.admin">
+                            <label for="sharedWith">Partager avec:</label>
+                            <input type="text" [(ngModel)]="adminConsultant.username" class="form-control"
+                                id="shared-with-modal" name="sharedWith" placeholder="Titre du document" disabled
+                                #sharedWith="ngModel">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="title">Titre :</label>
+                            <input type="text" [(ngModel)]="myObj.title" class="form-control" id="title-modal"
+                                name="title" placeholder="Titre du document" required #title="ngModel">
+                        </div>
+                        <div [hidden]="title.valid" class="badge badge-danger">Entrez le titre du document</div>
+
+                        <div class="form-group">
+                            <label>Date d'expiration :</label>
+                            <app-mz-date-picker id="expired-date-modal" placeHolder="Date d'expiration"
+                                [(myDatePicker)]="myObj.expired_date">
+                            </app-mz-date-picker>
+                        </div>
+
+                        <ul class="right">
+                            <li class="list-inline-item">
+                                <button type="submit" id="btn-save-modal" [disabled]="!adminDocForm.form.valid"
+                                    class="btn btn-info">Save</button>
+                            </li>
+                        </ul>
+                        <ul class="left">
+                            <li class="list-inline-item">
+                                <input type="file" accept=".jpg, .png, .pdf" class="btn btn-outline-dark"
+                                    (change)="onFileSelect($event)" name="ADD ATTACHMENT" id="attachment-modal"
+                                    required />
+                            </li>
+                            <div [hidden]="isSelectedFile" class="badge badge-danger">Choisissez un fichier</div>
+                        </ul>
+                    </form>
+
+                </div>
+                <table *ngIf="listSelectedFiles.length">
+                    <thead>
+                        <tr>
+                            <th colspan="2">Tous les fichiers séléctionner</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let file of listSelectedFiles">
+                            <td>{{file.name}}</td>
+                            <td class="td_icon">
+                                <i (click)="removeFile(file)" id="btn-remove-file" class="far fa-trash-alt"></i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!--
+            <div class="modal-footer">
+                <button (click)="craDayActivityNew()" class="btn btn-info" type="submit">
+                    +
+                </button>
+            </div> -->
+        </ng-template>
+        <!--addingNewDocumentView end-->
+    </div>
+
+
+</div>

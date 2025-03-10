@@ -1,0 +1,29 @@
+
+<div class="infors center" *ngIf="isInfoOrError()">
+
+    <div class="right">  <button class="btn btn-danger" (click)="clearInfos()" #clearInfosBtn>X</button>  </div>
+    <h3 *ngIf="nbCallServer != 0"> Loading : {{nbCallServer}} ... </h3> 
+    <div *ngIf="isInfo()" class="info">
+        <h5>NbInfos : {{listInfos.length}}</h5>
+        <ol>
+            <li *ngFor="let info of listInfos ">
+                {{info}}
+            </li>
+        </ol>
+        <hr>
+    </div> 
+    <div *ngIf="isError()" class="error">
+        <h5>NbError : {{listErrors.length}}</h5>
+        <ol>
+            <li *ngFor="let error of listErrors ">
+                {{getErrorTitleMsg(error)}}
+            </li>
+        </ol>
+        <hr>
+    </div>
+
+    <div *ngIf="isShowLoading && isInfo()">
+        <img src="assets/images/loading.gif" alt="" width="40px" height="40px">
+    </div>
+
+</div>

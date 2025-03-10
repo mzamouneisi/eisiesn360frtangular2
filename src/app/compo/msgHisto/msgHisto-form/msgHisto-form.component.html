@@ -1,0 +1,48 @@
+<!-- <infors #infors></infors> -->
+<div class="card my-5">
+    <div class="card-body">
+        <h3 class="card-title text-center py-3">{{ title }} {{myObj.id}} : {{ myObj.to }}</h3>
+        <form (ngSubmit)="onSubmit()" #msgHistoForm="ngForm">
+
+            <div class="form-group">
+                <label for="msg">Msg</label>
+                <input type="text" placeholder="Enter your msg" [(ngModel)]="myObj.msg" class="form-control" id="msg" name="msg" required #msg="ngModel">
+            </div>
+            <div [hidden]="msg.valid" class="alert alert-danger">Msg is required</div>
+
+            <div class="form-group">
+                <label for="type">Type</label>
+                <input type="text" placeholder="Enter your type" [(ngModel)]="myObj.type" class="form-control" id="type" name="type">
+            </div>
+
+            <div class="form-group">
+                <label for="typeId">TypeId</label>
+                <input type="number" [(ngModel)]="myObj.typeId" class="form-control" id="typeId" name="typeId">
+            </div>
+
+            <div class="form-group">
+                <label for="from">From</label>
+                <input type="text" placeholder="Enter your from" [(ngModel)]="myObj.from" class="form-control" id="from" name="from" required #from="ngModel">
+            </div>
+            <div [hidden]="from.valid" class="alert alert-danger">From is required</div>
+
+            <div class="form-group">
+                <label for="to">To</label>
+                <input type="text" placeholder="Enter your to" [(ngModel)]="myObj.to" class="form-control" id="to" name="to" required #to="ngModel">
+            </div>
+            <div [hidden]="to.valid" class="alert alert-danger">To is required</div>
+
+            <div class="form-group">
+                <label for="isReadByTo">IsReadByTo</label>
+                <input type="text" placeholder="Enter your isReadByTo" [(ngModel)]="myObj.isReadByTo" class="form-control" id="isReadByTo" name="isReadByTo">
+            </div>
+
+
+            <button type="submit" id="btn-msg-histo-save" [disabled]="!msgHistoForm.form.valid" class="btn btn-info">{{btnSaveTitle}}</button>
+            <li class="list-inline-item">
+                <a> </a>
+            </li>
+            <li class="list-inline-item"><a [routerLink]="['/msgHisto_list']" class="btn btn-info">List msgHistos</a></li>
+        </form>
+    </div>
+</div>

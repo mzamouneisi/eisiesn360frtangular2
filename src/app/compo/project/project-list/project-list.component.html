@@ -1,0 +1,65 @@
+<div class="card my-5">
+    <div class="card-body">
+        <!-- <infors #infors></infors> -->
+        <h3 id="title_list" class="card-title text-center py-3">{{getTitle()}}</h3>>
+
+        <div class="right" style="width: 40%;" name="searchDiv">
+            <input id="searchStr" #searchStrInput class="form-control left" style="width: 90%;" type="text" placeholder="search" name="searchStr" [(ngModel)]="searchStr" (keyup)="search()" (mouseover)="enableInputSearchStr()" [readonly]="dataSharingService.isDisableSearchStrInput">
+            <button class="right" style="width: 10%; height: 40px; text-align: center;" (click)="clearSearch()">X</button>
+        </div>
+
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">{{utils.tr('app.compo.project.list.table.thead.name')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.project.list.table.thead.description')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.project.list.table.thead.team')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.project.list.table.thead.method')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.project.list.table.thead.client')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.project.list.table.thead.action')}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let element of myList | paginate: {itemsPerPage, currentPage}; let i=index" [className]="element.id == getIdOfCurentObj() ? 'active' : 'inactive'">
+                    <td>{{ element.id }}</td>
+                    <td>
+                        {{ element.name }}
+                    </td>
+                    <td>
+                        {{ element.description }}
+                    </td>
+                    <td>
+                        {{ element.teamNumber }}p, {{ element.teamDesc }}
+                    </td>
+                    <td>
+                        {{ element.method }}
+                    </td>
+                    <td>
+                        {{ element?.client?.name }}
+                    </td>
+                    <td>
+                        <!-- <button (click)="edit(element)" class='btn btn-info' >Edit</button>  -->
+                        <button (click)="showForm(element)" class='btn btn-primary' id="btn-project-edit-{{i}}" [appAuthorization] feature="PROJECT_MANAGEMENT" permission="UPDATE">{{utils.tr('Edit')}}
+          </button>
+                        <button (click)="delete(element)" class='btn btn-danger' id="btn-project-delete-{{i}}" [appAuthorization] feature="PROJECT_MANAGEMENT" permission="DELETE">{{utils.tr('Delete')}}
+          </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="left" style="width: 50%;">
+            <pagination-controls (pageChange)="currentPage = $event"></pagination-controls>
+        </div>
+
+        <div class="right" style="width: 50%;" *ngIf="nbCallServer == 0">
+
+            <li class="list-inline-item"><a id="addProject" [routerLink]="['/project_form']" [queryParams]="{isAdd:true}" class="btn btn-info" [appAuthorization] feature="PROJECT_MANAGEMENT" permission="CREATE">{{utils.tr('app.compo.project.list.table.action.add')}}</a></li>
+
+        </div>
+
+    </div>
+</div>
+
+<app-project-form #myObjEditView [myObj]="myObj" *ngIf="myObj" [appAuthorization] feature="PROJECT_MANAGEMENT" permission="UPDATE"></app-project-form>

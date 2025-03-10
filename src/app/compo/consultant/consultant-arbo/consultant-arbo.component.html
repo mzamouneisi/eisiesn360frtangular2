@@ -1,0 +1,45 @@
+<div>
+    <h5>{{consultant.username}} : {{consultant.role}} 
+        <button [hidden]="!isListEmpty(consultant.listConsultant) || !isListEmpty(consultant.listCra)  || !isListEmpty(consultant.listActivity)  "
+        (click)="deleteConsultant(consultant, manager)" class="btn btn-danger">Supprimer</button>
+    </h5>
+    <mat-tab-group>
+        <mat-tab label="{{getTitleListConsultants(consultant)}}" [hidden]="isConsultantFct(consultant)" (click)="getListConsultants(consultant)">
+            <ng-template matTabContent>
+                <ol>
+                    <li *ngFor="let child of consultant.listConsultant">
+                        <app-consultant-arbo [consultant]="child" [manager]="consultant"></app-consultant-arbo>
+                    </li>
+                </ol>
+            </ng-template>
+        </mat-tab>
+        <mat-tab label="List Cra" (click)="getListCra(consultant)">
+            <ng-template matTabContent>
+                <ol>
+                    <li *ngFor="let cra of consultant.listCra">
+                        <div>
+                            <h6> {{infoCra(cra)}}
+                                <button (click)="deleteCra(cra, consultant)" class="btn btn-danger">Supprimer</button>
+                            </h6>
+                        </div>
+                    </li>
+                </ol>
+            </ng-template>
+        </mat-tab>
+        <mat-tab label="List Activity" (click)="getListActivity(consultant)">
+            <ng-template matTabContent>
+                <ol>
+                    <li *ngFor="let act of consultant.listActivity">
+                        <div>
+                            <h6> {{act.name}}
+                                <button (click)="deleteActivity(act, consultant)" class="btn btn-danger">Supprimer</button>
+                            </h6>
+                        </div>
+                    </li>
+                </ol>
+            </ng-template>
+        </mat-tab>
+    </mat-tab-group>
+
+</div>
+

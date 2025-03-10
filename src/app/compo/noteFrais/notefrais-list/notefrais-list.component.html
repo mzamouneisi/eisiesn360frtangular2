@@ -1,0 +1,113 @@
+<!-- <infors #infors></infors> -->
+
+
+<div class="card my-5">
+    <app-spinner *ngIf="loadingComponenet"></app-spinner>
+
+    <div *ngIf="!loadingComponenet" class="card-body">
+        <h3 id="title_list" class="card-title text-center py-3">{{getTitle()}}</h3>>
+
+        <div class="right" style="width: 40%;" name="searchDiv">
+            <input id="searchStr" #searchStrInput class="form-control left" style="width: 90%;" type="text" placeholder="search" name="searchStr" [(ngModel)]="searchStr" (keyup)="search()" (mouseover)="enableInputSearchStr()" [readonly]="dataSharingService.isDisableSearchStrInput">
+            <button class="right" style="width: 10%; height: 40px; text-align: center;" (click)="clearSearch()">X</button>
+        </div>
+
+        <div class="col-4" [appAuthorization] feature="CONSULTANT_MANAGEMENT" permission="VIEW">
+            <div class="form-group">
+                {{utils.tr('Consultant')}}
+                <app-select #compoSelectConsultant [selectId]="'notefrais-list-select-consultant'" [objectName]="'Consultant'" [myList]="consultants" [initObj]="myObj?.activity?.consultant" [objCaller]="this" onChangeCaller="onSelectConsultant" [ObjectPropName]="'fullName'"></app-select>
+            </div>
+        </div>
+
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th *ngIf="isAdmin()" scope="col">{{utils.tr('app.compo.frais.list.table.thead.consultantName')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.frais.list.table.thead.title')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.frais.list.table.thead.date')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.frais.list.table.thead.category')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.frais.list.table.thead.brandName')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.frais.list.table.thead.vat')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.frais.list.table.thead.pretaxAmount')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.frais.list.table.thead.amount')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.frais.list.table.thead.status')}}</th>
+                    <th scope="col">{{utils.tr('app.compo.frais.list.table.thead.action')}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let element of myList | paginate: {itemsPerPage, currentPage}; let i=index" [className]="element.id == getIdOfCurentObj() ? 'active' : 'inactive'">
+                    <td>{{ element.id }}</td>
+                    <td *ngIf="isAdmin()">{{ element.activity.consultant.firstName}} {{ element.activity.consultant.lastName}}</td>
+                    <td>{{ element.title }}</td>
+                    <td>{{ element.date | date:'dd/MM/yyyy' }}</td>
+                    <td>{{ element.category?.name}}</td>
+                    <td>{{ element.brand_name}}</td>
+                    <td>{{ element.vat }}</td>
+                    <td>{{ element.pretax_amount }}</td>
+                    <td>{{ element.amount }}</td>
+                    <td>
+                        <span class="badge badge-{{element.state =='REJECTED'? 'danger' :'primary'}}"> {{element.state}}</span><br>
+                        <span *ngIf="isPayed(element)">{{element.pay_date}}</span>
+                    </td>
+                    <td>
+                        <button (click)="downloadAttachment(element)" id="btn-notefrais-list-download-{{i}}" class='btn btn-primary mr-1'><i class="fas fa-download"></i>
+            </button>
+                        <button [appAuthorization] feature="FEE_MANAGEMENT" permission="UPDATE" id="btn-notefrais-list-update-{{i}}" *ngIf="isWaiting(element)" (click)="showForm(element)" class='btn btn-outline-primary mr-1'>{{utils.tr('Edit')}}
+            </button>
+                        <button *ngIf="isAdmin() && isWaiting(element)" id="btn-notefrais-list-accept-{{i}}" (click)="acceptNoteFrais(element)" class='btn btn-success mr-1'><i class="fas fa-check-circle"></i> {{utils.tr('Accept')}}
+            </button>
+                        <button *ngIf="isAdmin() && isWaiting(element)" id="btn-notefrais-list-reject-{{i}}" (click)="rejectNoteFrais(element)" class='btn btn-danger mr-1'><i class="fas fa-times-circle"></i> {{utils.tr('Reject')}}
+            </button>
+                        <button *ngIf="isAdmin() && isWaiting(element)" id="btn-notefrais-list-pay-{{i}}" (click)="selectPayementDate(element)" class='btn btn-info mr-1'><i class="fas fa-money-check-alt"></i> {{utils.tr('Pay')}}
+            </button>
+                        <button [appAuthorization] feature="FEE_MANAGEMENT" id="btn-notefrais-list-delete-{{i}}" permission="DELETE" *ngIf="isWaiting(element)" (click)="delete(element)" class='btn btn-danger'>{{utils.tr('Delete')}}
+            </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="left" style="width: 50%;">
+            <pagination-controls (pageChange)="currentPage = $event"></pagination-controls>
+        </div>
+
+        <div class="right" style="width: 50%;" *ngIf="nbCallServer == 0">
+
+            <li [appAuthorization] feature="FEE_MANAGEMENT" permission="CREATE" class="list-inline-item">
+                <a [routerLink]="['/notefrais_form']" [queryParams]="{isAdd:true}" class="btn btn-info">{{utils.tr('app.compo.frais.list.button.add')}} </a>
+            </li>
+
+        </div>
+
+
+    </div>
+    <!--dateView start-->
+    <ng-template #dateView let-modal>
+        <div class="modal-header">
+            <h5 class="modal-title">Séléctionnez la date de paiement</h5>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+        </div>
+
+        <div class="modal-body">
+            <div class="form-group">
+                <label>{{utils.tr('app.compo.frais.list.payementDate')}} :
+          <!-- <span class="badge badge-dark">{{myObj.date | date :'dd-MM-yyyy'}}</span>  -->
+        </label>
+                <app-mz-date-picker id="notefrais-list-date-pay" placeHolder="{{utils.tr('app.form.input.placeholder.prefix')}}  {{utils.tr('app.compo.frais.list.payementDate') | lowercase}}" [(myDatePicker)]="feeForPayement.dateTest" [objCaller]="this" onChangeCaller="onSelectPayementDate"></app-mz-date-picker>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button (click)="payNoteFrais()" id="btn-notefrais-list-valid-pay" class="btn btn-info" type="submit">
+        <i class="fas fa-check-circle"></i>
+        Valider
+      </button>
+        </div>
+    </ng-template>
+    <!--dateView end-->
+</div>
+
+<app-notefrais-form [appAuthorization] feature="FEE_MANAGEMENT" permission="CREATE" #myObjEditView [myObj]="myObj" *ngIf="myObj != null"></app-notefrais-form>

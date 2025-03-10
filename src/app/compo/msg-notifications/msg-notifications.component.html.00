@@ -1,0 +1,33 @@
+<!-- 
+<button *ngIf="listMsg && listMsg.length>0" (click)="isShowListMsg=!isShowListMsg" > <h3 class="badge badge-pill badge-danger"> {{listMsg?.length}} </h3> </button>
+ -->
+ 
+  <button type="button" class="btn btn-light" data-toggle="dropdown" aria-haspopup="true" (click)="openModal(tableNotifications)" >
+    Notifications <span class="badge badge-pill badge-danger">{{listMsg?.length}} </span>
+  </button>
+  
+  <ng-template #tableNotifications let-modal>
+<div *ngIf="listMsg && listMsg.length>0"  class="tableNotifications" >
+<br/>
+	<table>
+	 		<th> Date </th> 
+	 		<th> From </th> 
+	 		<th> To </th> 
+	 		<th> Message </th> 
+	 		<th> Type, Id </th> 
+	 		
+	   <tr *ngFor="let msg of listMsg; let i = index;" >
+	     <td> {{msg.dateMsg | date : 'dd/MM/yyyy hh:mm:ss'}} </td> 
+	     <td> {{msg.from.fullName}} </td>
+	     <td> {{msg.to.fullName}} </td>
+	     <td> {{msg.msg}} </td>
+	     <td> 
+	     	<button (click)="showTarget(msg)" >Show {{msg.type}} #{{msg.typeId}}</button>
+	     </td>
+	   </tr>
+	</table>
+</div>
+</ng-template>
+
+
+

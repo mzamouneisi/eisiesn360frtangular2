@@ -1,0 +1,150 @@
+<!-- <infors #infors></infors> -->
+<div class="card my-5">
+    <div class="card-body">
+        <h3 class="card-title text-center py-3">{{ titre }} {{myObj.id}}</h3>
+        <form (ngSubmit)="onSubmit()" #noteFraisForm="ngForm">
+
+            <label>Choix du fichier : </label>
+            <ul class="left" style="width: 100%; text-align: left;">
+                <li class="list-inline-item">
+                    <input type="file" accept=".jpg, .png, .pdf" class="btn btn-outline-dark"
+                        (change)="onFileSelect($event)" name="ADD ATTACHMENT" id="attachment" required />
+                </li>
+                <li>
+                    <textarea [(ngModel)]="myObj.textFilePdf" rows="7" style="width: 95%;" [readonly]="true"></textarea>
+                </li>
+            </ul>
+            <p></p>
+
+            <div class="form-group">
+                <label for="title">{{utils.tr('app.compo.frais.form.input.title')}} :</label>
+                <input type="text" [(ngModel)]="myObj.title" class="form-control" id="title" name="title"
+                    placeholder="{{utils.tr('app.form.input.placeholder.prefix')}}  {{utils.tr('app.compo.frais.form.input.title') | lowercase}}"
+                    required #title="ngModel">
+            </div>
+            <div [hidden]="title.valid" class="badge badge-danger">{{utils.tr('app.compo.frais.form.input.title')}}
+                {{utils.tr('app.badge.required')}}</div>
+
+            <div class="form-group">
+                <label>{{utils.tr('app.compo.frais.form.input.dateFee')}} :
+                    <!-- <span class="badge badge-dark">{{myObj.date | date :'dd-MM-yyyy'}}</span>  -->
+                </label>
+                <app-mz-date-picker id="notefrais-form-date"
+                    placeHolder="{{utils.tr('app.form.input.placeholder.prefix')}}  {{utils.tr('app.compo.frais.form.input.dateFee') | lowercase}}"
+                    [(myDatePicker)]="myObj.date"></app-mz-date-picker>
+            </div>
+            <!--<div [hidden]="date.valid" class="badge badge-danger ">Depense date {{utils.tr('app.badge.required')}}</div>-->
+
+
+            <div class="form-group">
+                <label for="country">{{utils.tr('app.compo.frais.form.input.country')}} :</label>
+                <input type="text" [(ngModel)]="myObj.country" class="form-control" id="country" name="country"
+                    placeholder="{{utils.tr('app.form.input.placeholder.prefix')}}  {{utils.tr('app.compo.frais.form.input.country') | lowercase}}"
+                    required #country="ngModel">
+            </div>
+            <div [hidden]="country.valid" class="badge badge-danger">{{utils.tr('app.compo.frais.form.input.country')}}
+                {{utils.tr('app.badge.required')}}</div>
+
+            <div class="form-group">
+                {{utils.tr('app.compo.frais.form.input.activity')}} :
+                <app-select #compoSelectActivity [selectId]="'notefrais-form-select-activity'" [objectName]="'Activity'"
+                    [myList]="activities" [initObj]="myObj.activity" [objCaller]="this"
+                    onChangeCaller="onSelectActivity" [ObjectPropName]="'name'"></app-select>
+                <div [hidden]="myObj.activity" class="badge badge-danger">
+                    {{utils.tr('app.compo.frais.form.input.activity')}} {{utils.tr('app.badge.required')}}</div>
+            </div>
+
+            <div class="form-group">
+                {{utils.tr('app.compo.frais.form.input.payementMode')}} :
+                <app-select #compoSelectPayementMode [selectId]="'notefrais-form-select-payement-mode'"
+                    [objectName]="'PayementMode'" [myList]="payementsModes" [initObj]="myObj.payementMode"
+                    [objCaller]="this" onChangeCaller="onSelectPayementMode" [ObjectPropName]="'name'"></app-select>
+                <div [hidden]="myObj.payementMode" class="badge badge-danger">
+                    {{utils.tr('app.compo.frais.form.input.payementMode')}} {{utils.tr('app.badge.required')}}</div>
+            </div>
+
+            <div class="form-group">
+                {{utils.tr('app.compo.frais.form.input.categories')}} :
+                <app-select #compoSelectCategory [selectId]="'notefrais-form-select-category'" [objectName]="'Category'"
+                    [myList]="categories" [initObj]="myObj.category" [objCaller]="this"
+                    onChangeCaller="onSelectCategory" [ObjectPropName]="'name'"></app-select>
+                <div [hidden]="myObj.category" class="badge badge-danger">
+                    {{utils.tr('app.compo.frais.form.input.categories')}} {{utils.tr('app.badge.required')}}</div>
+            </div>
+
+            <div class="form-group">
+                <label for="invoiceNumber">{{utils.tr('app.compo.frais.form.input.invoice')}} :</label>
+                <div class="form-group" style="padding-left: 20px;">
+
+                    <label for="number">{{utils.tr('app.compo.frais.form.input.invoiceNumber')}} :</label>
+                    <input type="text" [(ngModel)]="myObj.invoice_number" class="form-control" id="invoiceNumber"
+                        name="invoiceNumber"
+                        placeholder="{{utils.tr('app.form.input.placeholder.prefix')}}  {{utils.tr('app.compo.frais.form.input.invoiceNumber') | lowercase}}"
+                        required #invoiceNumber="ngModel">
+                    <div [hidden]="invoiceNumber.valid" class="badge badge-danger">
+                        {{utils.tr('app.compo.frais.form.input.invoiceNumber')}} {{utils.tr('app.badge.required')}}
+                    </div><br>
+
+                    <label for="pretax">{{utils.tr('app.compo.frais.form.input.pretaxAmount')}} :</label>
+                    <input type="number" [(ngModel)]="myObj.pretax_amount" class="form-control" id="pretaxAmount"
+                        name="pretaxAmount"
+                        placeholder="{{utils.tr('app.form.input.placeholder.prefix')}}  {{utils.tr('app.compo.frais.form.input.pretaxAmount') | lowercase}}"
+                        required #pretaxAmount="ngModel" (keyup)="calculAmount()" (change)="calculAmount()">
+                    <div [hidden]="pretaxAmount.valid" class="badge badge-danger">
+                        {{utils.tr('app.compo.frais.form.input.pretaxAmount')}} {{utils.tr('app.badge.required')}}</div>
+                    <br>
+
+                    <label for="vat">{{utils.tr('app.compo.frais.form.input.vat')}} :</label>
+                    <input type="number" [(ngModel)]="myObj.vat" class="form-control" id="vat" name="vat"
+                        placeholder="{{utils.tr('app.form.input.placeholder.prefix')}}  {{utils.tr('app.compo.frais.form.input.vat') | lowercase}}"
+                        required #vat="ngModel" (keyup)="calculAmount()" (change)="calculAmount()">
+                    <div [hidden]="vat.valid" class="badge badge-danger">{{utils.tr('app.compo.frais.form.input.vat')}}
+                        {{utils.tr('app.badge.required')}}</div><br>
+                    <app-spinner *ngIf="load"></app-spinner>
+
+                    <label for="amount">{{utils.tr('app.compo.frais.form.input.amount')}} :</label>
+                    <input type="number" [(ngModel)]="myObj.amount" class="form-control" id="amount" name="amount"
+                        placeholder="{{utils.tr('app.form.input.placeholder.prefix')}}  {{utils.tr('app.compo.frais.form.input.amount') | lowercase}}"
+                        required #amount="ngModel" [readonly]="true">
+                    <div [hidden]="amount.valid" class="badge badge-danger">
+                        {{utils.tr('app.compo.frais.form.input.amount')}} {{utils.tr('app.badge.required')}}</div>
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="brandName">{{utils.tr('app.compo.frais.form.input.brand')}} :</label>
+                <input type="text" [(ngModel)]="myObj.brand_name" class="form-control" id="brandName" name="brandName"
+                    placeholder="{{utils.tr('app.form.input.placeholder.prefix')}}  {{utils.tr('app.compo.frais.form.input.brand') | lowercase}}"
+                    required #brandName="ngModel">
+                <div [hidden]="brandName.valid" class="badge badge-danger">
+                    {{utils.tr('app.compo.frais.form.input.brand')}} {{utils.tr('app.badge.required')}}</div>
+
+            </div>
+
+            <div class="form-group">
+                <label for="description">{{utils.tr('app.compo.frais.form.input.description')}} :</label>
+                <input type="text" [(ngModel)]="myObj.description" class="form-control" id="description"
+                    name="description"
+                    placeholder="{{utils.tr('app.form.input.placeholder.prefix')}}  {{utils.tr('app.compo.frais.form.input.description') | lowercase}}"
+                    required #description="ngModel">
+                <div [hidden]="description.valid" class="badge badge-danger">
+                    {{utils.tr('app.compo.frais.form.input.description')}} {{utils.tr('app.badge.required')}}</div>
+
+            </div>
+
+
+            <br />
+            <ul class="right">
+                <li class="list-inline-item">
+                    <button type="submit" id="btn-notefrais-form-save" [disabled]="!noteFraisForm.form.valid"
+                        class="btn btn-info">{{btnSaveTitle}}</button>
+                </li>
+                <li class="list-inline-item"><a [routerLink]="['/notefrais_list']"
+                        class="btn btn-info">{{utils.tr('app.compo.frais.form.input.feeList')}}</a></li>
+            </ul>
+
+
+        </form>
+    </div>
+</div>

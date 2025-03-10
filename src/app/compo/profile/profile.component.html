@@ -1,0 +1,78 @@
+<!-- <infors #infors></infors> -->
+
+<div class="card my-5">
+    <div class="card-body">
+        <h3 class="card-title text-center py-3">Manage account settings</h3>
+
+        <form (ngSubmit)="onSubmit()" #consultantForm="ngForm" *ngIf="myObj">
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" [(ngModel)]="myObj.firstName" class="form-control" id="firstName" name="firstName" placeholder="Enter your firstName" required #firstName="ngModel">
+                <div [hidden]="firstName.valid" class="badge badge-danger">firstName is required</div>
+            </div>
+
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" [(ngModel)]="myObj.lastName" class="form-control" id="lastName" name="lastName" placeholder="Enter your lastName" required #lastName="ngModel">
+            </div>
+            <div [hidden]="lastName.valid" class="badge badge-danger">lastName is required</div>
+
+            <div class="form-group">
+                <label for="tel">Tel</label>
+                <input type="tel" [(ngModel)]="myObj.tel" class="form-control" id="tel" name="tel" placeholder="Enter your tel" required #tel="ngModel">
+            </div>
+            <div [hidden]="tel.valid" class="badge badge-danger">Tel is required</div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" [(ngModel)]="myObj.email" class="form-control" id="email" name="email" placeholder="Enter your email" required #email="ngModel">
+            </div>
+            <div [hidden]="email.valid" class="badge badge-danger">Email is required</div>
+
+            <div class="form-group">
+                <label>Date Birthday :
+          <!-- <span class="badge badge-dark">{{myObj.birthDay | date :'dd-MM-yyyy'}}</span> -->
+        </label>
+                <app-mz-date-picker id="date-of-birth" placeHolder="Choix de date" [(myDatePicker)]="myObj.birthDay"></app-mz-date-picker>
+            </div>
+
+
+            <div class="form-group">
+                <label for="street">Street</label>
+                <input type="text" [(ngModel)]="myObj.address.street" class="form-control" id="street" name="street" placeholder="Enter your street" required #street="ngModel">
+            </div>
+            <div [hidden]="street.valid" class="badge badge-danger">Street is required</div>
+
+            <div class="form-group">
+                <label for="zipCode">ZipCode</label>
+                <input type="text" [(ngModel)]="myObj.address.zipCode" class="form-control" id="zipCode" name="zipCode" placeholder="Enter your zipCode" required #zipCode="ngModel">
+            </div>
+            <div [hidden]="zipCode.valid" class="badge badge-danger">ZipCode is required</div>
+
+            <div class="form-group">
+                <label for="city">City</label>
+                <input type="text" [(ngModel)]="myObj.address.city" class="form-control" id="city" name="city" placeholder="Enter your city" required #city="ngModel">
+            </div>
+            <div [hidden]="city.valid" class="badge badge-danger">ZipCode is required</div>
+
+            <div class="form-group">
+                <label for="country">Country</label>
+                <input type="text" [(ngModel)]="myObj.address.country" class="form-control" id="country" name="city" placeholder="Enter your country" required #country="ngModel">
+            </div>
+            <div [hidden]="country.valid" class="badge badge-danger">Country is required</div>
+
+            <div class="form-group">
+                <label for="username">username</label>
+                <input type="text" [(ngModel)]="myObj.username" [value]="myObj.email" class="form-control" id="username" name="username" placeholder="Enter your username" disabled>
+            </div>
+
+            <br/>
+            <ul class="right">
+                <li class="list-inline-item">
+                    <button type="submit" id="btn-profile-save" [disabled]="!consultantForm.form.valid" class="btn btn-info">{{btnSaveTitle}}</button>
+                </li>
+            </ul>
+
+        </form>
+    </div>
+</div>

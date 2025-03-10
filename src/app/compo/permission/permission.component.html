@@ -1,0 +1,59 @@
+<!-- <infors #infors></infors> -->
+<div class="card my-5">
+    <div class="card-body">
+        <h3 class="card-title text-center py-3">Manage Permissions</h3>
+
+        <div class="right" style="width: 40%;" name="searchDiv">
+            <input id="searchStr" #searchStrInput class="form-control left" style="width: 90%;" type="text" placeholder="search" name="searchStr" [(ngModel)]="searchStr" (keyup)="search()" (mouseover)="enableInputSearchStr()" [readonly]="dataSharingService.isDisableSearchStrInput">
+            <button class="right" style="width: 10%; height: 40px; text-align: center;" (click)="clearSearch()">X</button>
+        </div>
+
+        <div class="form-group">
+            <label for="roleList">Role: </label>
+            <app-select #compoSelectRole [selectId]="'permission-select-role'" [objectName]="'Role'" [myList]="roles" [initObj]="roleFilter" [objCaller]="this" onChangeCaller="onSelectRole"></app-select>
+        </div>
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Feature</th>
+                    <th scope="col" class="center">ALL</th>
+                    <th scope="col" class="center">VIEW</th>
+                    <th scope="col" class="center">ADD</th>
+                    <th scope="col" class="center">UPDATE</th>
+                    <th scope="col" class="center">DELETE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let element of myList | paginate: {itemsPerPage, currentPage}; let i = index ">
+                    <td>{{ element.featureId.featureName }}</td>
+                    <td>
+                        <input type="checkbox" id="permission-update-all-{{ind(i)}}" (click)="updateList(ind(i),'all',$event)" class="form-check-input" style="margin-left: 10px;">
+                    </td>
+                    <td>
+                        <input type="checkbox" id="permission-update-view-{{ind(i)}}" [checked]="element.view" (click)="updateList(ind(i),'isView',$event)" class="form-check-input" style="margin-left: 10px;">
+                    </td>
+                    <td>
+                        <input type="checkbox" id="permission-update-add-{{ind(i)}}" [checked]="element.add" (click)="updateList(ind(i),'isAdd',$event)" class="form-check-input" style="margin-left: 10px;">
+                    </td>
+                    <td>
+                        <input type="checkbox" id="permission-update-isUpdate-{{ind(i)}}" [checked]="element.update" (click)="updateList(ind(i),'isUpdate',$event)" class="form-check-input" style="margin-left: 10px;">
+                    </td>
+                    <td>
+                        <input type="checkbox" id="permission-update-delete-{{ind(i)}}" [checked]="element.delete" (click)="updateList(ind(i),'isDelete',$event)" class="form-check-input" style="margin-left: 10px;">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="left" style="width: 50%;">
+            <pagination-controls (pageChange)="currentPage = $event"></pagination-controls>
+        </div>
+        <div class="right" style="width: 50%;">
+            <li class="list-inline-item "><a (click)="checkedAll()" class="btn btn-info">CHECKED ALL</a>
+            </li>
+            <li class="list-inline-item"><a (click)="updatePermissions()" class="btn btn-info">UPDATE</a>
+            </li>
+        </div>
+
+    </div>
+</div>

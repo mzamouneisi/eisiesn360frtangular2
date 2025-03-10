@@ -1,0 +1,46 @@
+<!-- <infors #infors></infors> -->
+<div class="card my-5">
+    <div class="card-body">
+        <h3 id="title_list" class="card-title text-center py-3">{{getTitle()}}</h3>>
+
+        <div class="right" style="width: 40%;" name="searchDiv">
+            <input id="searchStr" #searchStrInput class="form-control left" style="width: 90%;" type="text" placeholder="search" name="searchStr" [(ngModel)]="searchStr" (keyup)="search()" (mouseover)="enableInputSearchStr()" [readonly]="dataSharingService.isDisableSearchStrInput">
+            <button class="right" style="width: 10%; height: 40px; text-align: center;" (click)="clearSearch()">X</button>
+        </div>
+
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let element of myList | paginate: {itemsPerPage, currentPage}; let i=index" [className]="element.id == getIdOfCurentObj() ? 'active' : 'inactive'">
+                    <td>{{ element.id }}</td>
+                    <td> {{ element.name }} </td>
+                    <td>
+                        <button (click)="showForm(element)" id="btn-payementmode-edit-{{i}}" class='btn btn-info'>
+            Edit
+          </button>
+                        <button (click)="delete(element)" id="btn-payementmode-delete-{{i}}" class='btn btn-danger'>
+            Delete
+          </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="left" style="width: 50%;">
+            <pagination-controls (pageChange)="currentPage = $event"></pagination-controls>
+        </div>
+        <div class="right" style="width: 50%;" *ngIf="nbCallServer == 0">
+
+            <li class="list-inline-item"><a [routerLink]="['/payementmode_form']" [queryParams]="{isAdd:true}" class="btn btn-info">Add PayementMode</a></li>
+
+        </div>
+
+    </div>
+</div>
+
+<app-payementmode-form #payementModeDetail *ngIf="myObj != null" [myObj]="myObj"></app-payementmode-form>

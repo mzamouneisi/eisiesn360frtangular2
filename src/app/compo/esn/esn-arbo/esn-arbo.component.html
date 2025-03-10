@@ -1,0 +1,67 @@
+<div>
+    <h5> <label (click)="refreshEsn(esn)"> {{esn.name}}  </label>
+        <button [hidden]="!isListEmpty(esn.listConsultant) || !isListEmpty(esn.listClient)  || !isListEmpty(esn.listActivityType)  "
+        (click)="deleteEsn(esn)" class="btn btn-danger">Supprimer</button>
+    </h5>
+    <mat-tab-group>
+        <mat-tab label="List Responsables" (click)="getListResp(esn)">
+            <ng-template matTabContent>
+                <ol>
+                    <li *ngFor="let child of esn.listResp">
+                        <app-consultant-arbo [consultant]="child" [esnArbo]="this" ></app-consultant-arbo>
+                    </li>
+                </ol>
+            </ng-template>
+        </mat-tab>
+        <mat-tab label="List Clients" >
+            <ng-template matTabContent>
+                <ol>
+                    <li *ngFor="let cli of esn.listClient">
+                        <div>
+                            <h6> {{cli.name}}
+                                <button [hidden]="!isListEmpty(cli.listProject)" (click)="deleteClient(cli, esn)" class="btn btn-danger">Supprimer</button>
+                            </h6>
+                            <h6>List Projects : </h6>
+                            <ol>
+                                <li *ngFor="let proj of cli.listProject">
+                                    <div>
+                                        <h6> {{proj.name}}
+                                            <button [hidden]="!isListEmpty(proj.listActivity)" (click)="deleteProject(proj, cli)" class="btn btn-danger">Supprimer</button>
+                                        </h6>
+
+                                         <h6>List Activity : </h6>
+                                         <ol>
+                                            <li *ngFor="let act of proj.listActivity">
+                                                <div>
+                                                    <h6> {{act.name}}
+                                                        <button (click)="deleteActivity(act, proj)" class="btn btn-danger">Supprimer</button>
+                                                    </h6>
+                                                </div>
+                                            </li>
+                                        </ol>
+                                        
+                                    </div>
+                                </li>
+                            </ol>
+                        </div>
+                    </li>
+                </ol>
+            </ng-template>
+        </mat-tab>
+        <mat-tab label="List Activity Type" >
+            <ng-template matTabContent>
+                <ol>
+                    <li *ngFor="let type of esn.listActivityType">
+                        <div>
+                            <h6> {{type.name}}
+                                <button (click)="deleteActivityType(type, esn)" class="btn btn-danger">Supprimer</button>
+                            </h6>
+                        </div>
+                    </li>
+                </ol>
+            </ng-template>
+        </mat-tab>
+    </mat-tab-group>
+
+</div>
+

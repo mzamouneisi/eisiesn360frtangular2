@@ -1,0 +1,77 @@
+<div style="height: 100%;" class="bgcolor_tranp ">
+    <div style="float: center;" class="h_scroll">
+        <infors #infors></infors>
+    </div>
+
+    <div style="float: left; " class="bgcolor_tranp00 ">
+        <app-menu></app-menu>
+    </div>
+
+    <div style="float: left; text-align: center; margin-left: 10px;" class="bgcolor_tranp00 "
+        id="btn-header-showCaledar" (click)="showCalendar()">
+        {{dateStr}} <br> {{timeStr}}
+    </div>
+
+    <div style="float: right; " class="bgcolor_tranp00">
+        <nav class="navbar navbar-expand-md navbar-dark navbar-right  ">
+            <!-- <div *ngIf="isUserLoggedIn? UserConnected : UserNotConnected"></div> -->
+
+            <div *ngIf="isUserLoggedIn">
+                <div class="left">
+                    <a class="nav-link dropdown-toggle btn" id="dropdown01" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="true">{{language | uppercase}}</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown01">
+                        <a class="dropdown-item" id="header-language-en" (click)="changeLanguage('en')"><span
+                                class="flag-icon flag-icon-us"> </span> EN</a>
+                        <a class="dropdown-item" id="header-language-fr" (click)="changeLanguage('fr')"><span
+                                class="flag-icon flag-icon-fr"> </span> FR</a>
+                    </div>
+                </div>
+
+                <div class="bgcolor_tranp00" class="left">
+                    <button type="button" class="btn btn-light" id="dropdown02" data-toggle="dropdown"
+                        aria-haspopup="true">
+                        {{title0}} <span class="badge badge-pill badge-danger">{{getNbNotifications()}}</span>
+                    </button>
+
+                    <div class="dropdown-menu h_scroll bgcolor_tranp00" aria-labelledby="dropdown02">
+                        <app-notification [isOnlyNotViewed]="true" [isShowBtns]="false"
+                            idPagination="idPaginationNotViewed" #notificationCompo></app-notification>
+                        <a class="btn btn-primary title100pct" (click)="showNotificationsAll()">
+                            <h5>Voir toutes les notifications</h5>
+                        </a>
+                    </div>
+
+                </div>
+
+                <!-- Btn Login Connected -->
+                <div style="text-align: center; margin-right: 20px; margin-bottom: 22px;" class="pcoded-micon left"
+                    id="header-menu-user" (click)="menuUserConnected()"><i class="feather icon-settings"></i>
+                    <!-- {{dataSharingService?.userConnected?.esn?.name | uppercase }} -->
+                    {{esnName | uppercase }}
+
+                    <br> <span id="loginName">{{getCurentUserName()}}</span>
+                    <br>
+                    <button (click)="logout()" class="btn">
+                        logout
+                    </button>
+                </div>
+            </div>
+
+            <div *ngIf="!isUserLoggedIn">
+                <a routerLink="/login" id="header-login" class="btn btn-auth-gen">LOGIN</a>
+            </div>
+
+
+
+        </nav>
+
+
+
+    </div>
+
+
+
+
+
+</div>

@@ -1,0 +1,48 @@
+<button id="close" mat-button type="button" mat-dialog-close class="right">X</button>
+<p></p>
+<br/>
+<!-- <infors #infors></infors> -->
+<div class="card">
+    <div class="card-header">
+
+        <div style="text-align: center;" class="pcoded-micon bold"><i class="feather icon-settings"></i> {{getEsnCurrentName() | uppercase }}
+            <br> {{getCurentUserName() | titlecase}}
+            <br> {{getCurentUserEmail() }}
+            <br>
+            <br><br>
+            <div *ngIf="getManagerEmailOfUserCurent()">
+                <h4>Manager: </h4>
+                <br> {{getManagerEmailOfUserCurent()}}
+                <br><br>
+            </div>
+        </div>
+
+        <a routerLink="" *ngIf="isLoggedIn()" id="btn-user-connected-logout" class="btn btn-outline-primary" (click)="logout()" mat-dialog-close>
+            <span class="ml-1">Log out</span>
+        </a>
+        <a routerLink="/login" *ngIf="!isLoggedIn()" id="btn-user-connected-login" class="btn btn-outline-dark" routerLinkActive="active" mat-dialog-close>
+            <span class="ml-1">Log in</span>
+        </a>
+    </div>
+    <div class="card-body" *ngIf="userConnected">
+        <div class="form-group">
+            <label for="password1"> <b>Change password:</b> </label>
+            <input type="password" (ngModel)="null" class="form-control" id="password1" name="password1" placeholder="Enter your password" required #password1="ngModel">
+        </div>
+        <div class="form-group">
+            <input type="password" (ngModel)="null" class="form-control" id="password2" name="password2" placeholder="Enter same password" required #password2="ngModel">
+        </div>
+        <div [hidden]="password1.valid && password2.valid && password1.value==password2.value" class="alert alert-danger">
+            password is required
+        </div>
+
+        <button [hidden]="!(password1.valid && password2.valid && password1.value==password2.value)" (click)="changePassword(password1.value)" id="btn-user-connected-changePw" class="btn btn-primary">Change
+    </button>
+
+    </div>
+    <div class="card-footer center" *ngIf="userConnected">
+        <a routerLink="my-profile" *ngIf="isLoggedIn()" id="btn-user-connected-manageAccount" class="btn btn-outline-dark" mat-dialog-close>
+            <span class="ml-1">Manage your account</span>
+        </a>
+    </div>
+</div>

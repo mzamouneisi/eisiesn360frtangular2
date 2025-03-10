@@ -1,0 +1,39 @@
+.row {
+    display: flex;
+}
+
+.col1 {
+
+    /* float: left; */
+    margin: 1px;
+    width: 65%;
+
+    font-size: 1.2rem;
+    transition: color 0.3s ease-in-out;
+
+    border-bottom: 1px solid black;
+}
+
+.col2 {
+    /* float: right; */
+    text-align: right;
+    /* margin: 1px; */
+    padding: 0px;
+
+    width: 30%;
+
+    border-bottom: 1px solid black;
+}
+
+.add_new_document {
+    margin-left: -11px;
+    margin-bottom: 0px;
+    margin-top: -18px;
+}
+
+.strike {
+    text-decoration: line-through;
+    /* color: gray; */
+    /* Optionnel : pour mieux voir l'effet */
+}
+

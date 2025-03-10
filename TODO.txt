@@ -1,0 +1,52 @@
+
+
+A la connexion : 
+- get all infos 
+- afficher en bas du fullename : type : ADMIN, RESP_ESN, MANAGER, CONSULTANT 
+- navigateTo : dashboard :
+	- si ADMIN :
+		tabs : profil, notifications, list_esn, list_consultants 
+	- si RESP_ESN :
+		tabs : profil, notifications, my_esn, list_consultants, list_cra
+	- si MANAGER :
+		tabs : profil, notifications, my_esn, list_consultants, list_cra
+	- si CONSULTANT :
+		tabs : profil, notifications, my_esn, list_consultants , list_cra 
+- ces infos seront dans data-sharing , avec abonnements 
+- le call vers server de ces infos doit passer par la ou si ailleurs, doit mettre a jour celles-ci 
+
+deploy to server github and azure : for imed 
+
+
+tests selenium complet : 
+profils : admin, resp, manager, consultant
+
+
+dans la fenetre login : 
+faire une liste a gauche contenant la les last 5 logins différents par date dec 
+admin@eisi-consulting.fr
+resp.esn.demo1@ens-demo1.com
+manager.demo1@ens-demo1.com
+consultant.demo1@ens-demo1.com
+---------------------------
+
+
+Angular CLI: 12.2.18
+angular/material  12.2.13
+Angular: 12.2.17
+
+Code Tree pour les objets :
+
+Esn 
+	name : string 
+	listResp: Consultant[];
+	
+Consultant : 
+	name : string 
+	listCra : Cra[];
+	 
+Cra :
+	month : Date ;
+	
+
+	

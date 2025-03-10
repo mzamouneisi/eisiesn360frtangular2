@@ -1,0 +1,145 @@
+<!-- <infors #infors></infors> -->
+<div class="card my-5">
+    <div class="card-body">
+        <h3 class="card-title text-center py-3">{{ title }} {{myObj.id}} : {{ myObj.fullName }}</h3>
+        <form (ngSubmit)="onSubmit()" #consultantForm="ngForm">
+
+            <div class="form-group">
+                <label for="roleList">{{utils.tr('Role')}}</label>
+                <app-select [disbaleit]="esnIdStr" [selectId]="'role'" #compoSelectRole [objectName]="'Role'" [myList]="roles" [initObj]="myObj.role" [objCaller]="this" onChangeCaller="onSelectRole"></app-select>
+                <div [hidden]="myObj.role" class="badge badge-danger">{{utils.tr('Role')}} {{utils.tr('app.badge.required')}}</div>
+            </div>
+
+            <div class="form-group" *ngIf="myObj.role == 'RESPONSIBLE_ESN'">
+                <label for="esnList">{{utils.tr('Esn')}}</label>
+                <app-select [disbaleit]="esnIdStr" [selectId]="'responsableEsn'" #compoSelectEsn [objectName]="'Esn'" [ObjectPropName]="'name'" [myList]="esns" [initObj]="myObj.esn" [objCaller]="this" onChangeCaller="onSelectEsn"></app-select>
+                <div [hidden]="myObj.esn" class="badge badge-danger">{{utils.tr('Esn')}} {{utils.tr('app.badge.required')}}</div>
+            </div>
+
+            <div class="form-group">
+                <label for="firstName">{{utils.tr('app.compo.consultant.form.input.firstName')}}</label>
+                <input type="text" [(ngModel)]="myObj.firstName" class="form-control" id="firstName" name="firstName" placeholder="{{utils.tr('app.form.input.placeholder.prefix')}} {{utils.tr('app.compo.consultant.form.input.firstName') | lowercase}}" required #firstName="ngModel">
+            </div>
+            <div [hidden]="firstName.valid" class="badge badge-danger">{{utils.tr('app.compo.consultant.form.input.firstName')}} {{utils.tr('app.badge.required')}}</div>
+            <div class="form-group">
+                <label for="lastName">{{utils.tr('app.compo.consultant.form.input.lastName')}}</label>
+                <input type="text" [(ngModel)]="myObj.lastName" class="form-control" id="lastName" name="lastName" placeholder="{{utils.tr('app.form.input.placeholder.prefix')}}  {{utils.tr('app.compo.consultant.form.input.lastName') | lowercase}}" required #lastName="ngModel">
+            </div>
+            <div [hidden]="lastName.valid" class="badge badge-danger">{{utils.tr('app.compo.consultant.form.input.lastName')}} {{utils.tr('app.badge.required')}}</div>
+
+            <div class="form-group">
+                <label for="tel">{{utils.tr('app.compo.consultant.form.input.tel')}}</label>
+                <input type="tel" [(ngModel)]="myObj.tel" class="form-control" id="tel" name="tel" placeholder="{{utils.tr('app.form.input.placeholder.prefix')}}  {{utils.tr('app.compo.consultant.form.input.tel') | lowercase}}" required #tel="ngModel" pattern="{{telPattern}}">
+            </div>
+            <div [hidden]="tel.valid" class="badge badge-danger">{{utils.tr('app.compo.consultant.form.input.tel')}} {{utils.tr('app.badge.required')}}</div>
+
+            <div class="form-group">
+                <label for="email">{{utils.tr('app.compo.consultant.form.input.email')}}</label>
+                <input type="email" [(ngModel)]="myObj.email" class="form-control" id="email" name="email" 
+                    placeholder="{{utils.tr('app.form.input.placeholder.prefix')}}  {{utils.tr('app.compo.consultant.form.input.email') | lowercase}}"
+                    required #email="ngModel" [pattern]="emailPattern" (click)="emailFocus()" (keyup)="emailFocus()"  >
+            </div>
+            <div [hidden]="email.valid || (myObj.role == 'RESPONSIBLE_ESN' && myObj.email != '' )" class="badge badge-danger">{{utils.tr('app.compo.consultant.form.input.email')}} {{utils.tr('app.badge.required')}}</div>
+
+            <div class="form-group">
+                <label for="level">{{utils.tr('app.compo.consultant.form.input.level')}}</label>
+                <input type="level" [(ngModel)]="myObj.level" class="form-control" id="level" name="level" placeholder="{{utils.tr('app.form.input.placeholder.prefix')}}  {{utils.tr('app.compo.consultant.form.input.level') | lowercase}}" required #level="ngModel" >
+            </div>
+            <div [hidden]="level.valid" class="badge badge-danger">{{utils.tr('app.compo.consultant.form.input.level')}} {{utils.tr('app.badge.required')}}</div>
+
+            <div class="form-group">
+                <label>{{utils.tr('app.compo.consultant.form.input.birthDay')}} : 
+                <!-- <span class="badge badge-dark">{{myObj.birthDay | date :'dd-MM-yyyy'}}</span>  -->
+                </label>
+                <app-mz-date-picker placeHolder="Choix de date" [dateInputId]="'date-naissance'" [(myDatePicker)]="myObj.birthDay"></app-mz-date-picker>
+            </div>
+            <!--  <div [hidden]="birthday.valid" class="badge badge-danger ">Birthday is required</div>-->
+
+            <div class="form-group">
+                <label for="adresse">Adresse</label>
+                <div class="form-group" style="padding-left: 20px;">
+                    <div class="form-row">
+                        <label for="adresse_street" class="col-form-label col-sm-1">{{utils.tr('app.compo.consultant.form.input.street')}}: </label>
+                        <input type="text" [(ngModel)]="myObj.address.street" class="form-control col-sm-10" id="adresse_street" name="adresse_street" placeholder="{{utils.tr('app.form.input.placeholder.prefix')}}  {{utils.tr('app.compo.consultant.form.input.street') | lowercase}}"
+                            required #adresse_street="ngModel">
+                    </div>
+                    <div [hidden]="adresse_street.valid" class="badge badge-danger">{{utils.tr('app.compo.consultant.form.input.street')}} {{utils.tr('app.badge.required')}}</div>
+
+                    <div class="form-row">
+                        <label for="adresse_city" class="col-form-label col-sm-1">{{utils.tr('app.compo.consultant.form.input.city')}} : </label>
+                        <input type="text" [(ngModel)]="myObj.address.city" class="form-control col-sm-10" id="adresse_city" name="adresse_city" placeholder="{{utils.tr('app.form.input.placeholder.prefix')}}  {{utils.tr('app.compo.consultant.form.input.city') | lowercase}}"
+                            required #adresse_city="ngModel">
+                    </div>
+                    <div [hidden]="adresse_city.valid" class="badge badge-danger">{{utils.tr('app.compo.consultant.form.input.city')}} {{utils.tr('app.badge.required')}}</div>
+
+                    <div class="form-row">
+                        <label for="adresse_zipCode" class="col-form-label col-sm-1">{{utils.tr('app.compo.consultant.form.input.zipCode')}} : </label>
+                        <input type="number" [(ngModel)]="myObj.address.zipCode" class="form-control col-sm-10" id="adresse_zipCode" name="adresse_zipCode" placeholder="{{utils.tr('app.form.input.placeholder.prefix')}}  {{utils.tr('app.compo.consultant.form.input.zipCode') | lowercase}}"
+                            required #adresse_zipCode="ngModel">
+                    </div>
+                    <div [hidden]="adresse_zipCode.valid" class="badge badge-danger">{{utils.tr('app.compo.consultant.form.input.zipCode')}} {{utils.tr('app.badge.required')}}</div>
+
+                    <div class="form-row">
+                        <label for="adresse_country" class="col-form-label col-sm-1">{{utils.tr('app.compo.consultant.form.input.country')}}: </label>
+                        <input type="text" [(ngModel)]="myObj.address.country" class="form-control col-sm-10" id="adresse_country" name="adresse_country" placeholder="{{utils.tr('app.form.input.placeholder.prefix')}}  {{utils.tr('app.compo.consultant.form.input.country') | lowercase}}"
+                            required #adresse_country="ngModel">
+                    </div>
+                    <div [hidden]="adresse_country.valid" class="badge badge-danger">{{utils.tr('app.compo.consultant.form.input.country')}} {{utils.tr('app.badge.required')}}</div>
+                </div>
+            </div>
+
+<div class="form-group" *ngIf="myObj.adminConsultant">
+    <label for="manager">{{utils.tr('app.compo.consultant.form.input.manager')}}</label>
+    <input type="text" [(ngModel)]="myObj.adminConsultant.username" [value]="myObj.adminConsultant.username" class="form-control" id="manager" name="manager" [disabled]="manager.role != 'ADMIN'">
+</div>
+
+<div class="form-group" *ngIf="!myObj.adminConsultant">
+    <label for="manager">{{utils.tr('app.compo.consultant.form.input.manager')}}</label>
+    <h5>Not Exist</h5>
+</div>
+
+<!-- <div class="form-group">
+    <label for="consultantList">{{utils.tr('app.compo.consultant.form.input.manager')}}</label>
+
+    <app-select #compoSelectConsultant [selectId]="'adminConsultant'" [objectName]="'AdminConsultant'" [myList]="consultants" [initObj]="myObj.adminConsultant" [objCaller]="this" onChangeCaller="onSelectConsultant" [ObjectPropName]="'fullName'"></app-select>
+
+    <div [hidden]="myObj.adminConsultant" class="badge badge-danger">{{utils.tr('app.compo.consultant.form.input.manager')}} is required</div>
+</div> -->
+
+            <div class="form-group">
+                <label for="username">{{utils.tr('app.compo.consultant.form.input.username')}}</label>
+                <input type="text" [(ngModel)]="myObj.username" [value]="myObj.email" class="form-control" id="username" name="username" placeholder="Enter your username" disabled>
+            </div>
+            <div class="form-group" *ngIf="isAdd == 'true'">
+                <label for="password1">{{utils.tr('app.compo.consultant.form.input.password')}}</label>
+                <input type="password" [(ngModel)]="myObj.password" class="form-control" id="password1" name="password1" placeholder="Enter your password" required #password1="ngModel">
+                <div [hidden]="password1.valid" class="badge badge-danger">{{utils.tr('app.compo.consultant.form.input.password')}} {{utils.tr('app.badge.required')}}</div>
+                <br>
+                <label for="password2">{{utils.tr('app.compo.consultant.form.input.confirmPassword')}}</label>
+                <input type="password" [(ngModel)]="confirmPassword" class="form-control" id="password2" name="password2" placeholder="Enter your password" required #password2="ngModel">
+                <div [hidden]="password1.value==password2.value" class="badge badge-danger">{{utils.tr('app.compo.consultant.form.input.confirmPassword')}}</div>
+            </div>
+
+            <div class="form-group">
+                <button type="button" id="reset-password" (click)="resetPassword()" class="btn btn-info">Reset Password</button>
+                <label>{{infoResetPassword}}</label>
+            </div>
+
+
+            <div class="form-group">
+                <label for="active">{{utils.tr('app.compo.consultant.form.input.active')}}</label>
+                <input type="checkbox" [(ngModel)]="myObj.active" class="form-check-input" style="margin-left: 10px;" id="active" name="active" placeholder="Enter your active" #active="ngModel">
+            </div>
+            <br/>
+            <ul class="right">
+                <li class="list-inline-item">
+                    <!-- || myObj.password!=confirmPassword -->
+                    <button type="submit" [disabled]="!consultantForm.form.valid || !myObj.role " class="btn btn-info" id="btn-consultant-save">{{btnSaveTitle}}</button>
+                </li>
+                <li class="list-inline-item"><a [routerLink]="['/consultant_list']" class="btn btn-info">{{utils.tr('app.compo.consultant.form.button.list')}}</a>
+                </li>
+            </ul>
+
+        </form>
+    </div>
+</div>

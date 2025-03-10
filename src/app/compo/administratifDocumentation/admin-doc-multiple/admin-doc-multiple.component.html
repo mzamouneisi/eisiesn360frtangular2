@@ -1,0 +1,86 @@
+<!-- <infors #infors></infors> -->
+
+<div class="card my-5">
+    <div class="card-body">
+        <h3 class="card-title text-center py-3" style="margin-bottom: -1%;">{{ titre }}</h3>
+        <div [hidden]="!isErrorInForm" class="badge badge-danger" style="margin-left: 46%;margin-top: 0%;">Vérifiez vos données</div>
+        <br>
+        <br>
+        <form (ngSubmit)="onSubmit()" #adminDocForm="ngForm">
+
+            <span>Document Catégories: </span><br>
+            <select [(ngModel)]="selectedCategoryDoc" id="select-document-category" (ngModelChange)="onSelectCategoryDoc($event)" style="width: 100%;height: 34px;" #compoSelectCategory id="category" name="category">
+                <option [ngValue]="null" disabled [selected]="true">Choisir une catégorie</option>
+                <option *ngFor="let obj of categoryDocList" [ngValue]="obj"> {{obj.name}}</option>
+            </select>
+            <div [hidden]="myObj.category" class="badge badge-danger">Selectionner une catégorie</div>
+
+            <div *ngIf="showAddingCategoryName" class="form-group">
+                <label for="category_name">Préciser la catégorie :</label>
+                <input type="text" [(ngModel)]="myObj.category_name" class="form-control" id="category_name" name="category_name" placeholder="Titre du document" required #category_name="ngModel">
+            </div>
+            <div *ngIf="showAddingCategoryName" [hidden]="myObj.category_name" class="badge badge-danger">Entrez le nom du categorie</div>
+
+            <div class="form-group">
+                <label for="title">Titre :</label>
+                <input type="text" [(ngModel)]="myObj.title" class="form-control" id="title" name="title" placeholder="Titre du document" required #title="ngModel">
+            </div>
+            <div [hidden]="title.valid" class="badge badge-danger">Entrez le titre du document</div>
+
+            <div class="form-group">
+                <label>Date d'expiration :</label>
+                <app-mz-date-picker placeHolder="Date d'expiration" id="expired-date" [(myDatePicker)]="myObj.expired_date">
+                </app-mz-date-picker>
+            </div>
+
+            <table style="width: 60%;margin-left: 20%;margin-top: 8%;">
+                <tbody>
+                    <tr>
+                        <td>
+                            <span>Consultant: </span>
+                            <select [(ngModel)]="consultantSelected" id="select-consultant-table" (ngModelChange)="onSelectConsultant($event)" style="height: 34px;" #compoSelectConsultant id="consultant" name="consultant">
+                                <option [ngValue]="null" disabled [selected]="true">Choisir un consultant</option>
+                                <option *ngFor="let obj of consultantsList" [ngValue]="obj"> {{obj.fullName}}</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="file" id="select-file-table" accept=".jpg, .png, .pdf" class="btn btn-outline-dark" (change)="onFileSelect($event)" name="ADD ATTACHMENT" id="attachment" [(ngModel)]="fileSelected" />
+                        </td>
+                        <td>
+                            <a (click)="addNewCosultantDoc()" id="btn-add-doc-line" class='btn btn-primary mr-1' style="background-color: #91c8f8b8;"><i
+                                    class="fas fa-plus-circle"><span>Ajouter</span></i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div [hidden]="!isErrorInSelect" class="badge badge-danger" style="margin-left: 20%;">Veuillez choisir un consultant et une fichier</div>
+
+            <table class="table table-bordered table-striped" style="margin-top: 4%">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Consultant</th>
+                        <th scope="col">Fichier</th>
+                        <th scope="col" style="width: 3%;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let element of consultantFileUploadList; let i = index">
+                        <!--<td>{{ element.consultant.consultant.fullName }}</td>!-->
+                        <td>{{ element.fileUpload.name }}</td>
+                        <td>
+                            <button (click)="deleteElement(element)" id="btn-delete-consultant-file-upload" class='btn btn-primary mr-1'>
+                                <i class="fas fa-trash-alt"><span style="margin-left: 10px;">Supprimer</span></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <ul class="right">
+                <li class="list-inline-item">
+                    <button type="submit" [disabled]="!adminDocForm.form.valid" class="btn btn-info">Save</button>
+                </li>
+            </ul>
+        </form>
+    </div>
+</div>

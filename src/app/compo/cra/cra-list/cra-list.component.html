@@ -1,0 +1,176 @@
+<!-- <infors #infors></infors> -->
+<div class="card my-5">
+    <div class="card-body">
+
+        <h3 id="title_list" class="card-title text-center py-3">{{getTitle()}}</h3>>
+
+        <div class="right" style="width: 40%;" name="searchDiv">
+            <input id="searchStr" #searchStrInput class="form-control left" style="width: 90%;" type="text"
+                placeholder="search" name="searchStr" [(ngModel)]="searchStr" (keyup)="search()"
+                (mouseover)="enableInputSearchStr()" [readonly]="dataSharingService.isDisableSearchStrInput">
+            <button class="right" style="width: 10%; height: 40px; text-align: center;"
+                (click)="clearSearch()">X</button>
+        </div>
+
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">{{ utils.tr('Consultant') }}</th>
+                    <th scope="col">{{ utils.tr('Month') }}</th>
+                    <th scope="col">{{ utils.tr('CreatedDate') }}</th>
+                    <th scope="col">{{ utils.tr('LastUpdateDate') }}</th>
+                    <th scope="col">{{ utils.tr('Status') }}</th>
+                    <th scope="col">{{ utils.tr('Action') }}</th>
+                </tr>
+            <tbody>
+                <tr *ngFor="let element of myList | paginate: {itemsPerPage, currentPage:p1, id:'list1'}; let i = index"
+                    [className]="element.id == getIdOfCurentCra() ? 'active' : 'inactive'">
+                    <td>{{ element.id }}</td>
+                    <td>
+                        {{ element.consultant?.username}}
+                    </td>
+                    <td>
+                        <!-- <button (click)="edit(element)" class='btn btn-info'>
+            {{element.month | date : "yyyy-MM" }}
+          </button> -->
+                        {{element.month | date : "yyyy-MM" }}
+                    </td>
+                    <td>
+                        {{element.createdDate | date : "yyyy-MM-dd HH:mm:ss"}}
+                    </td>
+                    <td>
+                        {{element.lastModifiedDate | date : "yyyy-MM-dd HH:mm:ss"}}
+                    </td>
+                    <td>
+                        <span class="badge badge-{{element.status =='REJECTED'? 'danger' :'primary'}}">
+                            {{element.status}}</span>
+                    </td>
+                    <td style="text-align: right;">
+                        <button (click)="showCra(element, $event)" id="btn-cra-list-show-cra{{i}}"
+                            class="{{getClassButtonShowCra(element)}}">
+                            {{getTitleButtonShowCra(element)}}
+                        </button>
+                        <button class="btn btn-danger" id="btn-cra-form-delete" (click)="delete(element)"
+                            *ngIf="canDeleteCra(element)" [appAuthorization] feature="CRA_MANAGEMENT"
+                            permission="DELETE">DELETE
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="left" style="width: 50%;">
+            <pagination-controls (pageChange)="p1 = $event" id="list1"></pagination-controls>
+        </div>
+        <div class="right" style="width: 50%;" *ngIf="nbCallServer == 0">
+
+            <div style="float: right;"><a id="addConge" [routerLink]="['/cra_form']"
+                    [queryParams]="{isAdd:true,typeCra:'CONGE'}" class="btn btn-info bg-conge" [appAuthorization]
+                    feature="CRA_MANAGEMENT"
+                    permission="CREATE">{{utils.tr("app.compo.cra.list.table.action.addConge")}}</a>
+            </div>
+
+            <div id="addCra" class="btn btn-info" style="float: right;" [appAuthorization] feature="CRA_MANAGEMENT"
+                permission="CREATE" (click)="addNewCra()">
+                {{utils.tr("app.compo.cra.list.table.action.addCra")}}
+            </div>
+
+        </div>
+        <br /><br />
+        <hr />
+        <div class="card" *ngIf="accessCraConsultants()">
+            <div class="card-header text-center">
+                <h4>HISTORY CRA CONSULTANT</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="esnList">Consultant</label>
+                            <app-select #compoSelectConsultant [selectId]="'cra-list-select-consultant'"
+                                [objectName]="'Consultant'" [myList]="consultants" [initObj]="filterConsultant"
+                                [objCaller]="this" onChangeCaller="onSelectConsultant"
+                                [ObjectPropName]="'fullName'"></app-select>
+
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label class="px-2"> Month : </label>
+                            <span *ngIf="filterMonth" class="label label-info"> {{filterMonth | date :'yyyy-MM'}}
+                            </span>
+                            <button *ngIf="filterMonth" id="btn-cra-list-delete-filter-month"
+                                (click)="deleteFilterMonth()" class="btn-sm btn-danger"> X </button>
+                            <app-mz-date-picker placeHolder="Choix de date" id="cra-list-month-filter"
+                                [(myDatePicker)]="filterMonth"></app-mz-date-picker>
+                            <!-- required -->
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-outline-primary  mb-2" id="btn-cra-list-filter-cra"
+                    (click)="getFilteredCra()">Search</button>
+                <table class="table table-bordered table-striped">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Consultant</th>
+                            <th scope="col">Month</th>
+                            <th scope="col">Valid By Consultant</th>
+                            <th scope="col">Valid By Manager</th>
+                            <th scope="col">Date CR</th>
+                            <th scope="col">{{ utils.tr('app.compo.esn.list.table.thead.lastUpdateDate') }}</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let element of listCraFiltred | paginate: {itemsPerPage, currentPage:p2, id:'list2'}; let i = index"
+                            [className]="element.id == getIdOfCurentCra() ? 'active' : 'inactive'">
+                            <td>{{ element.id }}</td>
+                            <td>
+                                {{ element.consultant?.username}}
+                            </td>
+                            <td>
+                                <!-- <button (click)="edit(element)" class='btn btn-info'>
+                {{element.month | date : "yyyy-MM" }}
+              </button> -->
+                                {{element.month | date : "yyyy-MM" }}
+                            </td>
+                            <td>
+                                <input type="checkbox" id="cra-list-checkbox-valid-by-consultant"
+                                    [(ngModel)]="element.validByConsultant" disabled="disabled">
+                            </td>
+                            <td>
+                                <input type="checkbox" id="cra-list-checkbox-valid-by-manager"
+                                    [(ngModel)]="element.validByManager" disabled="disabled">
+                            </td>
+                            <td>
+                                {{element.createdDate | date : "yyyy-MM-dd HH:mm:ss"}}
+                            </td>
+                            <td>
+                                {{element.lastModifiedDate | date : "yyyy-MM-dd HH:mm:ss"}}
+                            </td>
+                            <td>
+                                {{ element.status}}
+                            </td>
+                            <td style="text-align: right;">
+                                <button (click)="showCra(element, $event)" id="btn-cra-list-show-cra"
+                                    class="{{getClassButtonShowCra(element)}}">
+                                    {{getTitleButtonShowCra(element)}}
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="left" style="width: 50%;">
+                    <pagination-controls id="list2" (pageChange)="p2 = $event"></pagination-controls>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- docs:
+  https://jasonwatmore.com/post/2019/06/18/angular-8-simple-pagination-example
+-->

@@ -1,0 +1,5 @@
+<select [(ngModel)]="selectedObjId" (ngModelChange)="onChange($event)" [disabled]="disbaleit" id="{{selectId}}">
+    <option disabled>Select {{objectName}} </option>
+    <option *ngFor="let obj of myList let i=index" [id] = i [ngValue]="getObjValue(obj)" > {{getObjDisplay(obj)}}</option>
+  </select>
+<!-- <span style="float: center; margin-left: 10px;">{{ getObjDisplay(selectedObj) }}</span> -->
