@@ -32,7 +32,9 @@ export class FeeDepenseInfoDashComponent extends MereComponent {
     this.noteFraisDashboardService.getDepensesGeneral().subscribe(
       data => {
         this.feeDepensesGeneral = data.body.result;
+        console.log("getGeneralInfoDepenses feeDepensesGeneral : ", this.feeDepensesGeneral)
       }, error => {
+        console.log("getGeneralInfoDepenses error : ", error)
         this.error = this.utils.getErrorFromErrorOfServer(error);
       }
     );

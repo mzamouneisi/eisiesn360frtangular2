@@ -1,13 +1,10 @@
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {FraisConsultantDashboard} from "../model/fraisConsultantDashboard";
-import {NoteFrais} from "../model/noteFrais";
-import {environment} from "../../environments/environment";
-import {Observable} from "rxjs";
-import {GenericResponse} from "../model/response/genericResponse";
-import {Consultant} from "../model/consultant";
-import {DataSharingService} from "./data-sharing.service";
-import {FraisConsultantFilter} from "../model/fraisConsultantFilter";
+import { Observable } from "rxjs";
+import { environment } from "../../environments/environment";
+import { FraisConsultantDashboard } from "../model/fraisConsultantDashboard";
+import { FraisConsultantFilter } from "../model/fraisConsultantFilter";
+import { GenericResponse } from "../model/response/genericResponse";
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'})
@@ -30,35 +27,35 @@ export class NoteFraisDashboardService {
   }
 
   public getSumFeePerPeriod(): Observable<GenericResponse> {
-    return this.http.get<GenericResponse>(this.noteFraisDashboardUrl + 'perPeriod/');
+    return this.http.get<GenericResponse>(this.noteFraisDashboardUrl + 'perPeriod');
   }
 
   public getDepensesGeneral(): Observable<GenericResponse> {
-    return this.http.get<GenericResponse>(this.noteFraisDashboardUrl + 'generalDepenses/');
+    return this.http.get<GenericResponse>(this.noteFraisDashboardUrl + 'generalDepenses');
   }
 
   public getAllFraisConsultantDashboard(): Observable<GenericResponse> {
-    return this.http.get<GenericResponse>(this.noteFraisDashboardUrl + 'byConsultant/');
+    return this.http.get<GenericResponse>(this.noteFraisDashboardUrl + 'byConsultant');
   }
 
   public getAllFraisActivityDashboard(): Observable<GenericResponse> {
-    return this.http.get<GenericResponse>(this.noteFraisDashboardUrl + 'byActivity/');
+    return this.http.get<GenericResponse>(this.noteFraisDashboardUrl + 'byActivity');
   }
 
   public getAllFraisProjectDashboard(): Observable<GenericResponse> {
-    return this.http.get<GenericResponse>(this.noteFraisDashboardUrl + 'byProject/');
+    return this.http.get<GenericResponse>(this.noteFraisDashboardUrl + 'byProject');
   }
 
   public getAllFraisPerYearDashboard(): Observable<GenericResponse> {
-    return this.http.get<GenericResponse>(this.noteFraisDashboardUrl + 'perYear/');
+    return this.http.get<GenericResponse>(this.noteFraisDashboardUrl + 'perYear');
   }
 
   public getAllFraisPerMonthDashboard(): Observable<GenericResponse> {
-    return this.http.get<GenericResponse>(this.noteFraisDashboardUrl + 'perMonth/');
+    return this.http.get<GenericResponse>(this.noteFraisDashboardUrl + 'perMonth');
   }
 
   public getAllFraisPerCategoryDashboard(): Observable<GenericResponse> {
-    return this.http.get<GenericResponse>(this.noteFraisDashboardUrl + 'perCategory/');
+    return this.http.get<GenericResponse>(this.noteFraisDashboardUrl + 'perCategory');
   }
 
   public getAllFraisConsultantPerMonth(id: number): Observable<GenericResponse> {
@@ -70,10 +67,10 @@ export class NoteFraisDashboardService {
   }
 
   public getFilteredFraisConsultantPerYear(fraisConsultantFiltred: FraisConsultantFilter): Observable<GenericResponse> {
-    return this.http.post<GenericResponse>(this.noteFraisDashboardUrl + "listFiltered/perYear/" , fraisConsultantFiltred);
+    return this.http.post<GenericResponse>(this.noteFraisDashboardUrl + "listFiltered/perYear" , fraisConsultantFiltred);
   }
 
   public getFilteredFraisConsultantPerMonth(fraisConsultantFiltred: FraisConsultantFilter): Observable<GenericResponse> {
-    return this.http.post<GenericResponse>(this.noteFraisDashboardUrl + "listFiltered/perMonth/" , fraisConsultantFiltred);
+    return this.http.post<GenericResponse>(this.noteFraisDashboardUrl + "listFiltered/perMonth" , fraisConsultantFiltred);
   }
 }
