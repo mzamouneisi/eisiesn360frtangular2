@@ -18,3 +18,11 @@
   text-align: center;
   /* border: 1px solid black; */
 }
+
+.loading {
+  text-align: center;
+  /* padding: 20px; */
+  width: 30px;
+  height: 30px;
+  margin-left: 40%;
+}

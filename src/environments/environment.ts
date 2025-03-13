@@ -15,7 +15,7 @@
 
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:80/esn360/api',
+  apiUrl: 'http://localhost:8080/esn360/api',
   // apiUrl: 'https://esn360.azurewebsites.net/esn360/api',
 };
 

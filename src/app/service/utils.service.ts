@@ -300,6 +300,10 @@ export class UtilsService {
     return parse(dateStr, "dd MMMM yyyy", new Date(), { locale: fr });
   }
 
+  public convertToDateTiret(dateStr: string): Date {
+    return parse(dateStr, "dd-MM-yyyy HH:mm:ss", new Date(), { locale: fr });
+  }
+
   public getErrorFromResultOfServer(data: any): MyError {
     //////console.log("getErrorFromResultOfServer: data", data)
     let error!: MyError;

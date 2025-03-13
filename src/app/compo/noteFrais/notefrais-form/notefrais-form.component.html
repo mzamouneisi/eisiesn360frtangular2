@@ -2,9 +2,12 @@
 <div class="card my-5">
     <div class="card-body">
         <h3 class="card-title text-center py-3">{{ titre }} {{myObj.id}}</h3>
+        <div *ngIf="isLoading" class="loading">
+            <img src="assets/images/loading.gif" alt="Chargement en cours...">
+        </div>
         <form (ngSubmit)="onSubmit()" #noteFraisForm="ngForm">
 
-            <label>Choix du fichier : </label>
+            <label>Choix du fichier (.jpg, .png, .pdf) : </label>
             <ul class="left" style="width: 100%; text-align: left;">
                 <li class="list-inline-item">
                     <input type="file" accept=".jpg, .png, .pdf" class="btn btn-outline-dark"
@@ -85,11 +88,13 @@
                         {{utils.tr('app.compo.frais.form.input.invoiceNumber')}} {{utils.tr('app.badge.required')}}
                     </div><br>
 
+                    <!-- PRIX -->
+
                     <label for="pretax">{{utils.tr('app.compo.frais.form.input.pretaxAmount')}} :</label>
                     <input type="number" [(ngModel)]="myObj.pretax_amount" class="form-control" id="pretaxAmount"
                         name="pretaxAmount"
                         placeholder="{{utils.tr('app.form.input.placeholder.prefix')}}  {{utils.tr('app.compo.frais.form.input.pretaxAmount') | lowercase}}"
-                        required #pretaxAmount="ngModel" (keyup)="calculAmount()" (change)="calculAmount()">
+                        required #pretaxAmount="ngModel" (keyup)="calculAmounts()">
                     <div [hidden]="pretaxAmount.valid" class="badge badge-danger">
                         {{utils.tr('app.compo.frais.form.input.pretaxAmount')}} {{utils.tr('app.badge.required')}}</div>
                     <br>
@@ -97,7 +102,7 @@
                     <label for="vat">{{utils.tr('app.compo.frais.form.input.vat')}} :</label>
                     <input type="number" [(ngModel)]="myObj.vat" class="form-control" id="vat" name="vat"
                         placeholder="{{utils.tr('app.form.input.placeholder.prefix')}}  {{utils.tr('app.compo.frais.form.input.vat') | lowercase}}"
-                        required #vat="ngModel" (keyup)="calculAmount()" (change)="calculAmount()">
+                        required #vat="ngModel" (keyup)="calculAmounts()">
                     <div [hidden]="vat.valid" class="badge badge-danger">{{utils.tr('app.compo.frais.form.input.vat')}}
                         {{utils.tr('app.badge.required')}}</div><br>
                     <app-spinner *ngIf="load"></app-spinner>
@@ -105,7 +110,7 @@
                     <label for="amount">{{utils.tr('app.compo.frais.form.input.amount')}} :</label>
                     <input type="number" [(ngModel)]="myObj.amount" class="form-control" id="amount" name="amount"
                         placeholder="{{utils.tr('app.form.input.placeholder.prefix')}}  {{utils.tr('app.compo.frais.form.input.amount') | lowercase}}"
-                        required #amount="ngModel" [readonly]="true">
+                        required #amount="ngModel">
                     <div [hidden]="amount.valid" class="badge badge-danger">
                         {{utils.tr('app.compo.frais.form.input.amount')}} {{utils.tr('app.badge.required')}}</div>
 
