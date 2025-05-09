@@ -40,7 +40,7 @@
                     <td>{{ element.id }}</td>
                     <td *ngIf="isAdmin()">{{ element.activity.consultant.firstName}} {{ element.activity.consultant.lastName}}</td>
                     <td>{{ element.title }}</td>
-                    <td>{{ element.date | date:'dd/MM/yyyy' }}</td>
+                    <td>{{ element.dateNf | date:'dd/MM/yyyy' }}</td>
                     <td>{{ element.category?.name}}</td>
                     <td>{{ element.brand_name}}</td>
                     <td>{{ element.vat }}</td>

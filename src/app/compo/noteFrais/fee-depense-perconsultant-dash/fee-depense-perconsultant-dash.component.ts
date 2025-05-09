@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import { Consultant } from 'src/app/model/consultant';
 import { FraisConsultantDashboard } from 'src/app/model/fraisConsultantDashboard';
@@ -6,6 +6,7 @@ import { ConsultantService } from 'src/app/service/consultant.service';
 import { DataSharingService } from 'src/app/service/data-sharing.service';
 import { NoteFraisDashboardService } from 'src/app/service/note-frais-dashboard.service';
 import { UtilsService } from 'src/app/service/utils.service';
+import { SelectComponent } from '../../_reuse/select-consultant/select/select.component';
 import { MereComponent } from '../../_utils/mere-component';
 
 @Component({
@@ -20,8 +21,9 @@ export class FeeDepensePerconsultantDashComponent extends MereComponent {
   fraisConsultant: FraisConsultantDashboard[];
   error: any;
   currentYear: number = (new Date()).getFullYear();
-  myList: Consultant[];
-	elementSelected: Consultant;
+  listConsultant: Consultant[];
+	consultantSelected: Consultant = this.userConnected;
+  	// consultantSelected: Consultant 
 	selectConsultantLabel: string = this.utils.tr("Consultant:")
   fraisPerMonth: any;
   load: boolean = true;
@@ -39,22 +41,47 @@ export class FeeDepensePerconsultantDashComponent extends MereComponent {
   ngOnInit(): void {
     this.getAllConsultant();
     this.getDepensesPerConsultant();
+    this.getDepensesConsultantPerMonth();	
+  }
+
+  getClassListConsultant() {
+    return this.load ? 'list_consultant_loading' : 'list_consultant'
   }
 
   getAllConsultant() {
+    console.log("*** dbg getAllConsultant")
     this.consultantService.findAll().subscribe(
       data => {
-        this.myList = data.body.result;
+        console.log("*** dbg getAllConsultant : data : ", data)
+        this.listConsultant = data.body.result;
+
+        setTimeout(() => {
+          this.onSelectConsultant(this.consultantSelected)
+        }, 1000);
       }, error => {
+        console.log("*** dbg getAllConsultant : error : ", error)
         this.addErrorFromErrorOfServer('consultantSelect',error);
       }
     );
   }
 
+  @ViewChild('fee-fep-perconsultant-slect-consultant', {static:false}) compoSelectConsultant:SelectComponent ;
+  selectConsultant(consultant:Consultant){
+      this.compoSelectConsultant.selectedObj = consultant;
+  }
+
+  onSelectConsultant(c: Consultant) {
+    this.load = false;
+		this.consultantSelected = c;
+    this.getDepensesConsultantPerMonth();	    
+	} 
+
   getDepensesPerConsultant() {
+    console.log("*** dbg getDepensesPerConsultant")
     this.error = null;
     this.noteFraisDashboardService.getAllFraisConsultantDashboard().subscribe(
       data => {
+        console.log("*** dbg getDepensesPerConsultant : data : ", data)
         this.fraisConsultant = data.body.result;
         let pieData: any[] = [];
         let columunData: any[] = [];
@@ -107,21 +134,19 @@ export class FeeDepensePerconsultantDashComponent extends MereComponent {
           ]
         }
       }, error => {
+        console.log("*** dbg getDepensesPerConsultant : error : ", error)
         this.error = this.utils.getErrorFromErrorOfServer(error);
       }
     );
   }
 
-  onSelectConsultant(c: Consultant) {
-    this.load = false;
-		this.elementSelected = c;
-    this.getDepensesConsultantPerMonth();	    
-	}  
-
   getDepensesConsultantPerMonth() {
     this.error = null;
-    this.noteFraisDashboardService.getAllFraisConsultantPerMonth(this.elementSelected.id).subscribe(
+    console.log("*** dbg getDepensesConsultantPerMonth : consultantSelected : ", this.consultantSelected)
+
+    this.noteFraisDashboardService.getAllFraisConsultantPerMonth(this.consultantSelected.id).subscribe(
       data => {
+        console.log("*** dbg getDepensesConsultantPerMonth : data : ", data)
         //getting data from the server
         this.fraisPerMonth = data.body.result;
         //mapping data in the dashboard
@@ -132,7 +157,7 @@ export class FeeDepensePerconsultantDashComponent extends MereComponent {
             plotShadow: true,
           },
           title: {
-            text: "Dépenses "+this.elementSelected.firstName+" "+this.elementSelected.lastName+" / "+ this.currentYear
+            text: "Dépenses "+this.consultantSelected.firstName+" "+this.consultantSelected.lastName+" / "+ this.currentYear
           },
           xAxis: {
             title: {
@@ -151,6 +176,7 @@ export class FeeDepensePerconsultantDashComponent extends MereComponent {
           }]
         }
       }, error => {
+        console.log("*** dbg getDepensesConsultantPerMonth : error : ", error)
         this.error = this.utils.getErrorFromErrorOfServer(error);
       }
     );

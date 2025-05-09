@@ -504,8 +504,8 @@ export class NotefraisFormComponent extends MereComponent {
         const match = line.match(regexs[j]);
         if (match) {
           try {
-            this.myObj.date = parse(match[0], formats[j], new Date(), { locale: fr });
-            console.log("Date trouvée :", this.myObj.date);
+            this.myObj.dateNf = parse(match[0], formats[j], new Date(), { locale: fr });
+            console.log("Date trouvée :", this.myObj.dateNf);
           } catch (error) {
             console.error("Erreur de parsing pour :", match[0], error);
           }
@@ -525,7 +525,7 @@ export class NotefraisFormComponent extends MereComponent {
         let tab = line.split(" ")
         let txt = tab[3]
         this.myObj.invoice_number = txt
-        this.myObj.date = this.utils.convertToDate(tab[5] + " " + tab[6] + " " + tab[7])
+        this.myObj.dateNf = this.utils.convertToDate(tab[5] + " " + tab[6] + " " + tab[7])
       } else if (line.includes("facture HT") && !this.myObj.pretax_amount) {
         let tab = line.split(" ")
         let txt = tab[5].toLowerCase().replace("e", "").replace("€", "")
@@ -621,16 +621,16 @@ export class NotefraisFormComponent extends MereComponent {
         if (regexExp.test(champ)) {
           if (champ.indexOf('-') != -1) {
             var date = new Date(champ.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"));
-            this.myObj.date = date;
+            this.myObj.dateNf = date;
             //console.log(champ, date);
           }
           else if (champ.indexOf('/') != -1) {
             var splitedDate = champ.split('/');
             if (Number(splitedDate[0]) > 12) {
-              this.myObj.date = new Date(splitedDate[1] + '/' + splitedDate[0] + '/' + splitedDate[2]);
+              this.myObj.dateNf = new Date(splitedDate[1] + '/' + splitedDate[0] + '/' + splitedDate[2]);
             }
             else {
-              this.myObj.date = new Date(champ)
+              this.myObj.dateNf = new Date(champ)
             }
           }
         }

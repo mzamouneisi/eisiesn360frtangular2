@@ -9,7 +9,7 @@ export class NoteFrais {
   amount: number;
   brand_name: string;
   country: string;
-  date: Date;
+  dateNf: Date;
   pay_date: string;
   description: string;
   invoice_number: string;
