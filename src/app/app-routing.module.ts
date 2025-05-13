@@ -5,6 +5,7 @@ import { HomeComponent } from './home/home.component';
 
 import { LoginComponent } from './auth/components/login/login.component';
 import { AuthGuard } from './auth/guards/auth.guard';
+import { TableViewerComponent } from './compo/_utils/table-viewer/table-viewer.component';
 import { ActivityAppComponent } from './compo/activity/activity-app/activity-app.component';
 import { ActivityFormComponent } from './compo/activity/activity-form/activity-form.component';
 import { ActivityListComponent } from './compo/activity/activity-list/activity-list.component';
@@ -116,6 +117,7 @@ const routes: Routes = [
   {canActivate: [AuthGuard], path: 'categoryDoc_app', component: DocCategoryAppComponent},
   {canActivate: [AuthGuard], path: 'categoryDoc_form', component: DocCategoryFormComponent},
   {canActivate: [AuthGuard], path: 'categoryDoc_list', component: DocCategoryListComponent},
+  {canActivate: [AuthGuard], path: 'showTables', component: TableViewerComponent},
 
   { path: 'loading', component: LoadingPageComponent},
   { path: 'esn360/:path', component: MyRoutingSpecComponent},

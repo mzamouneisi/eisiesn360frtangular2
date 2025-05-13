@@ -1,0 +1,67 @@
+<!-- Bouton en haut -->
+<h3 style="margin: 20px;">
+    Interface sql DOIT ETRE accessible que par ADMIN 
+</h3>
+<div style="display: flex; margin: 20px; ">
+    <button (click)="getTables()" >Get All Table Names</button>
+    <h5 style="margin-left: 20px;">
+        {{selectedTable}}
+    </h5>
+</div>
+
+<!-- Layout principal -->
+<!-- <button (click)="deleteTableData(table); $event.stopPropagation()">🗑️</button> -->
+<div class="side-container" *ngIf="tables && tables?.length">
+
+    <div #leftPanel class="side-left cadre">
+        <ol>
+            <li *ngFor="let table of tables " (click)="selectTable(table)" [style.cursor]="'pointer'" [ngClass]="getClassOfTable(table)">
+                {{ table }}
+            </li>
+        </ol>
+    </div>
+
+    <div class="resizer cadre " (mousedown)="startResizing($event)"></div>
+
+    <div class="side-right cadre ">
+        <h3 *ngIf="selectedTable">Table: {{ selectedTable }}</h3>
+        <table *ngIf="lines.length > 0" class="custom-table">
+            <thead>
+                <tr>
+                    <th *ngFor="let key of getOrderedKeys(lines[0])">{{ key }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let row of lines">
+                    <td *ngFor="let key of getOrderedKeys(row)">
+                        {{ row[key] }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<!-- Section SQL -->
+<div style="padding: 10px;">
+    <h3>Execute SQL</h3>
+    <textarea [(ngModel)]="sql" rows="5" cols="100"></textarea><br>
+    <button (click)="executeSql()">Execute</button>
+
+    <div *ngIf="sqlResult?.length" class="resize-all">
+        <h4>Result:</h4>
+        <table border="1" class="custom-table ">
+            <thead>
+                <tr>
+                    <th *ngFor="let key of getOrderedKeys(sqlResult[0]) ">{{ key }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let row of sqlResult">
+                    <td *ngFor="let key of getOrderedKeys(row)">{{ row[key] }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
