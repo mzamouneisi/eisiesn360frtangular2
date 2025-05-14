@@ -13,6 +13,8 @@ export class TableViewerComponent {
   lines: any[] = [];
   sql = '';
   sqlResult: any[] = [];
+  colDetails = '';
+  colDetails2 = '';
 
   private myUrl: string;
 
@@ -35,12 +37,11 @@ export class TableViewerComponent {
   selectTable(table: string) {
     this.selectedTable = table;
     this.http.get<any[]>(this.myUrl + table).subscribe(
-      data => 
-        {
-          // console.log("selectTable data : ", data)
-          this.lines = data
+      data => {
+        // console.log("selectTable data : ", data)
+        this.lines = data
 
-        }
+      }
     );
   }
 
@@ -58,12 +59,25 @@ export class TableViewerComponent {
 
   ///////////
 
-  getOrderedKeys(obj: any): string[] {
-    const keys = Object.keys(obj);
-    return ['ID', ...keys.filter(k => k !== 'ID')];
+  getKeys(obj: any): string[] {
+    return this.getKeysStartWithIdAndOrdered(obj);
   }
 
-  getClassOfTable(table : string) {
+  getKeysStartWithId(obj: any): string[] {
+    const keys = Object.keys(obj);
+    const idKey = keys.find(k => k.toLowerCase() === 'id'); // détecte la clé "id" quelle que soit la casse
+    return idKey ? [idKey, ...keys.filter(k => k !== idKey)] : keys;
+  }
+
+  getKeysStartWithIdAndOrdered(obj: any): string[] {
+    const keys = Object.keys(obj);
+    const idKey = keys.find(k => k.toLowerCase() === 'id');
+    const otherKeys = keys.filter(k => k !== idKey).sort((a, b) => a.localeCompare(b));
+    return idKey ? [idKey, ...otherKeys] : otherKeys;
+  }
+
+
+  getClassOfTable(table: string) {
     return table == this.selectedTable ? "tblSelected" : ""
   }
 

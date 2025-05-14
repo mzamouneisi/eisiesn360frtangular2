@@ -1,9 +1,9 @@
 <!-- Bouton en haut -->
 <h3 style="margin: 20px;">
-    Interface sql DOIT ETRE accessible que par ADMIN 
+    Interface sql DOIT ETRE accessible que par ADMIN
 </h3>
 <div style="display: flex; margin: 20px; ">
-    <button (click)="getTables()" >Get All Table Names</button>
+    <button (click)="getTables()">Get All Table Names</button>
     <h5 style="margin-left: 20px;">
         {{selectedTable}}
     </h5>
@@ -15,7 +15,8 @@
 
     <div #leftPanel class="side-left cadre">
         <ol>
-            <li *ngFor="let table of tables " (click)="selectTable(table)" [style.cursor]="'pointer'" [ngClass]="getClassOfTable(table)">
+            <li *ngFor="let table of tables " (click)="selectTable(table)" [style.cursor]="'pointer'"
+                [ngClass]="getClassOfTable(table)">
                 {{ table }}
             </li>
         </ol>
@@ -28,20 +29,23 @@
         <table *ngIf="lines.length > 0" class="custom-table">
             <thead>
                 <tr>
-                    <th *ngFor="let key of getOrderedKeys(lines[0])">{{ key }}</th>
+                    <th *ngFor="let key of getKeys(lines[0])">{{ key }}</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let row of lines">
-                    <td *ngFor="let key of getOrderedKeys(row)">
+                    <td *ngFor="let key of getKeys(row)" (click)="colDetails = row[key]" class="cell-content"
+                        [title]="row[key]">
                         {{ row[key] }}
                     </td>
                 </tr>
             </tbody>
         </table>
 
+
     </div>
 </div>
+<textarea *ngIf="colDetails" [(ngModel)]="colDetails" rows="5" cols="100" style="width: 100%;"></textarea><br>
 
 <!-- Section SQL -->
 <div style="padding: 10px;">
@@ -54,14 +58,17 @@
         <table border="1" class="custom-table ">
             <thead>
                 <tr>
-                    <th *ngFor="let key of getOrderedKeys(sqlResult[0]) ">{{ key }}</th>
+                    <th *ngFor="let key of getKeys(sqlResult[0]) ">{{ key }}</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let row of sqlResult">
-                    <td *ngFor="let key of getOrderedKeys(row)">{{ row[key] }}</td>
+                    <td *ngFor="let key of getKeys(row)" (click)="colDetails2 = row[key]" class="cell-content" [title]="row[key]">
+                        {{ row[key] }}
+                    </td>
                 </tr>
             </tbody>
         </table>
     </div>
+    <textarea *ngIf="colDetails2" [(ngModel)]="colDetails2" rows="5" cols="100" style="width: 100%;"></textarea><br>
 </div>

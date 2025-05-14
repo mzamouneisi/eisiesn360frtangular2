@@ -8,8 +8,15 @@
   .custom-table th,
   .custom-table td {
     border: 1px solid #ccc;
-    padding: 6px 10px;
-    text-align: left;
+    padding: 6px;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .cell-content {
+    cursor: pointer;
   }
   
   .custom-table thead {

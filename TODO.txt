@@ -1,4 +1,7 @@
 
+securité : 
+	bien géré du point de vue menu mais non gérés du pt de vue URL !!
+	
 
 A la connexion : 
 - get all infos 
