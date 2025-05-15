@@ -42,7 +42,8 @@ export class NotefraisFormComponent extends MereComponent {
   activities: Activity[];
   selectedFile: string | ArrayBuffer;
 
-  userConnected: Consultant
+   @Input()
+  consultantSelected: Consultant = this.userConnected
   load: boolean;
   isLoading = false;
 
@@ -58,7 +59,7 @@ export class NotefraisFormComponent extends MereComponent {
     , public dataSharingService: DataSharingService) {
     super(utils, dataSharingService);
 
-    this.userConnected = dataSharingService.userConnected
+    // this.userConnected = dataSharingService.userConnected
 
   }
 
@@ -78,6 +79,10 @@ export class NotefraisFormComponent extends MereComponent {
     }
     // tslint:disable-next-line:triple-equals
     if (this.isAdd == 'true') {
+      let consultantStr = this.route.snapshot.queryParamMap.get('consultantSelected');
+      if(consultantStr) {
+        this.consultantSelected = JSON.parse(consultantStr);
+      }
       this.btnSaveTitle = this.utils.tr("Add");
       this.titre = this.utils.tr("NewFee");
       this.myObj = new NoteFrais();
@@ -94,8 +99,8 @@ export class NotefraisFormComponent extends MereComponent {
   onSubmit() {
     this.isLoading = true
     console.log("*** onSubmit : ", this.myObj);
-    this.myObj.activity.consultant = this.userConnected;
-    this.myObj.consultant = this.userConnected;
+    this.myObj.consultant = this.consultantSelected;
+    if(this.myObj.activity) this.myObj.activity.consultant = this.consultantSelected;
     this.myObj.state = 'Waiting';
     this.beforeCallServer("onSubmit");
     this.noteFraisService.save(this.myObj).subscribe(
@@ -213,7 +218,7 @@ export class NotefraisFormComponent extends MereComponent {
   getActivities() {
     this.isLoading = true
     this.beforeCallServer("getActivities");
-    this.activityService.findAllByConsultant(this.userConnected.id).subscribe(
+    this.activityService.findAllByConsultant(this.consultantSelected.id).subscribe(
       data => {
         this.isLoading = false
         this.afterCallServer("getActivities", data)

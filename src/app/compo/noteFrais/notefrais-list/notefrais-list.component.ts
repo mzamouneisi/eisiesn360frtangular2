@@ -229,7 +229,7 @@ export class NotefraisListComponent extends MereComponent {
           this.myList = data.body.result;
 
           this.majMyList();
-          
+
         }, error => {
           this.addErrorFromErrorOfServer("onSelectConsultant", error);
         }
@@ -253,6 +253,15 @@ export class NotefraisListComponent extends MereComponent {
         this.addErrorFromErrorOfServer("getFilteredConsultant", error);
       }
     );
+  }
+
+  addNew() {
+    this.router.navigate(['/notefrais_form'], {
+      queryParams: {
+        isAdd: true,
+        consultantSelected: JSON.stringify(this.consultantSelected)
+      }
+    });
   }
 
   showForm(noteFrais: NoteFrais) {
