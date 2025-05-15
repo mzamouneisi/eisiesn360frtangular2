@@ -25,6 +25,8 @@ import { NotefraisFormComponent } from '../notefrais-form/notefrais-form.compone
 export class NotefraisListComponent extends MereComponent {
 
   consultants: Consultant[];
+  consultantSelected : Consultant = this.userConnected;
+
   myList: NoteFrais[];
   myObj: NoteFrais = null;
   filterConsultant: number = 0;
@@ -201,7 +203,11 @@ export class NotefraisListComponent extends MereComponent {
   }
 
   onSelectConsultant(consultant: Consultant) {
-    //this.myObj.consultant = consultant;
+    this.consultantSelected = consultant;
+
+    if(this.myObj) {
+      this.myObj.consultant = consultant;
+    }
     if (!consultant) {
       this.filterConsultant = -1;
       this.findAll();
@@ -226,6 +232,7 @@ export class NotefraisListComponent extends MereComponent {
 
   getFilteredConsultant() {
     this.beforeCallServer("getFilteredConsultant")
+    this.filterConsultant = this.consultantSelected ? this.consultantSelected.id : -1 ;
     this.noteFraisService.findAllByConsultant(this.filterConsultant).subscribe(
       data => {
         this.afterCallServer("getFilteredConsultant", data)

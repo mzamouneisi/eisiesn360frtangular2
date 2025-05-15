@@ -15,7 +15,7 @@
         <div class="col-4" [appAuthorization] feature="CONSULTANT_MANAGEMENT" permission="VIEW">
             <div class="form-group">
                 {{utils.tr('Consultant')}}
-                <app-select #compoSelectConsultant [selectId]="'notefrais-list-select-consultant'" [objectName]="'Consultant'" [myList]="consultants" [initObj]="myObj?.activity?.consultant" [objCaller]="this" onChangeCaller="onSelectConsultant" [ObjectPropName]="'fullName'"></app-select>
+                <app-select #compoSelectConsultant [selectId]="'notefrais-list-select-consultant'" [objectName]="'Consultant'" [myList]="consultants" [initObj]="consultantSelected" [objCaller]="this" onChangeCaller="onSelectConsultant" [ObjectPropName]="'fullName'"></app-select>
             </div>
         </div>
 
