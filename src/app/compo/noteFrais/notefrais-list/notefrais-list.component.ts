@@ -119,11 +119,9 @@ export class NotefraisListComponent extends MereComponent {
           this.majPayModes()
           this.majConsultants()
           this.majActivities()
-          this.myList = this.myList.filter(lf => {
-            this.dataSharingService.adminConsultant[lf.activity.consultant.id] == this.userConnected
-            //TODO ??? // lf.activity.consultant = this.userConnected 
-          });
-          this.myList00 = this.myList;
+
+          this.majMyList();
+
           this.loadingComponenet = false;
         }, error => {
           this.addErrorFromErrorOfServer("findAll", error);
@@ -135,12 +133,14 @@ export class NotefraisListComponent extends MereComponent {
         data => {
           this.afterCallServer("findAll", data)
           this.myList = data.body.result;
-          this.myList00 = this.myList;
           console.log("*** list nf : " , this.myList)
           this.majCategories()
           this.majPayModes()
           this.majConsultants()
           this.majActivities()
+
+          this.majMyList();
+
           // for(let nf of this.myList) {
           //   console.log("*** cat : " , nf.category)
           // }
@@ -151,6 +151,14 @@ export class NotefraisListComponent extends MereComponent {
       );
     }
 
+  }
+
+  private majMyList() {
+    for (let lf of this.myList) {
+      if (!lf.consultant) lf.consultant = this.consultantSelected;
+      this.dataSharingService.adminConsultant[lf.consultant.id] == this.consultantSelected;
+    }
+    this.myList00 = this.myList;
   }
 
   majCategories() {
@@ -184,6 +192,7 @@ export class NotefraisListComponent extends MereComponent {
         this.activityService.findById(nf.activityId).subscribe(
           data => {
             nf.activity = data.body.result
+            if(!nf.activity.consultant) nf.activity.consultant = this.consultantSelected
           }
         )
       }
@@ -218,6 +227,9 @@ export class NotefraisListComponent extends MereComponent {
         data => {
           this.afterCallServer("onSelectConsultant", data)
           this.myList = data.body.result;
+
+          this.majMyList();
+          
         }, error => {
           this.addErrorFromErrorOfServer("onSelectConsultant", error);
         }

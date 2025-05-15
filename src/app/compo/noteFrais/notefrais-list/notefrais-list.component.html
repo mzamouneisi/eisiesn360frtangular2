@@ -38,7 +38,7 @@
             <tbody>
                 <tr *ngFor="let element of myList | paginate: {itemsPerPage, currentPage}; let i=index" [className]="element.id == getIdOfCurentObj() ? 'active' : 'inactive'">
                     <td>{{ element.id }}</td>
-                    <td *ngIf="isAdmin()">{{ element.activity.consultant.firstName}} {{ element.activity.consultant.lastName}}</td>
+                    <td *ngIf="isAdmin()">{{ element.consultant.firstName}} {{ element.consultant.lastName}}</td>
                     <td>{{ element.title }}</td>
                     <td>{{ element.dateNf | date:'dd/MM/yyyy' }}</td>
                     <td>{{ element.category?.name}}</td>
