@@ -1,5 +1,5 @@
 import { Component, TemplateRef, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Notification } from 'src/app/model/notification';
@@ -42,6 +42,7 @@ export class NotefraisListComponent extends MereComponent {
 
   constructor(private noteFraisService: NoteFraisService
     , private router: Router
+    , private route: ActivatedRoute
     , public utils: UtilsService
     , protected utilsIhm: UtilsIhmService
     , public dataSharingService: DataSharingService
@@ -60,6 +61,11 @@ export class NotefraisListComponent extends MereComponent {
 
   ngOnInit(): void {
     super.ngOnInit()
+
+    let consultantStr = this.route.snapshot.queryParamMap.get('consultantSelected');
+    if(consultantStr) {
+      this.consultantSelected = JSON.parse(consultantStr);
+    }
 
     setTimeout(
       () => {
@@ -107,21 +113,25 @@ export class NotefraisListComponent extends MereComponent {
     this.myList = myList;
   }
 
+  afterLoadAll(data : any ) {
+
+    this.afterCallServer("findAll", data)
+    this.myList = data.body.result;
+    this.majCategories()
+    this.majPayModes()
+    this.majConsultants()
+    this.majActivities()
+
+    this.majMyList();
+  }
+
   findAll() {
     this.SpinnerService.show(); 
-    if (this.userConnected.admin) {
+    if (! this.consultantSelected) {
       this.beforeCallServer("findAll")
       this.noteFraisService.findAll().subscribe(
         data => {
-          this.afterCallServer("findAll", data)
-          this.myList = data.body.result;
-          this.majCategories()
-          this.majPayModes()
-          this.majConsultants()
-          this.majActivities()
-
-          this.majMyList();
-
+          this.afterLoadAll(data)
           this.loadingComponenet = false;
         }, error => {
           this.addErrorFromErrorOfServer("findAll", error);
@@ -129,21 +139,9 @@ export class NotefraisListComponent extends MereComponent {
       );
     } else {
       this.beforeCallServer("findAll")
-      this.noteFraisService.findAllByConsultant(this.userConnected.id).subscribe(
+      this.noteFraisService.findAllByConsultant(this.consultantSelected.id).subscribe(
         data => {
-          this.afterCallServer("findAll", data)
-          this.myList = data.body.result;
-          console.log("*** list nf : " , this.myList)
-          this.majCategories()
-          this.majPayModes()
-          this.majConsultants()
-          this.majActivities()
-
-          this.majMyList();
-
-          // for(let nf of this.myList) {
-          //   console.log("*** cat : " , nf.category)
-          // }
+          this.afterLoadAll(data)
           this.loadingComponenet = false; 
         }, error => {
           this.addErrorFromErrorOfServer("findAll", error);

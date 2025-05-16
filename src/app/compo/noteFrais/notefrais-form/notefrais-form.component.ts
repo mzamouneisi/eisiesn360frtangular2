@@ -120,6 +120,12 @@ export class NotefraisFormComponent extends MereComponent {
   gotoNoteFraisList() {
     this.clearInfos();
     this.router.navigate(['/notefrais_list']);
+
+    this.router.navigate(['/notefrais_list'], {
+      queryParams: {
+        consultantSelected: JSON.stringify(this.consultantSelected)
+      }
+    });
   }
 
   onSelectCategory(category: Category) {
