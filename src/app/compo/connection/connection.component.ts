@@ -31,7 +31,7 @@ export class ConnectionComponent extends MereComponent {
     , public dataSharingService: DataSharingService) {
     super(utils, dataSharingService);
 
-    this.colsSearch = ["Date ", "Login", "IP", "Country", "City", "Maps"]
+    this.colsSearch = ["dateConnection", "login", "ip", "country", "city"]
 
   }
 
@@ -53,7 +53,7 @@ export class ConnectionComponent extends MereComponent {
         this.afterCallServer("findAll", data)
         this.myList = data.body.result;
         this.myList00 = this.myList;
-        ////console.log(this.myList)
+        console.log("*** connections : ", this.myList)
       }, error => {
         this.addErrorFromErrorOfServer("findAll", error);
         ////console.log(error);
