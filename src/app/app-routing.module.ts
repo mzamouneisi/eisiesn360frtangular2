@@ -27,6 +27,7 @@ import { ClientAppComponent } from './compo/client/client-app/client-app.compone
 import { ClientFormComponent } from './compo/client/client-form/client-form.component';
 import { ClientListComponent } from './compo/client/client-list/client-list.component';
 import { CraConfigurationComponent } from "./compo/configuration/cra-configuration/cra-configuration.component";
+import { ConnectionComponent } from './compo/connection/connection.component';
 import { ConsultantAppComponent } from './compo/consultant/consultant-app/consultant-app.component';
 import { ConsultantFormComponent } from './compo/consultant/consultant-form/consultant-form.component';
 import { ConsultantListComponent } from './compo/consultant/consultant-list/consultant-list.component';
@@ -118,6 +119,7 @@ const routes: Routes = [
   {canActivate: [AuthGuard], path: 'categoryDoc_form', component: DocCategoryFormComponent},
   {canActivate: [AuthGuard], path: 'categoryDoc_list', component: DocCategoryListComponent},
   {canActivate: [AuthGuard], path: 'showTables', component: TableViewerComponent},
+  {canActivate: [AuthGuard], path: 'connections', component: ConnectionComponent},
 
   { path: 'loading', component: LoadingPageComponent},
   { path: 'esn360/:path', component: MyRoutingSpecComponent},

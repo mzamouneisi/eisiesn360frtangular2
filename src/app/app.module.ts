@@ -139,6 +139,7 @@ import { ProjectFormComponent } from './compo/project/project-form/project-form.
 import { ProjectListComponent } from './compo/project/project-list/project-list.component';
 import { ProjectService } from './service/project.service';
 import { TableViewerComponent } from './compo/_utils/table-viewer/table-viewer.component';
+import { ConnectionComponent } from './compo/connection/connection.component';
 // import { TabsComponent } from './tabs/tabs.component';
 
 
@@ -252,6 +253,7 @@ export function initApp(http: HttpClient, translate: TranslateService) {
     DocCategoryListComponent,
     DocCategoryAppComponent,
     TableViewerComponent,
+    ConnectionComponent,
 
   ],
   imports: [

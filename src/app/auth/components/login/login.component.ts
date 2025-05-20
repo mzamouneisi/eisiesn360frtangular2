@@ -29,6 +29,9 @@ export class LoginComponent implements OnInit {
     console.log("login ngOnInit fin : credentials : ", this.credentials)
   }
 
+  /**
+   * LOGIN function 
+   */
   public login(): void {
     this.dataSharingService.login(this.credentials, this);
 
