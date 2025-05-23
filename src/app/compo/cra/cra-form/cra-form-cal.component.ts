@@ -1654,6 +1654,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
         (response) => {
           this.afterCallServer("generatePDF", response)
           this.craReportActivities = response.body.result;
+          console.log("*** this.craReportActivities ", this.craReportActivities )
           this.openModalPopup(this.showCraReportPdfView);
         }, error => {
           this.addErrorFromErrorOfServer("generatePDF", error);
