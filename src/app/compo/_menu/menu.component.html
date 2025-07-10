@@ -53,6 +53,11 @@
                                     class="feather icon-home"></i></span><span
                                 class="pcoded-mtext">{{utils.tr('main.menu.navbar.navitem.esn.title')}}</span></a>
                     </li>
+                    <li class="nav-item " [appAuthorization] feature="CONSULTANT_MANAGEMENT" permission="VIEW">
+                        <a routerLink="/consultant_app" class="nav-link" id="consultantAppLink"><span
+                                class="pcoded-micon"><i class="feather icon-bell"></i></span><span
+                                class="pcoded-mtext">{{utils.tr('main.menu.navbar.navitem.consultant.title')}}</span></a>
+                    </li>
                     <li class="nav-item " [appAuthorization] feature="CLIENT_MANAGEMENT" permission="VIEW">
                         <a routerLink="/client_app" class="nav-link " id="clientAppLink"><span class="pcoded-micon"><i
                                     class="feather icon-user-plus"></i></span><span
@@ -62,11 +67,6 @@
                         <a routerLink="/project_app" class="nav-link " id="projectAppLink"><span class="pcoded-micon"><i
                                     class="feather icon-book"></i></span><span
                                 class="pcoded-mtext">{{utils.tr('main.menu.navbar.navitem.project.title')}}</span></a>
-                    </li>
-                    <li class="nav-item " [appAuthorization] feature="CONSULTANT_MANAGEMENT" permission="VIEW">
-                        <a routerLink="/consultant_app" class="nav-link" id="consultantAppLink"><span
-                                class="pcoded-micon"><i class="feather icon-bell"></i></span><span
-                                class="pcoded-mtext">{{utils.tr('main.menu.navbar.navitem.consultant.title')}}</span></a>
                     </li>
                     <li class="nav-item " [appAuthorization] feature="ACTIVITY_TYPE_MANAGEMENT" permission="VIEW">
                         <a routerLink="/activityType_app" class="nav-link " id="activityTypeAppLink"><span
