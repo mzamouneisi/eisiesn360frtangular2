@@ -350,7 +350,12 @@ export class ConsultantFormComponent extends MereComponent {
 
   emailFocus() {
     console.log("emailFocus", this.myObj)
+    console.log("emailFocus Email : ", this.myObj.email)
+    if(!this.myObj.esn) {
+      this.myObj.esn = this.esnCurrent
+    }
     if( this.utils.isEmpty (this.myObj.email)  ) {
+      console.log("email NULL")
       if( !this.utils.isEmpty (this.myObj.firstName) && !this.utils.isEmpty (this.myObj.lastName) && !this.utils.isEmpty (this.myObj.esn?.name) ) {
         this.myObj.email = (this.myObj.firstName+"."+this.myObj.lastName+"@"+this.myObj.esn?.name+".com").toLowerCase();
       }
