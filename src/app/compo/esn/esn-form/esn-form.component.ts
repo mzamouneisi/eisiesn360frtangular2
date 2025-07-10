@@ -73,11 +73,10 @@ export class EsnFormComponent extends MereComponent {
         this.afterCallServer("onSubmit", data)
         console.log("onSubmit: isError:", this.isError());
         if (!this.isError()) {
-          // this.gotoEsnList()
           console.info("data: ", data)
           if (data && data.body && data.body.result) {
-            // this.myObj = data.body.result
-            // this.gotoAddResponsibleEsn(this.myObj);
+            this.myObj = data.body.result
+            this.gotoEsnList();
           }
         }
       },

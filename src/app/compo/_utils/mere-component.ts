@@ -66,13 +66,13 @@ export class MereComponent implements OnInit, AfterViewInit, AfterContentInit {
 
     this.dataSharingService.isUserLoggedInFct.subscribe(value => {
       this.isUserLoggedIn = value;
-      console.log("*** isUserLoggedIn = ", this.isUserLoggedIn)
-      console.log("*** esnCurrent = ", this.esnCurrent)
+      // console.log("*** isUserLoggedIn = ", this.isUserLoggedIn)
+      // console.log("*** esnCurrent = ", this.esnCurrent)
       if (this.isUserLoggedIn) {
         setTimeout(
           () => {
             this.userConnected = this.dataSharingService.userConnected
-            console.log("*** userConnected = ", this.userConnected)
+            // console.log("*** userConnected = ", this.userConnected)
 
             this.isUserAdmin = this.userConnected?.admin;
 
@@ -82,7 +82,7 @@ export class MereComponent implements OnInit, AfterViewInit, AfterContentInit {
                 (esn) => {
 
                   this.esnCurrent = this.userConnected?.esn
-                  console.log("*** esnCurrent 2 = ", this.esnCurrent)
+                  // console.log("*** esnCurrent 2 = ", this.esnCurrent)
                   // this.esnCurrent = this.userConnected?.esn 
                   this.dataSharingService.esnCurrent = this.esnCurrent
                   this.dataSharingService.idEsnCurrent = this.esnCurrent?.id
@@ -93,7 +93,7 @@ export class MereComponent implements OnInit, AfterViewInit, AfterContentInit {
                   this.esnName = this.userConnected?.esnName;
                   if (!this.esnName) this.esnName = this.userConnected?.esn?.name;
                   if (this.esnName) this.userConnected.esnName = this.esnName
-                  console.log("*** esnName = ", this.esnName)
+                  // console.log("*** esnName = ", this.esnName)
                 }
               );
             }

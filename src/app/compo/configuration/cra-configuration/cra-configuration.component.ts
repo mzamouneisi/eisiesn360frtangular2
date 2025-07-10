@@ -51,9 +51,11 @@ export class CraConfigurationComponent extends MereComponent {
 
   update() {
     this.beforeCallServer("update")
+    console.log("update craConfigurationData : ", this.craConfigurationData)
     this.craConfigurationService.updateCraConfiguration(this.craConfigurationData).subscribe((data) => {
       this.afterCallServer("update", data)
-      //console.log(data.body.result)
+      this.craConfigurationData = data.body.result
+      console.log("craConfigurationData : ", this.craConfigurationData)
     }, (error) => {
       this.addErrorFromErrorOfServer("update", error);
     })

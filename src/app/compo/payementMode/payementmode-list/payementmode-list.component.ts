@@ -14,20 +14,27 @@ import { PayementmodeFormComponent } from '../payementmode-form/payementmode-for
   styleUrls: ['./payementmode-list.component.css']
 })
 export class PayementmodeListComponent extends MereComponent {
-  title = 'List PayementsModes';
+  title: string = "";
 
   myList: PayementMode[];
   myObj: PayementMode;
-  @ViewChild('payementModeDetail', {static: false}) payementModeDetail: PayementmodeFormComponent ;
+  @ViewChild('payementModeDetail', { static: false }) payementModeDetail: PayementmodeFormComponent;
+
+  getTitle() {
+    let nbElement = 0
+    if (this.myList != null) nbElement = this.myList.length
+    this.title = this.utils.tr("List") + " " + "PayementsModes" + " (" + nbElement + ")"
+    return this.title
+  }
 
   constructor(private payementModeService: PayementModeService,
-              private router: Router,
-              public utils: UtilsService
-              , protected utilsIhm: UtilsIhmService
-              , public dataSharingService: DataSharingService) {
-                super(utils, dataSharingService);
+    private router: Router,
+    public utils: UtilsService
+    , protected utilsIhm: UtilsIhmService
+    , public dataSharingService: DataSharingService) {
+    super(utils, dataSharingService);
 
-                this.colsSearch = ["name"]
+    this.colsSearch = ["id", "name"]
   }
   ngOnInit() {
     this.findAll();
@@ -47,9 +54,9 @@ export class PayementmodeListComponent extends MereComponent {
     );
   }
 
-  setMyList(myList : any[]) {
-		this.myList = myList;
-	}
+  setMyList(myList: any[]) {
+    this.myList = myList;
+  }
 
   showForm(payementMode: PayementMode) {
     this.myObj = payementMode;
@@ -66,38 +73,31 @@ export class PayementmodeListComponent extends MereComponent {
     this.router.navigate(['/payementmode_form']);
   }
 
-  getTitle() {
-    let nbElement = 0;
-    if (this.myList != null) { nbElement = this.myList.length; }
-    const t = this.title + ' (' + nbElement + ')';
-    return t;
-  }
-
   getIdOfCurentObj() {
     return this.myObj != null ? this.myObj.id : -1;
   }
 
   delete(myObj) {
     let mythis = this;
-		this.utilsIhm.confirmYesNo("Voulez vous vraiment supprimer la ligne avec id=" + myObj.id, mythis
-		, ()=> {
-      mythis.beforeCallServer("delete")
-      mythis.payementModeService.deleteById(myObj.id)
-        .subscribe(
-          data => {
-            mythis.afterCallServer("delete", data)
-            if (!this.isError()) {
-              mythis.findAll();
-              mythis.myObj = null;
+    this.utilsIhm.confirmYesNo("Voulez vous vraiment supprimer la ligne avec id=" + myObj.id, mythis
+      , () => {
+        mythis.beforeCallServer("delete")
+        mythis.payementModeService.deleteById(myObj.id)
+          .subscribe(
+            data => {
+              mythis.afterCallServer("delete", data)
+              if (!this.isError()) {
+                mythis.findAll();
+                mythis.myObj = null;
+              }
+            }, error => {
+              mythis.addErrorFromErrorOfServer("delete", error);
+              // //console.log(error);
             }
-          }, error => {
-            mythis.addErrorFromErrorOfServer("delete", error);
-            // //console.log(error);
-          }
-        );
-		}
-		, null 
-		);
+          );
+      }
+      , null
+    );
 
   }
 

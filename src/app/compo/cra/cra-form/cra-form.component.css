@@ -73,3 +73,32 @@
 	width: 150px;
 }
 
+/* Ajouts pour le CSS */
+.calendar-container {
+    background-color: #f8f9fa;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.card-header {
+    font-weight: 600;
+}
+
+.btn-outline-primary {
+    border-width: 2px;
+}
+
+.btn-group .btn {
+    margin-right: -1px;
+}
+
+.table-sm td {
+    padding: 0.3rem;
+}
+
+.badge {
+    font-weight: 500;
+    padding: 0.35em 0.65em;
+}
+

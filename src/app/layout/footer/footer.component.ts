@@ -1,3 +1,4 @@
+import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -6,11 +7,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./footer.component.css']
 })
 export class FooterComponent implements OnInit {
-  today: number = Date.now();
+  today = new Date();
+	dateCommit = "Last Commit : 2025-07-10 17:49:16"
+  dateFooter = "";
 
   constructor() { }
 
   ngOnInit() {
+    this.dateFooter = this.dateCommit || formatDate(this.today, 'yyyy-MM-dd HH:mm:ss', 'fr-FR');
   }
 
 }

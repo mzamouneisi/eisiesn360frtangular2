@@ -4,6 +4,10 @@ DIR_DEV=/cygdrive/c/Users/mza/Documents/home
 d1=$DIR_DEV/bitbucket/eisiesn360frtangular
 d2=$DIR_DEV/github/eisiesn360frtangular2
 
+echo "
+    Go to copy to github ...
+"
+
 exit_if_dir_not_exist() {
     [ ! -d $1 ] && {
         echo "

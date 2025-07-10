@@ -1,419 +1,439 @@
-<!-- <infors #infors></infors> -->
 <app-add-multi-date [currentCra]="currentCra" #addMultiDateComponent></app-add-multi-date>
-<div class="card my-5">
-    <div class="card-header">
-        <div class="alert alert-danger" role="alert" [hidden]="!currentCra?.comment">
-            <h4 class="alert-heading">Alert {{getNameByType()}} validation</h4>
-            <p>Your {{getNameByType()}} has been rejected by the manager.You can see above the comment.</p>
-            <hr>
-            <p class="mb-0">{{currentCra?.comment}}</p>
-        </div>
-    </div>
-    <div class="card-body">
-        <div class="btn btn-primary left" id="cra-form-show-week-number" (click)="showWeekNumber()" #showWeekNumberBtn>
-            {{titleShowWeekNumber}}
-        </div>
-        <div class="row" style="width: 100%; text-align: center;" *ngIf="viewDate">
 
-            <div class="left" [style.width]="getWidthDivsEntete()">
-                <div class="left">
-                    <div class="btn-group">
-                        <div class="btn btn-primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
-                            (click)="viewDateChange(true)" id="cra-form-show-previous-view">
-                            Previous
-                        </div>
-                        <div class="btn btn-secondary" mwlCalendarToday [(viewDate)]="viewDate"
-                            (click)="viewDateChange(true)" id="cra-form-show-today">
-                            Today
-                        </div>
-                        <div class="btn btn-primary" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
-                            (click)="viewDateChange(true)" id="cra-form-show-next-view">
-                            Next
-                        </div>
-
-                    </div>
+<div class="card my-4">
+    <div class="card-header bg-light">
+        <div class="alert alert-danger mb-0" role="alert" [hidden]="!currentCra?.comment">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-exclamation-circle fa-2x me-3"></i>
+                <div>
+                    <h4 class="alert-heading">Alert {{getNameByType()}} validation</h4>
+                    <p>Your {{getNameByType()}} has been rejected by the manager. You can see above the comment.</p>
+                    <hr>
+                    <p class="mb-0">{{currentCra?.comment}}</p>
                 </div>
             </div>
-            <div class="left" [style.width]="getWidthDivsEntete()">
-
-                <h4>{{getNameByType()}}</h4>
-                <h3 *ngIf="viewDate">{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
-
-            </div>
-
-            <div class="right" [style.width]="getWidthDivsEntete()" *ngIf="currentCraUser != null">
-
-                <h3>{{ currentCraUser?.fullName }}</h3>
-
-            </div>
-
         </div>
-        <br />
+    </div>
+
+    <div class="card-body">
+        <!-- Header Section -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <button class="btn btn-outline-primary" id="cra-form-show-week-number" (click)="showWeekNumber()"
+                #showWeekNumberBtn>
+                <i class="far fa-calendar-alt me-2"></i>{{titleShowWeekNumber}}
+            </button>
+
+            <div class="text-center">
+                <h3 class="mb-0" *ngIf="viewDate">{{getNameByType()}} {{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+            </div>
+
+            <div class="text-end" *ngIf="currentCraUser != null">
+                <h3 class="mb-0">{{ currentCraUser?.fullName }}</h3>
+            </div>
+        </div>
+
+        <!-- Navigation Controls -->
+        <div class="d-flex justify-content-center mb-4">
+            <div class="btn-group">
+                <button class="btn btn-outline-primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
+                    (click)="viewDateChange(true)" id="cra-form-show-previous-view">
+                    <i class="fas fa-chevron-left me-1"></i> Previous
+                </button>
+                <button class="btn btn-outline-secondary" mwlCalendarToday [(viewDate)]="viewDate"
+                    (click)="viewDateChange(true)" id="cra-form-show-today">
+                    <i class="fas fa-calendar-day me-1"></i> Today
+                </button>
+                <button class="btn btn-outline-primary" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
+                    (click)="viewDateChange(true)" id="cra-form-show-next-view">
+                    Next <i class="fas fa-chevron-right ms-1"></i>
+                </button>
+            </div>
+        </div>
 
         <div class="row">
-
-            <div class="col-10 col-auto">
-
-
-                <div class="left" *ngIf="isAffWeekNumber">
-
-                    <table style="margin-top: 50px;">
-                        <tr>
-                            <th>Week Number:</th>
-                        </tr>
-                        <tr *ngFor="let w of utils.getWeekNumbersOfMonth(currentCra.month); let i = index">
-                            <td style="padding: 40px;" id="cells-{{w}}-{{i}}"> <b>S-{{w}}</b> </td>
-                        </tr>
+            <!-- Main Calendar Area -->
+            <div class="col-lg-10 col-md-9">
+                <div class="mb-3" *ngIf="isAffWeekNumber">
+                    <table class="table table-bordered table-sm">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Week Number</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let w of utils.getWeekNumbersOfMonth(currentCra.month); let i = index">
+                                <td class="py-2" id="cells-{{w}}-{{i}}"><strong>S-{{w}}</strong></td>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
 
                 <!-- Calendar -->
-                <!-- [refresh]="refresh" genere une erreur de date sur un undefined-->
-
-                <mwl-calendar-month-view [headerTemplate]="defaultTemplate" [viewDate]="viewDate" [events]="events"
-                    [refresh]="refresh" [weekStartsOn]="1" (dayClicked)="dayClicked($event.day, events, $event)"
-                    [cellTemplate]="customCellTemplate">
-                    <a id="test"></a>
-                </mwl-calendar-month-view>
-
-                <br>
-                <div class="left" *ngIf="currentCra">
-                    <input type="file" accept=".jpg, .png, .pdf" class="btn btn-outline-dark"
-                        (change)="onFileSelect($event)" name="ADD ATTACHMENT" id="attachment"
-                        *ngIf="!currentCra.validByConsultant && !hasRoleManagerValidate() && currentCra.id != null" />
-                    <button type="button" class="btn btn-info" *ngIf="currentCra.attachment" #attachment
-                        id="btn-cra-form-download-attachement" (click)="downloadAttachment()">Download attachment
-                    </button>
-                </div>
-                <div class="right">
-                    <button type="button" class="btn btn-outline-success" *ngIf="!currentCra?.validByConsultant"
-                        id="btn-cra-form-add-multi-date" (click)="addMultiActivity()">ADD MULTI DATE
-                    </button>
-                    <button type="button" class="btn btn-outline-danger" *ngIf="!currentCra?.validByConsultant"
-                        id="btn-cra-form-delete-all-event" (click)="deleteAllEvents()">Delete All Events
-                    </button>
-                </div>
-            </div>
-            <div class="col-2">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="btn-group-vertical">
-                            <div class="card-header">
-                                <h4>Récapitulatif</h4>
-                            </div>
-                            <button type="button" class="btn btn-primary" id="btn-cra-form-days-open-total">Days Open
-                                Total
-                                <span class="badge_bg">{{totalDayToWork}}</span>
-                            </button>
-                            <button type="button" class="btn btn-danger" id="btn-cra-form-days-abs">Days Abs
-                                <span class="badge_bg">{{numberDayAbs}}</span>
-                            </button>
-                            <button type="button" class="btn btn-primary" id="btn-cra-form-days-worked">Days worked
-                                <span class="badge_bg">{{numberDayWorked}}</span>
-                            </button>
-                            <button type="button" class="btn btn-primary" id="btn-cra-form-days-billed">Days billed
-                                <span class="badge_bg">{{numberDayBilled}}</span>
-                            </button>
-                            <button type="button" class="btn btn-primary" id="btn-cra-form-total-billed"
-                                *ngIf="hasRoleManagerValidate()">Total billed (TJM)
-                                <span class="badge_bg">{{totalBilled}}</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <!-- TODO btns -->
-                </div>
-            </div>
-        </div>
-
-        <hr />
-        <div class="form-check" *ngIf="!currentCra.validByConsultant && currentCra.id !=null">
-            <button class="btn btn-success" (click)="isCraValid(false)" id="btn-cra-form-check-validation">
-                Check Validation of {{getNameByType()}}
-            </button>
-            <button class="btn btn-outline-dark" id="btn-cra-form-send-cra-validation" (click)="sendCraToValidate()"
-                *ngIf="(currentCra.status == 'DRAFT' || currentCra.status == 'REJECTED') && hasManager()">Soumettre
-                {{getNameByType()}}
-            </button>
-        </div>
-
-        <div class="form-check">
-            <button class="btn btn-success" (click)="validCra()" id="btn-cra-form-valid"
-                *ngIf="canValidateCraOrConge() ">
-                Valid {{getNameByType()}}
-            </button>
-            <button class='btn btn-danger' id="btn-cra-form-reject" (click)="openModalPopup(rejectCraView)"
-                *ngIf="hasRoleManagerValidate() && isTimeToModify() && ! isCraOfManagerRole() ">
-                Reject
-            </button>
-        </div>
-        <hr />
-        <div class=" left">
-            <li class="list-inline-item" [hidden]="currentCra.id==null"><a [routerLink]="['/cra_list']"
-                    class="btn btn-outline-primary">LIST CRAs/Conges</a></li>
-        </div>
-        <div class="right btn-group">
-            <button class='btn btn-outline-danger' id="btn-cra-form-generate-client-pdf" (click)="generatePDF()"
-                *ngIf="currentCra.id!=null"><i class="fa fa-file-pdf-o"></i> PDF CLIENT
-            </button>
-            <button class='btn btn-outline-primary' id="btn-cra-form-generate-esn-pdf" (click)="generateEsnPDF()"
-                *ngIf="currentCra.id!=null"><i class="fa fa-file-pdf-o"></i> PDF ESN
-            </button>
-
-            <button class="btn btn-success" id="btn-cra-form-save" (click)="saveCra(true, false, '', '')"
-                *ngIf="!currentCra.validByConsultant">{{btnActionTitle}}</button>
-                
-            <button class="btn btn-danger" id="btn-cra-form-delete" (click)="delete(currentCra)"
-                *ngIf="canDeleteCurrentCra()" 
-                [appAuthorization] feature="CRA_MANAGEMENT"
-                permission="DELETE">DELETE
-            </button>
-
-        </div>
-
-        <!--addActivityView start-->
-        <ng-template #addActivityView let-modal let-day="day">
-            <div class="modal-header">
-                <h5 class="modal-title">{{getTitleAddCraDayActivity()}} : <span
-                        class="cal-cell-col">{{daySelectedStr}}</span> </h5>
-                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" *ngIf="isDaySelectedInCurentMonth">
-                <label for="craDayActivityEndHour">Select activity</label>
-                <div class="form-group">
-                    <app-select #compoSelectActivity [selectId]="'cra-form-select-activity'" [objectName]="'Activity'"
-                        [myList]="activities" [initObj]="craDayActivity.activity" [objCaller]="this"
-                        onChangeCaller="onSelectActivity" [ObjectPropName]="'name'"></app-select>
+                <div class="calendar-container mb-4">
+                    <mwl-calendar-month-view [headerTemplate]="defaultTemplate" [viewDate]="viewDate" [events]="events"
+                        [refresh]="refresh" [weekStartsOn]="1" (dayClicked)="dayClicked($event.day, events, $event)"
+                        [cellTemplate]="customCellTemplate">
+                    </mwl-calendar-month-view>
                 </div>
 
-                <div *ngIf="craDayActivity.isOverTime; then BlockOverTime else BlockDay"></div>
-                <ng-template #BlockOverTime>
-                    <div class="form-group">
-                        <label for="craDayActivityStartHour">Start Hour</label>
-                        <input type="time" id="cra-form-start-hour" [(ngModel)]="craDayActivity.startHour"
-                            class="form-control" id="craDayActivityStartHour" name="craDayActivityStartHour" required
-                            #craDayActivityStartHour="ngModel" min="18" max="00">
-                    </div>
-                    <div [hidden]="craDayActivityStartHour.valid" class="alert alert-danger">Start hour is required
-                    </div>
-                    <div class="form-group">
-                        <label for="craDayActivityEndHour">End Hour</label>
-                        <input type="time" id="cra-form-end-hour" [(ngModel)]="craDayActivity.endHour"
-                            class="form-control" id="craDayActivityEndHour" name="craDayActivityEndHour" required
-                            #craDayActivityEndHour="ngModel" required>
-                    </div>
-                    <div [hidden]="craDayActivityEndHour.valid" class="alert alert-danger">End hour is required</div>
-                </ng-template>
-                <ng-template #BlockDay>
-                    <label for="craDayActivityEndHour">Time</label>
-                    <div class="form-group">
-                        <app-select #compoSelectTime [selectId]="'cra-form-select-end-hour'" [objectName]="'Time'"
-                            [myList]="times" [initObj]="craDayActivity.nbDay" [objCaller]="this"
-                            onChangeCaller="onSelectTime"></app-select>
-                    </div>
-                </ng-template>
-
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="cra-form-normal-day" name="inlineRadioOptions"
-                        id="form-check-normal-day" value="option1" (click)="onCheckTime(false)"
-                        [checked]="!craDayActivity.isOverTime">
-                    <label class="form-check-label" for="form-check-normal-day">Normal Day</label>
-                </div>
-                <div class="form-check form-check-inline"
-                    *ngIf="craDayActivity.activity !=null && craDayActivity.activity.overTime">
-                    <input class="form-check-input" type="radio" id="cra-form-over-time" name="inlineRadioOptions"
-                        id="form-check-overtime" value="option2" (click)="onCheckTime(true)"
-                        [checked]="craDayActivity.isOverTime">
-                    <label class="form-check-label" for="form-check-overtime">Overtime</label>
-                </div>
-            </div>
-
-            <div class="modal-center" *ngIf="isAddMultiDate">
-                <div class="form-group">
-                    <label>Choix de date debut et fin</label>
-
-                    <app-mz-date-picker-deb-fin #myDatePickerDebFin placeHolderDeb="Choix date debut"
-                        [myDatePickerDeb]="addMultiDateStartDate" [onChangeCallerDeb]="'onStartDateInputChanged'"
-                        placeHolderFin="Choix date fin" [myDatePickerFin]="addMultiDateEndDate"
-                        [onChangeCallerFin]="'onEndDateInputChanged'" [objCaller]="this"></app-mz-date-picker-deb-fin>
-
-                    <div [hidden]="addMultiDateStartDate" class="badge badge-danger">Start date is required</div>
-                    <div [hidden]="addMultiDateEndDate" class="badge badge-danger">End date is required</div>
-                </div>
-            </div>
-
-            <div class="modal-footer" *ngIf="isDaySelectedInCurentMonth">
-                <button (click)="addCurrentActivity()" id="btn-cra-form-add-current-activity" class="btn btn-info"
-                    type="submit">{{getTitleButtonAddActivity()}}</button>
-            </div>
-            <div class="modal-center" *ngIf="!isDaySelectedInCurentMonth">
-                <h3 class="center red" *ngIf="viewDate"> On ne peut pas saisir en dehors du mois courant : {{ viewDate |
-                    calendarDate:(view + 'ViewTitle'):'en' }} </h3>
-            </div>
-
-        </ng-template>
-        <!--addActivityView end-->
-
-        <!--dayDetailView start-->
-        <ng-template #dayDetailView let-modal>
-            <div class="modal-header">
-                <h5 class="modal-title">Activities of day : {{daySelectedStr}}</h5>
-                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-
-            <div class="modal-body">
-
-                <table class="table table-bordered">
-
-                    <thead>
-                        <tr>
-                            <th>Activity</th>
-                            <th>Time</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        <tr *ngFor="let craDayActivity of craDay.craDayActivities; let index = index">
-                            <td>
-                                <label class="craDayActivity" id="cra-form-edit-{{index}}"
-                                    (click)="craDayActivityEdit(craDayActivity)"> {{craDayActivity.activity.name}}
-                                </label>
-                            </td>
-                            <td>
-                                <div *ngIf="craDayActivity.isOverTime">
-                                    {{craDayActivity.startHour}} - {{craDayActivity.endHour}}
-                                </div>
-                                <div *ngIf="!craDayActivity.isOverTime">
-                                    {{craDayActivity.nbDay}} day
-                                </div>
-                            </td>
-
-                            <td>
-                                <button class="btn btn-danger" (click)="craDayActivityDelete(index)"
-                                    id="btn-cra-form-delete-{{index}}">
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-
-                </table>
-
-            </div>
-
-            <div class="modal-footer">
-                <button (click)="craDayActivityNew()" id="btn-cra-form-new" class="btn btn-info" type="submit"
-                    [disabled]="!isEnableAddCraActivity()">
-                    +
-                </button>
-            </div>
-        </ng-template>
-        <!--dayDetailView end-->
-
-        <ng-template #customCellTemplate let-day="day" let-openDay="openDay" let-locale="locale"
-            let-tooltipPlacement="tooltipPlacement" let-highlightDay="highlightDay" let-unhighlightDay="unhighlightDay"
-            let-eventClicked="eventClicked" let-tooltipTemplate="tooltipTemplate"
-            let-tooltipAppendToBody="tooltipAppendToBody">
-            <div [className]="getClassOfDay(day)" *ngIf="day">
-                <div *ngIf="day.inMonth; else notInMonth">
+                <!-- Action Buttons -->
+                <div class="d-flex justify-content-between mb-4">
                     <div>
-                        <div *ngFor="let e of day.events">
-                            <span class="cal-day-badge bg-{{day.isWeekend ? 'danger' : 'primary'}}"
-                                *ngIf="e.title!=null && !e.meta.isOverTime">{{ e.title }}</span>
-                            <span class="cal-day-badge bg-danger" *ngIf="e.title!=null && e.meta.isOverTime">{{ e.title
-                                }}</span>
+                        <input type="file" accept=".jpg, .png, .pdf" class="btn btn-outline-dark me-2"
+                            (change)="onFileSelect($event)" name="ADD ATTACHMENT" id="attachment"
+                            *ngIf="!currentCra.validByConsultant && !hasRoleManagerValidate() && currentCra.id != null" />
+                        <button type="button" class="btn btn-outline-info" *ngIf="currentCra.attachment" #attachment
+                            id="btn-cra-form-download-attachement" (click)="downloadAttachment()">
+                            <i class="fas fa-download me-1"></i> Download attachment
+                        </button>
+                    </div>
 
-                        </div>
-                        <span class="cal-day-number">{{ day?.date | calendarDate:'monthViewDayNumber':locale }}</span>
+                    <div>
+                        <button type="button" class="btn btn-outline-success me-2"
+                            *ngIf="!currentCra?.validByConsultant" id="btn-cra-form-add-multi-date"
+                            (click)="addMultiActivity()">
+                            <i class="fas fa-calendar-plus me-1"></i> Add Multi Date
+                        </button>
+                        <button type="button" class="btn btn-outline-danger" *ngIf="!currentCra?.validByConsultant"
+                            id="btn-cra-form-delete-all-event" (click)="deleteAllEvents()">
+                            <i class="fas fa-trash-alt me-1"></i> Delete All
+                        </button>
                     </div>
                 </div>
-                <ng-template #notInMonth>
-                    <div class="cal-cell-top">
-                        <span class="cal-day-number">{{ day?.date | calendarDate:'monthViewDayNumber':locale }}</span>
-                    </div>
-                </ng-template>
             </div>
-        </ng-template>
 
-        <ng-template #defaultTemplate let-days="days" let-locale="locale"
-            let-trackByWeekDayHeaderDate="trackByWeekDayHeaderDate">
-            <div class="cal-cell-row cal-header">
-                <div class="cal-cell" *ngFor="let day of days; trackBy: trackByWeekDayHeaderDate"
-                    [class.cal-past]="day.isPast" [class.cal-today]="day.isToday" [class.cal-future]="day.isFuture"
-                    [class.cal-weekend]="day.isWeekend" [ngClass]="day.cssClass">
-                    <div *ngIf="day.isWeekend; else calHeader">
-                        <div style="width:150px;">
-                            {{ day?.date | calendarDate: 'monthViewColumnHeader':locale }}
-                        </div>
-                        <span class="cal-day-badge bg-danger">WEEK</span>
+            <!-- Summary Sidebar -->
+            <div class="col-lg-2 col-md-3">
+                <div class="card mb-3">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-chart-pie me-2"></i>Summary</h5>
                     </div>
-                    <ng-template #calHeader>
-                        <div style="width:150px;">
-                            {{ day?.date | calendarDate: 'monthViewColumnHeader':locale }}
+                    <div class="card-body p-2">
+                        <div class="d-grid gap-2">
+                            <button type="button" class="btn btn-outline-primary text-start"
+                                id="btn-cra-form-days-open-total">
+                                <i class="far fa-calendar me-2"></i> Days Open
+                                <span class="badge bg-primary float-end">{{totalDayToWork}}</span>
+                            </button>
+                            <button type="button" class="btn btn-outline-danger text-start" id="btn-cra-form-days-abs">
+                                <i class="fas fa-umbrella-beach me-2"></i> Days Abs
+                                <span class="badge bg-danger float-end">{{numberDayAbs}}</span>
+                            </button>
+                            <button type="button" class="btn btn-outline-success text-start"
+                                id="btn-cra-form-days-worked">
+                                <i class="fas fa-briefcase me-2"></i> Days Worked
+                                <span class="badge bg-success float-end">{{numberDayWorked}}</span>
+                            </button>
+                            <button type="button" class="btn btn-outline-primary text-start"
+                                id="btn-cra-form-days-billed">
+                                <i class="fas fa-file-invoice-dollar me-2"></i> Days Billed
+                                <span class="badge bg-primary float-end">{{numberDayBilled}}</span>
+                            </button>
+                            <button type="button" class="btn btn-outline-info text-start" id="btn-cra-form-total-billed"
+                                *ngIf="hasRoleManagerValidate()">
+                                <i class="fas fa-money-bill-wave me-2"></i> Total Billed
+                                <span class="badge bg-info float-end">{{totalBilled}}</span>
+                            </button>
                         </div>
-                    </ng-template>
+                    </div>
                 </div>
             </div>
-        </ng-template>
+        </div>
 
-        <ng-template #rejectCraView let-modal>
-            <div class="modal-header">
-                <h5 class="modal-title">Reject {{getNameByType()}}</h5>
-                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-                    <span aria-hidden="true">&times;</span>
+        <!-- Validation Buttons -->
+        <div class="border-top pt-3 mt-3">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <button class="btn btn-success me-2" (click)="isCraValid(false)" id="btn-cra-form-check-validation">
+                        <i class="fas fa-check-circle me-1"></i> Validate {{getNameByType()}}
+                    </button>
+                    <button class="btn btn-outline-dark me-2" id="btn-cra-form-send-cra-validation"
+                        (click)="sendCraToValidate()"
+                        *ngIf="(currentCra.status == 'DRAFT' || currentCra.status == 'REJECTED') && hasManager()">
+                        <i class="fas fa-paper-plane me-1"></i> Submit {{getNameByType()}}
+                    </button>
+
+                    <button class="btn btn-outline-primary me-2" [hidden]="currentCra.id==null">
+                        <a [routerLink]="['/cra_list']" class="text-decoration-none">
+                            <i class="fas fa-list me-1"></i> List CRAs/Conges
+                        </a>
+                    </button>
+                </div>
+
+                <div>
+                    <button class="btn btn-outline-danger me-2" id="btn-cra-form-generate-client-pdf"
+                        (click)="generatePDF()" *ngIf="currentCra.id!=null">
+                        <i class="fas fa-file-pdf me-1"></i> Client PDF
+                    </button>
+                    <button class="btn btn-outline-primary me-2" id="btn-cra-form-generate-esn-pdf"
+                        (click)="generateEsnPDF()" *ngIf="currentCra.id!=null">
+                        <i class="fas fa-file-pdf me-1"></i> ESN PDF
+                    </button>
+
+                    <button class="btn btn-primary me-2" id="btn-cra-form-save" (click)="saveCra(true, false, '', '')"
+                        *ngIf="!currentCra.validByConsultant">
+                        <i class="fas fa-save me-1"></i> {{btnActionTitle}}
+                    </button>
+
+                    <button class="btn btn-danger" id="btn-cra-form-delete" (click)="delete(currentCra)"
+                        *ngIf="canDeleteCurrentCra()" [appAuthorization] feature="CRA_MANAGEMENT" permission="DELETE">
+                        <i class="fas fa-trash-alt me-1"></i> Delete
+                    </button>
+                </div>
+            </div>
+
+            <div class="mt-3" *ngIf="hasRoleManagerValidate()">
+                <button class="btn btn-success me-2" id="btn-cra-form-valid" (click)="validCra()"
+                    *ngIf="canValidateCraOrConge()">
+                    <i class="fas fa-check me-1"></i> Approve {{getNameByType()}}
+                </button>
+                <button class="btn btn-danger" id="btn-cra-form-reject" (click)="openModalPopup(rejectCraView)"
+                    *ngIf="hasRoleManagerValidate() && isTimeToModify() && ! isCraOfManagerRole()">
+                    <i class="fas fa-times me-1"></i> Reject
                 </button>
             </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="exampleFormControlTextarea1">Comment</label>
-                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
-                        [(ngModel)]="currentCra.comment" required #comment="ngModel"></textarea>
-                </div>
-                <div [hidden]="comment.valid" class="badge badge-danger">comment is required</div>
-            </div>
-
-            <div class="modal-footer">
-                <button (click)="rejectCra()" id="btn-cra-form-reject-cra" class="btn btn-info" type="submit"
-                    [disabled]="!comment.valid">Save</button>
-            </div>
-        </ng-template>
-
-        <ng-template #showCraReportPdfView let-modal>
-            <div class="modal-header">
-                <h5 class="modal-title">LIST REPORTS PDF ACTIVITIES</h5>
-                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <table class="table table-striped table-bordered">
-                    <thead class="thead-light">
-                        <th>Activity</th>
-                        <th>Number Day Worked</th>
-                        <th>Actions</th>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let report of craReportActivities; let index=index">
-                            <td>{{report.activity}}</td>
-                            <td>{{report.nbDayWorked}}</td>
-                            <td>
-                                <button class='btn btn-outline-danger' id="btn-cra-form-download-pdf-{{index}}"
-                                    (click)="downloadPDF(report)"><i class="fa fa-file-pdf-o"></i>DOWNLOAD
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-        </ng-template>
-
-
+        </div>
     </div>
 </div>
+
+
+<!--addActivityView start-->
+<ng-template #addActivityView let-modal let-day="day">
+    <div class="modal-header">
+        <h5 class="modal-title">{{getTitleAddCraDayActivity()}} : <span class="cal-cell-col">{{daySelectedStr}}</span>
+        </h5>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" *ngIf="isDaySelectedInCurentMonth">
+        <label for="craDayActivityEndHour">Select activity</label>
+        <div class="form-group">
+            <app-select #compoSelectActivity [selectId]="'cra-form-select-activity'" [objectName]="'Activity'"
+                [myList]="activities" [initObj]="craDayActivity.activity" [objCaller]="this"
+                onChangeCaller="onSelectActivity" [ObjectPropName]="'name'"></app-select>
+        </div>
+
+        <div *ngIf="craDayActivity.isOverTime; then BlockOverTime else BlockDay"></div>
+        <ng-template #BlockOverTime>
+            <div class="form-group">
+                <label for="craDayActivityStartHour">Start Hour</label>
+                <input type="time" id="cra-form-start-hour" [(ngModel)]="craDayActivity.startHour" class="form-control"
+                    id="craDayActivityStartHour" name="craDayActivityStartHour" required
+                    #craDayActivityStartHour="ngModel" min="18" max="00">
+            </div>
+            <div [hidden]="craDayActivityStartHour.valid" class="alert alert-danger">Start hour is required
+            </div>
+            <div class="form-group">
+                <label for="craDayActivityEndHour">End Hour</label>
+                <input type="time" id="cra-form-end-hour" [(ngModel)]="craDayActivity.endHour" class="form-control"
+                    id="craDayActivityEndHour" name="craDayActivityEndHour" required #craDayActivityEndHour="ngModel"
+                    required>
+            </div>
+            <div [hidden]="craDayActivityEndHour.valid" class="alert alert-danger">End hour is required</div>
+        </ng-template>
+        <ng-template #BlockDay>
+            <label for="craDayActivityEndHour">Time</label>
+            <div class="form-group">
+                <app-select #compoSelectTime [selectId]="'cra-form-select-end-hour'" [objectName]="'Time'"
+                    [myList]="times" [initObj]="craDayActivity.nbDay" [objCaller]="this"
+                    onChangeCaller="onSelectTime"></app-select>
+            </div>
+        </ng-template>
+
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" id="cra-form-normal-day" name="inlineRadioOptions"
+                id="form-check-normal-day" value="option1" (click)="onCheckTime(false)"
+                [checked]="!craDayActivity.isOverTime">
+            <label class="form-check-label" for="form-check-normal-day">Normal Day</label>
+        </div>
+        <div class="form-check form-check-inline"
+            *ngIf="craDayActivity.activity !=null && craDayActivity.activity.overTime">
+            <input class="form-check-input" type="radio" id="cra-form-over-time" name="inlineRadioOptions"
+                id="form-check-overtime" value="option2" (click)="onCheckTime(true)"
+                [checked]="craDayActivity.isOverTime">
+            <label class="form-check-label" for="form-check-overtime">Overtime</label>
+        </div>
+    </div>
+
+    <div class="modal-center" *ngIf="isAddMultiDate">
+        <div class="form-group">
+            <label>Choix de date debut et fin</label>
+
+            <app-mz-date-picker-deb-fin #myDatePickerDebFin placeHolderDeb="Choix date debut"
+                [myDatePickerDeb]="addMultiDateStartDate" [onChangeCallerDeb]="'onStartDateInputChanged'"
+                placeHolderFin="Choix date fin" [myDatePickerFin]="addMultiDateEndDate"
+                [onChangeCallerFin]="'onEndDateInputChanged'" [objCaller]="this"></app-mz-date-picker-deb-fin>
+
+            <div [hidden]="addMultiDateStartDate" class="badge badge-danger">Start date is required</div>
+            <div [hidden]="addMultiDateEndDate" class="badge badge-danger">End date is required</div>
+        </div>
+    </div>
+
+    <div class="modal-footer" *ngIf="isDaySelectedInCurentMonth">
+        <button (click)="addCurrentActivity()" id="btn-cra-form-add-current-activity" class="btn btn-info"
+            type="submit">{{getTitleButtonAddActivity()}}</button>
+    </div>
+    <div class="modal-center" *ngIf="!isDaySelectedInCurentMonth">
+        <h3 class="center red" *ngIf="viewDate"> On ne peut pas saisir en dehors du mois courant : {{ viewDate |
+            calendarDate:(view + 'ViewTitle'):'en' }} </h3>
+    </div>
+
+</ng-template>
+<!--addActivityView end-->
+
+<!--dayDetailView start-->
+<ng-template #dayDetailView let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title">Activities of day : {{daySelectedStr}}</h5>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+
+        <table class="table table-bordered">
+
+            <thead>
+                <tr>
+                    <th>Activity</th>
+                    <th>Time</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let craDayActivity of craDay.craDayActivities; let index = index">
+                    <td>
+                        <label class="craDayActivity" id="cra-form-edit-{{index}}"
+                            (click)="craDayActivityEdit(craDayActivity)"> {{craDayActivity.activity.name}}
+                        </label>
+                    </td>
+                    <td>
+                        <div *ngIf="craDayActivity.isOverTime">
+                            {{craDayActivity.startHour}} - {{craDayActivity.endHour}}
+                        </div>
+                        <div *ngIf="!craDayActivity.isOverTime">
+                            {{craDayActivity.nbDay}} day
+                        </div>
+                    </td>
+
+                    <td>
+                        <button class="btn btn-danger" (click)="craDayActivityDelete(index)"
+                            id="btn-cra-form-delete-{{index}}">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <div class="modal-footer">
+        <button (click)="craDayActivityNew()" id="btn-cra-form-new" class="btn btn-info" type="submit"
+            [disabled]="!isEnableAddCraActivity()">
+            +
+        </button>
+    </div>
+</ng-template>
+<!--dayDetailView end-->
+
+<ng-template #customCellTemplate let-day="day" let-openDay="openDay" let-locale="locale"
+    let-tooltipPlacement="tooltipPlacement" let-highlightDay="highlightDay" let-unhighlightDay="unhighlightDay"
+    let-eventClicked="eventClicked" let-tooltipTemplate="tooltipTemplate" let-tooltipAppendToBody="tooltipAppendToBody">
+    <div [className]="getClassOfDay(day)" *ngIf="day">
+        <div *ngIf="day.inMonth; else notInMonth">
+            <div>
+                <div *ngFor="let e of day.events">
+                    <span class="cal-day-badge bg-{{day.isWeekend ? 'danger' : 'primary'}}"
+                        *ngIf="e.title!=null && !e.meta.isOverTime">{{ e.title }}</span>
+                    <span class="cal-day-badge bg-danger" *ngIf="e.title!=null && e.meta.isOverTime">{{ e.title
+                        }}</span>
+
+                </div>
+                <span class="cal-day-number">{{ day?.date | calendarDate:'monthViewDayNumber':locale }}</span>
+            </div>
+        </div>
+        <ng-template #notInMonth>
+            <div class="cal-cell-top">
+                <span class="cal-day-number">{{ day?.date | calendarDate:'monthViewDayNumber':locale }}</span>
+            </div>
+        </ng-template>
+    </div>
+</ng-template>
+
+<ng-template #defaultTemplate let-days="days" let-locale="locale"
+    let-trackByWeekDayHeaderDate="trackByWeekDayHeaderDate">
+    <div class="cal-cell-row cal-header">
+        <div class="cal-cell" *ngFor="let day of days; trackBy: trackByWeekDayHeaderDate" [class.cal-past]="day.isPast"
+            [class.cal-today]="day.isToday" [class.cal-future]="day.isFuture" [class.cal-weekend]="day.isWeekend"
+            [ngClass]="day.cssClass">
+            <div *ngIf="day.isWeekend; else calHeader">
+                <div style="width:150px;">
+                    {{ day?.date | calendarDate: 'monthViewColumnHeader':locale }}
+                </div>
+                <span class="cal-day-badge bg-danger">WEEK</span>
+            </div>
+            <ng-template #calHeader>
+                <div style="width:150px;">
+                    {{ day?.date | calendarDate: 'monthViewColumnHeader':locale }}
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #rejectCraView let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title">Reject {{getNameByType()}}</h5>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label for="exampleFormControlTextarea1">Comment</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" [(ngModel)]="currentCra.comment"
+                required #comment="ngModel"></textarea>
+        </div>
+        <div [hidden]="comment.valid" class="badge badge-danger">comment is required</div>
+    </div>
+
+    <div class="modal-footer">
+        <button (click)="rejectCra()" id="btn-cra-form-reject-cra" class="btn btn-info" type="submit"
+            [disabled]="!comment.valid">Save</button>
+    </div>
+</ng-template>
+
+<ng-template #showCraReportPdfView let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title">LIST REPORTS PDF ACTIVITIES</h5>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <table class="table table-striped table-bordered">
+            <thead class="thead-light">
+                <th>Activity</th>
+                <th>Number Day Worked</th>
+                <th>Actions</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let report of craReportActivities; let index=index">
+                    <td>{{report.activity}}</td>
+                    <td>{{report.nbDayWorked}}</td>
+                    <td>
+                        <button class='btn btn-outline-danger' id="btn-cra-form-download-pdf-{{index}}"
+                            (click)="downloadPDF(report)"><i class="fa fa-file-pdf-o"></i>DOWNLOAD
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</ng-template>
