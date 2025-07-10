@@ -108,7 +108,6 @@ export class ConsultantFormComponent extends MereComponent {
       this.myObj = new Consultant();
       //par defaut active
       this.myObj.active = true;
-      this.myObj.adminConsultant = this.manager;
 
       this.setEsn();
 
@@ -242,6 +241,10 @@ export class ConsultantFormComponent extends MereComponent {
     //////////console.log("onSelectRole:", this, this.myObj)
     this.myObj.role = role;
     this.myObj.admin = (this.myObj.role == Constants.MANAGER || this.myObj.role == Constants.RESPONSIBLE_ESN);
+    if (this.myObj.role == Constants.MANAGER || this.myObj.role == Constants.CONSULTANT) {
+      this.myObj.adminConsultant = this.manager
+      this.myObj.adminConsultantId = this.manager?.id 
+    }
     this.setTitle()
   }
 
