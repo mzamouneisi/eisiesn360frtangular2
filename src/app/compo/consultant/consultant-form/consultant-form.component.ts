@@ -21,7 +21,7 @@ import { MereComponent } from '../../_utils/mere-component';
 export class ConsultantFormComponent extends MereComponent {
 
   title: string;
-  btnSaveTitle:string;
+  btnSaveTitle: string;
   isAdd: string;
 
   @Input()
@@ -37,9 +37,9 @@ export class ConsultantFormComponent extends MereComponent {
   // filter by manager
   manager: Consultant = null;
   emailPattern: string = UtilsService.EMAIL_PATTERN;
-  telPattern: string =   UtilsService.TEL_PATTERN;
-  confirmPassword:string;
-  infoResetPassword:string;
+  telPattern: string = UtilsService.TEL_PATTERN;
+  confirmPassword: string;
+  infoResetPassword: string;
   role: string;
   esnIdStr: string;
   esnId: number = 0;
@@ -77,7 +77,7 @@ export class ConsultantFormComponent extends MereComponent {
 
     if (this.esnIdStr == null) {
       this.esnIdStr = this.route.snapshot.queryParamMap.get('esnIdStr');
-      if(this.esnIdStr) {
+      if (this.esnIdStr) {
         this.esnId = Number.parseInt(this.esnIdStr);
         // if(this.myObj != null) {
         //   this.myObj.idEsn = this.esnId 
@@ -91,7 +91,7 @@ export class ConsultantFormComponent extends MereComponent {
   setTitle() {
     if (this.isAdd == 'true') {
       this.btnSaveTitle = this.utils.tr("Add");
-      this.title = this.utils.tr("New") + " " + this.typeUser() ;
+      this.title = this.utils.tr("New") + " " + this.typeUser();
     } else {
       this.btnSaveTitle = this.utils.tr("Save");
       this.title = this.utils.tr("Edit") + " " + this.typeUser();
@@ -121,7 +121,7 @@ export class ConsultantFormComponent extends MereComponent {
 
     }
 
-    if(this.myObj.address == null) {
+    if (this.myObj.address == null) {
       this.myObj.address = new Address();
     }
 
@@ -132,9 +132,9 @@ export class ConsultantFormComponent extends MereComponent {
   majAdminConsultant() {
     this.consultantService.setAdminConsultant(this.myObj)
   }
-  
+
   typeUser() {
-    if(this.myObj && this.myObj.role) return this.myObj.role;
+    if (this.myObj && this.myObj.role) return this.myObj.role;
     else return this.utils.tr("User")
   }
 
@@ -147,7 +147,7 @@ export class ConsultantFormComponent extends MereComponent {
         this.afterCallServer("getConsultants", data)
         if (data == undefined) {
           this.consultants = new Array();
-        }else {
+        } else {
           this.consultants = data.body.result;
           // this.dataSharingService.addEsnInConsultantList(this.consultants)
         }
@@ -161,33 +161,33 @@ export class ConsultantFormComponent extends MereComponent {
   onSelectConsultant(consultant: Consultant) {
     this.dataSharingService.adminConsultant[this.myObj.id] = consultant;
   }
-  @ViewChild('compoSelectConsultant', {static:false}) compoSelectConsultant:SelectComponent ;
-  selectConsultant(consultant:Consultant){
-      this.compoSelectConsultant.selectedObj = consultant;
+  @ViewChild('compoSelectConsultant', { static: false }) compoSelectConsultant: SelectComponent;
+  selectConsultant(consultant: Consultant) {
+    this.compoSelectConsultant.selectedObj = consultant;
   }
-/////////////////////////////////////////
+  /////////////////////////////////////////
 
 
   setEsn() {
-    
-    if(this.role == "resp"){
+
+    if (this.role == "resp") {
       this.myObj.role = Constants.RESPONSIBLE_ESN;
     }
 
-    if(this.myObj.role != Constants.RESPONSIBLE_ESN) {
-      this.myObj.esn = this.userConnected.esn ;
-      this.myObj.esnId = this.userConnected.esnId ;
+    if (this.myObj.role != Constants.RESPONSIBLE_ESN) {
+      this.myObj.esn = this.userConnected.esn;
+      this.myObj.esnId = this.userConnected.esnId;
 
-      if(!this.myObj.esn) {
+      if (!this.myObj.esn) {
         this.myObj.esn = this.esnCurrent
-        this.myObj.esnId = this.esnCurrent?.id 
+        this.myObj.esnId = this.esnCurrent?.id
       }
 
-      console.log("setEsn this.myObj.esn  : " , this.myObj.esn  )
-    }else {
-      if(this.esnId > 0) {
+      console.log("setEsn this.myObj.esn  : ", this.myObj.esn)
+    } else {
+      if (this.esnId > 0) {
         this.findEsnById(this.esnId)
-      }else {
+      } else {
         this.onSelectEsn(this.myObj.esn);
       }
     }
@@ -197,7 +197,7 @@ export class ConsultantFormComponent extends MereComponent {
   }
 
   findEsnById(esnId: number) {
-    let label = "find esn by id="+esnId;
+    let label = "find esn by id=" + esnId;
     this.esnService.findById(esnId).subscribe(
       data => {
         this.afterCallServer(label, data)
@@ -215,51 +215,51 @@ export class ConsultantFormComponent extends MereComponent {
 
   onSelectEsn(esn: Esn) {
 
-    if(esn) {
-     this.myObj.esn = esn;
-    //  this.myObj.idEsn = this.myObj.esn.id;
-     this.myObj.username = this.myObj.email
-     this.selectEsn(esn)
+    if (esn) {
+      this.myObj.esn = esn;
+      //  this.myObj.idEsn = this.myObj.esn.id;
+      this.myObj.username = this.myObj.email
+      this.selectEsn(esn)
     }
 
   }
 
-  @ViewChild('compoSelectEsn', {static:false}) compoSelectEsn:SelectComponent ;
-  selectEsn(esn:Esn){
+  @ViewChild('compoSelectEsn', { static: false }) compoSelectEsn: SelectComponent;
+  selectEsn(esn: Esn) {
     this.myObj.esn = esn;
     // this.myObj.idEsn = this.myObj.esn != null ? this.myObj.esn.id : -1;
-    if(this.compoSelectEsn != null) {
+    if (this.compoSelectEsn != null) {
       this.compoSelectEsn.selectedObj = esn;
-      if(esn != null) {
+      if (esn != null) {
         this.compoSelectEsn.onChange00(esn.id);
       }
     }
-    
-  } 
-  
+
+  }
+
   public onSelectRole(role: string) {
     //////////console.log("onSelectRole:", this, this.myObj)
     this.myObj.role = role;
     this.myObj.admin = (this.myObj.role == Constants.MANAGER || this.myObj.role == Constants.RESPONSIBLE_ESN);
     if (this.myObj.role == Constants.MANAGER || this.myObj.role == Constants.CONSULTANT) {
       this.myObj.adminConsultant = this.manager
-      this.myObj.adminConsultantId = this.manager?.id 
+      this.myObj.adminConsultantId = this.manager?.id
     }
     this.setTitle()
   }
 
-  @ViewChild('compoSelectRole', {static:false}) compoSelectRole:SelectComponent ;
-  selectRole(role:string){
+  @ViewChild('compoSelectRole', { static: false }) compoSelectRole: SelectComponent;
+  selectRole(role: string) {
 
     var compoSelect: HTMLSelectElement = document.getElementById(this.compoSelectRole.selectId) as HTMLSelectElement;
-      // console.log("selectRole compoSelect:", compoSelect)
+    // console.log("selectRole compoSelect:", compoSelect)
 
-      this.compoSelectRole.selectedObj = role;
-      var id = this.roles != null ? this.roles.indexOf(role) : -1
+    this.compoSelectRole.selectedObj = role;
+    var id = this.roles != null ? this.roles.indexOf(role) : -1
 
-      // id = 0 : est "Select Role"
-      compoSelect.selectedIndex = id+1;
-  }  
+    // id = 0 : est "Select Role"
+    compoSelect.selectedIndex = id + 1;
+  }
 
   resetPassword() {
     this.myObj.password = '$2a$10$E.LSKuP6fRizN7PZWaG0UOx7c4Md7qVXc8qNOKYlRxmc442kijNqG';  //Eisi2020
@@ -268,9 +268,9 @@ export class ConsultantFormComponent extends MereComponent {
 
   onSubmit() {
     this.myObj.username = this.myObj.email;
-    console.log("this.manager.role:", '.'+this.manager.role+'.')
+    console.log("this.manager.role:", '.' + this.manager.role + '.')
     console.log("this.myObj.adminConsultant : start ", this.myObj.adminConsultant)
-    if(this.userConnected.role + '' != 'ADMIN') {
+    if (this.userConnected.role + '' != 'ADMIN') {
       console.log('NOT ADMIN')
       this.dataSharingService.majAdminConsultantId(this.myObj, this.manager);
 
@@ -308,7 +308,7 @@ export class ConsultantFormComponent extends MereComponent {
    */
   private loadRoles() {
 
-    if(this.roles == null ) {
+    if (this.roles == null) {
 
       let label = "loadRoles";
       this.beforeCallServer(label);
@@ -318,7 +318,7 @@ export class ConsultantFormComponent extends MereComponent {
         else {
           this.roles = data.body.result;
         }
-  
+
       }, error => {
         this.addErrorFromErrorOfServer(label, error);
       })
@@ -328,7 +328,7 @@ export class ConsultantFormComponent extends MereComponent {
 
   private loadEsns() {
 
-    if(this.esns == null) {
+    if (this.esns == null) {
 
       let label = "loadEsns";
       this.beforeCallServer(label);
@@ -337,10 +337,24 @@ export class ConsultantFormComponent extends MereComponent {
         if (!data) this.esns = new Array();
         else {
           this.esns = data.body.result;
-  
+
           this.esns.sort(this.compareEsnLast);
+
+          if (this.manager) {
+            if (!this.manager.esn && this.manager.esnId) {
+              for (let e of this.esns) {
+                if (e.id == this.manager.esnId) {
+                  this.manager.esn = e
+                  if(!this.esnCurrent) {
+                    this.esnCurrent = e 
+                  }
+                  break;
+                }
+              }
+            }
+          }
         }
-  
+
       }, error => {
         this.addErrorFromErrorOfServer(label, error);
       })
@@ -348,11 +362,11 @@ export class ConsultantFormComponent extends MereComponent {
 
   }
 
-  compareEsnLast( a:Esn, b:Esn ) {
-    if ( a.id > b.id ){
+  compareEsnLast(a: Esn, b: Esn) {
+    if (a.id > b.id) {
       return -1;
     }
-    if ( a.id < b.id ){
+    if (a.id < b.id) {
       return 1;
     }
     return 0;
@@ -361,13 +375,13 @@ export class ConsultantFormComponent extends MereComponent {
   emailFocus() {
     console.log("emailFocus", this.myObj)
     console.log("emailFocus Email : ", this.myObj.email)
-    if(!this.myObj.esn) {
+    if (!this.myObj.esn) {
       this.myObj.esn = this.esnCurrent
     }
-    if( this.utils.isEmpty (this.myObj.email)  ) {
+    if (this.utils.isEmpty(this.myObj.email)) {
       console.log("email NULL")
-      if( !this.utils.isEmpty (this.myObj.firstName) && !this.utils.isEmpty (this.myObj.lastName) && !this.utils.isEmpty (this.myObj.esn?.name) ) {
-        this.myObj.email = (this.myObj.firstName+"."+this.myObj.lastName+"@"+this.myObj.esn?.name+".com").toLowerCase();
+      if (!this.utils.isEmpty(this.myObj.firstName) && !this.utils.isEmpty(this.myObj.lastName) && !this.utils.isEmpty(this.myObj.esn?.name)) {
+        this.myObj.email = (this.myObj.firstName + "." + this.myObj.lastName + "@" + this.myObj.esn?.name + ".com").toLowerCase();
       }
     }
   }
