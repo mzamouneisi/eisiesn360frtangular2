@@ -108,8 +108,10 @@ export class ConsultantFormComponent extends MereComponent {
       this.myObj = new Consultant();
       //par defaut active
       this.myObj.active = true;
+      this.myObj.adminConsultant = this.manager;
 
       this.setEsn();
+
     } else {
       let consultantP: Consultant = this.consultantService.getConsultant();
 
@@ -176,6 +178,11 @@ export class ConsultantFormComponent extends MereComponent {
     if(this.myObj.role != Constants.RESPONSIBLE_ESN) {
       this.myObj.esn = this.userConnected.esn ;
       this.myObj.esnId = this.userConnected.esnId ;
+
+      if(!this.myObj.esn) {
+        this.myObj.esn = this.esnCurrent
+        this.myObj.esnId = this.esnCurrent?.id 
+      }
 
       console.log("setEsn this.myObj.esn  : " , this.myObj.esn  )
     }else {
