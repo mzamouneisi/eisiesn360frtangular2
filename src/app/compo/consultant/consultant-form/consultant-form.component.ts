@@ -345,8 +345,8 @@ export class ConsultantFormComponent extends MereComponent {
               for (let e of this.esns) {
                 if (e.id == this.manager.esnId) {
                   this.manager.esn = e
-                  if(!this.esnCurrent) {
-                    this.esnCurrent = e 
+                  if (!this.esnCurrent) {
+                    this.esnCurrent = e
                   }
                   break;
                 }
@@ -378,6 +378,10 @@ export class ConsultantFormComponent extends MereComponent {
     if (!this.myObj.esn) {
       this.myObj.esn = this.esnCurrent
     }
+    if (!this.myObj.esn) {
+      this.myObj.esn = this.manager.esn
+    }
+    console.log("emailFocus Esn : ", this.myObj.esn)
     if (this.utils.isEmpty(this.myObj.email)) {
       console.log("email NULL")
       if (!this.utils.isEmpty(this.myObj.firstName) && !this.utils.isEmpty(this.myObj.lastName) && !this.utils.isEmpty(this.myObj.esn?.name)) {
