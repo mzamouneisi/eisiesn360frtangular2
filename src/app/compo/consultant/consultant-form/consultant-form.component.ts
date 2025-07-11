@@ -386,6 +386,7 @@ export class ConsultantFormComponent extends MereComponent {
       console.log("email NULL")
       if (!this.utils.isEmpty(this.myObj.firstName) && !this.utils.isEmpty(this.myObj.lastName) && !this.utils.isEmpty(this.myObj.esn?.name)) {
         this.myObj.email = (this.myObj.firstName + "." + this.myObj.lastName + "@" + this.myObj.esn?.name + ".com").toLowerCase();
+        this.myObj.username = this.myObj.email
       }
     }
   }
