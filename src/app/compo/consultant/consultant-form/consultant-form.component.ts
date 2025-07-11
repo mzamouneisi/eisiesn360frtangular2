@@ -381,11 +381,23 @@ export class ConsultantFormComponent extends MereComponent {
     if (!this.myObj.esn) {
       this.myObj.esn = this.manager.esn
     }
+
+    let domaine = ""
+    // du manager : 
+    let emailManagar = this.manager?.email
+    if (emailManagar) {
+      const parts = emailManagar.split('@');
+      if (parts.length > 1) {
+        domaine = parts[1];
+      }
+    } else {
+      domaine = (this.myObj.esn?.name + ".com").toLowerCase().replace(" ", "-");
+    }
     console.log("emailFocus Esn : ", this.myObj.esn)
     if (this.utils.isEmpty(this.myObj.email)) {
       console.log("email NULL")
       if (!this.utils.isEmpty(this.myObj.firstName) && !this.utils.isEmpty(this.myObj.lastName) && !this.utils.isEmpty(this.myObj.esn?.name)) {
-        this.myObj.email = (this.myObj.firstName + "." + this.myObj.lastName + "@" + this.myObj.esn?.name + ".com").toLowerCase();
+        this.myObj.email = (this.myObj.firstName + "." + this.myObj.lastName + "@" + domaine).toLowerCase();
         this.myObj.username = this.myObj.email
       }
     }
