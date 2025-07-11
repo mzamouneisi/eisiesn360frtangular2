@@ -77,7 +77,7 @@ export class ClientFormComponent extends MereComponent {
     ////console.log(this.myObj);
     this.beforeCallServer("onSubmit");
     if (!this.myObj.esn) {
-      this.myObj.esn = this.getEsnCurrent();
+      this.myObj.esn = this.esnCurrent;
       if (this.myObj.esn && this.myObj.esn.id) this.myObj.esnId = this.myObj.esn.id
     }
 
