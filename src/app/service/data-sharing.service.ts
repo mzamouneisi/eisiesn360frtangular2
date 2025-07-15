@@ -27,6 +27,7 @@ import { environment } from "../../environments/environment";
 import { Esn } from '../model/esn';
 import { Notification } from "../model/notification";
 import { GenericResponse } from "../model/response/genericResponse";
+import { ClientService } from './client.service';
 import { CraService } from './cra.service';
 import { EsnService } from './esn.service';
 
@@ -81,6 +82,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     , private consultantService: ConsultantService
     , private activityService: ActivityService
     , private esnService: EsnService
+    , private clientService: ClientService
     , private tokenService: TokenService
     , private http: HttpClient
   ) {
@@ -423,7 +425,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     );
   }
 
-  majEsnOnConsultant(fctSuccess : Function = null ) {
+  majEsnOnConsultant(fctSuccess: Function = null) {
     this.esnService.majEsnOnConsultant(this.userConnected, fctSuccess)
   }
 
@@ -440,8 +442,8 @@ export class DataSharingService implements CraStateService, ServiceLocator {
         if (data) {
           this.setUserConnected(data.body.result)
           console.log("findConsultantByUsername userConnected : ", this.userConnected)
-          this.esnCurrent = this.userConnected?.esn 
-          this.idEsnCurrent = this.esnCurrent?.id 
+          this.esnCurrent = this.userConnected?.esn
+          this.idEsnCurrent = this.esnCurrent?.id
 
           this.majEsnOnConsultant()
           console.log("findConsultantByUsername userConnected.esn : ", this.userConnected.esn)
@@ -840,12 +842,31 @@ export class DataSharingService implements CraStateService, ServiceLocator {
 
   }
 
+  ///////////////////
 
+  public majClientInProject(p: Project) {
+    let cond = p && !p.client && p.clientId
+    console.log("majClientInProject : cond, p, p.client, p.clientId", cond, p , !p.client , p.clientId)
+    if (p && !p.client && p.clientId) {
+      this.clientService.findById(p.clientId).subscribe(
+        data => {
+          p.client = data.body.result;
+          console.log("maj client in project p.client : ", p.client)
+        }, error => {
+          console.log("majCra ERROR : ", error);
+        }
+      );
+    }
+  }
 
-
-
-
-
+  public majClientInProjectList(list: Project[]) {
+    console.log("majClientInProjectList list : " , list )
+    if(list) {
+      for(let p of list) {
+        this.majClientInProject(p);
+      }
+    }
+  }
 
   ////////////////
 

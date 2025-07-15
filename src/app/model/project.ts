@@ -14,6 +14,7 @@ export class Project {
   comment: string;
   
   client: Client;
+  clientId : number;
   listActivity: Activity[];
 
 }

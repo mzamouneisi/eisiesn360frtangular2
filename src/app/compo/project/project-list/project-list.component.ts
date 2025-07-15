@@ -61,7 +61,12 @@ export class ProjectListComponent extends MereComponent {
       data => {
         this.afterCallServer("findAll", data)
         this.myList = data.body.result;
-        this.myList00 = this.myList;
+        this.dataSharingService.majClientInProjectList(this.myList);
+        setTimeout(
+          () => {
+            this.myList00 = this.myList;
+          }, 5000
+        )
         console.log("findAll : myList : ", this.myList);
       }, error => {
         this.addErrorFromErrorOfServer("findAll", error);

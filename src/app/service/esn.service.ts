@@ -75,7 +75,7 @@ export class EsnService {
         data => {
           // console.log("setEsnOnConsultant : data :", data)
           myObj.esn = data.body != null ? data.body.result : null;
-          console.log("setEsnOnConsultant : myObj.esn :", myObj.esn)
+          // console.log("setEsnOnConsultant : myObj.esn :", myObj.esn)
           myObj.esnName = myObj.esn?.name
           if(fct) fct.call(myObj.esn)
         },
