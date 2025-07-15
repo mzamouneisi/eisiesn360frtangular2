@@ -92,6 +92,9 @@ export class MereComponent implements OnInit, AfterViewInit, AfterContentInit {
                   this.idEsnCurrent = this.dataSharingService.idEsnCurrent
                   if (this.esnCurrent != null) {
                     this.idEsnCurrent = this.esnCurrent.id;
+                    if(this.userConnected) {
+                      this.userConnected.esn = this.esnCurrent
+                    }
                   }
                   this.esnName = this.userConnected?.esnName;
                   if (!this.esnName) this.esnName = this.userConnected?.esn?.name;
