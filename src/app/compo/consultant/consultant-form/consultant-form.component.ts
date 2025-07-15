@@ -267,7 +267,16 @@ export class ConsultantFormComponent extends MereComponent {
   }
 
   onSubmit() {
-    this.myObj.username = this.myObj.email;
+    console.log("onSubmit : deb ")
+    console.log("this.myObj.email ", this.myObj.email)
+    console.log("this.myObj.username ", this.myObj.username)
+
+    if (this.myObj.username) {
+      this.myObj.email = this.myObj.username
+    } else {
+      this.addErrorTitleMsg("Error on save consultant", "username must be not null !")
+      return
+    }
     console.log("this.manager.role:", '.' + this.manager.role + '.')
     console.log("this.myObj.adminConsultant : start ", this.myObj.adminConsultant)
     if (this.userConnected.role + '' != 'ADMIN') {
