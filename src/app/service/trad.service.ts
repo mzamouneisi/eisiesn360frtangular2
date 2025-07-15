@@ -268,6 +268,14 @@ export class TradService {
       "fr": "Gestion de Vacances",
       "en": "Holiday Management",
     },
+    "main.menu.navbar.navitem.setting.user.my-profile": {
+      "fr": "Mon Profile",
+      "en": "My Profile",
+    },
+    "main.menu.navbar.navitem.setting.user.notification": {
+      "fr": "Mes Notifications",
+      "en": "My Notifications",
+    },
     "main.menu.navbar.navitem.setting.payment.mode.title": {
       "fr": "Gestion Mode de Paiement",
       "en": "Payment Mode Management",

@@ -16,14 +16,14 @@
                     </li>
 
                     <li class="nav-item " [appAuthorization] feature="ESN_MANAGEMENT" permission="VIEW">
-                        <a routerLink="/showTables" class="nav-link " id="showTables" >
+                        <a routerLink="/showTables" class="nav-link " id="showTables">
                             <span class="pcoded-micon"> <i class="feather icon-home"></i></span>
                             <span class="pcoded-mtext">Show Tables</span>
                         </a>
                     </li>
 
                     <li class="nav-item " [appAuthorization] feature="ESN_MANAGEMENT" permission="VIEW">
-                        <a routerLink="/connections" class="nav-link " id="connections" >
+                        <a routerLink="/connections" class="nav-link " id="connections">
                             <span class="pcoded-micon"> <i class="feather icon-home"></i></span>
                             <span class="pcoded-mtext">Connections</span>
                         </a>
@@ -161,6 +161,16 @@
                         <a routerLink="/cra-configuration" class="nav-link " id="holidayLink"><span
                                 class="pcoded-micon"><i class="feather icon-cpu"></i></span><span
                                 class="pcoded-mtext">{{utils.tr('main.menu.navbar.navitem.setting.holiday.title')}}</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a routerLink="/notification" class="nav-link " id="notification"><span class="pcoded-micon"><i
+                                    class="feather icon-cpu"></i></span><span
+                                class="pcoded-mtext">{{utils.tr('main.menu.navbar.navitem.setting.user.notification')}}</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a routerLink="/my-profile" class="nav-link " id="my-profile"><span class="pcoded-micon"><i
+                                    class="feather icon-cpu"></i></span><span
+                                class="pcoded-mtext">{{utils.tr('main.menu.navbar.navitem.setting.user.my-profile')}}</span></a>
                     </li>
                 </ul>
             </div>
