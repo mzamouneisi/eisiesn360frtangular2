@@ -38,6 +38,7 @@ export class MereComponent implements OnInit, AfterViewInit, AfterContentInit {
   @ViewChild('searchStrInput') searchStrInput: ElementRef<HTMLInputElement>;
 
   public userConnected: Consultant;
+  public userConnectedName: String ;
   public esnCurrent: Esn;
   public idEsnCurrent: number = -1;
   public esnName = ""
@@ -73,6 +74,8 @@ export class MereComponent implements OnInit, AfterViewInit, AfterContentInit {
           () => {
             this.userConnected = this.dataSharingService.userConnected
             // console.log("*** userConnected = ", this.userConnected)
+
+            this.getCurentUserName()
 
             this.isUserAdmin = this.userConnected?.admin;
 
@@ -200,6 +203,7 @@ export class MereComponent implements OnInit, AfterViewInit, AfterContentInit {
     if (user) {
       s = user
     }
+    this.userConnectedName = s 
     return s;
   }
 

@@ -6,8 +6,9 @@
     <div class="card-header">
 
         <div style="text-align: center;" class="pcoded-micon bold"><i class="feather icon-settings"></i> {{getEsnCurrentName() | uppercase }}
-            <br> {{getCurentUserName() | titlecase}}
-            <br> {{getCurentUserEmail() }}
+            <br> {{userConnected?.fullName  | titlecase}}
+            <br> {{userConnected?.email  }}
+            <br> {{userConnected?.role  }}
             <br>
             <br><br>
             <div *ngIf="getManagerEmailOfUserCurent()">
