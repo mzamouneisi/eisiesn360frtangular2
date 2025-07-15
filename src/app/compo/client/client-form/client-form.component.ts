@@ -78,8 +78,11 @@ export class ClientFormComponent extends MereComponent {
     this.beforeCallServer("onSubmit");
     if (!this.myObj.esn) {
       this.myObj.esn = this.esnCurrent;
-      if (this.myObj.esn && this.myObj.esn.id) this.myObj.esnId = this.myObj.esn.id
+      if (!this.myObj.esn) {
+        this.myObj.esn = this.userConnected.esn
+      }
     }
+    if (this.myObj.esn && this.myObj.esn.id) this.myObj.esnId = this.myObj.esn.id
 
     if (!this.myObj.esnId) {
       this.myObj.esnId = this.myObj.esn?.id
