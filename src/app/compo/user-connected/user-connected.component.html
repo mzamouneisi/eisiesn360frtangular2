@@ -9,11 +9,10 @@
             <br> {{userConnected?.fullName  | titlecase}}
             <br> {{userConnected?.email  }}
             <br> {{userConnected?.role  }}
-            <br>
-            <br><br>
-            <div *ngIf="getManagerEmailOfUserCurent()">
-                <h4>Manager: </h4>
-                <br> {{getManagerEmailOfUserCurent()}}
+            <br> <br>
+            <div *ngIf="userConnected?.adminConsultant">
+                <h4>Manager: <br>
+                {{userConnected?.adminConsultant.email}} </h4>
                 <br><br>
             </div>
         </div>

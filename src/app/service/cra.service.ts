@@ -287,7 +287,7 @@ export class CraService {
     if (craDay) {
       craDay.craDayActivities.forEach((cda, k) => {
         let title = UtilsService.getEventTitle(cda);
-        title = title.slice(0, 25);
+        title = title.slice(0, 25) ;
         let indexEvent = this.getIndexEventOfCraActivity(craDay, cda, events);
         events[indexEvent].title = title;
       }

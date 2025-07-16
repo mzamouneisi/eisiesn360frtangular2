@@ -24,7 +24,8 @@
             </button>
 
             <div class="text-center">
-                <h3 class="mb-0" *ngIf="viewDate">{{getNameByType()}} {{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+                <h3 class="mb-0" *ngIf="viewDate">{{getNameByType()}} {{ viewDate | calendarDate:(view +
+                    'ViewTitle'):'en' }}</h3>
             </div>
 
             <div class="text-end" *ngIf="currentCraUser != null">
@@ -48,20 +49,38 @@
                     Next <i class="fas fa-chevron-right ms-1"></i>
                 </button>
             </div>
+
+            <div style="margin-left: 30px;">
+                <button type="button" class="btn btn-outline-success me-2" *ngIf="!currentCra?.validByConsultant"
+                    id="btn-cra-form-add-multi-date" (click)="addMultiActivity()">
+                    <i class="fas fa-calendar-plus me-1"></i> Add Multi Date
+                </button>
+                <button type="button" class="btn btn-outline-danger" *ngIf="!currentCra?.validByConsultant"
+                    id="btn-cra-form-delete-all-event" (click)="deleteAllEvents()">
+                    <i class="fas fa-trash-alt me-1"></i> Delete All
+                </button>
+            </div>
         </div>
 
         <div class="row">
             <!-- Main Calendar Area -->
             <div class="col-lg-10 col-md-9">
-                <div class="mb-3" *ngIf="isAffWeekNumber">
+                <div class="mb-3 left" *ngIf="isAffWeekNumber">
                     <table class="table table-bordered table-sm">
                         <thead class="table-light">
-                            <tr>
-                                <th>Week Number</th>
+                            <tr style="height: 88px; ">
+                                <th style="height: 88px; padding: 0;">
+                                    <div
+                                        style="height: 100%; display: flex; align-items: center; padding-bottom: 25px;">
+                                        Week Number
+                                    </div>
+                                </th>
+
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let w of utils.getWeekNumbersOfMonth(currentCra.month); let i = index">
+                            <tr *ngFor="let w of utils.getWeekNumbersOfMonth(currentCra.month); let i = index"
+                                style="height: 100px; vertical-align: middle;">
                                 <td class="py-2" id="cells-{{w}}-{{i}}"><strong>S-{{w}}</strong></td>
                             </tr>
                         </tbody>
@@ -88,17 +107,6 @@
                         </button>
                     </div>
 
-                    <div>
-                        <button type="button" class="btn btn-outline-success me-2"
-                            *ngIf="!currentCra?.validByConsultant" id="btn-cra-form-add-multi-date"
-                            (click)="addMultiActivity()">
-                            <i class="fas fa-calendar-plus me-1"></i> Add Multi Date
-                        </button>
-                        <button type="button" class="btn btn-outline-danger" *ngIf="!currentCra?.validByConsultant"
-                            id="btn-cra-form-delete-all-event" (click)="deleteAllEvents()">
-                            <i class="fas fa-trash-alt me-1"></i> Delete All
-                        </button>
-                    </div>
                 </div>
             </div>
 
@@ -307,7 +315,7 @@
                 <tr *ngFor="let craDayActivity of craDay.craDayActivities; let index = index">
                     <td>
                         <label class="craDayActivity" id="cra-form-edit-{{index}}"
-                            (click)="craDayActivityEdit(craDayActivity)"> {{craDayActivity.activity.name}}
+                            (click)="craDayActivityEdit(craDayActivity)"> {{craDayActivity.activity.name}} {{craDayActivity.activity.project?.name}} 
                         </label>
                     </td>
                     <td>
@@ -349,7 +357,7 @@
             <div>
                 <div *ngFor="let e of day.events">
                     <span class="cal-day-badge bg-{{day.isWeekend ? 'danger' : 'primary'}}"
-                        *ngIf="e.title!=null && !e.meta.isOverTime">{{ e.title }}</span>
+                        *ngIf="e.title!=null && !e.meta.isOverTime">{{ e.title }} </span>
                     <span class="cal-day-badge bg-danger" *ngIf="e.title!=null && e.meta.isOverTime">{{ e.title
                         }}</span>
 

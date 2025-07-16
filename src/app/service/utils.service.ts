@@ -348,8 +348,11 @@ export class UtilsService {
    */
   static getEventTitle(craActivity: CraDayActivity) {
     let title = "";
-    if (craActivity.isOverTime) title = '(' + craActivity.startHour + '-' + craActivity.endHour + ') ' + craActivity.activity.name;
-    else title = craActivity.nbDay + ' ' + craActivity.activity.name;
+    let name = craActivity.activity.name
+    // let proj = '/' + craActivity.activity.clientName
+    // name = name + proj 
+    if (craActivity.isOverTime) title = '(' + craActivity.startHour + '-' + craActivity.endHour + ') ' + name  ;
+    else title = craActivity.nbDay + ' ' + name;
     return title;
   }
 

@@ -1477,7 +1477,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     if (craActivity.activity != null) {
       let title = UtilsService.getEventTitle(craActivity);
       let day = this.utils.getDate(craDay.day);
-      title = title.slice(0, 25);
+      title = title.slice(0, 25) ;
 
       let color = colors.blue;
       let cssClass = 'event';

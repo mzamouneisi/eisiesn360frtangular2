@@ -178,7 +178,22 @@ export class ActivityFormComponent extends MereComponent {
 
   onSelectProject(project: Project) {
     this.myObj.project = project;
-    if (this.myObj.project == null) this.myObj.project = new Project();
+    if (this.myObj.project == null) {
+      this.myObj.project = new Project();
+    }else {
+      console.log("project : ", project )
+      let cli = this.myObj.project.client
+      console.log("cli : ", cli )
+      if (! cli) {
+        // this.myObj.name = this.myObj.type.name + ' / ' + cli.name
+        this.dataSharingService.majClientInProject(project, 
+          () => {
+            this.myObj.name = this.myObj.type.name + ' / ' + project.client.name
+          }
+        )
+      }
+    }
+
   }
 
   @ViewChild('compoSelectProject', { static: false }) compoSelectProject: SelectComponent;
@@ -316,7 +331,7 @@ export class ActivityFormComponent extends MereComponent {
       this.isTypeInterContrat = true
     }
 
-    let listHorsProject = ["INTER_CONTRAT",  "FORMATION_INT"]
+    let listHorsProject = ["INTER_CONTRAT", "FORMATION_INT"]
     this.isViewListProject = !listHorsProject.includes(obj.name)
 
   }

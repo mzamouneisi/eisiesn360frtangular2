@@ -594,7 +594,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     this.majActivityInCra(cra);
   }
 
-  public majActivityInCra(cra: Cra) {
+  majActivityInCra(cra: Cra) {
     if (cra != null) {
       for (let craDay of cra.craDays) {
         if (craDay != null) {
@@ -844,7 +844,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
 
   ///////////////////
 
-  public majClientInProject(p: Project) {
+  public majClientInProject(p: Project, fct: Function = null ) {
     let cond = p && !p.client && p.clientId
     console.log("majClientInProject : cond, p, p.client, p.clientId", cond, p , !p.client , p.clientId)
     if (p && !p.client && p.clientId) {
@@ -852,6 +852,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
         data => {
           p.client = data.body.result;
           console.log("maj client in project p.client : ", p.client)
+          if(fct) fct()
         }, error => {
           console.log("majCra ERROR : ", error);
         }
