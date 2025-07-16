@@ -11,7 +11,7 @@
         [ObjectPropName]="'name'"></app-select>
 
       <div *ngIf="myObj.type != null">
-        <div class="form-group" *ngIf="isTypeMission() || isTypeInterContrat()">
+        <div class="form-group" *ngIf="isViewListProject">
           {{ utils.tr('app.compo.activity.form.input.project') }}
 
           <app-select #compoSelectProject [objectName]="'Project'" [selectId]="'project'" [myList]="projects"
@@ -56,7 +56,7 @@
 
         </div>
 
-        <div class="form-group" *ngIf="isActivityLabelVisible()">
+        <div class="form-group" *ngIf="isActivityLabelVisible">
           <label for="name">{{ getActivityLabel() }}</label>
           <input type="text" [(ngModel)]="myObj.name" class="form-control" id="name" name="name" required
             #name="ngModel" />

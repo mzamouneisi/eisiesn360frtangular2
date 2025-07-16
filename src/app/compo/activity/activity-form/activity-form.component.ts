@@ -32,6 +32,13 @@ export class ActivityFormComponent extends MereComponent {
   btnSaveTitle: string;
   isAdd: string;
   isForCurentUser: string;
+  isViewListProject = false
+  isTypeMission = false
+  isTypeInterContrat = false
+  isTypeFormation = false
+  isActivityLabelVisible = false
+  isTypeConge = false
+
 
   @Input()
   myObj: Activity;
@@ -44,7 +51,7 @@ export class ActivityFormComponent extends MereComponent {
 
   consultants: Consultant[];
 
-  userConnected: Consultant 
+  userConnected: Consultant
   @Input()
   consultantSelected: Consultant;
 
@@ -94,6 +101,7 @@ export class ActivityFormComponent extends MereComponent {
       this.btnSaveTitle = this.utils.tr("Add");
       this.title = this.utils.tr("NewActivity");
       this.myObj = new Activity();
+      this.myObj.valid = true
       this.myObj.createdByUsername = this.userConnected.username;
       if (!this.isForMyConsultants()) {
         this.consultantSelected = this.userConnected;
@@ -102,12 +110,15 @@ export class ActivityFormComponent extends MereComponent {
       this.btnSaveTitle = this.btnSaveTitle = this.utils.tr("Save");
       this.title = this.btnSaveTitle = this.btnSaveTitle = this.utils.tr("EditActivity");
       let activityP: Activity = this.activityService.getActivity();
-      
+
       console.log('activityP=', activityP);
       console.log('myObj=', this.myObj);
 
-      if (activityP != null && this.myObj == null ) this.myObj = activityP;
-      else if (this.myObj == null) this.myObj = new Activity();
+      if (activityP != null && this.myObj == null) this.myObj = activityP;
+      else if (this.myObj == null) {
+        this.myObj = new Activity();
+        this.myObj.valid = true
+      }
 
       this.activityTypeService.majActivity(this.myObj)
       this.consultantService.majActivity(this.myObj)
@@ -290,6 +301,24 @@ export class ActivityFormComponent extends MereComponent {
     } catch (error) {
       // console.log(error)
     }
+
+    this.isViewListProject = false
+    this.isTypeMission = false
+    this.isTypeInterContrat = false
+
+    this.isTypeFormationFct()
+    this.isActivityLabelVisibleFct()
+    this.isTypeCongeFct()
+
+    if (obj.name == "MISSION") {
+      this.isTypeMission = true
+    } else if (obj.name == "INTER_CONTRAT") {
+      this.isTypeInterContrat = true
+    }
+
+    let listHorsProject = ["INTER_CONTRAT",  "FORMATION_INT"]
+    this.isViewListProject = !listHorsProject.includes(obj.name)
+
   }
   @ViewChild('compoSelectActivityType', { static: false }) compoSelectActivityType: SelectComponent;
   selectActivityType(activityType: ActivityType) {
@@ -331,48 +360,41 @@ export class ActivityFormComponent extends MereComponent {
 
   }
 
-  isTypeMission(): boolean {
-    ////////////console.log("isTypeMission", this.myObj)
-    return this.myObj.type.name == "MISSION";
-  }
-
-  isTypeInterContrat(): boolean {
-    return this.myObj.type.name == "INTER_CONTRACT";
-  }
-
-  isTypeFormation(): boolean {
+  isTypeFormationFct(): boolean {
     let ok = false;
     if (this.myObj.type.name != null) ok = this.myObj.type.formaDay;
+    this.isTypeFormation = ok
     return ok;
   }
 
-  isTypeConge(): boolean {
+  isTypeCongeFct(): boolean {
     ////////////console.log("isTypeConge:", this.myObj.type)
     let ok = false;
     if (this.myObj.type.name != null) ok = this.myObj.type.congeDay;
+    this.isTypeConge = ok
 
     return ok;
   }
 
-  getActivityLabel() {
-    let label = this.utils.tr("Entitled");
-    if (this.isTypeMission() || this.isTypeInterContrat())
-      label = this.utils.tr("Entitled");
-    else if (this.isTypeFormation())
-      label = this.utils.tr("Entitled");
-    return label;
-  }
-
-  isActivityLabelVisible() {
-    return (
-      this.isTypeMission() ||
-      this.isTypeInterContrat() ||
-      this.isTypeFormation()
+  isActivityLabelVisibleFct() {
+    this.isActivityLabelVisible = (
+      this.isTypeMission ||
+      this.isTypeInterContrat ||
+      this.isTypeFormation
     );
   }
 
   isActivityValidVisible() {
     return !this.isConsultant();
+  }
+
+  getActivityLabel() {
+    let label = this.utils.tr("Entitled");
+    if (this.isTypeMission || this.isTypeInterContrat)
+      label = this.utils.tr("Entitled");
+    else if (this.isTypeFormation)
+      label = this.utils.tr("Entitled");
+    return label;
   }
 
   gotoActivityList() {
@@ -390,7 +412,7 @@ export class ActivityFormComponent extends MereComponent {
 
     if (!this.isForMyConsultants()) {
       this.myObj.consultant = this.consultantSelected;
-      this.myObj.consultantId = this.consultantSelected?.id ;
+      this.myObj.consultantId = this.consultantSelected?.id;
     }
 
     console.log("onSubmit ", this.myObj)

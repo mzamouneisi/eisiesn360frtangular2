@@ -155,7 +155,7 @@ export class AddMultipleActivityComponent extends MereComponent {
   }
 
   isTypeInterContrat(): boolean {
-    return this.myObj.type.name == 'INTER_CONTRACT';
+    return this.myObj.type.name == 'INTER_CONTRAT';
   }
 
   getActivityLabel() {

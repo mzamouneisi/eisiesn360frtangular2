@@ -54,6 +54,7 @@ export class ActivityListComponent extends MereComponent {
   }
 
   ngOnInit() {
+    console.log("ngOnInit DEB ")
     this.findAll();
     if (this.myObjEditView != null) {
       this.myObjEditView.myObj = null;
@@ -65,6 +66,7 @@ export class ActivityListComponent extends MereComponent {
     this.getProjects();
     // this.getConsultants();
     this.getActivityTypes();
+
   }
 
   getTitle() {
@@ -83,6 +85,7 @@ export class ActivityListComponent extends MereComponent {
   }
 
   findAll() {
+    console.log("findAll Activity DEB : ", this.myList)
     let idConsultant = -1;
     if (this.consultant != null) idConsultant = this.consultant.id;
 
