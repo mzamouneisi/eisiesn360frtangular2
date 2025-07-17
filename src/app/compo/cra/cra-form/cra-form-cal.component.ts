@@ -161,6 +161,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
    */
 
   ngOnInit(): void {
+
     console.log("ngOnInit deb dataSharingService.listCra, dataSharingService.fromNotif", this.dataSharingService.listCra, this.dataSharingService.fromNotif);
 
     // eviter d'entrer si on vient de nulle part
@@ -207,7 +208,10 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
       this.currentCra.consultantId = this.userConnected.id
     }
 
+    this.consultantService.setAdminConsultant(this.userConnected)
+    
     this.consultantService.majCra(this.currentCra);
+
 
     console.log("cra list findAll ap call majCra : dataSharingService.listCra:", this.dataSharingService.listCra)
     console.log("cra list findAll ap call majCra : currentCra:", this.currentCra)
@@ -1038,6 +1042,14 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     let isManager = this.hasRoleManagerValidate();
     // let currentUser = this.dataSharingService.userConnected;
     let currentUser = this.currentCra.consultant
+    if(!currentUser) {
+      currentUser = this.userConnected
+      this.currentCra.consultant = currentUser
+    }
+
+    if(!currentUser.adminConsultant) {
+      currentUser.adminConsultant = this.userConnected.adminConsultant
+    }
 
     let notification: Notification = new Notification();
 
@@ -1422,7 +1434,9 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     }
 
     // let currentUser: Consultant = this.dataSharingService.userConnected
-    let currentUser: Consultant = this.currentCra.consultant
+    // let currentUser: Consultant = this.currentCra.consultant
+    let currentUser: Consultant = this.userConnected
+    this.currentCra.consultant = currentUser
 
     let craUser = this.currentCra.consultant
     let craManager = this.currentCra.consultant?.adminConsultant

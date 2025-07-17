@@ -65,6 +65,9 @@ export class MereComponent implements OnInit, AfterViewInit, AfterContentInit {
   ngOnInit() {
     console.log("Mere.ngOnInit deb")
 
+    //setAdminConsultant 
+    this.dataSharingService.setAdminConsultant(this.userConnected)
+
     this.dataSharingService.isUserLoggedInFct.subscribe(value => {
       this.isUserLoggedIn = value;
       // console.log("*** isUserLoggedIn = ", this.isUserLoggedIn)

@@ -34,7 +34,7 @@
         </div>
 
         <!-- Navigation Controls -->
-        <div class="d-flex justify-content-center mb-4">
+        <div class="d-flex justify-content-center mb-4" style="width: 100%;">
             <div class="btn-group">
                 <button class="btn btn-outline-primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
                     (click)="viewDateChange(true)" id="cra-form-show-previous-view">
@@ -50,7 +50,7 @@
                 </button>
             </div>
 
-            <div style="margin-left: 30px;">
+            <div style="margin-left: 40px;">
                 <button type="button" class="btn btn-outline-success me-2" *ngIf="!currentCra?.validByConsultant"
                     id="btn-cra-form-add-multi-date" (click)="addMultiActivity()">
                     <i class="fas fa-calendar-plus me-1"></i> Add Multi Date
@@ -58,6 +58,14 @@
                 <button type="button" class="btn btn-outline-danger" *ngIf="!currentCra?.validByConsultant"
                     id="btn-cra-form-delete-all-event" (click)="deleteAllEvents()">
                     <i class="fas fa-trash-alt me-1"></i> Delete All
+                </button>
+            </div>
+
+            <div style="margin-left: 40px;"> 
+                <button class="btn btn-outline-primary me-2" >
+                    <a [routerLink]="['/cra_list']" class="text-decoration-none">
+                        <i class="fas fa-list me-1"></i> List CRAs/Conges
+                    </a>
                 </button>
             </div>
         </div>
@@ -153,7 +161,7 @@
             <div class="d-flex justify-content-between">
                 <div>
                     <button class="btn btn-success me-2" (click)="isCraValid(false)" id="btn-cra-form-check-validation">
-                        <i class="fas fa-check-circle me-1"></i> Validate {{getNameByType()}}
+                        <i class="fas fa-check-circle me-1"></i> Check Validation of {{getNameByType()}}
                     </button>
                     <button class="btn btn-outline-dark me-2" id="btn-cra-form-send-cra-validation"
                         (click)="sendCraToValidate()"
@@ -161,11 +169,6 @@
                         <i class="fas fa-paper-plane me-1"></i> Submit {{getNameByType()}}
                     </button>
 
-                    <button class="btn btn-outline-primary me-2" [hidden]="currentCra.id==null">
-                        <a [routerLink]="['/cra_list']" class="text-decoration-none">
-                            <i class="fas fa-list me-1"></i> List CRAs/Conges
-                        </a>
-                    </button>
                 </div>
 
                 <div>
@@ -315,7 +318,8 @@
                 <tr *ngFor="let craDayActivity of craDay.craDayActivities; let index = index">
                     <td>
                         <label class="craDayActivity" id="cra-form-edit-{{index}}"
-                            (click)="craDayActivityEdit(craDayActivity)"> {{craDayActivity.activity.name}} {{craDayActivity.activity.project?.name}} 
+                            (click)="craDayActivityEdit(craDayActivity)"> {{craDayActivity.activity.name}}
+                            {{craDayActivity.activity.project?.name}}
                         </label>
                     </td>
                     <td>

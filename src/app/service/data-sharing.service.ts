@@ -607,7 +607,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     }
   }
 
-  private majConsultantInCra(cra: Cra) {
+  majConsultantInCra(cra: Cra) {
 
     // console.log("majConsultantInCra cra : ", cra);
     if (cra == null) {
@@ -640,7 +640,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     }
   }
 
-  private majActivityInCraDayActivity(craDayActivities: CraDayActivity) {
+  majActivityInCraDayActivity(craDayActivities: CraDayActivity) {
 
     // console.log("majActivityInCraDayActivity craDayActivities : ", craDayActivities);
     if (craDayActivities == null) {
@@ -844,15 +844,15 @@ export class DataSharingService implements CraStateService, ServiceLocator {
 
   ///////////////////
 
-  public majClientInProject(p: Project, fct: Function = null ) {
+  public majClientInProject(p: Project, fct: Function = null) {
     let cond = p && !p.client && p.clientId
-    console.log("majClientInProject : cond, p, p.client, p.clientId", cond, p , !p.client , p.clientId)
+    console.log("majClientInProject : cond, p, p.client, p.clientId", cond, p, !p.client, p.clientId)
     if (p && !p.client && p.clientId) {
       this.clientService.findById(p.clientId).subscribe(
         data => {
           p.client = data.body.result;
           console.log("maj client in project p.client : ", p.client)
-          if(fct) fct()
+          if (fct) fct()
         }, error => {
           console.log("majCra ERROR : ", error);
         }
@@ -861,15 +861,19 @@ export class DataSharingService implements CraStateService, ServiceLocator {
   }
 
   public majClientInProjectList(list: Project[]) {
-    console.log("majClientInProjectList list : " , list )
-    if(list) {
-      for(let p of list) {
+    console.log("majClientInProjectList list : ", list)
+    if (list) {
+      for (let p of list) {
         this.majClientInProject(p);
       }
     }
   }
 
   ////////////////
+
+  setAdminConsultant(user: Consultant) {
+    this.consultantService.setAdminConsultant(user);
+  }
 
 
 }

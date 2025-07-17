@@ -10,9 +10,9 @@
             <br> {{userConnected?.email  }}
             <br> {{userConnected?.role  }}
             <br> <br>
-            <div *ngIf="userConnected?.adminConsultant">
+            <div *ngIf="userConnected.adminConsultant">
                 <h4>Manager: <br>
-                {{userConnected?.adminConsultant.email}} </h4>
+                {{userConnected.adminConsultant.email}} </h4>
                 <br><br>
             </div>
         </div>

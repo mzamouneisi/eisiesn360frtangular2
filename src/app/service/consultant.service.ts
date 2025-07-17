@@ -155,7 +155,7 @@ export class ConsultantService {
   /////////////////////////////
 
   mapConsul = new Map<number, Consultant>();
-  setAdminConsultant(consultant: Consultant) {
+  setAdminConsultant(consultant: Consultant, fct : Function = null ) {
     ////////////////
     if(consultant == null) return ;
     if(consultant.adminConsultant != null) {
@@ -204,6 +204,8 @@ export class ConsultantService {
             this.mapConsul[id] = consultant.adminConsultant
           }
           console.log("setAdminConsultant trouve dans server ca : ", consultant.adminConsultant );
+
+          if(fct) fct()
         },
         error => {
           consultant.adminConsultant =  null 
@@ -240,13 +242,17 @@ export class ConsultantService {
     let id = myObj.consultantId
     let label = "find consultant by id=" + id;
     let obj = myObj.consultant
+    let admin = obj?.adminConsultant
+    let managerCra = myObj.manager
 
-    if (myObj && id && !obj) {
+    if (myObj && id && (!obj || !admin || !managerCra) ) {
       this.findById(id).subscribe(
         data => {
           console.log("*** majCra : label, data : ", label, data)
           myObj.consultant = data.body.result;
-          this.setAdminConsultant(myObj.consultant );
+          this.setAdminConsultant(myObj.consultant , () => {
+            myObj.manager = myObj.consultant.adminConsultant
+          });
           this.datasharingService.majActivityInCra(myObj)
           console.log("*** majCra END : myObj Cra : ", myObj)
         },
