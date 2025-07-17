@@ -187,6 +187,7 @@ export class ConsultantService {
         if(ca != null) {
           consultant.adminConsultant = ca 
           console.log("setAdminConsultant trouve dans map ca : ", ca );
+          if(fct) fct()
           return 
         }
       }

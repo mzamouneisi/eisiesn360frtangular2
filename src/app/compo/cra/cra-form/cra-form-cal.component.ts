@@ -209,7 +209,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     }
 
     this.consultantService.setAdminConsultant(this.userConnected)
-    
+
     this.consultantService.majCra(this.currentCra);
 
 
@@ -399,7 +399,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
           v.craDayActivities.forEach((value, index) => {
             // ////////console.log("+++ initCra av setEvent v, value:", v, value);
             this.setEvent(v, value, false);
-            console.log("+++ initCra ap setEvent v, k, value : ", v, k, value );
+            console.log("+++ initCra ap setEvent v, k, value : ", v, k, value);
           })
         }
       })
@@ -943,12 +943,12 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     console.log("saveCra isSendNotification=", isSendNotification)
 
     if (!this.currentCra.consultant) {
-      this.currentCra.consultant = this.userConnected ;
+      this.currentCra.consultant = this.userConnected;
     }
     if (!this.currentCra.consultantId) {
-      this.currentCra.consultantId = this.userConnected.id ;
-    } 
-    
+      this.currentCra.consultantId = this.userConnected.id;
+    }
+
     this.setMonthCurentCraIfNull();
 
     // this.consultantService.majCra(this.currentCra);
@@ -964,7 +964,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
           console.log("ERROR +++ saveCra : set consultant err", error)
         }
       );
-    }else {
+    } else {
       this.saveCraDirect(redirectToList, isSendNotification, title, message);
     }
 
@@ -1018,19 +1018,19 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
   }
 
   canDeleteCurrentCra() {
-    let cond = !this.currentCra.validByConsultant && this.currentCra.id!=null ;
+    let cond = !this.currentCra.validByConsultant && this.currentCra.id != null;
 
-    if(this.dataSharingService.isCurrenUserRespOrAdmin()) {
-      return this.currentCra.id!=null ;
-    }else {
-      return cond ;
+    if (this.dataSharingService.isCurrenUserRespOrAdmin()) {
+      return this.currentCra.id != null;
+    } else {
+      return cond;
     }
 
   }
 
   canValidateCraOrConge() {
 
-    return this.hasRoleManagerValidate() && !this.currentCra.validByManager &&  this.isTimeToModify() && ! this.isCraOfManagerRole();
+    return this.hasRoleManagerValidate() && !this.currentCra.validByManager && this.isTimeToModify() && !this.isCraOfManagerRole();
 
   }
 
@@ -1042,13 +1042,23 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     let isManager = this.hasRoleManagerValidate();
     // let currentUser = this.dataSharingService.userConnected;
     let currentUser = this.currentCra.consultant
-    if(!currentUser) {
+    console.log("sendNotification currentUser=", currentUser)
+    console.log("sendNotification currentUser.role=", currentUser.role)
+
+    console.log("sendNotification this.userConnected=", this.userConnected)
+    console.log("sendNotification this.userConnected.role=", this.userConnected.role)
+
+    if (!currentUser) {
       currentUser = this.userConnected
       this.currentCra.consultant = currentUser
     }
 
-    if(!currentUser.adminConsultant) {
+    if (!currentUser.adminConsultant) {
       currentUser.adminConsultant = this.userConnected.adminConsultant
+    }
+
+    if (!currentUser.adminConsultant) {
+      currentUser.adminConsultant = this.currentCra.manager
     }
 
     let notification: Notification = new Notification();
@@ -1067,16 +1077,21 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     notification.fromUsername = notification.fromUser.username
 
     notification.toUser = currentUser.adminConsultant != null ? currentUser.adminConsultant : currentUser;
-    if(currentUser.role == "RESPONSIBLE_ESN"){
+    console.log("sendNotification toUser 1 : ", notification.toUser)
+
+    console.log("sendNotification currentUser.role : ", currentUser.role)
+    if (currentUser.role == "RESPONSIBLE_ESN") {
       notification.toUser = currentUser
     }
+
+    console.log("sendNotification toUser 2 : ", notification.toUser)
 
     notification.toUsername = notification.toUser.username
 
     console.log("sendNotification isManager=", isManager)
     console.log("sendNotification currentUser=", currentUser)
-    console.log("sendNotification this.currentCra.consultant=", this.currentCra.consultant)
-    console.log("sendNotification this.currentCra.manager=", this.currentCra.consultant.adminConsultant)
+    console.log("sendNotification currentCra.consultant=", this.currentCra.consultant)
+    console.log("sendNotification currentCra.consultant.adminConsultant=", this.currentCra.consultant.adminConsultant)
     console.log("sendNotification notification=", notification)
 
     this.beforeCallServer("sendNotification")
@@ -1227,7 +1242,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
           let cda = this.getNewCraDayActivityFrom(craDayActivity);
           this.craDayActivity = cda;
           this.addActivity(this.craDayActivity, this.craDay, false);
-        }else {
+        } else {
           console.log("addActivityInDates: can add KO : this.craDay, craDayActivity : ", this.craDay, craDayActivity)
         }
       }
@@ -1428,9 +1443,9 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
   sendCraToValidate() {
     console.log("sendCraToValidate DEB currentCra", this.currentCra)
 
-    if(this.currentCra == null) {
+    if (this.currentCra == null) {
       console.log("sendCraToValidate ERROR : currentCra is NULL !! ")
-      return 
+      return
     }
 
     // let currentUser: Consultant = this.dataSharingService.userConnected
@@ -1441,12 +1456,12 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     let craUser = this.currentCra.consultant
     let craManager = this.currentCra.consultant?.adminConsultant
 
-    if(craUser.role = "RESPONSIBLE_ESN") {
+    if (craUser.role = "RESPONSIBLE_ESN") {
       craManager = craUser;
     }
 
     console.log("sendCraToValidate currentUser, craUser, craManager : ", currentUser, craUser, craManager)
-    
+
     if (craUser != null) {
 
       let name = this.getNameByType();
@@ -1457,7 +1472,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
           "Voulez-vous soumettre le " + name + "?\n" +
           "Une fois soumis, impossible de le modifier", this
           , () => {
-             console.log("sendCraToValidate go to soumettre cra : currentUser.adminConsultant ", currentUser.adminConsultant)
+            console.log("sendCraToValidate go to soumettre cra : currentUser.adminConsultant ", currentUser.adminConsultant)
             this.currentCra.validByConsultant = true;
             this.currentCra.dateValidationConsultant = new Date();
             this.currentCra.comment = null;
@@ -1491,7 +1506,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     if (craActivity.activity != null) {
       let title = UtilsService.getEventTitle(craActivity);
       let day = this.utils.getDate(craDay.day);
-      title = title.slice(0, 25) ;
+      title = title.slice(0, 25);
 
       let color = colors.blue;
       let cssClass = 'event';
@@ -1569,7 +1584,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
                 console.log("ERROR activityTypeService.findById, activity.typeId, err", activity.typeId, error)
               }
             );
-          }else {
+          } else {
             this.calcul_recap(activity, cda, craDay);
           }
 
@@ -1616,7 +1631,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
   hasRoleManagerValidate() {
     let currentUser = this.dataSharingService.userConnected
     let isCurUserRespOrAdmin = this.dataSharingService.isCurrenUserRespOrAdmin()
-    if (this.isAdd || (this.isCurrenUserSameAsUserOfCurrentCra() && !isCurUserRespOrAdmin ) ) return false;
+    if (this.isAdd || (this.isCurrenUserSameAsUserOfCurrentCra() && !isCurUserRespOrAdmin)) return false;
     if (currentUser.role == "MANAGER" || isCurUserRespOrAdmin) return true;
     return false;
   }
@@ -1668,7 +1683,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
         (response) => {
           this.afterCallServer("generatePDF", response)
           this.craReportActivities = response.body.result;
-          console.log("*** this.craReportActivities ", this.craReportActivities )
+          console.log("*** this.craReportActivities ", this.craReportActivities)
           this.openModalPopup(this.showCraReportPdfView);
         }, error => {
           this.addErrorFromErrorOfServer("generatePDF", error);
