@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MyError } from 'src/app/resource/MyError';
 import { DataSharingService } from 'src/app/service/data-sharing.service';
 import { EsnService } from 'src/app/service/esn.service';
 import { UtilsService } from 'src/app/service/utils.service';
@@ -86,6 +87,12 @@ export class ClientFormComponent extends MereComponent {
 
     if (!this.myObj.esnId) {
       this.myObj.esnId = this.myObj.esn?.id
+    }
+
+    console.log("onSubmit this.myObj.esn : ", this.myObj.esn)
+    if(!this.myObj.esn) {
+      this.addError(new MyError("", "esn absente !! "))
+      return 
     }
 
     this.clientService.save(this.myObj).subscribe(

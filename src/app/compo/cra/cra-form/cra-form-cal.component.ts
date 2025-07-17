@@ -942,7 +942,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
 
     console.log("saveCra isSendNotification=", isSendNotification)
 
-    if (!this.currentCra.consultant) {
+    if (!this.currentCra.consultant && this.currentCra.status != 'REJECTED') {
       this.currentCra.consultant = this.userConnected;
     }
     if (!this.currentCra.consultantId) {
@@ -986,7 +986,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
       this.currentCra.type = 'CRA';
     }
 
-    if (!this.isCraValid(true)) {
+    if (!this.isCraValid(true) && this.currentCra.status != 'REJECTED') {
       console.log("saveCraDirect : isCraValid = KO !! this.currentCra=", this.currentCra)
       return;
     }
@@ -1040,8 +1040,8 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     console.log("sendNotification this.currentCra=", this.currentCra)
 
     let isManager = this.hasRoleManagerValidate();
-    // let currentUser = this.dataSharingService.userConnected;
-    let currentUser = this.currentCra.consultant
+    let currentUser = this.userConnected;
+    // let currentUser = this.currentCra.consultant
     console.log("sendNotification currentUser=", currentUser)
     console.log("sendNotification currentUser.role=", currentUser.role)
 
@@ -1076,7 +1076,12 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     notification.fromUser = currentUser
     notification.fromUsername = notification.fromUser.username
 
-    notification.toUser = currentUser.adminConsultant != null ? currentUser.adminConsultant : currentUser;
+    let toUser = currentUser.adminConsultant != null ? currentUser.adminConsultant : currentUser;
+    if(this.currentCra.status != 'TO_VALIDATE') {
+      toUser = this.currentCra.consultant
+    }
+
+    notification.toUser = toUser 
     console.log("sendNotification toUser 1 : ", notification.toUser)
 
     console.log("sendNotification currentUser.role : ", currentUser.role)
@@ -1456,7 +1461,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     let craUser = this.currentCra.consultant
     let craManager = this.currentCra.consultant?.adminConsultant
 
-    if (craUser.role = "RESPONSIBLE_ESN") {
+    if (craUser.role == "RESPONSIBLE_ESN") {
       craManager = craUser;
     }
 
