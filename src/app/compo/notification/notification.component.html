@@ -2,39 +2,59 @@
 
 <div style="text-align: center;">
     <button (click)="getNotifications()" id="btn-notif-refresh" class='btn btn-primary mr-1'>Refresh
-  </button>
-    <input type="checkbox" [(ngModel)]="refreshStarted" id="refreshStarted" name="refreshStarted" (click)="refresh()" /> Every
-    <input type="text" [(ngModel)]="refreshEverySec" id="refreshEverySec" name="refreshEverySec" type="number" style="width:70px" /> seconds.
+    </button>
+    <input type="checkbox" [(ngModel)]="refreshStarted" id="refreshStarted" name="refreshStarted" (click)="refresh()" />
+    Every
+    <input type="text" [(ngModel)]="refreshEverySec" id="refreshEverySec" name="refreshEverySec" type="number"
+        style="width:70px" /> seconds.
 </div>
 
 <div class="card" *ngIf="myList && myList.length>0">
     <div class="card-body">
 
         <ul class="list-group-flush">
-            <li class="list-group-item list-group-item-action flex-column align-items-start" *ngFor="let notification of myList | paginate: {itemsPerPage, currentPage, id:idPagination}; let index=index">
+            <li class="list-group-item list-group-item-action flex-column align-items-start"
+                *ngFor="let notification of myList | paginate: {itemsPerPage, currentPage, id:idPagination}; let index=index">
                 <div class="d-flex w-100 justify-content-between">
 
-                    <span *ngIf="notification.cra" aria-hidden="true" (click)="showCra(notification)" attr.aria-label="{{getLabelShowCraConge(notification)}}" class="picto-item"> <button id="btn-notif-show-cra-{{index}}">Voir</button> </span>
+                    <span>
+                        <span *ngIf="notification.cra" aria-hidden="true" (click)="showCra(notification)"
+                            attr.aria-label="{{getLabelShowCraConge(notification)}}" class="picto-item"> <button
+                                id="btn-notif-show-cra-{{index}}">Voir</button> </span>
 
-                    <span *ngIf="notification.noteFrais" aria-hidden="true" (click)="showFee(notification)" attr.aria-label="{{getLabelShowCraConge(notification)}}" class="picto-item"> <button id="btn-notif-show-fee-{{index}}">Voir</button> </span>
+                        <span *ngIf="notification.noteFrais" aria-hidden="true" (click)="showFee(notification)"
+                            attr.aria-label="{{getLabelShowCraConge(notification)}}" class="picto-item"> <button
+                                id="btn-notif-show-fee-{{index}}">Voir</button> </span>
 
-                    <span *ngIf="notification.currentDocument" aria-hidden="true" (click)="showDocument(notification)" attr.aria-label="{{getLabelShowCraConge(notification)}}" class="picto-item"> <button id="btn-notif-show-doc-{{index}}">Voir</button> </span>
+                        <span *ngIf="notification.currentDocument" aria-hidden="true"
+                            (click)="showDocument(notification)"
+                            attr.aria-label="{{getLabelShowCraConge(notification)}}" class="picto-item"> <button
+                                id="btn-notif-show-doc-{{index}}">Voir</button> </span>
+                    </span>
+
 
                     <h6 *ngIf="notification && notification.title" class="mb-2 h6">{{notification.title}}
                         <small> {{getTimeAgoNotification(notification)}} ago</small>
                     </h6>
+
                     <div>
+
                         <p *ngIf="notification.message" class="mb-2">{{notification.message}}.</p>
                         <small class="badge badge-info">{{notification.createdDate | date : 'dd-MM-yyyy HH:mm'}}</small>
 
                         <span aria-hidden="true" *ngIf="isShowBtns">
-              <span aria-hidden="true" (click)="changeViewed(notification)" attr.aria-label="{{getBulle(notification)}}"
-                class="picto-item">
-                <img src="{{getImgRead(notification)}}" width="30" height="30">
-              </span>
-                        <span aria-hidden="true" (click)="showForm(notification)" aria-label="Edit" class="picto-item">
-                <button id="btn-notif-edit-{{index}}">E</button> </span>
-                        <span aria-hidden="true" (click)="deleteNotification(notification)" aria-label="Delete" class="picto-item"> <button id="btn-notif-delete-{{index}}">X</button> </span>
+
+                            <span aria-hidden="true" (click)="changeViewed(notification)"
+                                attr.aria-label="{{getBulle(notification)}}" class="picto-item">
+                                <img src="{{getImgRead(notification)}}" width="30" height="30">
+                            </span>
+
+                            <span aria-hidden="true" (click)="showForm(notification)" aria-label="Edit"
+                                class="picto-item">
+                                <button id="btn-notif-edit-{{index}}">E</button> </span>
+
+                            <span aria-hidden="true" (click)="deleteNotification(notification)" aria-label="Delete"
+                                class="picto-item"> <button id="btn-notif-delete-{{index}}">X</button> </span>
                         </span>
 
                     </div>

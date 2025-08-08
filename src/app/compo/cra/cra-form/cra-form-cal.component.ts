@@ -480,8 +480,11 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
 
     console.log("viewDateChange after : viewDate:", this.viewDate)
 
-    this.addMultiDateStartDate = this.viewDate
-    this.addMultiDateEndDate = this.viewDate
+    // this.viewDate est un objet Date au 1er
+    this.addMultiDateStartDate = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth() , 1);
+
+    // Calcul de la dernière date du mois de this.viewDate
+    this.addMultiDateEndDate = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth() + 1, 0);
 
     /**
      * si existe un cra validee , afficher le
@@ -810,6 +813,10 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     this.modal.open(this.addActivityView, { size: 'lg' });
   }
 
+  // // this.craDayActivity.startHour = this.currentCra.monthStr
+  // this.craDayActivity.startHour = "01/09/2025"
+  // this.craDayActivity.startHour = "30/09/2025"
+
   addMultiActivity() {
 
     console.log("addMultiActivity this.currentCra=", this.currentCra)
@@ -818,6 +825,11 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     this.isDaySelectedInCurentMonth = true;
 
     this.craDayActivity = new CraDayActivity()
+
+    // this.addMultiDateStartDate = this.viewDate
+    // this.addMultiDateEndDate = this.viewDate
+
+    console.log("---- addMultiActivity: addMultiDateStartDate ", this.addMultiDateStartDate)
 
     let refModal = this.modal.open(this.addActivityView, { size: 'lg' });
     refModal.result.then((result) => {
@@ -1077,11 +1089,11 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     notification.fromUsername = notification.fromUser.username
 
     let toUser = currentUser.adminConsultant != null ? currentUser.adminConsultant : currentUser;
-    if(this.currentCra.status != 'TO_VALIDATE') {
+    if (this.currentCra.status != 'TO_VALIDATE') {
       toUser = this.currentCra.consultant
     }
 
-    notification.toUser = toUser 
+    notification.toUser = toUser
     console.log("sendNotification toUser 1 : ", notification.toUser)
 
     console.log("sendNotification currentUser.role : ", currentUser.role)

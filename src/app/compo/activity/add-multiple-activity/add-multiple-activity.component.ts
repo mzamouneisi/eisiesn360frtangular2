@@ -30,6 +30,7 @@ export class AddMultipleActivityComponent extends MereComponent {
   projects: Project[];
   activityTypes: ActivityType[];
   consultants: Consultant[];
+  consultantsOthers: Consultant[];
   myObj: Activity = new Activity();
   activityOverTime: ActivityOverTime = new ActivityOverTime();
 
@@ -83,9 +84,16 @@ export class AddMultipleActivityComponent extends MereComponent {
     this.consultantService.findNotAdminConsultant().subscribe(
       data => {
         this.afterCallServer("getConsultants", data)
-        this.consultants = data.body.result;
         if (data == undefined) {
           this.consultants = new Array();
+        }
+
+        this.consultants = data.body.result;
+        this.consultantsOthers = []
+        for(let c of this.consultants) {
+          if(c.id != this.userConnected.id) {
+            this.consultantsOthers.push(c)
+          }
         }
 
       }, error => {

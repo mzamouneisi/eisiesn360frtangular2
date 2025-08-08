@@ -51,6 +51,7 @@ export class HeaderComponent extends MereComponent {
         this.dataSharingService.addInfosObservers(this);
         this.esnService.majEsnOnConsultant(this.userConnected )
         this.consultantService.setAdminConsultant(this.userConnected)
+        this.getNbNotifications()
       }, 1000
     )
 

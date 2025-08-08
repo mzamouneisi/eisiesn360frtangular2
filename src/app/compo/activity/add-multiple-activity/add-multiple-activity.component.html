@@ -34,7 +34,7 @@
                         <label for="consultantList">{{utils.tr('app.compo.activity.multiple.input.consultant')}}</label>
 
                         <app-select #compoSelectConsultant [selectId]="'consultant'" [objectName]="'Consultant'"
-                            [myList]="consultants" [initObj]="myObj.consultant" [objCaller]="this"
+                            [myList]="consultantsOthers" [initObj]="myObj.consultant" [objCaller]="this"
                             onChangeCaller="onSelectConsultant" [ObjectPropName]="'fullName'"></app-select>
 
                         <div [hidden]="myObj.consultant" class="badge badge-danger">

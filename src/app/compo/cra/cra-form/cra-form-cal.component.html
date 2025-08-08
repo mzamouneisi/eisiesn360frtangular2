@@ -18,56 +18,68 @@
     <div class="card-body">
         <!-- Header Section -->
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <button class="btn btn-outline-primary" id="cra-form-show-week-number" (click)="showWeekNumber()"
-                #showWeekNumberBtn>
-                <i class="far fa-calendar-alt me-2"></i>{{titleShowWeekNumber}}
-            </button>
+            <div class="text-left" style="width: 30%;">
+                <button class="btn btn-outline-primary" id="cra-form-show-week-number" (click)="showWeekNumber()"
+                    #showWeekNumberBtn>
+                    <i class="far fa-calendar-alt me-2"></i>{{titleShowWeekNumber}}
+                </button>
+            </div>
 
             <div class="text-center">
                 <h3 class="mb-0" *ngIf="viewDate">{{getNameByType()}} {{ viewDate | calendarDate:(view +
                     'ViewTitle'):'en' }}</h3>
+
+
             </div>
 
-            <div class="text-end" *ngIf="currentCraUser != null">
+
+            <div class="text-end" style="width: 30%;" *ngIf="currentCraUser != null">
                 <h3 class="mb-0">{{ currentCraUser?.fullName }}</h3>
             </div>
+
         </div>
 
         <!-- Navigation Controls -->
-        <div class="d-flex justify-content-center mb-4" style="width: 100%;">
-            <div class="btn-group">
-                <button class="btn btn-outline-primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
-                    (click)="viewDateChange(true)" id="cra-form-show-previous-view">
-                    <i class="fas fa-chevron-left me-1"></i> Previous
-                </button>
-                <button class="btn btn-outline-secondary" mwlCalendarToday [(viewDate)]="viewDate"
-                    (click)="viewDateChange(true)" id="cra-form-show-today">
-                    <i class="fas fa-calendar-day me-1"></i> Today
-                </button>
-                <button class="btn btn-outline-primary" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
-                    (click)="viewDateChange(true)" id="cra-form-show-next-view">
-                    Next <i class="fas fa-chevron-right ms-1"></i>
-                </button>
-            </div>
+        <div class="d-flex justify-content-between align-items-center mb-4">
 
-            <div style="margin-left: 40px;">
+
+            <div class="text-left " style="width: 40%;">
+
                 <button type="button" class="btn btn-outline-success me-2" *ngIf="!currentCra?.validByConsultant"
                     id="btn-cra-form-add-multi-date" (click)="addMultiActivity()">
                     <i class="fas fa-calendar-plus me-1"></i> Add Multi Date
                 </button>
-                <button type="button" class="btn btn-outline-danger" *ngIf="!currentCra?.validByConsultant"
-                    id="btn-cra-form-delete-all-event" (click)="deleteAllEvents()">
-                    <i class="fas fa-trash-alt me-1"></i> Delete All
-                </button>
+
             </div>
 
-            <div style="margin-left: 40px;"> 
-                <button class="btn btn-outline-primary me-2" >
+            <div class="text-center ">
+
+                <div class="btn-group">
+                    <button class="btn btn-outline-primary" mwlCalendarPreviousView [view]="view"
+                        [(viewDate)]="viewDate" (click)="viewDateChange(true)" id="cra-form-show-previous-view">
+                        <i class="fas fa-chevron-left me-1"></i> Previous
+                    </button>
+                    <button class="btn btn-outline-secondary" mwlCalendarToday [(viewDate)]="viewDate"
+                        (click)="viewDateChange(true)" id="cra-form-show-today">
+                        <i class="fas fa-calendar-day me-1"></i> Today
+                    </button>
+                    <button class="btn btn-outline-primary" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
+                        (click)="viewDateChange(true)" id="cra-form-show-next-view">
+                        Next <i class="fas fa-chevron-right ms-1"></i>
+                    </button>
+                </div>
+
+            </div>
+
+            <div class="text-right " style="width: 40%;">
+                <button class="btn btn-outline-primary me-2" style="margin-left: 30px;">
                     <a [routerLink]="['/cra_list']" class="text-decoration-none">
                         <i class="fas fa-list me-1"></i> List CRAs/Conges
                     </a>
                 </button>
+
             </div>
+
         </div>
 
         <div class="row">
@@ -184,6 +196,11 @@
                     <button class="btn btn-primary me-2" id="btn-cra-form-save" (click)="saveCra(true, false, '', '')"
                         *ngIf="!currentCra.validByConsultant">
                         <i class="fas fa-save me-1"></i> {{btnActionTitle}}
+                    </button>
+
+                    <button type="button" class="btn btn-outline-danger" *ngIf="!currentCra?.validByConsultant"
+                        id="btn-cra-form-delete-all-event" (click)="deleteAllEvents()">
+                        <i class="fas fa-trash-alt me-1"></i> Delete All
                     </button>
 
                     <button class="btn btn-danger" id="btn-cra-form-delete" (click)="delete(currentCra)"
