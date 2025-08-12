@@ -56,9 +56,15 @@ export class DataSharingService implements CraStateService, ServiceLocator {
   public serviceRegistry: Map<string, any> = new Map<string, any>();
   public userSelectedActivity: Consultant;
 
-  listInfos: Array<string> = [];
-  listErrors: MyError[] = [];
-  listInfosObservers: MereComponent[] = [];
+  private infosSource = new BehaviorSubject<string[]>([]);
+  private errorsSource = new BehaviorSubject<MyError[]>([]);
+
+  infos$ = this.infosSource.asObservable();
+  errors$ = this.errorsSource.asObservable();
+
+  // listInfos: Array<string> = [];
+  // listErrors: MyError[] = [];
+  // listInfosObservers: MereComponent[] = [];
   listCra: Cra[];
   isAdd: string;
   typeCra: string;
@@ -135,31 +141,49 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     return this.userConnected
   }
 
-  addInfosObservers(cli: MereComponent) {
-    this.listInfosObservers.push(cli);
-  }
+  // addInfosObservers(cli: MereComponent) {
+  //   this.listInfosObservers.push(cli);
+  // }
 
-  updateInfosObservers() {
-    //////console.log("DS updateInfosObservers")
-    for (let cli of this.listInfosObservers) {
-      //////console.log("DS updateInfosObservers cli", cli)
-      if (cli) {
-        cli.updateInfosObserver();
-      }
-    }
-  }
+  // updateInfosObservers() {
+  //   //////console.log("DS updateInfosObservers")
+  //   for (let cli of this.listInfosObservers) {
+  //     console.log("DS updateInfosObservers cli", cli)
+  //     if (cli) {
+  //       cli.updateInfosObserver();
+  //     }
+  //   }
+  // }
 
   addInfo(info: string) {
-    this.listInfos.push(info);
-    this.updateInfosObservers();
+    // this.listInfos.push(info);
+    // this.updateInfosObservers();
+    const current = this.infosSource.value;
+    this.infosSource.next([...current, info]);
   }
 
+  // delInfo(info: string) {
+  //   let index: number = this.listInfos.indexOf(info);
+  //   if (index >= 0) {
+  //     this.listInfos.splice(index, 1);
+  //     this.updateInfosObservers();
+  //   }
+  // }
+
   delInfo(info: string) {
-    let index: number = this.listInfos.indexOf(info);
+    const current = this.infosSource.value;
+    const index = current.indexOf(info);
+
     if (index >= 0) {
-      this.listInfos.splice(index, 1);
-      this.updateInfosObservers();
+      const updated = [...current]; // copie
+      updated.splice(index, 1);
+      this.infosSource.next(updated);
     }
+  }
+
+
+  addErrorTxt(errorTxt: string) {
+    this.addError(new MyError("", errorTxt))
   }
 
   addError(error: MyError) {
@@ -172,35 +196,58 @@ export class DataSharingService implements CraStateService, ServiceLocator {
         error.msg += "\n" + ". Il est recomand\u00e9 de se reconnecter.";
       }
     }
-    this.listErrors.push(error)
-    this.updateInfosObservers();
+    // this.listErrors.push(error)
+    // this.updateInfosObservers();
+    const current = this.errorsSource.value;
+    this.errorsSource.next([...current, error]);
   }
+
+  // delError(error: MyError) {
+  //   if (!error || !error.msg) return
+  //   let index: number = -1;
+  //   let i = -1;
+  //   for (let err of this.listErrors) {
+  //     i++;
+  //     if (err.title == error.title && err.msg == error.msg) {
+  //       index = i;
+  //       break;
+  //     }
+  //   }
+  //   if (index >= 0) {
+  //     this.listErrors.splice(index, 1);
+  //     this.updateInfosObservers();
+  //   }
+  // }
 
   delError(error: MyError) {
-    if (!error || !error.msg) return
-    let index: number = -1;
-    let i = -1;
-    for (let err of this.listErrors) {
-      i++;
-      if (err.title == error.title && err.msg == error.msg) {
-        index = i;
-        break;
-      }
-    }
-    if (index >= 0) {
-      this.listErrors.splice(index, 1);
-      this.updateInfosObservers();
-    }
-  }
+  const current = this.errorsSource.value;
+  const index = current.findIndex(e => (e.msg === error.msg && e.title === e.title) );
 
+  if (index >= 0) {
+    const updated = [...current];
+    updated.splice(index, 1);
+    this.errorsSource.next(updated);
+  }
+}
+
+
+  // clearInfos() {
+  //   this.listInfos = [];
+  //   this.updateInfosObservers();
+  // }
+  /** Efface toutes les infos */
   clearInfos() {
-    this.listInfos = [];
-    this.updateInfosObservers();
+    this.infosSource.next([]);
   }
 
+  // clearErrors() {
+  //   this.listErrors = [];
+  //   this.updateInfosObservers();
+  // }
+
+  /** Efface toutes les erreurs */
   clearErrors() {
-    this.listErrors = [];
-    this.updateInfosObservers();
+    this.errorsSource.next([]);
   }
 
   clearInfosErrors() {
@@ -425,8 +472,8 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     );
   }
 
-  majEsnOnConsultant(fctSuccess: Function = null) {
-    this.esnService.majEsnOnConsultant(this.userConnected, fctSuccess)
+  majEsnOnConsultant(fctSuccess: Function = null, fctErr: Function) {
+    this.esnService.majEsnOnConsultant(this.userConnected, fctSuccess, fctErr)
   }
 
   /**
@@ -445,7 +492,9 @@ export class DataSharingService implements CraStateService, ServiceLocator {
           this.esnCurrent = this.userConnected?.esn
           this.idEsnCurrent = this.esnCurrent?.id
 
-          this.majEsnOnConsultant()
+          this.majEsnOnConsultant(() => { }, (error) => {
+            this.addErrorTxt(JSON.stringify(error))
+          })
           console.log("findConsultantByUsername userConnected.esn : ", this.userConnected.esn)
           if (caller) {
             caller.info = "Info : res=" + JSON.stringify(this.userConnected.fullName)

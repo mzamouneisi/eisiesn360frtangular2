@@ -52,12 +52,15 @@ export class JwtTokenInterceptor implements HttpInterceptor {
       let msgTitle = "Vérifiez vos données!", msgBody = "oops! vos données sont erronées";
       // this.utilsIhmService.openModal(false,msgTitle, msgBody,null,null);
       console.log(msgTitle, msgBody)
+      this.dataSharingService.addError(new MyError(msgTitle, msgBody))
       this.dataSharingService.redirectToUrl = this.router.url;
       this.utils.showNotification("error", err.error.message)
       this.dataSharingService.notifyObserversNotificationsError("Erreur 401", new MyError("Erreur 401", err.error.message));
       this.dataSharingService.logout();
       this.router.navigate(['/login']);
       return of(err.message);
+    }else {
+      this.dataSharingService.addError(new MyError(err.status + ' : ' + err.name, err.message))
     }
     this.router.navigate(['/login']);
     return of(err.message);

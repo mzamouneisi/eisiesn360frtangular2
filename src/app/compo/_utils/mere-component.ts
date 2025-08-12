@@ -1,4 +1,5 @@
 import { AfterContentInit, AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Consultant } from 'src/app/model/consultant';
 import { Esn } from 'src/app/model/esn';
 import { MyError } from 'src/app/resource/MyError';
@@ -19,6 +20,8 @@ export class MereComponent implements OnInit, AfterViewInit, AfterContentInit {
   listInfos: Array<string> = [];
   listErrors: MyError[];
 
+  private subscriptions: Subscription[] = [];
+
   //pagination
   currentPage: number = 1;
   itemsPerPage: number = 5;
@@ -38,7 +41,7 @@ export class MereComponent implements OnInit, AfterViewInit, AfterContentInit {
   @ViewChild('searchStrInput') searchStrInput: ElementRef<HTMLInputElement>;
 
   public userConnected: Consultant;
-  public userConnectedName: String ;
+  public userConnectedName: String;
   public esnCurrent: Esn;
   public idEsnCurrent: number = -1;
   public esnName = ""
@@ -62,8 +65,17 @@ export class MereComponent implements OnInit, AfterViewInit, AfterContentInit {
     this.dataSharingService.navigateTo(url);
   }
 
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
+
   ngOnInit() {
     console.log("Mere.ngOnInit deb")
+
+    this.subscriptions.push(
+      this.dataSharingService.infos$.subscribe(infos => this.listInfos = infos),
+      this.dataSharingService.errors$.subscribe(errors => this.listErrors = errors)
+    );
 
     //setAdminConsultant 
     this.dataSharingService.setAdminConsultant(this.userConnected)
@@ -95,7 +107,7 @@ export class MereComponent implements OnInit, AfterViewInit, AfterContentInit {
                   this.idEsnCurrent = this.dataSharingService.idEsnCurrent
                   if (this.esnCurrent != null) {
                     this.idEsnCurrent = this.esnCurrent.id;
-                    if(this.userConnected) {
+                    if (this.userConnected) {
                       this.userConnected.esn = this.esnCurrent
                     }
                   }
@@ -103,6 +115,8 @@ export class MereComponent implements OnInit, AfterViewInit, AfterContentInit {
                   if (!this.esnName) this.esnName = this.userConnected?.esn?.name;
                   if (this.esnName) this.userConnected.esnName = this.esnName
                   // console.log("*** esnName = ", this.esnName)
+                }, (error) => {
+                  this.addErrorTxt(JSON.stringify(error))
                 }
               );
             }
@@ -209,7 +223,7 @@ export class MereComponent implements OnInit, AfterViewInit, AfterContentInit {
     if (user) {
       s = user
     }
-    this.userConnectedName = s 
+    this.userConnectedName = s
     return s;
   }
 
@@ -235,17 +249,17 @@ export class MereComponent implements OnInit, AfterViewInit, AfterContentInit {
     return this.userConnected.admin;
   }
 
-  updateInfosObserver() {
-    // console.log("updateInfosObserver deb")
-    //////console.log("MERE updateInfosObservers this", this)
-    //////console.log("MERE updateInfosObservers listInfos", this.listInfos)
-    //////console.log("MERE updateInfosObservers listErrors", this.listErrors)
-    this.listInfos = this.dataSharingService.listInfos;
-    this.listErrors = this.dataSharingService.listErrors;
-    this.setInfosMere();
-    this.userConnected = this.getCurrentUserFromLocaleStorage();
-    this.setUserConnected(this.userConnected)
-  }
+  // updateInfosObserver() {
+  //   // console.log("updateInfosObserver deb")
+  //   //////console.log("MERE updateInfosObservers this", this)
+  //   console.log("MERE updateInfosObservers listInfos", this.listInfos)
+  //   console.log("MERE updateInfosObservers listErrors", this.listErrors)
+  //   // this.listInfos = this.dataSharingService.listInfos;
+  //   // this.listErrors = this.dataSharingService.listErrors;
+  //   this.setInfosMere();
+  //   this.userConnected = this.getCurrentUserFromLocaleStorage();
+  //   this.setUserConnected(this.userConnected)
+  // }
 
   clearInfos() {
     //////////console.log("DBG MereComponent clearInfos")
@@ -270,36 +284,40 @@ export class MereComponent implements OnInit, AfterViewInit, AfterContentInit {
   addInfo(info: string, isShowLoading = true) {
     //////////console.log("///////// DATA SHARING add info " , info, this)
     this.isShowLoading = isShowLoading;
-    this.dataSharingService.addInfo(info)
+    this.dataSharingService.addInfo(info);
   }
 
   delInfo(info: string) {
     this.dataSharingService.delInfo(info)
   }
 
-  getlistInfos() {
-    // if(this.infors) this.listInfos = this.infors.listInfos
-    // if(this.infors) {
-    //   this.listInfos = this.infors.listInfos ;
-    // }
-    // else {
-    //   //////console.log("!!!!!!!!!!!!!!!!!!!!!!! getlistInfos infors NOT EXIST !!!!!!!!!!!!!!!!!!!!!!!!", this)
-    // }
-    this.listInfos = this.dataSharingService.listInfos;
-    return this.listInfos;
-  }
+  // getlistInfos() {
+  //   // if(this.infors) this.listInfos = this.infors.listInfos
+  //   // if(this.infors) {
+  //   //   this.listInfos = this.infors.listInfos ;
+  //   // }
+  //   // else {
+  //   //   //////console.log("!!!!!!!!!!!!!!!!!!!!!!! getlistInfos infors NOT EXIST !!!!!!!!!!!!!!!!!!!!!!!!", this)
+  //   // }
+  //   this.listInfos = this.dataSharingService.listInfos;
+  //   return this.listInfos;
+  // }
 
   isInfoOrError() {
     return this.isInfo() || this.isError();
   }
 
+  isInfoAndNotError() {
+    return this.isInfo() && !this.listErrors;
+  }
+
   isInfo() {
-    this.listInfos = this.dataSharingService.listInfos;
+    // this.listInfos = this.dataSharingService.listInfos;
     return this.listInfos && this.listInfos.length > 0;
   }
 
   isError() {
-    this.listErrors = this.dataSharingService.listErrors;
+    // this.listErrors = this.dataSharingService.listErrors;
     //////console.log("IsError listErrors:", this.listErrors)
     return this.listErrors && this.listErrors.length > 0;
   }
@@ -313,6 +331,10 @@ export class MereComponent implements OnInit, AfterViewInit, AfterContentInit {
   //   let err = this.getError()
   //   return err? this.getErrorTitleMsg(err) : "" ;
   // }
+
+  addErrorTxt(errorTxt: string) {
+    this.dataSharingService.addErrorTxt(errorTxt)
+  }
 
   addError(error: MyError) {
     // console.log("addError error:", error)

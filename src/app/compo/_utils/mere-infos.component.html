@@ -1,8 +1,7 @@
-
 <div class="infors center" *ngIf="isInfoOrError()">
 
-    <div class="right">  <button class="btn btn-danger" (click)="clearInfos()" #clearInfosBtn>X</button>  </div>
-    <h3 *ngIf="nbCallServer != 0"> Loading : {{nbCallServer}} ... </h3> 
+    <div class="right"> <button class="btn btn-danger" (click)="clearInfos()" #clearInfosBtn>X</button> </div>
+    <h3 *ngIf="nbCallServer != 0"> Loading : {{nbCallServer}} ... </h3>
     <div *ngIf="isInfo()" class="info">
         <h5>NbInfos : {{listInfos.length}}</h5>
         <ol>
@@ -11,7 +10,7 @@
             </li>
         </ol>
         <hr>
-    </div> 
+    </div>
     <div *ngIf="isError()" class="error">
         <h5>NbError : {{listErrors.length}}</h5>
         <ol>
@@ -22,8 +21,13 @@
         <hr>
     </div>
 
-    <div *ngIf="isShowLoading && isInfo()">
+    <!-- <div *ngIf="isShowLoading && isInfo()">
+        <h1>loading 1 </h1>
         <img src="assets/images/loading.gif" alt="" width="40px" height="40px">
+    </div> -->
+
+    <div class="loading-overlay" *ngIf="isInfoAndNotError()">
+        <img src="assets/images/loading.gif" alt="Chargement..." />
     </div>
 
 </div>

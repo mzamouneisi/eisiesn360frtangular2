@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { MereComponent } from 'src/app/compo/_utils/mere-component';
 import { NotificationComponent } from 'src/app/compo/notification/notification.component';
 import { UserConnectedComponent } from 'src/app/compo/user-connected/user-connected.component';
+import { MyError } from 'src/app/resource/MyError';
 import { ConsultantService } from 'src/app/service/consultant.service';
 import { EsnService } from 'src/app/service/esn.service';
 import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
@@ -42,14 +43,17 @@ export class HeaderComponent extends MereComponent {
 
     super.ngOnInit()
 
+    this.language = this.utils.getLocale();
+    this.dataSharingService.setHeaderComponent(this);
+    // this.dataSharingService.addInfosObservers(this);
+
     setTimeout(
       () => {
         console.log("UserConnected : ", this.userConnected)
 
-        this.language = this.utils.getLocale();
-        this.dataSharingService.setHeaderComponent(this);
-        this.dataSharingService.addInfosObservers(this);
-        this.esnService.majEsnOnConsultant(this.userConnected )
+        this.esnService.majEsnOnConsultant(this.userConnected , ()=>{}, (error)=>{
+          this.addError(new MyError("", JSON.stringify(error)))
+        } )
         this.consultantService.setAdminConsultant(this.userConnected)
         this.getNbNotifications()
       }, 1000

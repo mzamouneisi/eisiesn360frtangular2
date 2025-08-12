@@ -17,7 +17,7 @@ import { ConsultantFormComponent } from '../consultant-form/consultant-form.comp
 })
 export class ConsultantListComponent extends MereComponent {
 
-    @ViewChild('myConsultants', {static: false}) myConsultants;
+    @ViewChild('myConsultants', { static: false }) myConsultants;
 
     title: string = "List Consultants"
 
@@ -31,7 +31,7 @@ export class ConsultantListComponent extends MereComponent {
     roleFilter: string = "";
 
     constructor(private consultantService: ConsultantService
-        , private esnService : EsnService
+        , private esnService: EsnService
         , private router: Router
         , public utils: UtilsService
         , protected utilsIhm: UtilsIhmService
@@ -81,9 +81,9 @@ export class ConsultantListComponent extends MereComponent {
         );
     }
 
-    setMyList(myList : any[]) {
-		this.myList = myList;
-	}
+    setMyList(myList: any[]) {
+        this.myList = myList;
+    }
 
     edit(consultant: Consultant) {
         this.clearInfos();
@@ -95,24 +95,24 @@ export class ConsultantListComponent extends MereComponent {
     delete(consultant: Consultant) {
         let mythis = this;
         this.utilsIhm.confirmYesNo("Voulez vous vraiment supprimer le consultant: " + consultant.fullName, mythis
-        , ()=> {
-            mythis.beforeCallServer("delete")
-            mythis.consultantService.deleteById(consultant.id)
-                .subscribe(
-                    data => {
-                        mythis.afterCallServer("delete", data)
-                        if (!this.isError()) {
-                            mythis.findAll();
-                            if (mythis.managerSelected != null && mythis.managerSelected.id == consultant.id)
-                                mythis.managerSelected = null;
+            , () => {
+                mythis.beforeCallServer("delete")
+                mythis.consultantService.deleteById(consultant.id)
+                    .subscribe(
+                        data => {
+                            mythis.afterCallServer("delete", data)
+                            if (!this.isError()) {
+                                mythis.findAll();
+                                if (mythis.managerSelected != null && mythis.managerSelected.id == consultant.id)
+                                    mythis.managerSelected = null;
+                            }
+                        }, error => {
+                            mythis.addErrorFromErrorOfServer("delete", error);
+                            ////console.log(error);
                         }
-                    }, error => {
-                        mythis.addErrorFromErrorOfServer("delete", error);
-                        ////console.log(error);
-                    }
-                );
-        }
-        , null 
+                    );
+            }
+            , null
         );
     }
 
@@ -120,30 +120,33 @@ export class ConsultantListComponent extends MereComponent {
         return this.myObj != null ? this.myObj.id : -1;
     }
 
-    @ViewChild('myObjEditView', {static:false}) myObjEditView:ConsultantFormComponent ;
+    @ViewChild('myObjEditView', { static: false }) myObjEditView: ConsultantFormComponent;
     showFormPure(myObj: Consultant) {
         this.consultantService.setConsultant(myObj)
 
         this.myObj = myObj;
         // console.log("role", myObj.role)
-        if(this.myObjEditView != null) {
+        if (this.myObjEditView != null) {
 
-                this.myObjEditView.myObj = myObj
-                this.myObjEditView.isAdd = 'false';
-                this.myObjEditView.ngOnInit()
+            this.myObjEditView.myObj = myObj
+            this.myObjEditView.isAdd = 'false';
+            this.myObjEditView.ngOnInit()
 
-                this.myObjEditView.selectRole(myObj.role)
-                this.myObjEditView.selectEsn(myObj.esn)
+            this.myObjEditView.selectRole(myObj.role)
+            this.myObjEditView.selectEsn(myObj.esn)
 
         }
     }
 
     showForm(myObj: Consultant) {
-        if(myObj.role != "ADMIN" && !myObj.esn) {
+        if (myObj.role != "ADMIN" && !myObj.esn) {
             this.esnService.majEsnOnConsultant(myObj, () => {
                 this.showFormPure(myObj);
-            } )
-        }else {
+            }, (error) => {
+                this.addErrorTxt(JSON.stringify(error))
+            }
+            )
+        } else {
             this.showFormPure(myObj);
         }
     }
