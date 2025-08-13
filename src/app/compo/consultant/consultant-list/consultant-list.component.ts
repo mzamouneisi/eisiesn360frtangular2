@@ -46,7 +46,7 @@ export class ConsultantListComponent extends MereComponent {
 
         this.loadRoles();
 
-        this.colsSearch = ["fullName", "username", "tel", "email", "esn", "role", "level"]
+        this.colsSearch = ["fullName", "username", "tel", "esn", "role", "level"]
 
     }
 
@@ -69,11 +69,14 @@ export class ConsultantListComponent extends MereComponent {
                 this.afterCallServer("findAll", data)
                 console.log("data : ", data)
                 this.myList = data.body.result;
-
-                // this.dataSharingService.addEsnInConsultantList(this.myList )
-
                 console.log("myList : ", this.myList)
                 this.myList00 = this.myList;
+
+                // this.dataSharingService.addEsnInConsultantList(this.myList )
+                this.esnService.majEsnOnConsultants(this.myList, ()=>{} , (error)=>{
+                    this.addErrorTxt(JSON.stringify(error))
+                })
+
             }, error => {
                 this.addErrorFromErrorOfServer("findAll", error);
                 ////console.log(error);

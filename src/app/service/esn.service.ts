@@ -66,6 +66,14 @@ export class EsnService {
 
   ///////////////////
 
+  majEsnOnConsultants(list: Consultant[], fct : Function = null, fctErr : Function ) {
+    if(list && list.length>0) {
+      for(let c of list) {
+        this.majEsnOnConsultant(c, fct, fctErr)
+      }
+    }
+  }
+
   majEsnOnConsultant(myObj: Consultant, fct : Function = null, fctErr : Function ) {
     // console.log("majEsnOnConsultant myObj, esnId, myObj.esn : ", myObj, myObj.esnId, myObj.esn)
     if (myObj && myObj.esnId && !myObj.esn) {

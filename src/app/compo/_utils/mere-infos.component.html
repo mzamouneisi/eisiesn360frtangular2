@@ -26,7 +26,7 @@
         <img src="assets/images/loading.gif" alt="" width="40px" height="40px">
     </div> -->
 
-    <div class="loading-overlay" *ngIf="isInfoAndNotError()">
+    <div class="loading-overlay" *ngIf="(this.listInfos && this.listInfos.length > 0) && !(this.listErrors && this.listErrors.length > 0) ">
         <img src="assets/images/loading.gif" alt="Chargement..." />
     </div>
 
