@@ -114,16 +114,17 @@ export class ProjectFormComponent extends MereComponent {
 
   onSubmit() {
     ////console.log(this.myObj);
-    this.beforeCallServer("onSubmit add proj");
+    let info_id = "onSubmit add proj"
+    this.beforeCallServer(info_id);
     console.log("client : " , this.myObj.client)
     this.projectService.save(this.myObj).subscribe(
       data => {
-        this.afterCallServer("onSubmit", data)
+        this.afterCallServer(info_id, data)
         
         if (!this.isError()) this.gotoProjectList();
       },
       error => {
-        this.addErrorFromErrorOfServer("onSubmit", error);
+        this.addErrorFromErrorOfServer(info_id, error);
         
       }
     );

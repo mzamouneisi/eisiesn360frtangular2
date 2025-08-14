@@ -118,7 +118,7 @@ export class CraService {
     return this.http.post<GenericResponse>(this.craUrl + "init", date);
   }
 
-  public generatePDF(idCra: number): Observable<GenericResponse> {
+  public generateCliPDF(idCra: number): Observable<GenericResponse> {
     return this.http.get<GenericResponse>(this.craUrl + "generate-client-pdf/" + idCra)
   }
   public generateEsnPDF(idCra: number): Observable<GenericResponse> {

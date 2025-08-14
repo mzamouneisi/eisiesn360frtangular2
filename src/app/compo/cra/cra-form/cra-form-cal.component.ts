@@ -195,13 +195,15 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     console.log("ngOnInit isAdd : ", this.isAdd)
     console.log("ngOnInit currentCraUser : ", this.currentCraUser)
 
+    
     if (this.isAdd == "true") {
       this.currentCraUser = this.userConnected;
       console.log("ngOnInit currentCraUser : ", this.currentCraUser)
-      this.findAllActivities();
     } else {
       this.findConsultantOfCurrentCra();
     }
+
+    this.findAllActivities();
 
     console.log("ngOnInit currentCra.consultantId : ", this.currentCra.consultantId)
     if (!this.currentCra.consultantId) {
@@ -211,7 +213,6 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     this.consultantService.setAdminConsultant(this.userConnected)
 
     this.consultantService.majCra(this.currentCra);
-
 
     console.log("cra list findAll ap call majCra : dataSharingService.listCra:", this.dataSharingService.listCra)
     console.log("cra list findAll ap call majCra : currentCra:", this.currentCra)
@@ -313,11 +314,14 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
    * used to retrieve cra activity
    */
   private findAllActivities() {
+    if(!this.currentCraUser) this.currentCraUser = this.userConnected
+    
     console.log("*************** findAllActivities deb currentCraUser : ", this.currentCraUser);
-    this.beforeCallServer("findAllActivities currentCraUser : " + this.currentCraUser?.fullName);
+    let info_id = "findAllActivities currentCraUser : " + this.currentCraUser?.fullName
+    this.beforeCallServer(info_id);
     this.activityService.findAllByConsultant(this.currentCraUser.id).subscribe(
       data => {
-        this.afterCallServer("findAllActivities", data)
+        this.afterCallServer(info_id, data)
         console.log("*************** findAllActivities data : ", data);
         if (data == null) {
           this.activities = new Array();
@@ -330,9 +334,10 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
             console.log("*************** findAllActivities ac.valid : ", ac.valid);
             if (ac.valid == true) {
               if (this.typeCra == "CONGE") {
-                if (ac.type.congeDay) {
-                  list.push(ac)
-                }
+                // if (ac.type && ac.type.congeDay) {
+                //   list.push(ac)
+                // }
+                list.push(ac)
               } else {
                 list.push(ac)
               }
@@ -375,7 +380,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
         //////////console.log("************ findAllActivities fin");
       }, error => {
         //////////console.log("+++ findAllActivities error", error)
-        this.addErrorFromErrorOfServer("findAllActivities", error);
+        this.addErrorFromErrorOfServer(info_id, error);
       }
     );
   }
@@ -404,7 +409,6 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
         }
       })
     }
-    // this.refreshMe();
     console.log("+++ initCra fin");
   }
 
@@ -468,20 +472,21 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
 
   viewDateChange(isClearInfos: boolean) {
 
-    console.log("viewDateChange deb viewDate:", this.viewDate)
+    let label = "viewDateChange"
+
+    console.log(label + " deb viewDate:", this.viewDate)
 
     if (isClearInfos) this.clearInfos();
 
-    let label = "viewDateChange"
     this.btnActionTitle = "SAVE " + this.getLabelByType();
 
     if (this.notADate(this.viewDate)) this.viewDate = new Date();
     this.viewDate = this.utils.getDate(this.viewDate);
 
-    console.log("viewDateChange after : viewDate:", this.viewDate)
+    console.log(label + " after : viewDate:", this.viewDate)
 
     // this.viewDate est un objet Date au 1er
-    this.addMultiDateStartDate = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth() , 1);
+    this.addMultiDateStartDate = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth(), 1);
 
     // Calcul de la dernière date du mois de this.viewDate
     this.addMultiDateEndDate = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth() + 1, 0);
@@ -491,7 +496,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
      */
 
     let craInDateView: Cra = this.craService.getCraInDate(this.viewDate, this.dataSharingService.listCra);
-    console.log("viewDateChange craInDateView", craInDateView)
+    console.log(label + " craInDateView", craInDateView)
 
     if (craInDateView != null) {
       console.log("showCra valide deb")
@@ -503,12 +508,11 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
       console.log("showCra valide fin")
 
     } else {
-      // console.log("before beforeCallServer : label ", label)
       this.beforeCallServer(label)
       console.log("before getNewCraOfDate : viewDate ", this.viewDate)
       this.craService.getNewCraOfDate(this.viewDate).subscribe(
         data => {
-          console.log("viewDateChange : viewDate, data : ", this.viewDate, data)
+          console.log(label + " : viewDate, data : ", this.viewDate, data)
           this.afterCallServer(label, data)
           if (data != null && data.body != null && data.body.result != null) {
             console.log("we have a new cra from initCra du server. data", data)
@@ -523,7 +527,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
             this.events = [];
           }
 
-          console.log("viewDateChange currentCra : ", this.currentCra)
+          console.log(label + " currentCra : ", this.currentCra)
 
           if (!this.getError() || this.getError().length == 0) {
             // this.addActivitiesValidOfThisMonth();
@@ -560,7 +564,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
         })
     }
 
-    console.log("viewDateChange fin currentCra ", this.currentCra)
+    console.log(label + " fin currentCra ", this.currentCra)
 
   }
 
@@ -1008,8 +1012,12 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     this.beforeCallServer("saveCraDirect")
     this.craService.save(this.currentCra).subscribe(
       data => {
-        console.log("saveCraDirect data=", data)
-        this.afterCallServer("**********saveCraDirect", data)
+        console.log("saveCraDirect", data)
+        this.afterCallServer("saveCraDirect", data)
+
+        this.currentCra = data.body.result
+
+        this.addToList(this.currentCra)
 
         console.log("saveCraDirect this.isError()=", this.isError())
         console.log("saveCraDirect isSendNotification=", isSendNotification)
@@ -1027,6 +1035,17 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
 
     console.log("++++ saveCraDirect FIN this.currentCra, consultant : ", this.currentCra, this.currentCra.consultant)
 
+  }
+
+  addToList(cra: Cra) {
+    if(cra && this.dataSharingService.listCra) {
+      const exists = this.dataSharingService.listCra.some(item => item.id === cra.id);
+      if(!exists) {
+        this.dataSharingService.listCra.push(cra)
+        // this.myList00 
+        // this.setMyList(this.dataSharingService.listCra)
+      }
+    }
   }
 
   canDeleteCurrentCra() {
@@ -1190,7 +1209,9 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
 
       this.craService.setDayProps(craDay);
 
-      if (isLanceProcess) this.process();
+      if (isLanceProcess) {
+        this.process();
+      }
     }
 
   }
@@ -1541,7 +1562,9 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
         },
         meta: craActivity
       })
-      if (isRefresh) this.refreshMe();
+      if (isRefresh) {
+        this.refreshMe();
+      }
     }
   }
 
@@ -1693,28 +1716,30 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
   /***
    * This method used  to generate pdf file from data bytes encoded in base64
    */
-  generatePDF() {
-    this.beforeCallServer("generatePDF")
-    this.craService.generatePDF(this.currentCra.id)
+  generateCliPDF() {
+    let label = "generateCliPDF"
+    this.beforeCallServer(label)
+    this.craService.generateCliPDF(this.currentCra.id)
       .subscribe(
         (response) => {
-          this.afterCallServer("generatePDF", response)
+          this.afterCallServer(label, response)
           this.craReportActivities = response.body.result;
           console.log("*** this.craReportActivities ", this.craReportActivities)
           this.openModalPopup(this.showCraReportPdfView);
         }, error => {
-          this.addErrorFromErrorOfServer("generatePDF", error);
+          this.addErrorFromErrorOfServer(label, error);
           ////console.log(error);
         }
       );
   }
 
   generateEsnPDF() {
-    this.beforeCallServer("generateEsnPDF");
+    let label = "generateEsnPDF"
+    this.beforeCallServer(label);
     this.craService.generateEsnPDF(this.currentCra.id)
       .subscribe(
         response => {
-          this.afterCallServer("generateEsnPDF", response)
+          this.afterCallServer(label, response)
           const linkSource = `data:application/pdf;base64,${response.body.result}`;
           const downloadLink = document.createElement("a");
           const fileName = new Date().getTime() + ".pdf";
@@ -1722,7 +1747,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
           downloadLink.download = fileName;
           downloadLink.click();
         }, error => {
-          this.addErrorFromErrorOfServer("generateEsnPDF", error);
+          this.addErrorFromErrorOfServer(label, error);
           ////console.log(error);
         }
       );
@@ -1783,9 +1808,10 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     setTimeout(() => {
       if (this.notADate(this.viewDate)) this.viewDate = new Date();
       this.viewDate = this.utils.getDate(this.viewDate);
-      // ////////console.log("**** refreshMe av refresh")
+      console.log("**** refreshMe av refresh : ", this.viewDate)
       try {
         this.refresh.next(0)
+        console.log("**** refreshMe ap refresh : ", this.viewDate)
       } catch (error) {
         console.log("refreshMe error:", error)
       }

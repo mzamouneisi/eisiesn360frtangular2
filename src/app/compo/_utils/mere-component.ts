@@ -400,7 +400,9 @@ export class MereComponent implements OnInit, AfterViewInit, AfterContentInit {
 
   }
 
-  setMyList(list: any[]): void { }
+  setMyList(list: any[]): void { 
+    // this.myLi = list 
+  }
 
   search() {
     // this.searchStr = this.searchStr.trim();
