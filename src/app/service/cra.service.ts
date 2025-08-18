@@ -313,15 +313,18 @@ export class CraService {
   ////////////////
 
   getCraInDate(date: Date, myList: Cra[]): Cra {
-    // console.log("getCraValidInDate date, list", date, myList)
-    if (!date) return null;
+    console.log("getCraValidInDate date, list", date, myList)
+    if (!date) {
+      console.log("getCraValidInDate date NULL")
+      return null;
+    }
     let dateMonth = this.utils.formatDateToMonth(date);
-    // console.log("getCraValidInDate dateMonth", dateMonth)
+    console.log("getCraValidInDate dateMonth", dateMonth)
 
     let res: Cra = null;
     if (myList) {
       for (let cra of myList) {
-        if (cra.type != "CONGE") {
+        // if (cra.type != "CONGE") {
           let dateCra = cra.month;
           // console.log("getCraValidInDate dateValide", dateValide)
           let dateCraMonth = this.utils.formatDateToMonth(dateCra);
@@ -330,7 +333,7 @@ export class CraService {
             res = cra
             break;
           }
-        }
+        // }
       }
     }
     // console.log("getCraValidInDate res", res)
