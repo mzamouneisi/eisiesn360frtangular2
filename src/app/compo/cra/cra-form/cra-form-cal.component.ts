@@ -195,7 +195,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     console.log("ngOnInit isAdd : ", this.isAdd)
     console.log("ngOnInit currentCraUser : ", this.currentCraUser)
 
-    
+
     if (this.isAdd == "true") {
       this.currentCraUser = this.userConnected;
       console.log("ngOnInit currentCraUser : ", this.currentCraUser)
@@ -314,8 +314,8 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
    * used to retrieve cra activity
    */
   private findAllActivities() {
-    if(!this.currentCraUser) this.currentCraUser = this.userConnected
-    
+    if (!this.currentCraUser) this.currentCraUser = this.userConnected
+
     console.log("*************** findAllActivities deb currentCraUser : ", this.currentCraUser);
     let info_id = "findAllActivities currentCraUser : " + this.currentCraUser?.fullName
     this.beforeCallServer(info_id);
@@ -1038,9 +1038,9 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
   }
 
   addToList(cra: Cra) {
-    if(cra && this.dataSharingService.listCra) {
+    if (cra && this.dataSharingService.listCra) {
       const exists = this.dataSharingService.listCra.some(item => item.id === cra.id);
-      if(!exists) {
+      if (!exists) {
         this.dataSharingService.listCra.push(cra)
         // this.myList00 
         // this.setMyList(this.dataSharingService.listCra)
@@ -1716,16 +1716,41 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
   /***
    * This method used  to generate pdf file from data bytes encoded in base64
    */
+  // generateCliPDF() {
+  //   let label = "generateCliPDF"
+  //   this.beforeCallServer(label)
+  //   this.craService.generateCliPDF(this.currentCra.id)
+  //     .subscribe(
+  //       (response) => {
+  //         this.afterCallServer(label, response)
+  //         this.craReportActivities = response.body.result;
+  //         console.log("*** this.craReportActivities ", this.craReportActivities)
+  //         this.openModalPopup(this.showCraReportPdfView);
+  //       }, error => {
+  //         this.addErrorFromErrorOfServer(label, error);
+  //         ////console.log(error);
+  //       }
+  //     );
+  // }
+
   generateCliPDF() {
     let label = "generateCliPDF"
-    this.beforeCallServer(label)
+    this.beforeCallServer(label);
+
+    let userName = this.dataSharingService.userConnected.fullName.replace(" ", "-");
+    let now = this.utils.getDateNow()
+
     this.craService.generateCliPDF(this.currentCra.id)
       .subscribe(
-        (response) => {
+        response => {
           this.afterCallServer(label, response)
-          this.craReportActivities = response.body.result;
-          console.log("*** this.craReportActivities ", this.craReportActivities)
-          this.openModalPopup(this.showCraReportPdfView);
+          console.log(label, "response : ", response)
+          const linkSource = `data:application/pdf;base64,${response.body.result}`;
+          const downloadLink = document.createElement("a");
+          const fileName = "cra-cli-" + userName + "-" + now + ".pdf";
+          downloadLink.href = linkSource;
+          downloadLink.download = fileName;
+          downloadLink.click();
         }, error => {
           this.addErrorFromErrorOfServer(label, error);
           ////console.log(error);
@@ -1736,13 +1761,18 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
   generateEsnPDF() {
     let label = "generateEsnPDF"
     this.beforeCallServer(label);
+
+    let userName = this.dataSharingService.userConnected.fullName.replace(" ", "-");
+    let now = this.utils.getDateNow()
+
     this.craService.generateEsnPDF(this.currentCra.id)
       .subscribe(
         response => {
           this.afterCallServer(label, response)
+          console.log(label, "response : ", response)
           const linkSource = `data:application/pdf;base64,${response.body.result}`;
           const downloadLink = document.createElement("a");
-          const fileName = new Date().getTime() + ".pdf";
+          const fileName = "cra-esn-" + userName + "-" + now + ".pdf";
           downloadLink.href = linkSource;
           downloadLink.download = fileName;
           downloadLink.click();

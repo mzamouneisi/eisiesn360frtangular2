@@ -210,6 +210,28 @@ export class UtilsService {
     return res;
   }
 
+  getDateNow() {
+    let d: Date = new Date();
+
+    let month = this.getNumberInMin2Digits((d.getMonth() + 1) + ""),
+      day = this.getNumberInMin2Digits(d.getDate() + ""),
+      year = d.getFullYear(),
+      hour = this.getNumberInMin2Digits(d.getHours() + ""),
+      min = this.getNumberInMin2Digits(d.getMinutes() + ""),
+      sec = this.getNumberInMin2Digits(d.getSeconds() + "")
+      ;
+
+    if (month.length < 2)
+      month = '0' + month;
+    if (day.length < 2)
+      day = '0' + day;
+
+    let res = [year, month, day].join('_') + '_' + [hour, min, sec].join('_');
+    ////////////console.log("res:")
+    ////console.log(res)
+    return res;
+  }
+
   public isDateWeekend(date: Date): boolean {
     date = this.getDate(date);
     let dayOfWeek = date.getDay();
@@ -351,7 +373,7 @@ export class UtilsService {
     let name = craActivity.activity.name
     // let proj = '/' + craActivity.activity.clientName
     // name = name + proj 
-    if (craActivity.isOverTime) title = '(' + craActivity.startHour + '-' + craActivity.endHour + ') ' + name  ;
+    if (craActivity.isOverTime) title = '(' + craActivity.startHour + '-' + craActivity.endHour + ') ' + name;
     else title = craActivity.nbDay + ' ' + name;
     return title;
   }
