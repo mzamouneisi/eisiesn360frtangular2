@@ -741,9 +741,20 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     return this.http.get<GenericResponse>(this.notificationUrl);
   }
 
+  nbCallNotifications = 0 
+  isCallNotifications = false 
+  
   public getNotifications() {
     let label = "loading Notifications ...";
-    // console.log(label)
+
+    if(!this.isCallNotifications) {
+      this.isCallNotifications = true 
+    }else {
+      console.log(label, "En cours ..." )
+      return 
+    }
+    this.nbCallNotifications ++
+    console.log(label, this.nbCallNotifications )
     this.notifyObserversNotificationsBefore(label)
     this.getNotificationsFromServer().subscribe((data) => {
       // console.log("getNotifications: this, data", this, data)
@@ -751,9 +762,11 @@ export class DataSharingService implements CraStateService, ServiceLocator {
       this.majListNotifications();
       console.log("getNotifications ", this.listNotifications)
       this.notifyObserversNotificationsAfter(label, data)
+      this.isCallNotifications = false 
     }, error => {
       // console.log("getNotifications: this, error", this, error)
       this.notifyObserversNotificationsError(label, error);
+      this.isCallNotifications = false 
     })
   }
 
