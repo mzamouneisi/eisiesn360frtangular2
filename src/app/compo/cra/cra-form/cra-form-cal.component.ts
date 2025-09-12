@@ -1716,22 +1716,6 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
   /***
    * This method used  to generate pdf file from data bytes encoded in base64
    */
-  // generateCliPDF() {
-  //   let label = "generateCliPDF"
-  //   this.beforeCallServer(label)
-  //   this.craService.generateCliPDF(this.currentCra.id)
-  //     .subscribe(
-  //       (response) => {
-  //         this.afterCallServer(label, response)
-  //         this.craReportActivities = response.body.result;
-  //         console.log("*** this.craReportActivities ", this.craReportActivities)
-  //         this.openModalPopup(this.showCraReportPdfView);
-  //       }, error => {
-  //         this.addErrorFromErrorOfServer(label, error);
-  //         ////console.log(error);
-  //       }
-  //     );
-  // }
 
   generateCliPDF() {
     let label = "generateCliPDF"

@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+﻿import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -119,10 +119,14 @@ export class CraService {
   }
 
   public generateCliPDF(idCra: number): Observable<GenericResponse> {
-    return this.http.get<GenericResponse>(this.craUrl + "generate-client-pdf/" + idCra)
+    return this.http.get<GenericResponse>(this.craUrl + "generate-cra-pdf/cli/" + idCra + "/-")
   }
   public generateEsnPDF(idCra: number): Observable<GenericResponse> {
-    return this.http.get<GenericResponse>(this.craUrl + "generate-esn-pdf/" + idCra)
+    return this.http.get<GenericResponse>(this.craUrl + "generate-cra-pdf/esn/" + idCra + "/-")
+  }
+
+  public generateCliPDFClientName(idCra: number, clientName : string): Observable<GenericResponse> {
+    return this.http.get<GenericResponse>(this.craUrl + "generate-cra-pdf/cli/" + idCra + "/" + clientName)
   }
 
   public canAddActivity(craDay: CraDay, craDayActivity: CraDayActivity): boolean {
@@ -363,4 +367,3 @@ export class CraService {
   }
 
 }
-

@@ -139,6 +139,10 @@ export class ActivityFormComponent extends MereComponent {
     }
     this.myObj.consultant = this.consultantSelected
 
+    this.onSelectActivityType(this.myObj.type)
+
+    this.isActivityLabelVisibleFct()
+
     console.log('activityTypes ', this.activityTypes);
     console.log('projects ', this.projects);
 
@@ -188,7 +192,7 @@ export class ActivityFormComponent extends MereComponent {
         // this.myObj.name = this.myObj.type.name + ' / ' + cli.name
         this.dataSharingService.majClientInProject(project, 
           () => {
-            this.myObj.name = this.myObj.type.name + ' / ' + project.client.name
+            this.myObj.name = project.client.name + ' || ' +   this.myObj.type.name 
           }
         )
       }
@@ -322,8 +326,11 @@ export class ActivityFormComponent extends MereComponent {
     this.isTypeInterContrat = false
 
     this.isTypeFormationFct()
-    this.isActivityLabelVisibleFct()
     this.isTypeCongeFct()
+
+    if(obj == null ) {
+      return 
+    }
 
     if (obj.name == "MISSION") {
       this.isTypeMission = true
@@ -333,6 +340,8 @@ export class ActivityFormComponent extends MereComponent {
 
     let listHorsProject = ["INTER_CONTRAT", "FORMATION_INT"]
     this.isViewListProject = !listHorsProject.includes(obj.name)
+
+    this.isActivityLabelVisibleFct()
 
   }
   @ViewChild('compoSelectActivityType', { static: false }) compoSelectActivityType: SelectComponent;
