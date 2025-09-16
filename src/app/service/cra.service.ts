@@ -118,15 +118,24 @@ export class CraService {
     return this.http.post<GenericResponse>(this.craUrl + "init", date);
   }
 
-  public generateCliPDF(idCra: number): Observable<GenericResponse> {
-    return this.http.get<GenericResponse>(this.craUrl + "generate-cra-pdf/cli/" + idCra + "/-")
+  public getClientsOfCra(idCra: number): Observable<GenericResponse> {
+    return this.http.get<GenericResponse>(this.craUrl + "getClientsOfCra/" + idCra)
   }
+
   public generateEsnPDF(idCra: number): Observable<GenericResponse> {
     return this.http.get<GenericResponse>(this.craUrl + "generate-cra-pdf/esn/" + idCra + "/-")
   }
 
-  public generateCliPDFClientName(idCra: number, clientName : string): Observable<GenericResponse> {
+  public generateCliPDF(idCra: number): Observable<GenericResponse> {
+    return this.generateCliPDFClientName(idCra , "/-")
+  }
+
+  public generateCliPDFClientName(idCra: number, clientName: string): Observable<GenericResponse> {
     return this.http.get<GenericResponse>(this.craUrl + "generate-cra-pdf/cli/" + idCra + "/" + clientName)
+  }
+
+  generateCliPDFGenLinks(idCra: number): Observable<GenericResponse> {
+    return this.http.get<GenericResponse>(this.craUrl + "generate-cra-pdf/cli/" + idCra + "/-")
   }
 
   public canAddActivity(craDay: CraDay, craDayActivity: CraDayActivity): boolean {
@@ -291,7 +300,7 @@ export class CraService {
     if (craDay) {
       craDay.craDayActivities.forEach((cda, k) => {
         let title = UtilsService.getEventTitle(cda);
-        title = title.slice(0, 25) ;
+        title = title.slice(0, 25);
         let indexEvent = this.getIndexEventOfCraActivity(craDay, cda, events);
         events[indexEvent].title = title;
       }
@@ -329,14 +338,14 @@ export class CraService {
     if (myList) {
       for (let cra of myList) {
         // if (cra.type != "CONGE") {
-          let dateCra = cra.month;
-          // console.log("getCraValidInDate dateValide", dateValide)
-          let dateCraMonth = this.utils.formatDateToMonth(dateCra);
-          // console.log("getCraValidInDate dateValideMonth", dateValideMonth)
-          if (dateCra && dateMonth == dateCraMonth) {
-            res = cra
-            break;
-          }
+        let dateCra = cra.month;
+        // console.log("getCraValidInDate dateValide", dateValide)
+        let dateCraMonth = this.utils.formatDateToMonth(dateCra);
+        // console.log("getCraValidInDate dateValideMonth", dateValideMonth)
+        if (dateCra && dateMonth == dateCraMonth) {
+          res = cra
+          break;
+        }
         // }
       }
     }

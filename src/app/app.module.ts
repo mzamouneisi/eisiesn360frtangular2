@@ -130,6 +130,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { ConsultantArboComponent } from './compo/consultant/consultant-arbo/consultant-arbo.component';
 
 import { MatTabsModule } from '@angular/material/tabs';
+import { ClientsDialogComponent } from './compo/_dialogs/ClientsDialogComponent';
 import { TableViewerComponent } from './compo/_utils/table-viewer/table-viewer.component';
 import { DocCategoryAppComponent } from './compo/administratifDocumentation/docCategory/doc-category-app/doc-category-app.component'; // Assurez-vous d'importer MatTabsModule
 import { DocCategoryFormComponent } from './compo/administratifDocumentation/docCategory/doc-category-form/doc-category-form.component';
@@ -254,6 +255,7 @@ export function initApp(http: HttpClient, translate: TranslateService) {
     DocCategoryAppComponent,
     TableViewerComponent,
     ConnectionComponent,
+    ClientsDialogComponent,
 
   ],
   imports: [

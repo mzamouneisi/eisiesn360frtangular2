@@ -1,4 +1,4 @@
-<app-add-multi-date [currentCra]="currentCra" #addMultiDateComponent></app-add-multi-date>
+﻿<app-add-multi-date [currentCra]="currentCra" #addMultiDateComponent></app-add-multi-date>
 
 <div class="card my-4">
     <div class="card-header bg-light">
@@ -184,13 +184,14 @@
                 </div>
 
                 <div>
-                    <button class="btn btn-outline-danger me-2" id="btn-cra-form-generate-client-pdf"
-                        (click)="generateCliPDF()" *ngIf="currentCra.id!=null">
-                        <i class="fas fa-file-pdf me-1"></i> Client PDF
+                    <button class="btn btn-outline-danger me-2" id="btn-cra-form-getClientsOfCra"
+                        (click)="generateCliPDFGenLinks()" *ngIf="currentCra.id!=null">
+                        <i class="fas fa-file-pdf me-1"></i> PDF for Clients Of Cra
                     </button>
+                    
                     <button class="btn btn-outline-primary me-2" id="btn-cra-form-generate-esn-pdf"
                         (click)="generateEsnPDF()" *ngIf="currentCra.id!=null">
-                        <i class="fas fa-file-pdf me-1"></i> ESN PDF
+                        <i class="fas fa-file-pdf me-1"></i> Pdf for ESN
                     </button>
 
                     <button class="btn btn-primary me-2" id="btn-cra-form-save" (click)="saveCra(true, false, '', '')"

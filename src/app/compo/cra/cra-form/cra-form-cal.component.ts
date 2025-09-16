@@ -33,6 +33,7 @@ import { DataSharingService } from "../../../service/data-sharing.service";
 import { UtilsService } from "../../../service/utils.service";
 // import {NotifierService} from "angular-notifier";
 import { DatePipe } from '@angular/common';
+import { MatDialog } from '@angular/material/dialog';
 import { CraContext } from 'src/app/core/model/cra-context';
 import { Notification } from 'src/app/model/notification';
 import { ActivityTypeService } from 'src/app/service/activityType.service';
@@ -40,6 +41,7 @@ import { ConsultantService } from 'src/app/service/consultant.service';
 import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
 import { CraObservable, CraObserver } from "../../../core/core";
 import { CraReportActivity } from "../../../model/cra-report-activity";
+import { ClientsDialogComponent } from '../../_dialogs/ClientsDialogComponent';
 import { SelectComponent } from '../../_reuse/select-consultant/select/select.component';
 import { MereComponent } from '../../_utils/mere-component';
 import { AddMultiDateComponent } from "../add-multi-date/add-multi-date.component";
@@ -145,6 +147,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     , public dataSharingService: DataSharingService
     , private utilsIhm: UtilsIhmService
     , private datePipe: DatePipe
+    , public dialog: MatDialog
   ) {
     super(utils, dataSharingService);
     console.log("DBG: cra-form-cal: constructot: currentCra: ", this.currentCra)
@@ -1713,33 +1716,81 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     this.refreshMe();
   }
 
-  /***
-   * This method used  to generate pdf file from data bytes encoded in base64
-   */
 
-  generateCliPDF() {
-    let label = "generateCliPDF"
+  /**
+   // avoir la liste des clients du cra courant 
+   // si un seul client, on genere le cra client de celui-ci
+   // si plusieurs : on ouvre une popup avec liste des btn / client 
+     * 
+     */
+  generateCliPDFGenLinks() {
+    let label = "generateCliPDFGenLinks"
     this.beforeCallServer(label);
 
     let userName = this.dataSharingService.userConnected.fullName.replace(" ", "-");
     let now = this.utils.getDateNow()
 
-    this.craService.generateCliPDF(this.currentCra.id)
+    // retourne an array of clientName 
+    this.craService.getClientsOfCra(this.currentCra.id)
       .subscribe(
         response => {
           this.afterCallServer(label, response)
           console.log(label, "response : ", response)
-          const linkSource = `data:application/pdf;base64,${response.body.result}`;
-          const downloadLink = document.createElement("a");
-          const fileName = "cra-cli-" + userName + "-" + now + ".pdf";
-          downloadLink.href = linkSource;
-          downloadLink.download = fileName;
-          downloadLink.click();
+          let clients = response.body.result
+
+          if (clients) {
+            if (clients.length == 1) {
+              this.craService.generateCliPDFClientName(this.currentCra.id, clients[0].name);
+            } else {
+              //>1
+              // TODO on ouvre une popup avec liste des btn / client 
+              console.log(">>> AV ouverture dialog avec clients=", clients);
+              this.openClientsDialog(clients);
+            }
+          }
+
+
         }, error => {
           this.addErrorFromErrorOfServer(label, error);
-          ////console.log(error);
         }
       );
+  }
+
+  // ouverture du dialog
+  openClientsDialog(clients: any[]) {
+    console.log(">>> ouverture dialog avec clients=", clients);
+
+    const dialogRef = this.dialog.open(ClientsDialogComponent, {
+      width: '400px',
+      data: { clients: clients }
+    });
+
+    let label = "openClientsDialog"
+    this.beforeCallServer(label);
+
+    let userName = this.dataSharingService.userConnected.fullName.replace(" ", "-");
+    let now = this.utils.getDateNow()
+
+    dialogRef.afterClosed().subscribe(selectedClient => {
+      console.log("selectedClient : ", selectedClient)
+      if (selectedClient) {
+        this.craService.generateCliPDFClientName(this.currentCra.id, selectedClient.name).subscribe(
+          response => {
+            this.afterCallServer(label, response)
+            console.log(label, "response : ", response)
+            const linkSource = `data:application/pdf;base64,${response.body.result}`;
+            const downloadLink = document.createElement("a");
+            const fileName = "cra-cli-" + userName + "-" + now + ".pdf";
+            downloadLink.href = linkSource;
+            downloadLink.download = fileName;
+            downloadLink.click();
+          }, error => {
+            this.addErrorFromErrorOfServer(label, error);
+            ////console.log(error);
+          }
+        );
+      }
+    });
   }
 
   generateEsnPDF() {
