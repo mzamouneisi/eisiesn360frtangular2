@@ -1,11 +1,15 @@
+	BUG :
+	reject cra : ne doit pas supprimer les cra_day_activity 
 
-securité : 
-	bien géré du point de vue menu mais non gérés du pt de vue URL !!
-	
+	- Refresh Notification : dont work !!!
+
+
+	manager : 
+		btn : add all type d'activities for a consultant selected 
 
 A la connexion : 
 - get all infos 
-- afficher en bas du fullename : type : ADMIN, RESP_ESN, MANAGER, CONSULTANT 
+
 - navigateTo : dashboard :
 	- si ADMIN :
 		tabs : profil, notifications, list_esn, list_consultants 
@@ -51,5 +55,12 @@ Consultant :
 Cra :
 	month : Date ;
 	
+----------------------------------------------
+
+DONE 
+------------------
+
+- afficher en bas du fullename : type : ADMIN, RESP_ESN, MANAGER, CONSULTANT 
+
 
 	

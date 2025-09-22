@@ -126,6 +126,9 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
   addMultiDateStartDate!: Date;
   addMultiDateEndDate!: Date;
 
+  isToRejectCra = false;
+  isToValidateCra = false;
+
   showWeekNumber() {
     // //////////console.log("DBG showWeekNumber")
     if (this.isAffWeekNumber) this.titleShowWeekNumber = 'Show Week Number';
@@ -209,11 +212,9 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     this.findAllActivities();
 
     console.log("ngOnInit currentCra.consultantId : ", this.currentCra.consultantId)
-    if (!this.currentCra.consultantId) {
-      this.currentCra.consultantId = this.userConnected.id
-    }
+    this.setCurrentCraConsultantId()
 
-    this.consultantService.setAdminConsultant(this.userConnected)
+    this.consultantService.majAdminConsultant(this.userConnected)
 
     this.consultantService.majCra(this.currentCra);
 
@@ -224,6 +225,21 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
 
     console.log("+++ ngOnit FIN");
 
+  }
+
+  setCurrentCraConsultantId() {
+    console.log("DBG: setCurrentCraConsultantId currentCra.consultantId DEB : ", this.currentCra.consultantId)
+    if (!this.currentCra.consultantId) {
+      if (this.currentCra.consultant && this.currentCra.consultant.id) {
+        this.currentCra.consultantId = this.currentCra.consultant.id
+        console.log("DBG: setCurrentCraConsultantId currentCra.consultantId 1 : ", this.currentCra.consultantId)
+        console.log("+++ saveCra : change 02 of consultant of currentCra ", this.currentCra)
+      } else {
+        this.currentCra.consultantId = this.userConnected.id
+        console.log("DBG: setCurrentCraConsultantId currentCra.consultantId 2 : ", this.currentCra.consultantId)
+        console.log("+++ saveCra : change 03 of consultant of currentCra ", this.currentCra)
+      }
+    }
   }
 
   initParams() {
@@ -250,6 +266,10 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
         console.log("DBG: initParams: dataSharingService.currentCra : ", this.currentCra)
       }
     }
+
+    console.log("showCra cra-form ", this.currentCra)
+
+    this.currentCraUser = this.currentCra?.consultant
 
     if (this.currentCra == null) {
       console.log("DBG: initParams: mode new Cra ")
@@ -309,6 +329,8 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
         }
       );
 
+    } else {
+
     }
   }
 
@@ -317,6 +339,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
    * used to retrieve cra activity
    */
   private findAllActivities() {
+    if (!this.currentCraUser) this.currentCraUser = this.currentCra?.consultant
     if (!this.currentCraUser) this.currentCraUser = this.userConnected
 
     console.log("*************** findAllActivities deb currentCraUser : ", this.currentCraUser);
@@ -396,18 +419,18 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     if (currentCra != null && currentCra.craDays != null) {
       this.deleteCraDayActivitiesOfActivityNullInCra(currentCra)
       this.viewDate = currentCra.month;
-      console.log("+++ initCra currentCra.month", currentCra.month);
+      // console.log("+++ initCra currentCra.month", currentCra.month);
       if (this.notADate(this.viewDate)) this.viewDate = new Date();
       this.viewDate = this.utils.getDate(this.viewDate);
-      console.log("+++ initCra viewDate", this.viewDate);
+      // console.log("+++ initCra viewDate", this.viewDate);
       this.events = [];
-      console.log("+++ initCra currentCra.craDays", currentCra.craDays);
+      // console.log("+++ initCra currentCra.craDays", currentCra.craDays);
       currentCra.craDays.forEach((v, k) => {
         if (v.craDayActivities != null) {
           v.craDayActivities.forEach((value, index) => {
             // ////////console.log("+++ initCra av setEvent v, value:", v, value);
             this.setEvent(v, value, false);
-            console.log("+++ initCra ap setEvent v, k, value : ", v, k, value);
+            // console.log("+++ initCra ap setEvent v, k, value : ", v, k, value);
           })
         }
       })
@@ -959,31 +982,36 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
    */
   saveCra(redirectToList: boolean, isSendNotification: boolean, title, message): void {
 
-    console.log("saveCra isSendNotification=", isSendNotification)
+    console.log("saveCra isSendNotification, currentCra : ", isSendNotification, this.currentCra)
 
-    if (!this.currentCra.consultant && this.currentCra.status != 'REJECTED') {
+    if (!this.currentCra.consultant && this.currentCra.status != 'REJECTED' && this.currentCra.status != 'VALIDATED') {
       this.currentCra.consultant = this.userConnected;
+      console.log("+++ saveCra : change 01 of consultant of currentCra ", this.currentCra)
     }
-    if (!this.currentCra.consultantId) {
-      this.currentCra.consultantId = this.userConnected.id;
-    }
+    this.setCurrentCraConsultantId()
 
     this.setMonthCurentCraIfNull();
 
     // this.consultantService.majCra(this.currentCra);
     if (!this.currentCra.consultant) {
+      console.log("+++ saveCra : cat No consultant of currentCra ")
       this.consultantService.findById(this.currentCra.consultantId).subscribe(
         data => {
           console.log("+++ saveCra : set consultant ", data)
           this.currentCra.consultant = data.body.result;
+          console.log("+++ saveCra : after call server consultant of currentCra is : ", this.currentCra.consultant)
+          console.log("+++ saveCra : change 04 of consultant of currentCra ", this.currentCra)
 
           this.saveCraDirect(redirectToList, isSendNotification, title, message);
         },
         error => {
           console.log("ERROR +++ saveCra : set consultant err", error)
+          this.isToRejectCra = false
+          this.isToValidateCra = false
         }
       );
     } else {
+      console.log("+++ saveCra : cat consultant of currentCra Not Null : ", this.currentCra.consultant)
       this.saveCraDirect(redirectToList, isSendNotification, title, message);
     }
 
@@ -995,8 +1023,8 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
  */
   saveCraDirect(redirectToList: boolean, isSendNotification: boolean, title, message): void {
 
-    console.log("++++ saveCraDirect DEB this.currentCra, consultant : ", this.currentCra, this.currentCra.consultant)
-    console.log("saveCraDirect isSendNotification=", isSendNotification)
+    console.log("saveCra ++++ saveCraDirect DEB this.currentCra, consultant : ", this.currentCra, this.currentCra.consultant)
+    console.log("saveCra saveCraDirect isSendNotification=", isSendNotification)
     //////////////////////////
 
     if (this.typeCra == 'CONGE') {
@@ -1006,11 +1034,13 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     }
 
     if (!this.isCraValid(true) && this.currentCra.status != 'REJECTED') {
-      console.log("saveCraDirect : isCraValid = KO !! this.currentCra=", this.currentCra)
+      console.log("saveCra saveCraDirect : isCraValid = KO !! this.currentCra=", this.currentCra)
+      this.isToRejectCra = false
+      this.isToValidateCra = false
       return;
     }
 
-    console.log("****************saveCraDirect this.currentCra=" + this.currentCra)
+    console.log("saveCra ****************saveCraDirect this.currentCra=", this.currentCra)
 
     this.beforeCallServer("saveCraDirect")
     this.craService.save(this.currentCra).subscribe(
@@ -1019,16 +1049,25 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
         this.afterCallServer("saveCraDirect", data)
 
         this.currentCra = data.body.result
+        this.dataSharingService.majConsultantInCra(this.currentCra,
+          () => {
+            console.log("+++ saveCra : change 05 of consultant of currentCra ", this.currentCra.consultant)
+            console.log("+++ saveCra : currentCraUser.id ", this.currentCraUser.id)
+            console.log("+++ saveCra : currentCra.consultant.id ", this.currentCra.consultant.id)
+            console.log("+++ saveCra : currentCraUser.role ", this.currentCraUser.role)
 
-        this.addToList(this.currentCra)
+            this.addToList(this.currentCra)
 
-        console.log("saveCraDirect this.isError()=", this.isError())
-        console.log("saveCraDirect isSendNotification=", isSendNotification)
+            console.log("saveCraDirect this.isError()=", this.isError())
+            console.log("saveCraDirect isSendNotification=", isSendNotification)
 
-        console.log("++++ saveCraDirect ap call server this.currentCra, consultant : ", this.currentCra, this.currentCra.consultant)
+            console.log("++++ saveCraDirect ap call server this.currentCra, consultant : ", this.currentCra, this.currentCra.consultant)
 
-        if (!this.isError() && isSendNotification) this.sendNotification(title, message);
-        if (!this.isError() && redirectToList) this.gotoCraList()
+            if (!this.isError() && isSendNotification) this.sendNotification(title, message);
+            if (!this.isError() && redirectToList) this.gotoCraList()
+          }
+        )
+
       }, error => {
         console.log("saveCraDirect error=", error)
         this.addErrorFromErrorOfServer("saveCraDirect", error);
@@ -1082,9 +1121,9 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     console.log("sendNotification this.userConnected=", this.userConnected)
     console.log("sendNotification this.userConnected.role=", this.userConnected.role)
 
-    if (!currentUser) {
-      currentUser = this.userConnected
+    if (!this.currentCra.consultant) {
       this.currentCra.consultant = currentUser
+      console.log("+++ saveCra : change 06 of consultant of currentCra ", this.currentCra)
     }
 
     if (!currentUser.adminConsultant) {
@@ -1104,13 +1143,13 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     notification.cra = this.currentCra;
     notification.craId = this.currentCra.id;
 
-    // notification.fromUser = isManager ? currentUser : this.currentCra.consultant;
-    // notification.toUser = isManager ? this.currentCra.consultant : this.currentCra.manager;
-
     notification.fromUser = currentUser
     notification.fromUsername = notification.fromUser.username
 
+    console.log("sendNotification fromUser : ", notification.fromUser)
+
     let toUser = currentUser.adminConsultant != null ? currentUser.adminConsultant : currentUser;
+    console.log("sendNotification currentCra.status=", this.currentCra.status)
     if (this.currentCra.status != 'TO_VALIDATE') {
       toUser = this.currentCra.consultant
     }
@@ -1337,9 +1376,9 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     let dateCra = this.utils.getDate(this.currentCra.month);
     let moisPrec = this.utils.getDateLastMonthFirstDay();
 
-    console.log("isTimeToModify : dateCra:", dateCra)
-    console.log("isTimeToModify : moisPrec:", moisPrec)
-    console.log("isTimeToModify : dateCra >= moisPrec:", (dateCra >= moisPrec))
+    // console.log("isTimeToModify : dateCra:", dateCra)
+    // console.log("isTimeToModify : moisPrec:", moisPrec)
+    // console.log("isTimeToModify : dateCra >= moisPrec:", (dateCra >= moisPrec))
 
     return dateCra >= moisPrec;
 
@@ -1449,6 +1488,8 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
    */
   validCra() {
 
+    this.isToValidateCra = true
+
     let name = this.getNameByType();
 
     this.utilsIhm.confirmYesNo("Voulez-vous valider le " + name + "?", this
@@ -1470,13 +1511,17 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
  * This method used to rejected cra,
  */
   rejectCra() {
+    console.log("rejectCra DEB currentCra", this.currentCra)
+    this.isToRejectCra = true
     let name = this.getNameByType();
+    this.currentCraUser = this.currentCra.consultant
 
     this.currentCra.validByManager = false;
     this.currentCra.validByConsultant = false;
     this.currentCra.status = "REJECTED";
     this.modal.dismissAll(this.rejectCraView);
     this.saveCra(true, true, name + " rejected", this.currentCra.comment);
+    console.log("rejectCra END currentCra", this.currentCra)
 
   }
 
@@ -1493,6 +1538,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     // let currentUser: Consultant = this.currentCra.consultant
     let currentUser: Consultant = this.userConnected
     this.currentCra.consultant = currentUser
+    this.currentCraUser = this.currentCra.consultant
 
     let craUser = this.currentCra.consultant
     let craManager = this.currentCra.consultant?.adminConsultant

@@ -130,7 +130,7 @@ export class ConsultantFormComponent extends MereComponent {
   }
 
   majAdminConsultant() {
-    this.consultantService.setAdminConsultant(this.myObj)
+    this.consultantService.majAdminConsultant(this.myObj)
   }
 
   typeUser() {

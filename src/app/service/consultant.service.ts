@@ -25,7 +25,7 @@ export class ConsultantService {
   private consultant: Consultant;
   private managerSelected: Consultant = null;
 
-  constructor(private http: HttpClient, private datasharingService : DataSharingService) {
+  constructor(private http: HttpClient, private datasharingService: DataSharingService) {
     this.consultantUrl = environment.apiUrl + '/consultant';
   }
 
@@ -56,7 +56,7 @@ export class ConsultantService {
     return this.http.get<GenericResponse>(this.consultantUrl);
   }
 
-  public findAllByEsn(idEsn : number): Observable<GenericResponse> {
+  public findAllByEsn(idEsn: number): Observable<GenericResponse> {
     return this.http.get<GenericResponse>(this.consultantUrl + "/esn/" + idEsn);
   }
 
@@ -155,40 +155,40 @@ export class ConsultantService {
   /////////////////////////////
 
   mapConsul = new Map<number, Consultant>();
-  setAdminConsultant(consultant: Consultant, fct : Function = null ) {
+  majAdminConsultant(consultant: Consultant, fct: Function = null) {
     ////////////////
-    if(consultant == null) return ;
-    if(consultant.adminConsultant != null) {
-      consultant.adminConsultantId = consultant.adminConsultant.id 
-      return ;
+    if (consultant == null) return;
+    if (consultant.adminConsultant != null) {
+      consultant.adminConsultantId = consultant.adminConsultant.id
+      return;
     }
-    if(consultant.role == "ADMIN") {
-      consultant.adminConsultant = null 
-      consultant.adminConsultantId = null 
-      return ;
+    if (consultant.role == "ADMIN") {
+      consultant.adminConsultant = null
+      consultant.adminConsultantId = null
+      return;
     }
 
-    if(consultant.role == "RESPONSIBLE_ESN") {
-      consultant.adminConsultant = null  
-      consultant.adminConsultantId = null 
-      return ;
+    if (consultant.role == "RESPONSIBLE_ESN") {
+      consultant.adminConsultant = null
+      consultant.adminConsultantId = null
+      return;
     }
-    
+
     let id = consultant.adminConsultantId
     let label = "find admin consultant by id=" + id;
     let obj = consultant.adminConsultant
 
-    console.log("setAdminConsultant DEB consultant, idAdmin, admin : ",consultant, id, obj )
+    console.log("setAdminConsultant DEB consultant, idAdmin, admin : ", consultant, id, obj)
 
     if (consultant && id != null && !obj) {
 
-      if(this.mapConsul != null) {
+      if (this.mapConsul != null) {
         let ca = this.mapConsul[id]
-        if(ca != null) {
-          consultant.adminConsultant = ca 
-          console.log("setAdminConsultant trouve dans map ca : ", ca );
-          if(fct) fct()
-          return 
+        if (ca != null) {
+          consultant.adminConsultant = ca
+          console.log("setAdminConsultant trouve dans map ca : ", ca);
+          if (fct) fct()
+          return
         }
       }
 
@@ -196,20 +196,20 @@ export class ConsultantService {
         data => {
           console.log(label, data)
           consultant.adminConsultant = data.body.result;
-          consultant.adminConsultantId = consultant.adminConsultant?.id 
+          consultant.adminConsultantId = consultant.adminConsultant?.id
           // if(consultant.adminConsultant == null) {
           //   consultant.adminConsultant = consultant
           // }
-          if(this.mapConsul != null) {
+          if (this.mapConsul != null) {
             let ca = this.mapConsul[id]
             this.mapConsul[id] = consultant.adminConsultant
           }
-          console.log("setAdminConsultant trouve dans server ca : ", consultant.adminConsultant );
+          console.log("setAdminConsultant trouve dans server ca : ", consultant.adminConsultant);
 
-          if(fct) fct()
+          if (fct) fct()
         },
         error => {
-          consultant.adminConsultant =  null 
+          consultant.adminConsultant = null
           console.log("setAdminConsultant ERROR label consultant, err", label, consultant, error)
         }
       );
@@ -246,26 +246,42 @@ export class ConsultantService {
     let admin = obj?.adminConsultant
     let managerCra = myObj.manager
 
-    if (myObj && id && (!obj || !admin || !managerCra) ) {
+    if (myObj && id && (!obj || !admin || !managerCra)) {
       this.findById(id).subscribe(
         data => {
           console.log("*** majCra : label, data : ", label, data)
           myObj.consultant = data.body.result;
-          this.setAdminConsultant(myObj.consultant , () => {
+          console.log("*** majCra : myObj : ", myObj)
+          this.majAdminConsultant(myObj.consultant, () => {
             myObj.manager = myObj.consultant.adminConsultant
+            this.majActivityInCra(myObj)
+            console.log("*** majCra END : myObj : Cra : ", myObj)
           });
-          this.datasharingService.majActivityInCra(myObj)
-          console.log("*** majCra END : myObj Cra : ", myObj)
         },
         error => {
           console.log("majCra ERROR label myObj, err", label, myObj, error)
         }
       );
+
     }
     /////////////////
   }
 
-  majMsgConsultants(myObj: Msg, consultantName : string ) {
+  majActivityInCra(cra: Cra) {
+    // this.datasharingService.majActivityInCra(cra)
+    if (cra != null) {
+      for (let craDay of cra.craDays) {
+        if (craDay != null) {
+          for (let craDayActivities of craDay.craDayActivities) {
+            // craDayActivities.craDay = craDay
+            this.datasharingService.majActivityInCraDayActivity(craDayActivities);
+          }
+        }
+      }
+    }
+  }
+
+  majMsgConsultants(myObj: Msg, consultantName: string) {
     ////////////////
     let consultantId = consultantName + "Id"
     let id = myObj[consultantId]

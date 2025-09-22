@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+﻿import { Injectable } from '@angular/core';
 
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, of } from "rxjs";
@@ -625,13 +625,17 @@ export class DataSharingService implements CraStateService, ServiceLocator {
   }
 
   majManagerOfUserCurent() {
-    this.consultantService.setAdminConsultant(this.userConnected)
+    this.consultantService.majAdminConsultant(this.userConnected)
   }
 
   mapAct = new Map<number, Activity>();
   majListCra() {
-    if (this.listCra != null) {
-      for (let cra of this.listCra) {
+    this.majListCraParam(this.listCra)
+  }
+
+  majListCraParam(list : Cra[]) {
+    if (list != null) {
+      for (let cra of list) {
         this.majCra(cra)
       }
     }
@@ -643,7 +647,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     this.majActivityInCra(cra);
   }
 
-  majActivityInCra(cra: Cra) {
+  public majActivityInCra(cra: Cra) {
     if (cra != null) {
       for (let craDay of cra.craDays) {
         if (craDay != null) {
@@ -656,7 +660,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     }
   }
 
-  majConsultantInCra(cra: Cra) {
+  majConsultantInCra(cra: Cra, fct : Function = null ) {
 
     // console.log("majConsultantInCra cra : ", cra);
     if (cra == null) {
@@ -669,7 +673,8 @@ export class DataSharingService implements CraStateService, ServiceLocator {
       let consul = this.consultantService.mapConsul[consultantId];
       if (consul != null) {
         cra.consultant = consul;
-        this.consultantService.setAdminConsultant(cra.consultant)
+        this.consultantService.majAdminConsultant(cra.consultant)
+        if(fct) fct()
       } else {
         this.consultantService.findById(consultantId).subscribe(
           data => {
@@ -678,14 +683,15 @@ export class DataSharingService implements CraStateService, ServiceLocator {
             cra.consultant = consul;
             console.log("majCra act : ", consul);
             console.log("majCra listCra : ", this.listCra);
-            this.consultantService.setAdminConsultant(cra.consultant)
+            this.consultantService.majAdminConsultant(cra.consultant)
+            if(fct) fct()
           }, error => {
             console.log("majCra ERROR : ", error);
           }
         );
       }
     } else {
-      this.consultantService.setAdminConsultant(cra.consultant)
+      this.consultantService.majAdminConsultant(cra.consultant)
     }
   }
 
@@ -826,6 +832,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     // //console.log(label, this.listObserversNotifications)
     for (let cli of this.listObserversNotifications) {
       if (cli) {
+        console.log("notifyObserversNotificationsAfter cli : ", cli )
         cli.afterCallServer(label, data)
         cli["updateNotifications"](this.listNotifications);
       }
@@ -934,9 +941,8 @@ export class DataSharingService implements CraStateService, ServiceLocator {
   ////////////////
 
   setAdminConsultant(user: Consultant) {
-    this.consultantService.setAdminConsultant(user);
+    this.consultantService.majAdminConsultant(user);
   }
 
 
 }
-

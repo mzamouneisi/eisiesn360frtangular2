@@ -355,22 +355,25 @@ export class CraService {
 
   ////////////////////
 
-  majNotification(myObj: Notification) {
+  majNotification(myObj: Notification, fct : Function = null, isForce : Boolean = false  ) {
     ////////////////
     let id = myObj.craId
     let label = "find cra by id=" + id;
     let obj = myObj.cra
 
-    if (myObj && id && !obj) {
+    if (myObj && id && ( !obj || isForce)) {
       this.findById(id).subscribe(
         data => {
           console.log(label, data)
           myObj.cra = data.body.result;
+          if(fct) fct()
         },
         error => {
           console.log("ERROR label myObj, err", label, myObj, error)
         }
       );
+    }else {
+      if(fct) fct()
     }
     /////////////////
   }

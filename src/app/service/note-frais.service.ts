@@ -67,7 +67,7 @@ export class NoteFraisService {
 
   ///////////////////////////////////////////////////////////////////
 
-  majNotification(myObj: Notification) {
+  majNotification(myObj: Notification, fct : Function = null ) {
 	    ////////////////
       let id = myObj.noteFraisId
       let label = "find noteFrais by id="+id;
@@ -78,11 +78,14 @@ export class NoteFraisService {
         data => {
           console.log(label, data)
           myObj.noteFrais = data.body.result;
+          if(fct) fct()
         },
         error => {
           console.log("ERROR label myObj, err", label, myObj, error )
         }
         );
+      }else {
+        if(fct) fct()
       }
       ////////////////
   }

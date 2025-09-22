@@ -54,7 +54,7 @@ export class HeaderComponent extends MereComponent {
         this.esnService.majEsnOnConsultant(this.userConnected , ()=>{}, (error)=>{
           this.addError(new MyError("", JSON.stringify(error)))
         } )
-        this.consultantService.setAdminConsultant(this.userConnected)
+        this.consultantService.majAdminConsultant(this.userConnected)
         this.getNbNotifications()
       }, 1000
     )

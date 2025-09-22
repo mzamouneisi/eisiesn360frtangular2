@@ -229,14 +229,20 @@ export class NotificationComponent extends MereComponent implements AfterViewIni
 
     this.clearInfos();
     notification.viewed = true;
-    this.craService.majNotification(notification)
-    this.noteFraisService.majNotification(notification)
-    this.saveNotification(notification);
+    this.craService.majNotification(notification,
+      ()=>{
+        this.noteFraisService.majNotification(notification, 
+          ()=>{
+            this.saveNotification(notification);
+            this.dataSharingService.fromNotif = true;
+            this.dataSharingService.showCra(notification.cra);
+          }
+        )
+      }, true 
+    )
 
-    this.dataSharingService.fromNotif = true;
-    setTimeout(() => {
-      this.dataSharingService.showCra(notification.cra);
-    }, 5000);
+    // setTimeout(() => {
+    // }, 5000);
   }
 
   showFee(notification: Notification) {

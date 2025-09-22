@@ -139,6 +139,7 @@ export class CraListComponent extends MereComponent {
   }
 
   showCra(cra: Cra, event: any) {
+    console.log("showCra craList ", cra)
     this.clearInfos()
     this.dataSharingService.showCra(cra);
   }
@@ -149,7 +150,7 @@ export class CraListComponent extends MereComponent {
     this.router.navigate(['/cra_form']);
   }
 
-  delete(myObj : Cra) {
+  delete(myObj: Cra) {
     let mythis = this;
     this.utilsIhm.confirmYesNo("Voulez vous vraiment supprimer la ligne avec id=" + myObj.id, mythis
       , () => {
@@ -172,13 +173,13 @@ export class CraListComponent extends MereComponent {
     );
   }
 
-  canDeleteCra(myObj : Cra) {
-    let cond = !myObj.validByConsultant && myObj.id!=null ;
+  canDeleteCra(myObj: Cra) {
+    let cond = !myObj.validByConsultant && myObj.id != null;
 
-    if(this.dataSharingService.isCurrenUserRespOrAdmin()) {
-      return myObj.id!=null ;
-    }else {
-      return cond ;
+    if (this.dataSharingService.isCurrenUserRespOrAdmin()) {
+      return myObj.id != null;
+    } else {
+      return cond;
     }
 
   }
@@ -205,6 +206,8 @@ export class CraListComponent extends MereComponent {
       data => {
         this.afterCallServer("getFilteredCra", data);
         this.listCraFiltred = data.body.result;
+        this.dataSharingService.majListCraParam(this.listCraFiltred)
+        console.log("**** showCra getFilteredCra: listCraFiltred=", this.listCraFiltred);
 
         // this.saveListCra(this.listCraFiltred)
 
