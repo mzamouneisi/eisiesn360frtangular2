@@ -184,15 +184,15 @@ export class ActivityFormComponent extends MereComponent {
     this.myObj.project = project;
     if (this.myObj.project == null) {
       this.myObj.project = new Project();
-    }else {
-      console.log("project : ", project )
+    } else {
+      console.log("project : ", project)
       let cli = this.myObj.project.client
-      console.log("cli : ", cli )
-      if (! cli) {
+      console.log("cli : ", cli)
+      if (!cli) {
         // this.myObj.name = this.myObj.type.name + ' / ' + cli.name
-        this.dataSharingService.majClientInProject(project, 
+        this.dataSharingService.majClientInProject(project,
           () => {
-            this.myObj.name = project.client.name + ' || ' +   this.myObj.type.name 
+            this.myObj.name = project.client.name + ' || ' + this.myObj.type?.name + ' ' + project.name
           }
         )
       }
@@ -328,8 +328,8 @@ export class ActivityFormComponent extends MereComponent {
     this.isTypeFormationFct()
     this.isTypeCongeFct()
 
-    if(obj == null ) {
-      return 
+    if (obj == null) {
+      return
     }
 
     if (obj.name == "MISSION") {
@@ -386,7 +386,7 @@ export class ActivityFormComponent extends MereComponent {
 
   isTypeFormationFct(): boolean {
     let ok = false;
-    if (this.myObj.type.name != null) ok = this.myObj.type.formaDay;
+    if (this.myObj.type && this.myObj.type.name != null) ok = this.myObj.type.formaDay;
     this.isTypeFormation = ok
     return ok;
   }
@@ -394,7 +394,7 @@ export class ActivityFormComponent extends MereComponent {
   isTypeCongeFct(): boolean {
     ////////////console.log("isTypeConge:", this.myObj.type)
     let ok = false;
-    if (this.myObj.type.name != null) ok = this.myObj.type.congeDay;
+    if (this.myObj.type && this.myObj.type.name != null) ok = this.myObj.type.congeDay;
     this.isTypeConge = ok
 
     return ok;
@@ -430,7 +430,7 @@ export class ActivityFormComponent extends MereComponent {
   onSubmit() {
     //////////
     console.log("onSubmit: myObj", this.myObj);
-    if (!this.myObj.name) {
+    if (!this.myObj.name && this.myObj.type) {
       this.myObj.name = this.myObj.type.name;
     }
 
@@ -462,7 +462,7 @@ export class ActivityFormComponent extends MereComponent {
   sendMsgToManager() {
     let msg: Msg = new Msg();
     msg.dateMsg = new Date();
-    msg.msg = "New Activity : " + this.myObj.type.name;
+    msg.msg = "New Activity : " + this.myObj.type?.name;
     msg.type = "Activity";
     msg.typeId = this.myObj.id;
     msg.from = this.userConnected;
@@ -521,13 +521,18 @@ export class ActivityFormComponent extends MereComponent {
 
   onChangeDateDebFin(): void {
 
-    console.log('Date Deb changed:', this.myObj.dateDeb);
-    console.log('Date Fin changed:', this.myObj.dateFin);
+    console.log('Date Deb changed: 1 ', this.myObj.dateDeb);
+    console.log('Date Fin changed: 1 ', this.myObj.dateFin);
 
-    if (this.myObj.dateDeb == null) this.myObj.dateDeb = new Date()
-    if (this.myObj.dateFin == null) this.myObj.dateFin = new Date()
+    if (!this.myObj.dateDeb) this.myObj.dateDeb = new Date()
+
+    if (!this.myObj.dateFin) this.myObj.dateFin = this.myObj.dateDeb
 
     if (this.myObj.dateFin < this.myObj.dateDeb) this.myObj.dateFin = this.myObj.dateDeb
+    
+    console.log('Date Deb changed: 2 ', this.myObj.dateDeb);
+    console.log('Date Fin changed: 2 ', this.myObj.dateFin);
+
   }
 
   ///////////////
