@@ -172,12 +172,12 @@
         <div class="border-top pt-3 mt-3">
             <div class="d-flex justify-content-between">
                 <div>
-                    <button class="btn btn-success me-2" (click)="isCraValid(false)" id="btn-cra-form-check-validation">
+                    <button class="btn btn-success me-2" (click)="isCraValid(false)" id="btn-cra-form-check-validation" *ngIf="currentCra.status != 'VALIDATED'">
                         <i class="fas fa-check-circle me-1"></i> Check Validation of {{getNameByType()}}
                     </button>
                     <button class="btn btn-outline-dark me-2" id="btn-cra-form-send-cra-validation"
                         (click)="sendCraToValidate()"
-                        *ngIf="(currentCra.status == 'DRAFT' || currentCra.status == 'REJECTED') && hasManager()">
+                        *ngIf="(currentCra.status != 'VALIDATED') && hasManager()">
                         <i class="fas fa-paper-plane me-1"></i> Submit {{getNameByType()}}
                     </button>
 
@@ -217,7 +217,7 @@
                     <i class="fas fa-check me-1"></i> Approve {{getNameByType()}}
                 </button>
                 <button class="btn btn-danger" id="btn-cra-form-reject" (click)="openModalPopup(rejectCraView)"
-                    *ngIf="hasRoleManagerValidate() && isTimeToModify() && ! isCraOfManagerRole()">
+                    *ngIf="hasRoleManagerValidate() && isTimeToModify() && ! isCraOfManagerRole() && currentCra.status != 'VALIDATED'">
                     <i class="fas fa-times me-1"></i> Reject
                 </button>
             </div>

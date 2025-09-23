@@ -1,11 +1,10 @@
-	BUG :
-	reject cra : ne doit pas supprimer les cra_day_activity 
-
-	- Refresh Notification : dont work !!!
 
 
-	manager : 
-		btn : add all type d'activities for a consultant selected 
+manager : 
+	btn : add all type d'activities for a consultant selected 
+
+Btn : delete all notifications 
+
 
 A la connexion : 
 - get all infos 
@@ -22,8 +21,6 @@ A la connexion :
 - ces infos seront dans data-sharing , avec abonnements 
 - le call vers server de ces infos doit passer par la ou si ailleurs, doit mettre a jour celles-ci 
 
-deploy to server github and azure : for imed 
-
 
 tests selenium complet : 
 profils : admin, resp, manager, consultant
@@ -36,7 +33,6 @@ resp.esn.demo1@ens-demo1.com
 manager.demo1@ens-demo1.com
 consultant.demo1@ens-demo1.com
 ---------------------------
-
 
 Angular CLI: 12.2.18
 angular/material  12.2.13
@@ -59,6 +55,11 @@ Cra :
 
 DONE 
 ------------------
+
+si cra valide : 
+hide certains btns 
+
+-----------------------------
 
 - afficher en bas du fullename : type : ADMIN, RESP_ESN, MANAGER, CONSULTANT 
 
