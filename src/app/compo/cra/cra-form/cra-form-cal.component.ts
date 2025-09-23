@@ -1773,7 +1773,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     let label = "generateCliPDFGenLinks"
     this.beforeCallServer(label);
 
-    let userName = this.dataSharingService.userConnected.fullName.replace(" ", "-");
+    let userName = this.currentCra.consultant.fullName.replace(" ", "-");
     let now = this.utils.getDateNow()
 
     console.log(label + " : ", now)
@@ -1835,7 +1835,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     let label = "openClientsDialog"
     this.beforeCallServer(label);
 
-    let userName = this.dataSharingService.userConnected.fullName.replace(" ", "-");
+    let userName = this.currentCra.consultant.fullName.replace(" ", "-");
     let now = this.utils.getDateNow()
 
     dialogRef.afterClosed().subscribe(selectedClient => {
@@ -1864,7 +1864,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     let label = "generateEsnPDF"
     this.beforeCallServer(label);
 
-    let userName = this.dataSharingService.userConnected.fullName.replace(" ", "-");
+    let userName = this.currentCra.consultant.fullName.replace(" ", "-");
     let now = this.utils.getDateNow()
 
     this.craService.generateEsnPDF(this.currentCra.id)
