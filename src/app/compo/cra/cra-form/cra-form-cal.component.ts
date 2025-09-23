@@ -1776,27 +1776,48 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     let userName = this.dataSharingService.userConnected.fullName.replace(" ", "-");
     let now = this.utils.getDateNow()
 
+    console.log(label + " : ", now)
+
     // retourne an array of clientName 
     this.craService.getClientsOfCra(this.currentCra.id)
       .subscribe(
         response => {
+          console.log(label + " response : ", response)
           this.afterCallServer(label, response)
-          console.log(label, "response : ", response)
           let clients = response.body.result
-
+          console.log(label + " >>> AV ouverture dialog avec clients=", clients);
           if (clients) {
             if (clients.length == 1) {
-              this.craService.generateCliPDFClientName(this.currentCra.id, clients[0].name);
+              let clientName = clients[0].name
+              console.log(label + " : one client : ", clientName)
+              this.craService.generateCliPDFClientName(this.currentCra.id, clientName).subscribe(
+                response => {
+                  this.afterCallServer(label, response)
+                  console.log(label, "response : ", response)
+                  const linkSource = `data:application/pdf;base64,${response.body.result}`;
+                  const downloadLink = document.createElement("a");
+                  const fileName = "cra-cli-" + userName + "-" + clientName + "-" + now + ".pdf";
+                  downloadLink.href = linkSource;
+                  downloadLink.download = fileName;
+                  downloadLink.click();
+                }, error => {
+                  this.addErrorFromErrorOfServer(label, error);
+                  ////console.log(error);
+                }
+              );
             } else {
               //>1
               // TODO on ouvre une popup avec liste des btn / client 
               console.log(">>> AV ouverture dialog avec clients=", clients);
               this.openClientsDialog(clients);
             }
+          } else {
+            console.log(label + " : NO client ")
           }
 
 
         }, error => {
+          console.log("ERROR : ", error)
           this.addErrorFromErrorOfServer(label, error);
         }
       );

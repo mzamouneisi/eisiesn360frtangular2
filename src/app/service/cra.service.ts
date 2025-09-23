@@ -131,6 +131,7 @@ export class CraService {
   }
 
   public generateCliPDFClientName(idCra: number, clientName: string): Observable<GenericResponse> {
+    console.log("generateCliPDFClientName generateCliPDFGenLinks : ", idCra, clientName)
     return this.http.get<GenericResponse>(this.craUrl + "generate-cra-pdf/cli/" + idCra + "/" + clientName)
   }
 
