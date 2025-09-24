@@ -147,6 +147,11 @@ export class TradService {
       en: "Edit Activity Type",
     },
 
+    "NewActivity": {
+      fr: "Nouvelle activiti\u00e9",
+      en: "New Activity",
+    },
+
     "EditActivity": {
       fr: "Modifier activity",
       en: "Edit Activity"

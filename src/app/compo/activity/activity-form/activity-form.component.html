@@ -26,12 +26,12 @@
 
           <label>{{ utils.tr('app.compo.activity.form.input.endDate') }} :
           </label>
-<!-- 
+
           <app-mz-date-picker-deb-fin placeHolderDeb="Choix date debut" [myDatePickerDeb]="myObj.dateDeb"
             [onChangeCallerDeb]="'onStartDateChanged'" placeHolderFin="Choix date fin" [myDatePickerFin]="myObj.dateFin"
-            [onChangeCallerFin]="'onEndDateChanged'" [objCaller]="this"></app-mz-date-picker-deb-fin> -->
+            [onChangeCallerFin]="'onEndDateChanged'" [objCaller]="this"></app-mz-date-picker-deb-fin>
 
-            <mat-form-field appearance="fill">
+            <!-- <mat-form-field appearance="fill">
               <mat-label>{{ utils.tr('app.compo.activity.form.input.startDate') }}</mat-label>
               <input id="pickerDeb" matInput [matDatepicker]="pickerDeb" [(ngModel)]="myObj.dateDeb" (dateChange)="onChangeDateDebFin()">
               <mat-datepicker-toggle matSuffix [for]="pickerDeb"></mat-datepicker-toggle>
@@ -43,7 +43,7 @@
               <input id="pickerFin" matInput [matDatepicker]="pickerFin" [(ngModel)]="myObj.dateFin" (dateChange)="onChangeDateDebFin()">
               <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
               <mat-datepicker #pickerFin></mat-datepicker>
-            </mat-form-field>
+            </mat-form-field> -->
 
           
 

@@ -520,20 +520,60 @@ export class ActivityFormComponent extends MereComponent {
   // }
 
   onChangeDateDebFin(): void {
+    let { dateDeb, dateFin } = this.myObj;
 
-    console.log('Date Deb changed: 1 ', this.myObj.dateDeb);
-    console.log('Date Fin changed: 1 ', this.myObj.dateFin);
+    // Si dateDeb est null -> initialiser
+    if (!dateDeb) {
+      dateDeb = dateFin ? this.makePureDate(dateFin) : new Date();
+    }
 
-    if (!this.myObj.dateDeb) this.myObj.dateDeb = new Date()
+    // Si dateFin est null -> dateDeb + 3 mois
+    if (!dateFin) {
+      dateFin = this.addMonthsToDate2(dateDeb, 3);
+    }
 
-    if (!this.myObj.dateFin) this.myObj.dateFin = this.myObj.dateDeb
+    // Si dateFin < dateDeb -> recalculer fin
+    if (dateFin < dateDeb) {
+      dateFin = this.addMonthsToDate2(dateDeb, 3);
+    }
 
-    if (this.myObj.dateFin < this.myObj.dateDeb) this.myObj.dateFin = this.myObj.dateDeb
-    
-    console.log('Date Deb changed: 2 ', this.myObj.dateDeb);
-    console.log('Date Fin changed: 2 ', this.myObj.dateFin);
+    this.myObj.dateDeb = new Date(dateDeb);
+    this.myObj.dateFin = new Date(dateFin);
 
+    console.log(' Date Deb:', this.myObj.dateDeb);
+    console.log(' Date Fin:', this.myObj.dateFin);
+
+    this.myObj.dateDeb = new Date(this.myObj.dateDeb);
+    this.myObj.dateFin = new Date(this.myObj.dateFin);
+
+    console.log('Final Date Deb:', this.myObj.dateDeb);
+    console.log('Final Date Fin:', this.myObj.dateFin);
   }
+
+  // private addMonthsToDate2(date: Date, nbMonth: number): Date {
+  //   const clone = new Date(date);
+  //   clone.setMonth(clone.getMonth() + nbMonth);
+  //   return this.makePureDate(clone);
+  // }
+
+  private addMonthsToDate2(date: Date, nbMonth: number): Date {
+  const newDate = new Date(date.getFullYear(), date.getMonth() + nbMonth, date.getDate());
+  return newDate;
+}
+
+
+  private makePureDate(date: Date): Date {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  }
+
+
+  private formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const day = ('0' + date.getDate()).slice(-2);
+    return `${year}-${month}-${day}`;
+  }
+
 
   ///////////////
 

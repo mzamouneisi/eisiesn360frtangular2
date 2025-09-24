@@ -309,8 +309,8 @@ export function initApp(http: HttpClient, translate: TranslateService) {
       useClass: JwtTokenInterceptor,
       multi: true
     },
-    Location, 
-    {provide: LocationStrategy, useClass: PathLocationStrategy},
+    Location,
+    { provide: LocationStrategy, useClass: PathLocationStrategy },
     UtilsService,
     ActivityTypeService,
     PermissionService,
@@ -335,4 +335,8 @@ export function initApp(http: HttpClient, translate: TranslateService) {
 
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {
+  // constructor(private dateAdapter: DateAdapter<Date>) {
+  //   this.dateAdapter.setLocale('fr-FR'); // force le datepicker à travailler en local
+  // }
+}
