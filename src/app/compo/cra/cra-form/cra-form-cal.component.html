@@ -177,7 +177,7 @@
                     </button>
                     <button class="btn btn-outline-dark me-2" id="btn-cra-form-send-cra-validation"
                         (click)="sendCraToValidate()"
-                        *ngIf="(currentCra.status != 'VALIDATED') && hasManager()">
+                        *ngIf="(currentCra.status != 'VALIDATED') && hasManager() && currentCra.consultant?.id == userConnected.id ">
                         <i class="fas fa-paper-plane me-1"></i> Submit {{getNameByType()}}
                     </button>
 
