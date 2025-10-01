@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+﻿import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { HomeComponent } from './home/home.component';
@@ -37,6 +37,7 @@ import { CraListComponent } from './compo/cra/cra-list/cra-list.component';
 import { EsnAppComponent } from './compo/esn/esn-app/esn-app.component';
 import { EsnFormComponent } from './compo/esn/esn-form/esn-form.component';
 import { EsnListComponent } from './compo/esn/esn-list/esn-list.component';
+import { InscriptionComponent } from './compo/inscription/inscription.component';
 import { LoadingPageComponent } from './compo/loading-page/loading-page.component';
 import { MyRoutingSpecComponent } from './compo/my-routing-spec/my-routing-spec.component';
 import { FeeDepensePercategoryDashComponent } from './compo/noteFrais/fee-depense-percategory-dash/fee-depense-percategory-dash.component';
@@ -120,6 +121,7 @@ const routes: Routes = [
   {canActivate: [AuthGuard], path: 'categoryDoc_list', component: DocCategoryListComponent},
   {canActivate: [AuthGuard], path: 'showTables', component: TableViewerComponent},
   {canActivate: [AuthGuard], path: 'connections', component: ConnectionComponent},
+  {path: 'inscription', component: InscriptionComponent},
 
   { path: 'loading', component: LoadingPageComponent},
   { path: 'esn360/:path', component: MyRoutingSpecComponent},
@@ -140,4 +142,3 @@ const routes: Routes = [
   exports: [RouterModule],
 })
 export class AppRoutingModule { }
-

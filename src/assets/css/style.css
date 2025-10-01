@@ -10605,3 +10605,14 @@ div.code-toolbar > .toolbar span:hover {
 		box-shadow: 0 0 0 0 rgba(4, 169, 245, 0)
 	}
 }
+
+.max_height_scroll_y {
+    /* width: 75%; */
+    /* display: flex; */
+    border: 1px solid black;
+    flex: 1;
+    padding: 10px;
+    /* resize: both; */
+    overflow: auto;
+    max-height: 600px;
+}

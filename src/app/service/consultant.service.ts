@@ -22,11 +22,13 @@ export class ConsultantService {
   public LIST_FILTRES_AFF: string[] = [this.AFF_ALL, this.AFF_CONSULTANT, this.AFF_MANAGER, this.AFF_BOSS];
 
   private consultantUrl: string;
+  private consultantUrlPub: string;
   private consultant: Consultant;
   private managerSelected: Consultant = null;
 
   constructor(private http: HttpClient, private datasharingService: DataSharingService) {
     this.consultantUrl = environment.apiUrl + '/consultant';
+    this.consultantUrlPub = environment.divUrl + '/consultant';
   }
 
   public setManagerSelected(m: Consultant) {
@@ -88,8 +90,9 @@ export class ConsultantService {
   /***
    * used to retrieve all roles from the server side
    */
-  public getRoles(): Observable<GenericResponse> {
-    return this.http.get<GenericResponse>(this.consultantUrl + "/roles");
+  public getRoles(isPub : boolean = false ): Observable<GenericResponse> {
+    let url = isPub ? this.consultantUrlPub : this.consultantUrl
+    return this.http.get<GenericResponse>(url + "/roles");
   }
 
   /***
@@ -118,14 +121,15 @@ export class ConsultantService {
    * used to persist consultant
    * @param consultant
    */
-  public save(consultant: Consultant): Observable<GenericResponse> {
+  public save(consultant: Consultant, isPub:boolean = false ): Observable<GenericResponse> {
     ////console.log('save id=' + consultant.id + '.');
+    let url = isPub ? this.consultantUrlPub : this.consultantUrl
     if (consultant.id > 0) {
       ////console.log('put update');
-      return this.http.put<GenericResponse>(this.consultantUrl + "/", consultant);
+      return this.http.put<GenericResponse>(url+ "/", consultant);
     } else {
       ////console.log('post add');
-      return this.savePost(consultant);
+      return this.savePost(consultant, isPub);
     }
   }
 
@@ -133,16 +137,18 @@ export class ConsultantService {
    * used to persist consultant with ending password
    * @param consultant
    */
-  public savePost(consultant: Consultant): Observable<GenericResponse> {
-    return this.http.post<GenericResponse>(this.consultantUrl + "/", consultant);
+  public savePost(consultant: Consultant, isPub:boolean = false): Observable<GenericResponse> {
+    let url = isPub ? this.consultantUrlPub : this.consultantUrl
+    return this.http.post<GenericResponse>(url + "/", consultant);
   }
 
   /***
    * used to remove consultant by id
    * @param id
    */
-  public deleteById(id: number): Observable<GenericResponse> {
-    return this.http.delete<GenericResponse>(this.consultantUrl + "/" + id);
+  public deleteById(id: number, isPub : boolean = false ): Observable<GenericResponse> {
+    let url = isPub ? this.consultantUrlPub : this.consultantUrl
+    return this.http.delete<GenericResponse>(url + "/" + id);
   }
 
   /***

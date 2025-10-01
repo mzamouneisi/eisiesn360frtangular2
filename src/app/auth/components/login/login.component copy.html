@@ -25,17 +25,12 @@
                                 Password is required
                             </div>
                         </div>
-                        <div class="text-center mt-3 d-flex justify-content-center">
-                            <button class="btn btn-warning mx-2" id="btn-login" (click)="login()"
+                        <div class="text-center">
+                            <button class="btn btn-warning" id="btn-login" (click)="login()"
                                 [disabled]="!username || !password">
                                 <span class="ml-1">Log in</span>
                             </button>
-
-                            <button type="button" class="btn btn-light mx-2" id="btn-signup" (click)="goToSignup()">
-                                <span class="ml-1">Inscription</span>
-                            </button>
                         </div>
-
                     </form>
                 </div>
             </div>

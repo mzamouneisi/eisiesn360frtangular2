@@ -60,6 +60,10 @@ rm -rf $file_out
 
 cp -p .gitignore $d2 
 
+setApiUrlServer() {
+    local f=""
+}
+
 date_fin=$(date_now.sh)
 
 echo "

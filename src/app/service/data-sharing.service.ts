@@ -81,6 +81,9 @@ export class DataSharingService implements CraStateService, ServiceLocator {
   isUserLoggedInFct: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   esnCurrent: Esn;
   idEsnCurrent: number;
+  IsAddEsnAndResp: boolean = false ;
+  esnSaved: Esn;
+  respEsnSaved : Consultant;
 
   constructor(private router: Router
     , private craService: CraService

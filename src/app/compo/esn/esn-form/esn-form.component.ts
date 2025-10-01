@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Consultant } from 'src/app/model/consultant';
 import { Cra } from 'src/app/model/cra';
@@ -46,10 +46,12 @@ export class EsnFormComponent extends MereComponent {
       this.isAdd = this.route.snapshot.queryParamMap.get('isAdd');
     }
 
-    if (this.isAdd == 'true') {
+    if (this.isAdd == 'true' || !this.myObj || !this.myObj.id) {
+      this.isAdd = 'true'
       this.btnSaveTitle = this.utils.tr("Add")
       this.title = this.utils.tr("New") + " ESN";
       this.myObj = new Esn();
+      this.dataSharingService.esnSaved = null
     } else {
       this.btnSaveTitle = this.utils.tr("Save")
       this.title = this.utils.tr("Edit") + " ESN";
@@ -62,13 +64,33 @@ export class EsnFormComponent extends MereComponent {
       }
       else if (this.myObj == null) this.myObj = new Esn();
     }
+
   }
+
+  @ViewChild('nameInput') nameInput!: ElementRef;
+  gotoName() {
+    setTimeout(() => {
+      this.nameInput.nativeElement.focus();
+    }, 300);
+  }
+
+  @ViewChild('tabRespEsn') tabRespEsn!: ElementRef;
+  gotoTabRespEsn() {
+    if (this.tabRespEsn && this.dataSharingService.IsAddEsnAndResp) {
+      setTimeout(() => {
+        this.tabRespEsn.nativeElement.focus();
+      }, 300);
+    }
+  }
+
+  @Output() esnSaved = new EventEmitter<void>();
 
   onSubmit() {
     console.log("onSubmit: ", this.myObj);
     this.beforeCallServer("onSubmit");
     // this.esnService.setEsn(this.myObj);
-    this.esnService.save(this.myObj).subscribe(
+    this.dataSharingService.esnSaved = null
+    this.esnService.save(this.myObj, this.dataSharingService.IsAddEsnAndResp).subscribe(
       data => {
         this.afterCallServer("onSubmit", data)
         console.log("onSubmit: isError:", this.isError());
@@ -76,7 +98,17 @@ export class EsnFormComponent extends MereComponent {
           console.info("data: ", data)
           if (data && data.body && data.body.result) {
             this.myObj = data.body.result
-            this.gotoEsnList();
+            if (this.dataSharingService.IsAddEsnAndResp) {
+              this.dataSharingService.esnSaved = this.myObj
+              // this.utilsIhm.scrollToTop()
+              this.gotoName()
+              // this.gotoTabRespEsn()
+              // ton traitement (appel service, etc.)
+              this.esnSaved.emit(); // informer le parent
+            }
+            if (!this.isError() && !this.dataSharingService.IsAddEsnAndResp) {
+              this.gotoEsnList();
+            }
           }
         }
       },

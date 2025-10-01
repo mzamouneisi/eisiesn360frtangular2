@@ -8,7 +8,8 @@
                 <label for="name">{{utils.tr('app.compo.esn.form.input.name')}}</label>
                 <input type="text"
                     placeholder="{{utils.tr('app.form.input.placeholder.prefix')}} {{utils.tr('app.compo.esn.form.input.name') | lowercase}}"
-                    [(ngModel)]="myObj.name" class="form-control" id="name" name="name" required #name="ngModel">
+                    [(ngModel)]="myObj.name" class="form-control" id="name" name="name" required #name="ngModel"
+                    #nameInput>
             </div>
             <div [hidden]="name.valid" class="badge badge-danger">{{utils.tr('app.compo.esn.form.input.name')}}
                 {{utils.tr('app.badge.required')}}</div>
@@ -91,19 +92,19 @@
                 {{utils.tr('app.badge.required')}}</div>
 
             <br />
-            <ul class="right">
-                <li class="list-inline-item">
+            <ul class="right" >
+                <li class="list-inline-item" *ngIf="myObj && dataSharingService.IsAddEsnAndResp">
                     <button type="submit" id="btn-esn-form-save" [disabled]="!esnForm.form.valid"
                         class="btn btn-info">{{btnSaveTitle}}</button>
                 </li>
-                <li class="list-inline-item"><a [routerLink]="['/esn_list']"
+                <li class="list-inline-item" *ngIf="userConnected && userConnected.role == 'ADMIN'"><a [routerLink]="['/esn_list']"
                         class="btn btn-info">{{utils.tr('app.compo.esn.form.button.list')}}</a></li>
             </ul>
 
         </form>
     </div>
 
-    <div style="margin-left: 20px;">
+    <div style="margin-left: 20px;" *ngIf="myObj && myObj.id && userConnected && userConnected.role == 'ADMIN'" >
         <app-esn-arbo [esn]="myObj" ></app-esn-arbo>
     </div>
 

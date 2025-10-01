@@ -1,15 +1,19 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IMyDpOptions } from "mydatepicker";
 import { Address } from 'src/app/model/address';
 import { MyError } from 'src/app/resource/MyError';
 import { EsnService } from 'src/app/service/esn.service';
 import { UtilsService } from 'src/app/service/utils.service';
+import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
 import { Constants } from "../../../model/constants/constants";
 import { Consultant } from '../../../model/consultant';
 import { Esn } from '../../../model/esn';
 import { ConsultantService } from '../../../service/consultant.service';
 import { DataSharingService } from "../../../service/data-sharing.service";
+import { ConfirmDialogComponent } from '../../_dialogs/confirm-dialog.component';
+import { InfoDialogComponent } from '../../_dialogs/info-dialog.component';
 import { SelectComponent } from '../../_reuse/select-consultant/select/select.component';
 import { MereComponent } from '../../_utils/mere-component';
 
@@ -44,12 +48,15 @@ export class ConsultantFormComponent extends MereComponent {
   esnIdStr: string;
   esnId: number = 0;
   consultants: Consultant[];
+  esnSavedName = ""
 
   constructor(private route: ActivatedRoute, private router: Router
     , private consultantService: ConsultantService
     , private esnService: EsnService
     , public utils: UtilsService
+    , public utilsIhmService: UtilsIhmService
     , public dataSharingService: DataSharingService
+    , private dialog: MatDialog
   ) {
     super(utils, dataSharingService);
 
@@ -59,13 +66,20 @@ export class ConsultantFormComponent extends MereComponent {
     // le userCoonected est le manager du user manipul�
     this.manager = this.dataSharingService.userConnected;
 
-    this.loadRoles();
-    this.loadEsns();
+    if (!this.dataSharingService.IsAddEsnAndResp) {
+      this.loadRoles();
+      this.loadEsns();
+    }
+
     this.initByConsultant();
     //console.log('myObj', this.myObj)
   }
 
   initParams() {
+
+    if (this.dataSharingService.IsAddEsnAndResp) {
+      this.isAdd = "true"
+    }
 
     if (this.isAdd == null) {
       this.isAdd = this.route.snapshot.queryParamMap.get('isAdd');
@@ -89,7 +103,8 @@ export class ConsultantFormComponent extends MereComponent {
   }
 
   setTitle() {
-    if (this.isAdd == 'true') {
+    if (this.isAdd == 'true' || !this.myObj || !this.myObj.id) {
+      this.isAdd = 'true'
       this.btnSaveTitle = this.utils.tr("Add");
       this.title = this.utils.tr("New") + " " + this.typeUser();
     } else {
@@ -108,6 +123,12 @@ export class ConsultantFormComponent extends MereComponent {
       this.myObj = new Consultant();
       //par defaut active
       this.myObj.active = true;
+
+      this.myObj.address = new Address()
+
+      if (this.dataSharingService.IsAddEsnAndResp) {
+        this.myObj.role = Constants.RESPONSIBLE_ESN
+      }
 
       this.setEsn();
 
@@ -217,12 +238,31 @@ export class ConsultantFormComponent extends MereComponent {
 
     if (esn) {
       this.myObj.esn = esn;
-      //  this.myObj.idEsn = this.myObj.esn.id;
       this.myObj.username = this.myObj.email
       this.selectEsn(esn)
+    } else {
+      if (this.dataSharingService.IsAddEsnAndResp) {
+        this.myObj.esn = this.dataSharingService.esnSaved;
+        this.myObj.username = this.myObj.email
+      }
     }
 
   }
+
+  refreshEsnSaved() {
+    if (this.dataSharingService.esnSaved) {
+      this.myObj.esn = this.dataSharingService.esnSaved;
+      this.esnSavedName = this.dataSharingService.esnSaved.name
+    }
+  }
+
+  @ViewChild('firstNameInput') firstNameInput!: ElementRef;
+  gotoFirstName() {
+    setTimeout(() => {
+      this.firstNameInput.nativeElement.focus();
+    }, 300);
+  }
+
 
   @ViewChild('compoSelectEsn', { static: false }) compoSelectEsn: SelectComponent;
   selectEsn(esn: Esn) {
@@ -271,15 +311,27 @@ export class ConsultantFormComponent extends MereComponent {
     console.log("this.myObj.email ", this.myObj.email)
     console.log("this.myObj.username ", this.myObj.username)
 
-    if (this.myObj.username) {
-      this.myObj.email = this.myObj.username
-    } else {
-      this.addErrorTitleMsg("Error on save consultant", "username must be not null !")
+    if (!this.myObj.username || !this.myObj.email) {
+      const dialogRef = this.dialog.open(InfoDialogComponent, {
+        width: '350px',
+        data: {
+          title: 'Info',
+          message: 'email or username is null !!',
+          disableClose: true,
+          autoFocus: false
+        }
+      });
       return
     }
-    console.log("this.manager.role:", '.' + this.manager.role + '.')
+
+    this.myObj.username = this.myObj.email
+
+    //todo check if email exist : a la saisie . invalider le form si exist via une variable isEmailExist.
+    // todo : confirmer avec le user son email en lui rappelant : prenom, nom, soc 
+
+    console.log("this.manager.role:", '.' + this.manager?.role + '.')
     console.log("this.myObj.adminConsultant : start ", this.myObj.adminConsultant)
-    if (this.userConnected.role + '' != 'ADMIN') {
+    if (this.userConnected && this.userConnected.role + '' != 'ADMIN') {
       console.log('NOT ADMIN')
       this.dataSharingService.majAdminConsultantId(this.myObj, this.manager);
 
@@ -289,13 +341,49 @@ export class ConsultantFormComponent extends MereComponent {
     let label = "onSubmit"
     this.beforeCallServer(label);
     console.log("this.myObj.adminConsultant : before save ", this.myObj.adminConsultant)
-    this.consultantService.save(this.myObj).subscribe(
+    this.consultantService.save(this.myObj, this.dataSharingService.IsAddEsnAndResp).subscribe(
       data => {
         this.afterCallServer(label, data)
 
+        this.myObj = data.body.result
+
+        console.log("after save this.myObj : ", this.myObj)
+
+        if (this.dataSharingService.IsAddEsnAndResp) {
+          this.dataSharingService.respEsnSaved = this.myObj
+          console.log("after save respEsnSaved : ", this.dataSharingService.respEsnSaved)
+          // this.utilsIhmService.scrollToTop()
+          // send mail 
+          // dialog info : votre esn est enregistree. vous allez recevoir un mail.
+          // close 
+          this.gotoFirstName()
+
+          // InfoDialogComponent
+          const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+            width: '350px',
+            data: {
+              title: 'Info',
+              message: 'Votre esn ' + this.dataSharingService.esnSaved.name + ' et sont responsable ont été ajoutés : resp : ' + this.myObj.fullName,
+              disableClose: true,
+              autoFocus: false
+            }
+          });
+
+          dialogRef.afterClosed().subscribe(result => {
+            if(result) {
+              this.dataSharingService.navigateTo("")
+            }else {
+
+            }
+          });
+
+          
+
+        }
+
         console.log("this.myObj.adminConsultant : after save ", this.myObj.adminConsultant)
 
-        if (!this.isError()) {
+        if (!this.isError() && !this.dataSharingService.IsAddEsnAndResp) {
           this.gotoConsultantList()
         }
       },
@@ -308,6 +396,7 @@ export class ConsultantFormComponent extends MereComponent {
 
 
   gotoConsultantList() {
+    console.log("gotoConsultantList")
     this.clearInfos();
     this.router.navigate(['/consultant_list']);
   }
@@ -321,12 +410,14 @@ export class ConsultantFormComponent extends MereComponent {
 
       let label = "loadRoles";
       this.beforeCallServer(label);
-      this.consultantService.getRoles().subscribe(data => {
+      this.consultantService.getRoles(this.dataSharingService.IsAddEsnAndResp).subscribe(data => {
         this.afterCallServer(label, data)
         if (data == undefined) this.roles = new Array();
         else {
           this.roles = data.body.result;
         }
+
+        console.log("*** roles : ", this.roles)
 
       }, error => {
         this.addErrorFromErrorOfServer(label, error);
@@ -382,13 +473,14 @@ export class ConsultantFormComponent extends MereComponent {
   }
 
   emailFocus() {
+    this.setEsn();
     console.log("emailFocus", this.myObj)
     console.log("emailFocus Email : ", this.myObj.email)
     if (!this.myObj.esn) {
       this.myObj.esn = this.esnCurrent
     }
     if (!this.myObj.esn) {
-      this.myObj.esn = this.manager.esn
+      this.myObj.esn = this.manager?.esn
     }
 
     let domaine = ""
@@ -410,6 +502,10 @@ export class ConsultantFormComponent extends MereComponent {
         this.myObj.username = this.myObj.email
       }
     }
+  }
+
+  emailChange() {
+    this.myObj.username = this.myObj.email
   }
 
   //////////////end meths

@@ -1,5 +1,13 @@
 
-voir si le mail fonctionne 
+
+refaire scenario d'une nouvelle esn de A-Z : 
+	- l'esn fait une demande d'inscription via formulaire 
+	- le 1er mois est gratuit. A partir du 2em mois, on bloque les connexions jusqu'au paiment 
+	- on lui envoie un mot de passe provisoire à changer apres la 1ere connexion 
+	
+	- le resp esn ajoute ses managers 
+	- chaque manager ajoute ses consultants, les clients, projets, les activités de type missions de ses consultants. (les activités de type congé, formation, IC, ... sont ajoutées automatiquement)
+	- chaque consultant ajoute ses cra, congés , ses documents , valide son cra , son congé 
 
 manager : btn : add all type d'activities for a consultant selected 
 
@@ -55,6 +63,8 @@ Cra :
 
 DONE 
 ------------------
+
+voir si le mail fonctionne 
 
 si cra valide : hide certains btns 
 

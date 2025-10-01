@@ -12,6 +12,7 @@ import { GenericResponse } from "../model/response/genericResponse";
 export class EsnService {
 
   private esnUrl: string;
+  private esnUrlPub: string;
   private esn: Esn;
   public setEsn(esn: Esn) {
     this.esn = esn;
@@ -23,6 +24,7 @@ export class EsnService {
 
   constructor(private http: HttpClient) {
     this.esnUrl = environment.apiUrl + '/esn/';
+    this.esnUrlPub = environment.divUrl + '/esn/';
   }
 
   public findAll(): Observable<GenericResponse> {
@@ -41,19 +43,21 @@ export class EsnService {
     return this.http.get<GenericResponse>(this.esnUrl + id);
   }
 
-  public save(esn: Esn): Observable<GenericResponse> {
+  public save(esn: Esn, isPub : boolean = false): Observable<GenericResponse> {
     ////////////console.log("save id=" + esn.id + ".");
+    let url = isPub ? this.esnUrlPub : this.esnUrl
     if (esn.id > 0) {
       ////////////console.log("put update")
-      return this.http.put<GenericResponse>(this.esnUrl, esn);
+      return this.http.put<GenericResponse>(url, esn);
     } else {
       ////////////console.log("post add")
-      return this.http.post<GenericResponse>(this.esnUrl, esn);
+      return this.http.post<GenericResponse>(url, esn);
     }
   }
 
-  public deleteById(id: number): Observable<GenericResponse> {
-    return this.http.delete<GenericResponse>(this.esnUrl + id);
+  public deleteById(id: number,  isPub : boolean = false ): Observable<GenericResponse> {
+    let url = isPub ? this.esnUrlPub : this.esnUrl
+    return this.http.delete<GenericResponse>(url + id);
   }
 
   public deleteAll(): Observable<GenericResponse> {

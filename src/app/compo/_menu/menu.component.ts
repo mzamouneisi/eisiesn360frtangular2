@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { EsnService } from 'src/app/service/esn.service';
 import { PermissionService } from 'src/app/service/permission.service';
 import { UtilsService } from 'src/app/service/utils.service';
+import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
 import { DataSharingService } from "../../service/data-sharing.service";
 import { MereComponent } from '../_utils/mere-component';
 
@@ -22,10 +23,11 @@ export class MenuComponent extends MereComponent {
     private router: Router
     , private esnService: EsnService
     , private permissionService: PermissionService
-    ) { 
-      super(utils, dataSharingService); 
-      this.userConnected = dataSharingService.userConnected
-    }
+    , private utilsIhm : UtilsIhmService
+  ) {
+    super(utils, dataSharingService);
+    this.userConnected = dataSharingService.userConnected
+  }
 
   ngOnInit() {
 
@@ -46,31 +48,41 @@ export class MenuComponent extends MereComponent {
     console.log("**** menu isUserLoggedIn=", this.isUserLoggedIn)
 
   }
-  
+
   getActivityName() {
-	  
-	  return this.isConsultant() ? "Absences" : "Activity";
+
+    return this.isConsultant() ? "Absences" : "Activity";
 
   }
 
   addEsnDemo() {
-    this.beforeCallServer("addEsnDemo");
-    this.esnService.addEsnDemo().subscribe(
-      data => {
-        this.afterCallServer("addEsnDemo", data)
-        console.log(JSON.stringify(data))
-        
-        if (!this.isError()) {
-          this.addInfo("l'Esn Demo a bien \u00e9t\u00e9 ajout\u00e9e", false)
-        }
-        this.router.navigate(["/esn_app"]);
 
-      }, error => {
-        this.addErrorFromErrorOfServer("getEsns", error);
-        ////console.log(error);
-        // this.addError(error)
+    let mythis = this;
+    mythis.utilsIhm.confirmYesNo("Voulez vous vraiment ajouter une Esn Demo", mythis
+      , () => {
+        ////////////////////
+        this.beforeCallServer("addEsnDemo");
+        this.esnService.addEsnDemo().subscribe(
+          data => {
+            this.afterCallServer("addEsnDemo", data)
+            console.log(JSON.stringify(data))
+    
+            if (!this.isError()) {
+              this.addInfo("l'Esn Demo a bien \u00e9t\u00e9 ajout\u00e9e", false)
+            }
+            this.router.navigate(["/esn_app"]);
+    
+          }, error => {
+            this.addErrorFromErrorOfServer("getEsns", error);
+            ////console.log(error);
+            // this.addError(error)
+          }
+        );
+        ////////////////
       }
+      , null
     );
+
   }
 
   setDefaultPermissions() {
@@ -90,4 +102,3 @@ export class MenuComponent extends MereComponent {
 
 
 }
-

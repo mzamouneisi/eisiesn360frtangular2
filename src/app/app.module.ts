@@ -53,7 +53,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
-
 import { UtilsService } from "./service/utils.service";
 
 import { MatDialogModule } from '@angular/material/dialog';
@@ -131,6 +130,9 @@ import { ConsultantArboComponent } from './compo/consultant/consultant-arbo/cons
 
 import { MatTabsModule } from '@angular/material/tabs';
 import { ClientsDialogComponent } from './compo/_dialogs/ClientsDialogComponent';
+import { ConfirmDialogComponent } from './compo/_dialogs/confirm-dialog.component';
+import { InfoDialogComponent } from './compo/_dialogs/info-dialog.component';
+import { SignupDialogComponent } from './compo/_dialogs/signup-dialog/signup-dialog.component';
 import { TableViewerComponent } from './compo/_utils/table-viewer/table-viewer.component';
 import { DocCategoryAppComponent } from './compo/administratifDocumentation/docCategory/doc-category-app/doc-category-app.component'; // Assurez-vous d'importer MatTabsModule
 import { DocCategoryFormComponent } from './compo/administratifDocumentation/docCategory/doc-category-form/doc-category-form.component';
@@ -141,6 +143,7 @@ import { ProjectAppComponent } from './compo/project/project-app/project-app.com
 import { ProjectFormComponent } from './compo/project/project-form/project-form.component';
 import { ProjectListComponent } from './compo/project/project-list/project-list.component';
 import { ProjectService } from './service/project.service';
+import { InscriptionComponent } from './compo/inscription/inscription.component';
 // import { TabsComponent } from './tabs/tabs.component';
 
 
@@ -256,7 +259,11 @@ export function initApp(http: HttpClient, translate: TranslateService) {
     TableViewerComponent,
     ConnectionComponent,
     ClientsDialogComponent,
-
+    SignupDialogComponent,
+    ConfirmDialogComponent,
+    InfoDialogComponent,
+    InscriptionComponent,
+    
   ],
   imports: [
     CommonModule,

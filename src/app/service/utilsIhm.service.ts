@@ -29,7 +29,9 @@ export class UtilsIhmService {
     );
   }
 
-
+  public scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
   public info(content: string, callBackFctResult: any = null, callBackFctReason: any = null) {
     console.log("msg info content=", content)

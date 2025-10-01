@@ -1,0 +1,52 @@
+<div style="width: 100%;">
+    <h2 class="left">Inscription ESN & Responsable</h2>
+
+    <button mat-button (click)="cancel()" class="right" title="Cancel">
+        <h2>X</h2>
+    </button>
+
+    <br style="width: 100%;">
+    <br style="width: 100%;">
+
+</div>
+
+<div style="width: 100%; display: flex;">
+    <div style="margin-right: 30px; color: blue;">
+        {{infos}} 
+    </div>
+    <div style="color: red;">
+        {{errors}} 
+    </div>
+
+    <!-- <mat-dialog-actions align="center">
+
+    </mat-dialog-actions> -->
+
+</div>
+
+<div style="width: 100%; display: flex;">
+    <div style="display: flex; margin-right: 30px;" *ngIf="dataSharingService.esnSaved">
+        <h5>Esn Saved :</h5>
+        <h5 style="color: blue;">{{dataSharingService.esnSaved?.name}}</h5>
+    </div>
+    <div style="display: flex; margin-right: 30px;" *ngIf="dataSharingService.respEsnSaved">
+        <h5>Resp Esn Saved :</h5>
+        <h5 style="color: blue;">{{dataSharingService.respEsnSaved?.fullName}}</h5>
+    </div>
+    <button mat-raised-button color="primary" (click)="onSubmit()" title="Valider"
+        *ngIf="dataSharingService.esnSaved && dataSharingService.respEsnSaved">
+        <h2>Valider</h2>
+    </button>
+</div>
+
+<mat-dialog-content style="height: 500px;">
+    <mat-tab-group #tabGroup style="width: 100%;">
+        <mat-tab label="ESN">
+            <app-esn-form (esnSaved)="onEsnSaved()"></app-esn-form>
+        </mat-tab>
+        <mat-tab label="Responsable ESN" #tabRespEsn>
+            <app-consultant-form></app-consultant-form>
+        </mat-tab>
+    </mat-tab-group>
+
+</mat-dialog-content>
