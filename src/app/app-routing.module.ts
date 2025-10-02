@@ -68,6 +68,7 @@ const routes: Routes = [
   { path: 'home0', component: HomeComponent },
   {path: 'login', component: LoginComponent},
   {path: 'logout', component: LoginComponent},
+  { path: '', redirectTo: 'home', pathMatch: 'full' },  // racine redirige vers /home
   {canActivate: [AuthGuard], path: 'home', component: NotificationComponent},
   {canActivate: [AuthGuard], path: '', component: NotificationComponent },
   {canActivate: [AuthGuard], path: 'notification', component: NotificationComponent},
@@ -125,11 +126,11 @@ const routes: Routes = [
 
   { path: 'loading', component: LoadingPageComponent},
   { path: 'esn360/:path', component: MyRoutingSpecComponent},
-  { path: '/:path', component: MyRoutingSpecComponent},
+  { path: ':path', component: MyRoutingSpecComponent },  // pas de slash initial
 
   { path: 'test2', component: Test2Component},
 
-  {path: '**', component: MyRoutingSpecComponent}
+  { path: '**', component: MyRoutingSpecComponent } // toujours en dernier
 
 
 ];
