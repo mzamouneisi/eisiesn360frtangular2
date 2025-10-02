@@ -77,7 +77,7 @@
                     placeholder="{{utils.tr('app.form.input.placeholder.prefix')}}  {{utils.tr('app.compo.consultant.form.input.email') | lowercase}}"
                     required #email="ngModel" [pattern]="emailPattern" (click)="emailFocus()" (keyup)="emailFocus()" (change)="emailChange()" >
             </div>
-            <div [hidden]="email.valid || (myObj.role == 'RESPONSIBLE_ESN' && myObj.email != '' )" class="badge badge-danger">{{utils.tr('app.compo.consultant.form.input.email')}} {{utils.tr('app.badge.required')}}</div>
+            <div [hidden]="email.valid || (myObj.role == 'RESPONSIBLE_ESN' && myObj.email != '' && email.valid )" class="badge badge-danger">{{utils.tr('app.compo.consultant.form.input.email')}} {{utils.tr('app.badge.required')}}</div>
 
             <div class="form-group">
                 <label for="tel">{{utils.tr('app.compo.consultant.form.input.tel')}}</label>
