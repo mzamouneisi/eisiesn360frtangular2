@@ -68,7 +68,7 @@ const routes: Routes = [
   { path: 'home0', component: HomeComponent },
   {path: 'login', component: LoginComponent},
   {path: 'logout', component: LoginComponent},
-  { path: '', redirectTo: 'home', pathMatch: 'full' },  // racine redirige vers /home
+  // { path: '', redirectTo: 'home', pathMatch: 'full' },  // racine redirige vers /home
   {canActivate: [AuthGuard], path: 'home', component: NotificationComponent},
   {canActivate: [AuthGuard], path: '', component: NotificationComponent },
   {canActivate: [AuthGuard], path: 'notification', component: NotificationComponent},
