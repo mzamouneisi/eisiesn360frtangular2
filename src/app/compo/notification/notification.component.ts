@@ -127,11 +127,11 @@ export class NotificationComponent extends MereComponent implements AfterViewIni
   }
 
   getNotifications() {
-
-    ////////console.log("isOnlyNotViewed="+this.isOnlyNotViewed)
-
     this.dataSharingService.getNotifications();
+  }
 
+  findAll() {
+    this.dataSharingService.getNotifications();
   }
 
   saveNotification(notification: Notification) {
