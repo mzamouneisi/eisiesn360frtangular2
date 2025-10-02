@@ -8,8 +8,6 @@ import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabGroup } from '@angular/material/tabs';
 import { ConsultantService } from 'src/app/service/consultant.service';
-import { ConfirmDialogComponent } from '../_dialogs/confirm-dialog.component';
-// import { ConfirmDialogComponent } from '../confirm-dialog.component';
 
 @Component({
   selector: 'app-inscription',
@@ -55,33 +53,46 @@ export class InscriptionComponent implements OnInit {
   }
 
   deleteAllSaved() {
+    let msg = ""
     if (this.dataSharingService.respEsnSaved && this.dataSharingService.respEsnSaved.id) {
       // del cons
+      let respEsnName = this.dataSharingService.respEsnSaved.fullName
+      msg = "Go to delete resp esn : " + respEsnName
       this.consultantService.deleteById(this.dataSharingService.respEsnSaved.id, this.dataSharingService.IsAddEsnAndResp).subscribe(
         data => {
           this.dataSharingService.respEsnSaved = null
-
+          msg += "\nWas delete resp esn : " + respEsnName
           // del esn 
           if (this.dataSharingService.esnSaved && this.dataSharingService.esnSaved.id) {
-            // del cons
+            let esnName = this.dataSharingService.esnSaved.name
+            msg += "\n" + "Go to delete esn : " + esnName
             this.esnService.deleteById(this.dataSharingService.esnSaved.id, this.dataSharingService.IsAddEsnAndResp).subscribe(
               data => {
                 this.dataSharingService.esnSaved = null
+                msg += "\nWas delete esn : " + esnName
+                this.utilsIhm.infoDialog(msg)
               },
               error => {
                 this.errors = error
                 console.log("ERROR delete esnSaved : ", error)
+                msg += "\n" + JSON.stringify(error)
+                this.utilsIhm.infoDialog(msg)
               }
             );
+          } else {
+            this.utilsIhm.infoDialog(msg)
           }
         },
         error => {
           this.errors = error
           console.log("ERROR delete respEsnSaved : ", error)
+          msg += "\n" + JSON.stringify(error)
+          this.utilsIhm.infoDialog(msg)
         }
       );
+    } else {
+      this.utilsIhm.infoDialog(msg)
     }
-
 
   }
 
@@ -99,31 +110,18 @@ export class InscriptionComponent implements OnInit {
 
   cancel() {
 
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '350px',
-      data: {
-        title: 'Confirmation',
-        message: 'Voulez-vous vraiment tout annuler ?',
-        disableClose: true,
-        autoFocus: false
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        // L’utilisateur a cliqué "Yes"
-        console.log('Confirmed');
+    this.utilsIhm.confirmDialog('Voulez-vous vraiment tout annuler ?',
+      () => {
         this.deleteAllSavedAndClose();
-      } else {
-        // L’utilisateur a cliqué "No"
-        console.log('Cancelled');
+      },
+      () => {
+
       }
-    });
+    )
 
   }
 
   close(): void {
-    // this.dialogRef.close();
     this.dataSharingService.IsAddEsnAndResp = false;
     this.dataSharingService.navigateTo("")
   }

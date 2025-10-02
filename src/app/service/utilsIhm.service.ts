@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmDialogComponent } from '../compo/_dialogs/confirm-dialog.component';
+import { InfoDialogComponent } from '../compo/_dialogs/info-dialog.component';
 import { MyCalendarComponent } from '../compo/my-calendar/my-calendar.component';
 import { ModalComponent } from '../compo/resources/ModalComponent';
 
@@ -10,7 +13,7 @@ import { ModalComponent } from '../compo/resources/ModalComponent';
 export class UtilsIhmService {
   modalChoice: any;
 
-  constructor(private modalService: NgbModal) {
+  constructor(private modalService: NgbModal, private dialog: MatDialog) {
   }
 
   public confirm(content: string, callBackFctResult: any, callBackFctReason: any) {
@@ -36,6 +39,45 @@ export class UtilsIhmService {
   public info(content: string, callBackFctResult: any = null, callBackFctReason: any = null) {
     console.log("msg info content=", content)
     this.openModal(false, "Infos", content, callBackFctResult, callBackFctReason);
+  }
+
+  public confirmDialog(msg: string, fctYes: Function, fctNo: Function) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Confirmation',
+        message: msg,
+        disableClose: true,
+        autoFocus: false
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // L’utilisateur a cliqué "Yes"
+        console.log('Confirmed');
+        if (fctYes) fctYes()
+      } else {
+        // L’utilisateur a cliqué "No"
+        console.log('Cancelled');
+        if (fctNo) fctNo()
+      }
+    });
+  }
+
+  infoDialog(msg: string) {
+    if (msg) {
+      const dialogRef = this.dialog.open(InfoDialogComponent, {
+        width: '350px',
+        data: {
+          title: 'Info',
+          message: msg,
+          disableClose: true,
+          autoFocus: false
+        }
+      });
+    }
+
   }
 
   openCalendarModal(callBackFctResult: any = null) {
