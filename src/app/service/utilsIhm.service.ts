@@ -65,7 +65,7 @@ export class UtilsIhmService {
     });
   }
 
-  infoDialog(msg: string) {
+  infoDialog(msg: string,  fctYes : Function = null ) {
     if (msg) {
       const dialogRef = this.dialog.open(InfoDialogComponent, {
         width: '350px',
@@ -75,6 +75,14 @@ export class UtilsIhmService {
           disableClose: true,
           autoFocus: false
         }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          // L’utilisateur a cliqué "Yes"
+          console.log('Confirmed');
+          if (fctYes) fctYes()
+        } 
       });
     }
 
