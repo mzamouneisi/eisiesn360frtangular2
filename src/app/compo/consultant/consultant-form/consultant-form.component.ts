@@ -2,7 +2,6 @@ import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IMyDpOptions } from "mydatepicker";
 import { Address } from 'src/app/model/address';
-import { Mail } from 'src/app/model/Mail';
 import { MyError } from 'src/app/resource/MyError';
 import { EsnService } from 'src/app/service/esn.service';
 import { MsgService } from 'src/app/service/msg.service';
@@ -317,6 +316,7 @@ export class ConsultantFormComponent extends MereComponent {
 
     this.myObj.username = this.myObj.email
     let pass = this.myObj.password
+    this.dataSharingService.passRespEsnSaved = pass
 
     //todo check if email exist : a la saisie . invalider le form si exist via une variable isEmailExist.
     // todo : confirmer avec le user son email en lui rappelant : prenom, nom, soc 
@@ -348,63 +348,38 @@ export class ConsultantFormComponent extends MereComponent {
 
           this.gotoFirstName()
 
-          let esnNameSaved = this.dataSharingService.esnSaved.name
-          let respEsnSaved = this.myObj.fullName
+          let esnSavedName = this.dataSharingService.esnSaved.name
+          let respEsnSavedName = this.dataSharingService.respEsnSaved.fullName
 
-          let msg = `Votre ESN "${esnNameSaved}" et son Responsable "${respEsnSaved}" ont été ajoutés :
+          let msg = `Votre ESN "${esnSavedName}" et son Responsable "${respEsnSavedName}" ont été ajoutés :
           Voulez vous confirmer ? `;
 
+          let label2 = "sendMail"
           this.utilsIhmService.confirmDialog(msg,
             () => {
-              // send email . si ok, msgBox : un mail a été envoyé. retour à la racine 
-              let mail = new Mail()
-              mail.subject = "ESN360 : Confirmation de l'ajout de votre esn : " + esnNameSaved
-              mail.to = this.myObj.email
-
-              let to = mail.to
-              let url = "https://mzamouneisi.github.io/eisiesn360frtangular2"
-
-              mail.msg = `
-              Bonjour ${respEsnSaved},\n<BR>
-              \n<BR>
-              Votre ESN "${esnNameSaved}" et son Responsable "${respEsnSaved}" ont bien été ajoutés à notre plateforme Esn360.\n<BR>
-              \n<BR>
-              Email : ${to}\n<BR>
-              Password : ${pass}\n<BR>
-              url = : ${url}\n<BR>
-              \n<BR>
-              Cordialement,\n<BR>
-              l'équipe ESN 360 \n<BR>
-              \n<BR>
-              `;
-
-              let label2 = "sendMailSimple"
-              console.log("goto " + label2)
-              this.msgService.sendMailSimple(mail, this.dataSharingService.IsAddEsnAndResp).subscribe(
-                data => {
-                  console.log(label2 + " data : ",  data  )
-                  this.afterCallServer(label2, data)
-                  console.log(label2 + " isError : ",  this.isError()  )
+              this.dataSharingService.sendMailToConfirmInscription(
+                (data2, to) => {
+                  this.afterCallServer(label2, data2)
+                  console.log(label2 + " isError : ", this.isError())
                   if (!this.isError()) {
-                    this.utilsIhmService.infoDialog("Un email a bien été envoyé à " + mail.to,
+                    this.utilsIhmService.infoDialog("Un email a bien été envoyé à " + to,
                       () => {
                         setTimeout(() => {
-                          this.dataSharingService.navigateTo("")
+                          this.navigateTo("")
                         }, 100);
                       }
                     )
-                  }else {
-                    console.log(label2 + " Error : ",  this.error  )
+                  } else {
+                    console.log(label2 + " Error : ", this.error)
                   }
                 },
-                error => {
+                (error) => {
                   this.addErrorFromErrorOfServer(label2, error);
                   this.utilsIhmService.infoDialog(label2 + " Erreur envoie email : " + JSON.stringify(error))
                 }
-              );
-
+              )
             }, () => {
-                console.log("sendMailSimple " + " annuler tout en supprimant les deux objs. " )
+              console.log("sendMailSimple " + " annuler tout en supprimant les deux objs. ")
               // annuler tout en supprimant les deux objs.
             }
           )

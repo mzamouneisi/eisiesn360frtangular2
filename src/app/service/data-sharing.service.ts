@@ -25,11 +25,14 @@ import { UtilsService } from "./utils.service";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "../../environments/environment";
 import { Esn } from '../model/esn';
+import { Mail } from '../model/Mail';
 import { Notification } from "../model/notification";
 import { GenericResponse } from "../model/response/genericResponse";
 import { ClientService } from './client.service';
 import { CraService } from './cra.service';
 import { EsnService } from './esn.service';
+import { MsgService } from './msg.service';
+import { UtilsIhmService } from './utilsIhm.service';
 
 
 /**
@@ -48,6 +51,48 @@ import { EsnService } from './esn.service';
   providedIn: 'root'
 })
 export class DataSharingService implements CraStateService, ServiceLocator {
+
+
+  sendMailToConfirmInscription(fctOk: Function, fctKo: Function) {
+    // send email . si ok, msgBox : un mail a été envoyé. retour à la racine 
+    let respEsnSavedName = this.respEsnSaved.fullName
+    let esnSavedName = this.esnSaved.name
+
+    let mail = new Mail()
+    mail.subject = "ESN360 : Confirmation de l'ajout de votre esn : " + esnSavedName
+    mail.to = this.respEsnSaved.email
+
+
+    let to = mail.to
+    let url = "https://mzamouneisi.github.io/eisiesn360frtangular2"
+
+    mail.msg = `
+              Bonjour ${respEsnSavedName},\n<BR>
+              \n<BR>
+              Votre ESN "${esnSavedName}" et son Responsable "${respEsnSavedName}" ont bien été ajoutés à notre plateforme Esn360.\n<BR>
+              \n<BR>
+              Email : ${to}\n<BR>
+              Password : ${this.passRespEsnSaved}\n<BR>
+              url = : ${url}\n<BR>
+              \n<BR>
+              Cordialement,\n<BR>
+              l'équipe ESN 360 \n<BR>
+              \n<BR>
+              `;
+
+    let label2 = "sendMailSimple"
+    console.log("goto " + label2)
+    this.msgService.sendMailSimple(mail, this.IsAddEsnAndResp).subscribe(
+      data => {
+        console.log(label2 + " data : ", data)
+        if (fctOk) fctOk(data, to)
+      },
+      error => {
+        if (fctKo) fctKo(error)
+      }
+    );
+
+  }
 
   headerComponent: HeaderComponent;
 
@@ -81,19 +126,22 @@ export class DataSharingService implements CraStateService, ServiceLocator {
   isUserLoggedInFct: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   esnCurrent: Esn;
   idEsnCurrent: number;
-  IsAddEsnAndResp: boolean = false ;
+  IsAddEsnAndResp: boolean = false;
   esnSaved: Esn;
-  respEsnSaved : Consultant;
+  respEsnSaved: Consultant;
+  passRespEsnSaved: string;
 
   constructor(private router: Router
     , private craService: CraService
     , private utils: UtilsService
+    , private utilsIhmService: UtilsIhmService
     , private consultantService: ConsultantService
     , private activityService: ActivityService
     , private esnService: EsnService
     , private clientService: ClientService
     , private tokenService: TokenService
     , private http: HttpClient
+    , private msgService: MsgService
   ) {
     console.log("data-sharing constructor deb")
     this.notificationUrl = environment.apiUrl + "/notifications";
@@ -223,15 +271,15 @@ export class DataSharingService implements CraStateService, ServiceLocator {
   // }
 
   delError(error: MyError) {
-  const current = this.errorsSource.value;
-  const index = current.findIndex(e => (e.msg === error.msg && e.title === e.title) );
+    const current = this.errorsSource.value;
+    const index = current.findIndex(e => (e.msg === error.msg && e.title === e.title));
 
-  if (index >= 0) {
-    const updated = [...current];
-    updated.splice(index, 1);
-    this.errorsSource.next(updated);
+    if (index >= 0) {
+      const updated = [...current];
+      updated.splice(index, 1);
+      this.errorsSource.next(updated);
+    }
   }
-}
 
 
   // clearInfos() {
@@ -636,7 +684,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     this.majListCraParam(this.listCra)
   }
 
-  majListCraParam(list : Cra[]) {
+  majListCraParam(list: Cra[]) {
     if (list != null) {
       for (let cra of list) {
         this.majCra(cra)
@@ -663,7 +711,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     }
   }
 
-  majConsultantInCra(cra: Cra, fct : Function = null ) {
+  majConsultantInCra(cra: Cra, fct: Function = null) {
 
     // console.log("majConsultantInCra cra : ", cra);
     if (cra == null) {
@@ -677,7 +725,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
       if (consul != null) {
         cra.consultant = consul;
         this.consultantService.majAdminConsultant(cra.consultant)
-        if(fct) fct()
+        if (fct) fct()
       } else {
         this.consultantService.findById(consultantId).subscribe(
           data => {
@@ -687,7 +735,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
             console.log("majCra act : ", consul);
             console.log("majCra listCra : ", this.listCra);
             this.consultantService.majAdminConsultant(cra.consultant)
-            if(fct) fct()
+            if (fct) fct()
           }, error => {
             console.log("majCra ERROR : ", error);
           }
@@ -750,20 +798,20 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     return this.http.get<GenericResponse>(this.notificationUrl);
   }
 
-  nbCallNotifications = 0 
-  isCallNotifications = false 
-  
+  nbCallNotifications = 0
+  isCallNotifications = false
+
   public getNotifications() {
     let label = "loading Notifications ...";
 
-    if(!this.isCallNotifications) {
-      this.isCallNotifications = true 
-    }else {
-      console.log(label, "En cours ..." )
-      return 
+    if (!this.isCallNotifications) {
+      this.isCallNotifications = true
+    } else {
+      console.log(label, "En cours ...")
+      return
     }
-    this.nbCallNotifications ++
-    console.log(label, this.nbCallNotifications )
+    this.nbCallNotifications++
+    console.log(label, this.nbCallNotifications)
     this.notifyObserversNotificationsBefore(label)
     this.getNotificationsFromServer().subscribe((data) => {
       // console.log("getNotifications: this, data", this, data)
@@ -771,11 +819,11 @@ export class DataSharingService implements CraStateService, ServiceLocator {
       this.majListNotifications();
       console.log("getNotifications ", this.listNotifications)
       this.notifyObserversNotificationsAfter(label, data)
-      this.isCallNotifications = false 
+      this.isCallNotifications = false
     }, error => {
       // console.log("getNotifications: this, error", this, error)
       this.notifyObserversNotificationsError(label, error);
-      this.isCallNotifications = false 
+      this.isCallNotifications = false
     })
   }
 
@@ -835,7 +883,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     // //console.log(label, this.listObserversNotifications)
     for (let cli of this.listObserversNotifications) {
       if (cli) {
-        console.log("notifyObserversNotificationsAfter cli : ", cli )
+        console.log("notifyObserversNotificationsAfter cli : ", cli)
         cli.afterCallServer(label, data)
         cli["updateNotifications"](this.listNotifications);
       }

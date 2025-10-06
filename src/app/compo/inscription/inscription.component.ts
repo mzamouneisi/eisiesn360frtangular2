@@ -52,7 +52,7 @@ export class InscriptionComponent implements OnInit {
     this.tabGroup.selectedIndex = 0;
   }
 
-  deleteAllSaved() {
+  deleteAllSaved(fctOnEnd: Function) {
     let msg = ""
     if (this.dataSharingService.respEsnSaved && this.dataSharingService.respEsnSaved.id) {
       // del cons
@@ -66,46 +66,69 @@ export class InscriptionComponent implements OnInit {
           if (this.dataSharingService.esnSaved && this.dataSharingService.esnSaved.id) {
             let esnName = this.dataSharingService.esnSaved.name
             msg += "\n" + "Go to delete esn : " + esnName
-            this.esnService.deleteById(this.dataSharingService.esnSaved.id, this.dataSharingService.IsAddEsnAndResp).subscribe(
+            this.esnService.deleteById(this.dataSharingService.esnSaved.id, true).subscribe(
               data => {
                 this.dataSharingService.esnSaved = null
                 msg += "\nWas delete esn : " + esnName
-                this.utilsIhm.infoDialog(msg)
+                this.utilsIhm.infoDialog(msg,
+                  () => {
+                    if (fctOnEnd) fctOnEnd()
+                  }
+                )
               },
               error => {
                 this.errors = error
                 console.log("ERROR delete esnSaved : ", error)
                 msg += "\n" + JSON.stringify(error)
-                this.utilsIhm.infoDialog(msg)
+                this.utilsIhm.infoDialog(msg,
+                  () => {
+                    if (fctOnEnd) fctOnEnd()
+                  }
+                )
               }
             );
           } else {
-            this.utilsIhm.infoDialog(msg)
+            this.utilsIhm.infoDialog(msg,
+              () => {
+                if (fctOnEnd) fctOnEnd()
+              }
+            )
           }
         },
         error => {
           this.errors = error
           console.log("ERROR delete respEsnSaved : ", error)
           msg += "\n" + JSON.stringify(error)
-          this.utilsIhm.infoDialog(msg)
+          this.utilsIhm.infoDialog(msg,
+            () => {
+              if (fctOnEnd) fctOnEnd()
+            }
+          )
         }
       );
     } else {
-      this.utilsIhm.infoDialog(msg)
+      this.utilsIhm.infoDialog(msg,
+        () => {
+          if (fctOnEnd) fctOnEnd()
+        }
+      )
     }
 
   }
 
   deleteAllSavedAndClose() {
-    this.deleteAllSaved()
+    this.deleteAllSaved(
+      () => {
+        let ms = this.errors ? 5000 : 10;
 
-    let ms = this.errors ? 5000 : 10;
-
-    setTimeout(() => {
-      if (!this.errors) {
-        this.close();
+        setTimeout(() => {
+          if (!this.errors) {
+            this.close();
+          }
+        }, ms);
       }
-    }, ms);
+    )
+
   }
 
   cancel() {
@@ -113,6 +136,7 @@ export class InscriptionComponent implements OnInit {
     this.utilsIhm.confirmDialog('Voulez-vous vraiment tout annuler ?',
       () => {
         this.deleteAllSavedAndClose();
+        this.close();
       },
       () => {
 
@@ -128,6 +152,26 @@ export class InscriptionComponent implements OnInit {
 
   onSubmit(): void {
     console.log("Formulaire confirmé");
-    this.close();
+
+    let label2 = "sendMail"
+
+    this.dataSharingService.sendMailToConfirmInscription(
+      (data2, to) => {
+        console.log(label2 + " data2, to : ", data2, to)
+        this.utilsIhm.infoDialog("Un email a bien été envoyé à " + to,
+          () => {
+            setTimeout(() => {
+              this.close();
+            }, 100);
+          }
+        )
+      },
+      (error) => {
+        console.log(label2 + " error : ", error)
+        this.utilsIhm.infoDialog(label2 + " Erreur envoie email : " + JSON.stringify(error))
+      }
+    )
+
+
   }
 }
