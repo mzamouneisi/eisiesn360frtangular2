@@ -94,6 +94,8 @@ export class MereComponent implements OnInit, AfterViewInit, AfterContentInit {
 
             this.isUserAdmin = this.userConnected?.admin;
 
+            if(this.userConnected) this.isUserLoggedIn = true ;
+
             if (!this.esnCurrent) {
 
               this.dataSharingService.majEsnOnConsultant(
@@ -170,6 +172,7 @@ export class MereComponent implements OnInit, AfterViewInit, AfterContentInit {
     let userConnected = this.dataSharingService.userConnected
     let res = "LOGIN";
     if (userConnected != null && userConnected.firstName) {
+      if(this.userConnected) this.isUserLoggedIn = true ;
       res = userConnected.fullName;
     }
     // //////////console.log("**** getUserFullName : res=", res, userConnected);
@@ -224,6 +227,9 @@ export class MereComponent implements OnInit, AfterViewInit, AfterContentInit {
       s = user
     }
     this.userConnectedName = s
+
+    if(this.userConnected) this.isUserLoggedIn = true ;
+
     return s;
   }
 
@@ -266,6 +272,8 @@ export class MereComponent implements OnInit, AfterViewInit, AfterContentInit {
     this.dataSharingService.clearInfosErrors()
     this.nbCallServer = 0
 
+    if(this.userConnected) this.isUserLoggedIn = true ;
+
   }
 
   setInfosMere() {
@@ -279,6 +287,8 @@ export class MereComponent implements OnInit, AfterViewInit, AfterContentInit {
     else {
       //////console.log("!!!!!!!!!!!!!!!!!!!!!!! setInfosMere infors NOT EXIST !!!!!!!!!!!!!!!!!!!!!!!!", this)
     }
+
+    if(this.userConnected) this.isUserLoggedIn = true ;
   }
 
   addInfo(info: string, isShowLoading = true) {
