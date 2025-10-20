@@ -47,52 +47,12 @@ import { UtilsIhmService } from './utilsIhm.service';
  * @author Saber Ben Khalifa <saber.khalifa@eisi-consulting.fr>
  **/
 
+const URL_FRONT = "https://mzamouneisi.github.io/eisiesn360frtangular2"
+
 @Injectable({
   providedIn: 'root'
 })
 export class DataSharingService implements CraStateService, ServiceLocator {
-
-
-  sendMailToConfirmInscription(fctOk: Function, fctKo: Function) {
-    // send email . si ok, msgBox : un mail a été envoyé. retour à la racine 
-    let respEsnSavedName = this.respEsnSaved.fullName
-    let esnSavedName = this.esnSaved.name
-
-    let mail = new Mail()
-    mail.subject = "ESN360 : Confirmation de l'ajout de votre esn : " + esnSavedName
-    mail.to = this.respEsnSaved.email
-
-
-    let to = mail.to
-    let url = "https://mzamouneisi.github.io/eisiesn360frtangular2"
-
-    mail.msg = `
-              Bonjour ${respEsnSavedName},\n<BR>
-              \n<BR>
-              Votre ESN "${esnSavedName}" et son Responsable "${respEsnSavedName}" ont bien été ajoutés à notre plateforme Esn360.\n<BR>
-              \n<BR>
-              Email : ${to}\n<BR>
-              Password : ${this.passRespEsnSaved}\n<BR>
-              url = : ${url}\n<BR>
-              \n<BR>
-              Cordialement,\n<BR>
-              l'équipe ESN 360 \n<BR>
-              \n<BR>
-              `;
-
-    let label2 = "sendMailSimple"
-    console.log("goto " + label2)
-    this.msgService.sendMailSimple(mail, this.IsAddEsnAndResp).subscribe(
-      data => {
-        console.log(label2 + " data : ", data)
-        if (fctOk) fctOk(data, to)
-      },
-      error => {
-        if (fctKo) fctKo(error)
-      }
-    );
-
-  }
 
   headerComponent: HeaderComponent;
 
@@ -993,6 +953,96 @@ export class DataSharingService implements CraStateService, ServiceLocator {
 
   setAdminConsultant(user: Consultant) {
     this.consultantService.majAdminConsultant(user);
+  }
+
+  ////////////////////
+
+  sendMailToConfirmInscription(fctOk: Function, fctKo: Function) {
+    // send email . si ok, msgBox : un mail a été envoyé. retour à la racine 
+    let respEsnSavedName = this.respEsnSaved.fullName
+    let esnSavedName = this.esnSaved.name
+
+    let mail = new Mail()
+    mail.subject = "ESN360 : Confirmation de l'ajout de votre esn : " + esnSavedName
+    mail.to = this.respEsnSaved.email
+
+
+    let to = mail.to
+
+    mail.msg = `
+              Bonjour ${respEsnSavedName},\n<BR>
+              \n<BR>
+              Votre ESN "${esnSavedName}" et son Responsable "${respEsnSavedName}" ont bien été ajoutés à notre plateforme Esn360.\n<BR>
+              \n<BR>
+              Email : ${to}\n<BR>
+              Password : ${this.passRespEsnSaved}\n<BR>
+              url = : ${URL_FRONT}\n<BR>
+              \n<BR>
+              Cordialement,\n<BR>
+              l'équipe ESN 360 \n<BR>
+              \n<BR>
+              `;
+
+    let label2 = "sendMailSimple"
+    console.log("goto " + label2)
+    this.msgService.sendMailSimple(mail, this.IsAddEsnAndResp).subscribe(
+      data => {
+        console.log(label2 + " data : ", data)
+        if (fctOk) fctOk(data, to)
+      },
+      error => {
+        if (fctKo) fctKo(error)
+      }
+    );
+
+  }
+
+  /**
+ * Envoie un mail contenant un lien de validation d'adresse email.
+ * Le lien a la forme : URL_FRONT + "/validEmail/<code_email_to_validate>"
+ * @param fctOk Fonction à exécuter en cas de succès
+ * @param fctKo Fonction à exécuter en cas d'erreur
+ */
+  sendMailToValidEmailInscription(fctOk: Function, fctKo: Function) {
+    const respEsnSavedName = this.respEsnSaved.fullName;
+    const respEsnMail = this.respEsnSaved.email;
+    const esnSavedName = this.esnSaved.name;
+
+    // 🔹 Génération d’un code unique de validation (par ex. UUID ou hash)
+    const codeEmailToValidate = this.utils.generateRandomCode(32); // méthode à implémenter côté utilitaire
+    const validationUrl = `${URL_FRONT}/validEmail/${codeEmailToValidate}`;
+
+    // 🔹 Construction du mail
+    const mail = new Mail();
+    mail.subject = `ESN360 : Validation de votre email ${respEsnMail}`;
+    mail.to = respEsnMail;
+    mail.msg = `
+    Bonjour ${respEsnSavedName},<br><br>
+    Votre ESN <strong>${esnSavedName}</strong> et son Responsable <strong>${respEsnSavedName}</strong> ont bien été ajoutés à notre plateforme <strong>ESN360</strong>.<br><br>
+    Avant de pouvoir vous connecter, veuillez valider votre adresse email en cliquant sur le lien suivant :<br><br>
+    👉 <a href="${validationUrl}" target="_blank">${validationUrl}</a><br><br>
+    <hr>
+    Vos identifiants :<br>
+    Email : ${respEsnMail}<br>
+    Mot de passe : ${this.passRespEsnSaved}<br><br>
+    Cordialement,<br>
+    L’équipe <strong>ESN360</strong><br>
+  `;
+
+    // 🔹 Envoi du mail
+    const label = "sendMailToValidEmailInscription";
+    console.log("goto " + label);
+
+    this.msgService.sendMailSimple(mail, this.IsAddEsnAndResp).subscribe(
+      (data) => {
+        console.log(label + " data : ", data);
+        if (fctOk) fctOk(data, respEsnMail, codeEmailToValidate);
+      },
+      (error) => {
+        console.error(label + " error : ", error);
+        if (fctKo) fctKo(error);
+      }
+    );
   }
 
 

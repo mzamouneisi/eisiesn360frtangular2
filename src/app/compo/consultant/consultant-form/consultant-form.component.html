@@ -138,7 +138,7 @@
             </div>
 
 
-            <div class="form-group">
+            <div class="form-group" *ngIf="userConnected && userConnected?.id">
                 <label for="active">{{utils.tr('app.compo.consultant.form.input.active')}}</label>
                 <input type="checkbox" [(ngModel)]="myObj.active" class="form-check-input" style="margin-left: 10px;" id="active" name="active" placeholder="Enter your active" #active="ngModel">
             </div>

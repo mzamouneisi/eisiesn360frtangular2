@@ -1,4 +1,9 @@
 
+manager peut changer status cra/congé validated 
+
+on doit pouvoir ajouter cra sur mois d'un congé futur déjà validated 
+
+faire table historique des changement status des cra 
 
 refaire scenario d'une nouvelle esn de A-Z : 
 	- l'esn fait une demande d'inscription via formulaire 

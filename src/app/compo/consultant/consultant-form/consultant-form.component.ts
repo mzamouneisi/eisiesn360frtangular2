@@ -120,7 +120,10 @@ export class ConsultantFormComponent extends MereComponent {
     if (this.isAdd == 'true') {
       this.myObj = new Consultant();
       //par defaut active
-      this.myObj.active = true;
+      this.myObj.active = false 
+      if(this.userConnected) {
+        this.myObj.active = true;
+      }
 
       this.myObj.address = new Address()
 
@@ -357,7 +360,7 @@ export class ConsultantFormComponent extends MereComponent {
           let label2 = "sendMail"
           this.utilsIhmService.confirmDialog(msg,
             () => {
-              this.dataSharingService.sendMailToConfirmInscription(
+              this.dataSharingService.sendMailToValidEmailInscription(
                 (data2, to) => {
                   this.afterCallServer(label2, data2)
                   console.log(label2 + " isError : ", this.isError())

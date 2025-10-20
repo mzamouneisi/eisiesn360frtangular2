@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FooterComponent implements OnInit {
   today = new Date();
-	dateCommit = "Last Commit : 2025-10-14 00:03:24"
+	dateCommit = "Last Commit : 2025-10-20 17:43:15"
   dateFooter = "";
 
   constructor() { }

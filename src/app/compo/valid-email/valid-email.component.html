@@ -1,0 +1,17 @@
+<div class="container text-center py-5">
+    <h2 class="mb-3">Validation d'email</h2>
+
+    <div *ngIf="isLoading" class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Chargement...</span>
+    </div>
+
+    <div *ngIf="!isLoading">
+        <p [class.text-success]="isSuccess" [class.text-danger]="!isSuccess">
+            {{ message }}
+        </p>
+
+        <button *ngIf="!isLoading && isSuccess" class="btn btn-primary mt-3" (click)="router.navigate(['/login'])">
+            Se connecter
+        </button>
+    </div>
+</div>

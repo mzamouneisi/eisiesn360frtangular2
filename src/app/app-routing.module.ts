@@ -58,6 +58,7 @@ import { ProjectAppComponent } from './compo/project/project-app/project-app.com
 import { ProjectFormComponent } from './compo/project/project-form/project-form.component';
 import { ProjectListComponent } from './compo/project/project-list/project-list.component';
 import { Test2Component } from './compo/test2/test2.component';
+import { ValidEmailComponent } from './compo/valid-email/valid-email.component';
 
 
 const routes: Routes = [
@@ -123,6 +124,7 @@ const routes: Routes = [
   {canActivate: [AuthGuard], path: 'showTables', component: TableViewerComponent},
   {canActivate: [AuthGuard], path: 'connections', component: ConnectionComponent},
   {path: 'inscription', component: InscriptionComponent},
+  { path: 'validEmail/:code', component: ValidEmailComponent },
 
   { path: 'loading', component: LoadingPageComponent},
   { path: 'esn360/:path', component: MyRoutingSpecComponent},

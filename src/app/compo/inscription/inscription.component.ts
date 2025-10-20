@@ -155,7 +155,7 @@ export class InscriptionComponent implements OnInit {
 
     let label2 = "sendMail"
 
-    this.dataSharingService.sendMailToConfirmInscription(
+    this.dataSharingService.sendMailToValidEmailInscription(
       (data2, to) => {
         console.log(label2 + " data2, to : ", data2, to)
         this.utilsIhm.infoDialog("Un email a bien été envoyé à " + to,
