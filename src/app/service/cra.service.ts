@@ -141,15 +141,18 @@ export class CraService {
 
   public canAddActivity(craDay: CraDay, craDayActivity: CraDayActivity): boolean {
     let t = craDayActivity.nbDay;
-    if (!craDay.craDayActivities) {
-      craDay.craDayActivities = []
-    }
 
-    craDay.craDayActivities.forEach(
-      (cda, index) => {
-        t += cda.nbDay
+    if(craDay) {
+      if (!craDay.craDayActivities) {
+        craDay.craDayActivities = []
       }
-    );
+  
+      craDay.craDayActivities.forEach(
+        (cda, index) => {
+          t += cda.nbDay
+        }
+      );
+    }
 
     return t <= 1;
 
@@ -162,6 +165,7 @@ export class CraService {
    * @param date
    */
   public getCraDayByDate(cra: Cra, date: Date): CraDay {
+    console.log("getCraDayByDate : cra, date : ", cra, date )
     let craDay: CraDay;
 
     if (cra != null && cra.craDays != null) {

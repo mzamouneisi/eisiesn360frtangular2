@@ -45,7 +45,7 @@
 
             <div class="text-left " style="width: 40%;">
 
-                <button type="button" class="btn btn-outline-success me-2" *ngIf="!currentCra?.validByConsultant"
+                <button type="button" class="btn btn-outline-success me-2" *ngIf="!currentCra?.validByConsultant || currentCra?.type == 'CONGE'"
                     id="btn-cra-form-add-multi-date" (click)="addMultiActivity()">
                     <i class="fas fa-calendar-plus me-1"></i> Add Multi Date
                 </button>

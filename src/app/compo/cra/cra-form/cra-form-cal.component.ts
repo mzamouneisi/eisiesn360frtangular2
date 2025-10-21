@@ -434,6 +434,9 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
           })
         }
       })
+
+      this.initDatesDebFinMultiDates();
+      
     }
     console.log("+++ initCra fin");
   }
@@ -512,10 +515,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     console.log(label + " after : viewDate:", this.viewDate)
 
     // this.viewDate est un objet Date au 1er
-    this.addMultiDateStartDate = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth(), 1);
-
-    // Calcul de la dernière date du mois de this.viewDate
-    this.addMultiDateEndDate = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth() + 1, 0);
+    this.initDatesDebFinMultiDates();
 
     /**
      * si existe un cra validee , afficher le
@@ -592,6 +592,13 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
 
     console.log(label + " fin currentCra ", this.currentCra)
 
+  }
+
+  private initDatesDebFinMultiDates() {
+    this.addMultiDateStartDate = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth(), 1);
+
+    // Calcul de la dernière date du mois de this.viewDate
+    this.addMultiDateEndDate = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth() + 1, 0);
   }
 
   showCra(cra: Cra) {
@@ -1311,7 +1318,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
       let date = this.utils.getDatePlusNbJour(dateDeb, i);
       console.log("addActivityInDates: currentCra, date", this.currentCra, date)
       this.craDay = this.craService.getCraDayByDate(this.currentCra, date);
-      console.log("addActivityInDates: craDay", this.craDay)
+      console.log("addActivityInDates: craDay : ", this.craDay)
       // this.craService.setDayProps(this.craDay);
       console.log("addActivityInDates: craService, craDayActivity: ", this.craService, craDayActivity)
       if (this.craService.canAddActivity(this.craDay, craDayActivity)) {
@@ -1439,7 +1446,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
       for (let i = 0; i < this.currentCra.craDays.length; i++) {
         let craDay: CraDay = this.currentCra.craDays[i];
         if (craDay.type == "DAY_WORKED") {
-          let craDayActivities: CraDayActivity[] = this.currentCra.craDays[i].craDayActivities;
+          let craDayActivities: CraDayActivity[] = craDay.craDayActivities;
           let time: number = 0;
           craDayActivities.forEach(craDayActivity => {
             time = time + craDayActivity.nbDay;

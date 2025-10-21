@@ -1,7 +1,5 @@
 
-manager peut changer status cra/congé validated 
 
-on doit pouvoir ajouter cra sur mois d'un congé futur déjà validated 
 
 faire table historique des changement status des cra 
 
@@ -64,10 +62,13 @@ Consultant :
 Cra :
 	month : Date ;
 	
-----------------------------------------------
-
+============================================================================================
 DONE 
-------------------
+============================================================================================
+
+on doit pouvoir ajouter cra sur mois d un conge futur deja validated
+
+manager peut changer status cra/congé validated 
 
 voir si le mail fonctionne 
 
