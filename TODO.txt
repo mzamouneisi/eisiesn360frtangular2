@@ -1,8 +1,6 @@
 
 
 
-faire table historique des changement status des cra 
-
 refaire scenario d'une nouvelle esn de A-Z : 
 	- l'esn fait une demande d'inscription via formulaire 
 	- le 1er mois est gratuit. A partir du 2em mois, on bloque les connexions jusqu'au paiment 
@@ -66,11 +64,13 @@ Cra :
 DONE 
 ============================================================================================
 
+faire table historique des changement status des cra 
+
 on doit pouvoir ajouter cra sur mois d un conge futur deja validated
 
 manager peut changer status cra/congé validated 
 
-voir si le mail fonctionne 
+le mail fonctionne
 
 si cra valide : hide certains btns 
 

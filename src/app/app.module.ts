@@ -131,6 +131,7 @@ import { ConsultantArboComponent } from './compo/consultant/consultant-arbo/cons
 import { MatTabsModule } from '@angular/material/tabs';
 import { ClientsDialogComponent } from './compo/_dialogs/ClientsDialogComponent';
 import { ConfirmDialogComponent } from './compo/_dialogs/confirm-dialog.component';
+import { CraHistoStatusComponent } from './compo/_dialogs/CraHistoStatusComponent';
 import { InfoDialogComponent } from './compo/_dialogs/info-dialog.component';
 import { SignupDialogComponent } from './compo/_dialogs/signup-dialog/signup-dialog.component';
 import { TableViewerComponent } from './compo/_utils/table-viewer/table-viewer.component';
@@ -139,12 +140,12 @@ import { DocCategoryFormComponent } from './compo/administratifDocumentation/doc
 import { DocCategoryListComponent } from './compo/administratifDocumentation/docCategory/doc-category-list/doc-category-list.component';
 import { ConnectionComponent } from './compo/connection/connection.component';
 import { EsnArboComponent } from './compo/esn/esn-arbo/esn-arbo.component';
+import { InscriptionComponent } from './compo/inscription/inscription.component';
 import { ProjectAppComponent } from './compo/project/project-app/project-app.component';
 import { ProjectFormComponent } from './compo/project/project-form/project-form.component';
 import { ProjectListComponent } from './compo/project/project-list/project-list.component';
-import { ProjectService } from './service/project.service';
-import { InscriptionComponent } from './compo/inscription/inscription.component';
 import { ValidEmailComponent } from './compo/valid-email/valid-email.component';
+import { ProjectService } from './service/project.service';
 // import { TabsComponent } from './tabs/tabs.component';
 
 
@@ -265,6 +266,7 @@ export function initApp(http: HttpClient, translate: TranslateService) {
     InfoDialogComponent,
     InscriptionComponent,
     ValidEmailComponent,
+    CraHistoStatusComponent,
     
   ],
   imports: [

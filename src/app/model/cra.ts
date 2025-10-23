@@ -1,5 +1,6 @@
 import { Consultant } from "./consultant";
 import { CraDay } from "./cra-day";
+import { CraStatusHisto } from "./cra-status-histo.model";
 import { Notification } from "./notification";
 
 export class Cra {
@@ -9,6 +10,8 @@ export class Cra {
   taskRealized: string;
   comment: string;
   status: string;
+  statusHistoJson: string;
+  statusHistoTab: CraStatusHisto[];
   nbDayWorked: number;
   validByConsultant: boolean;
   validByManager: boolean;

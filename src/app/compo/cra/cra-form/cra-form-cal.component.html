@@ -27,7 +27,10 @@
 
             <div class="text-center">
                 <h3 class="mb-0" *ngIf="viewDate">{{getNameByType()}} {{ viewDate | calendarDate:(view +
-                    'ViewTitle'):'en' }}</h3>
+                    'ViewTitle'):'en' }}
+                    <button class="btn " [ngClass]="getClassForStatus()" id="cra-form-status"
+                        (click)="showHistoryStatus()"> {{currentCra?.status}} </button>
+                </h3>
 
 
             </div>
@@ -45,9 +48,16 @@
 
             <div class="text-left " style="width: 40%;">
 
-                <button type="button" class="btn btn-outline-success me-2" *ngIf="!currentCra?.validByConsultant || currentCra?.type == 'CONGE'"
+                <button type="button" class="btn btn-outline-success me-2"
+                    *ngIf="!currentCra?.validByConsultant"
                     id="btn-cra-form-add-multi-date" (click)="addMultiActivity()">
                     <i class="fas fa-calendar-plus me-1"></i> Add Multi Date
+                </button>
+
+                <button type="button" class="btn btn-outline-primary"
+                    *ngIf="currentCra?.type == 'CONGE'"
+                    id="btn-cra-form-change-type-to-cra" (click)="changeTypeToCra()">
+                    Change Type To CRA
                 </button>
 
             </div>
@@ -172,12 +182,13 @@
         <div class="border-top pt-3 mt-3">
             <div class="d-flex justify-content-between">
                 <div>
-                    <button class="btn btn-success me-2" (click)="isCraValid(false)" id="btn-cra-form-check-validation" *ngIf="currentCra.status != 'VALIDATED'">
+                    <button class="btn btn-success me-2" (click)="isCraValid(false)" id="btn-cra-form-check-validation"
+                        *ngIf="!currentCra?.validByConsultant">
                         <i class="fas fa-check-circle me-1"></i> Check Validation of {{getNameByType()}}
                     </button>
                     <button class="btn btn-outline-dark me-2" id="btn-cra-form-send-cra-validation"
                         (click)="sendCraToValidate()"
-                        *ngIf="(currentCra.status != 'VALIDATED') && hasManager() && currentCra.consultant?.id == userConnected.id ">
+                        *ngIf="(!currentCra?.validByConsultant) && hasManager() && currentCra.consultant?.id == userConnected.id ">
                         <i class="fas fa-paper-plane me-1"></i> Submit {{getNameByType()}}
                     </button>
 
@@ -188,14 +199,14 @@
                         (click)="generateCliPDFGenLinks()" *ngIf="currentCra.id!=null">
                         <i class="fas fa-file-pdf me-1"></i> PDF for Clients Of Cra
                     </button>
-                    
+
                     <button class="btn btn-outline-primary me-2" id="btn-cra-form-generate-esn-pdf"
                         (click)="generateEsnPDF()" *ngIf="currentCra.id!=null">
                         <i class="fas fa-file-pdf me-1"></i> Pdf for ESN
                     </button>
 
                     <button class="btn btn-primary me-2" id="btn-cra-form-save" (click)="saveCra(true, false, '', '')"
-                        *ngIf="!currentCra.validByConsultant">
+                        *ngIf="!currentCra?.validByConsultant">
                         <i class="fas fa-save me-1"></i> {{btnActionTitle}}
                     </button>
 
