@@ -1,6 +1,10 @@
 
+
 refaire scenario d'une nouvelle esn de A-Z : 
 	- l'esn fait une demande d'inscription via formulaire 
+	- l'admin esn recoit un email pour valider son email 
+	- s'il valide son email, il peut se connecter (dans le code, on valide le consultant correspondant )
+	
 	- le 1er mois est gratuit. A partir du 2em mois, on bloque les connexions jusqu'au paiment 
 	- on lui envoie un mot de passe provisoire à changer apres la 1ere connexion 
 	
