@@ -60,7 +60,7 @@ import { ValidEmailComponent } from './compo/valid-email/valid-email.component';
 
 const routes: Routes = [
   // route publique par défaut -> login
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
 
   // routes publiques
   { path: 'login', component: LoginComponent },
