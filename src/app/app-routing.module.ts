@@ -69,6 +69,18 @@ const routes: Routes = [
   { path: 'home0', component: HomeComponent },
   {path: 'login', component: LoginComponent},
   {path: 'logout', component: LoginComponent},
+
+    {path: 'inscription', component: InscriptionComponent},
+  { path: 'validEmail/:code', component: ValidEmailComponent },
+
+  { path: 'loading', component: LoadingPageComponent},
+  { path: 'esn360/:path', component: MyRoutingSpecComponent},
+  { path: ':path', component: MyRoutingSpecComponent },  // pas de slash initial
+
+  { path: 'test2', component: Test2Component},
+
+  { path: '**', component: MyRoutingSpecComponent }, // toujours en dernier
+  
   // { path: '', redirectTo: 'home', pathMatch: 'full' },  // racine redirige vers /home
   {canActivate: [AuthGuard], path: 'home', component: NotificationComponent},
   {canActivate: [AuthGuard], path: '', component: NotificationComponent },
@@ -123,17 +135,6 @@ const routes: Routes = [
   {canActivate: [AuthGuard], path: 'categoryDoc_list', component: DocCategoryListComponent},
   {canActivate: [AuthGuard], path: 'showTables', component: TableViewerComponent},
   {canActivate: [AuthGuard], path: 'connections', component: ConnectionComponent},
-  {path: 'inscription', component: InscriptionComponent},
-  { path: 'validEmail/:code', component: ValidEmailComponent },
-
-  { path: 'loading', component: LoadingPageComponent},
-  { path: 'esn360/:path', component: MyRoutingSpecComponent},
-  { path: ':path', component: MyRoutingSpecComponent },  // pas de slash initial
-
-  { path: 'test2', component: Test2Component},
-
-  { path: '**', component: MyRoutingSpecComponent } // toujours en dernier
-
 
 ];
 

@@ -1,6 +1,4 @@
 
-
-
 refaire scenario d'une nouvelle esn de A-Z : 
 	- l'esn fait une demande d'inscription via formulaire 
 	- le 1er mois est gratuit. A partir du 2em mois, on bloque les connexions jusqu'au paiment 
@@ -63,6 +61,8 @@ Cra :
 ============================================================================================
 DONE 
 ============================================================================================
+
+le manager peut rejeter un cra/congé validated 
 
 faire table historique des changement status des cra 
 
