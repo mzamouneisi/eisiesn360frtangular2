@@ -25,8 +25,8 @@ export class AuthGuard implements CanActivate {
       console.log("checkLogin OK url = ", url )
       // return true;
       // this.router.navigate(['/home']);
-      // this.router.navigate([ url ]);
-      return true  ;
+      // this.router.navigate([ '/#/'+ url ]);
+      return true    ;
     }
     //////////console.log("checkLogin KO")
     this.authService.redirectToUrl = url;

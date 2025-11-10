@@ -131,7 +131,7 @@ const routes: Routes = [
 
   // { path: 'test2', component: Test2Component },
 
-  // { path: '**', component: MyRoutingSpecComponent }, // toujours en dernier
+  { path: '**', component: NotificationComponent }, // toujours en dernier
 
 ];
 
