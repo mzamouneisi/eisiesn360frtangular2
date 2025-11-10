@@ -9,7 +9,7 @@ import { DataSharingService } from 'src/app/service/data-sharing.service';
 })
 export class AuthGuard implements CanActivate {
 
-  constructor(private authService: DataSharingService, private router: Router) {}
+  constructor(private authService: DataSharingService, private router: Router) { }
 
   canActivate(
     next: ActivatedRouteSnapshot,
@@ -21,9 +21,11 @@ export class AuthGuard implements CanActivate {
 
   private checkLogin(url: string): boolean {
     //////////console.log("checkLogin url", url)
-    if(this.authService.isLoggedIn()) {
+    if (this.authService.isLoggedIn()) {
       //////////console.log("checkLogin OK")
-      return true;
+      // return true;
+      this.router.navigate(['/home']);
+      return false;
     }
     //////////console.log("checkLogin KO")
     this.authService.redirectToUrl = url;
