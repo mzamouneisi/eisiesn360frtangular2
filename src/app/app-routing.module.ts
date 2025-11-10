@@ -38,7 +38,6 @@ import { EsnFormComponent } from './compo/esn/esn-form/esn-form.component';
 import { EsnListComponent } from './compo/esn/esn-list/esn-list.component';
 import { InscriptionComponent } from './compo/inscription/inscription.component';
 import { LoadingPageComponent } from './compo/loading-page/loading-page.component';
-import { MyRoutingSpecComponent } from './compo/my-routing-spec/my-routing-spec.component';
 import { FeeDepensePercategoryDashComponent } from './compo/noteFrais/fee-depense-percategory-dash/fee-depense-percategory-dash.component';
 import { FeeDepensePerconsultantDashComponent } from './compo/noteFrais/fee-depense-perconsultant-dash/fee-depense-perconsultant-dash.component';
 import { FeeDepensePermonthDashComponent } from './compo/noteFrais/fee-depense-permonth-dash/fee-depense-permonth-dash.component';
@@ -56,7 +55,6 @@ import { ProfileComponent } from "./compo/profile/profile.component";
 import { ProjectAppComponent } from './compo/project/project-app/project-app.component';
 import { ProjectFormComponent } from './compo/project/project-form/project-form.component';
 import { ProjectListComponent } from './compo/project/project-list/project-list.component';
-import { Test2Component } from './compo/test2/test2.component';
 import { ValidEmailComponent } from './compo/valid-email/valid-email.component';
 
 
@@ -127,12 +125,12 @@ const routes: Routes = [
   { canActivate: [AuthGuard], path: 'showTables', component: TableViewerComponent },
   { canActivate: [AuthGuard], path: 'connections', component: ConnectionComponent },
 
-  { path: 'esn360/:path', component: MyRoutingSpecComponent },
-  { path: ':path', component: MyRoutingSpecComponent },  // pas de slash initial
+  // { path: 'esn360/:path', component: MyRoutingSpecComponent },
+  // { path: ':path', component: MyRoutingSpecComponent },  // pas de slash initial
 
-  { path: 'test2', component: Test2Component },
+  // { path: 'test2', component: Test2Component },
 
-  { path: '**', component: MyRoutingSpecComponent }, // toujours en dernier
+  // { path: '**', component: MyRoutingSpecComponent }, // toujours en dernier
 
 ];
 
