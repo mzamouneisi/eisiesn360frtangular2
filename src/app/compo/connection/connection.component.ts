@@ -9,8 +9,7 @@ import { MereComponent } from '../_utils/mere-component';
 
 @Component({
   selector: 'app-connection',
-  // templateUrl: './connection.component.html',
-  templateUrl: './index.html',
+  templateUrl: './connection.component.html',
   styleUrls: ['./connection.component.css']
 })
 export class ConnectionComponent extends MereComponent {

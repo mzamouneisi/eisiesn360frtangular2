@@ -1,7 +1,6 @@
 ﻿import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { HomeComponent } from './home/home.component';
 
 import { LoginComponent } from './auth/components/login/login.component';
 import { AuthGuard } from './auth/guards/auth.guard';
@@ -62,23 +61,21 @@ import { ValidEmailComponent } from './compo/valid-email/valid-email.component';
 
 
 const routes: Routes = [
-  // { path: '**', component: HomeComponent },  // Wildcard route for a 404 page
-  // { path: '', redirectTo: '/home', pathMatch: 'full' },
-  // {canActivate: [AuthGuard], path: '', redirectTo: '/home', pathMatch: 'full' },
+  // route publique par défaut -> login
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
 
-  { path: 'home0', component: HomeComponent },
+  // routes publiques
   { path: 'login', component: LoginComponent },
   { path: 'logout', component: LoginComponent },
-
   { path: 'inscription', component: InscriptionComponent },
   { path: 'validEmail/:code', component: ValidEmailComponent },
-
   { path: 'loading', component: LoadingPageComponent },
+  { path: 'connections', component: ConnectionComponent },  
 
-  // { path: '', redirectTo: 'home', pathMatch: 'full' },  // racine redirige vers /home
+  // routes protégées (après)
   { canActivate: [AuthGuard], path: 'home', component: NotificationComponent },
-  { canActivate: [AuthGuard], path: '', component: NotificationComponent },
   { canActivate: [AuthGuard], path: 'notification', component: NotificationComponent },
+
   { canActivate: [AuthGuard], path: 'my-profile', component: ProfileComponent },
   { canActivate: [AuthGuard], path: 'project_list', component: ProjectListComponent },
   { canActivate: [AuthGuard], path: 'project_form', component: ProjectFormComponent },
