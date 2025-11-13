@@ -4,4 +4,5 @@
 # ng build --configuration production --output-path docs --base-href /eisiesn360frtangular2/
 # ng build --prod --base-href /eisiesn360frtangular2/
 # ng build --output-path docs --base-href ./
-ng build --output-path docs --base-href .
+# ng build --output-path docs --base-href .
+ng build --configuration production --output-path docs --base-href .

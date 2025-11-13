@@ -1,4 +1,4 @@
-import { CommonModule, DatePipe, LocationStrategy, PathLocationStrategy } from '@angular/common';
+import { CommonModule, DatePipe, HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -321,7 +321,7 @@ export function initApp(http: HttpClient, translate: TranslateService) {
       multi: true
     },
     Location,
-    { provide: LocationStrategy, useClass: PathLocationStrategy },
+    { provide: LocationStrategy, useClass: HashLocationStrategy  },
     UtilsService,
     ActivityTypeService,
     PermissionService,
