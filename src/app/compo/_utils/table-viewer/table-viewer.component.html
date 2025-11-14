@@ -25,8 +25,27 @@
     <div class="resizer cadre " (mousedown)="startResizing($event)"></div>
 
     <div class="side-right cadre ">
-        <h3 *ngIf="selectedTable">Table: {{ selectedTable }}</h3>
-        <table *ngIf="lines.length > 0" class="custom-table">
+        <!-- <h3 *ngIf="selectedTable">Table: {{ selectedTable }}</h3> -->
+        <h3 *ngIf="selectedTable">
+            Table: {{ selectedTable }}
+
+            <!-- Bouton Add Table Like -->
+            <button class='btn btn-primary' (click)="addTableLike()">Add Table Like</button>
+
+            <!-- Bouton Delete Table -->
+            <button class='btn btn-danger' (click)="confirmDeleteTable()">Delete Table</button>
+
+            <!-- Bouton Delete Row -->
+            <button class='btn btn-danger' (click)="generateDeleteRow()">Delete Row</button>
+
+            <!-- Bouton Insert Row -->
+            <button class='btn btn-primary' (click)="generateInsertRow()">Insert Row</button>
+
+            <button class='btn btn-primary' (click)="generateUpdateRow()">Update Row</button>
+
+        </h3>
+
+        <table *ngIf="lines && lines.length > 0" class="custom-table" id="res1">
             <thead>
                 <tr>
                     <th *ngFor="let key of getKeys(lines[0])">{{ key }}</th>
@@ -49,9 +68,9 @@
 
 <!-- Section SQL -->
 <div style="padding: 10px;">
-    <h3>Execute SQL</h3>
+    <!-- <h3>Execute SQL</h3> -->
+    <button (click)="executeSql()"> <h3>Execute SQL</h3> </button> <br>
     <textarea [(ngModel)]="sql" rows="5" cols="100"></textarea><br>
-    <button (click)="executeSql()">Execute</button>
 
     <div *ngIf="sqlResult?.length" class="resize-all">
         <h4>Result:</h4>
@@ -63,7 +82,8 @@
             </thead>
             <tbody>
                 <tr *ngFor="let row of sqlResult">
-                    <td *ngFor="let key of getKeys(row)" (click)="colDetails2 = row[key]" class="cell-content" [title]="row[key]">
+                    <td *ngFor="let key of getKeys(row)" (click)="colDetails2 = row[key]" class="cell-content"
+                        [title]="row[key]">
                         {{ row[key] }}
                     </td>
                 </tr>

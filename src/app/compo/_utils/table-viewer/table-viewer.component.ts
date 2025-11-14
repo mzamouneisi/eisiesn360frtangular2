@@ -51,10 +51,19 @@ export class TableViewerComponent {
     });
   }
 
-  executeSql() {
+  executeSql(fctSuccess: Function = null) {
     this.http.post<any[]>(this.myUrl + 'execute', this.sql, {
       headers: { 'Content-Type': 'text/plain' }
-    }).subscribe(result => this.sqlResult = result);
+    }).subscribe(
+      result => {
+        this.sqlResult = result
+        this.getTables()
+        if (fctSuccess) fctSuccess()
+        if (this.selectedTable) {
+          this.selectTable(this.selectedTable)
+        }
+      }
+    );
   }
 
   ///////////
@@ -109,6 +118,76 @@ export class TableViewerComponent {
     document.addEventListener('mouseup', stopResizing);
   }
 
+  /////////////////////////////
+
+  confirmDeleteAllRowsOfTable() {
+    if (confirm(`Are you sure you want to delete all rows of table "${this.selectedTable}" ?`)) {
+      this.deleteTableData(this.selectedTable);
+    }
+  }
+
+  confirmDeleteTable() {
+    if (confirm(`Are you sure you want to delete table "${this.selectedTable}" ?`)) {
+      this.deleteTable(this.selectedTable);
+
+    }
+  }
+
+  deleteTable(table: string) {
+    this.sql = `DROP TABLE ${this.selectedTable} ;`;
+    this.executeSql(
+      () => {
+        this.selectedTable = null
+        this.lines = []
+      }
+    )
+  }
+
+  generateDeleteRow() {
+    // On prend la première clé comme id par défaut
+    const keys = this.lines && this.lines.length ? this.getKeys(this.lines[0]) : [];
+    const idKey = keys[0] || 'id';
+    this.sql = `DELETE FROM ${this.selectedTable} WHERE ${idKey} = ?;`;
+  }
+
+  generateInsertRow() {
+    if (!this.lines || !this.lines.length) {
+      alert('Table has no rows to infer columns.');
+      return;
+    }
+    const keys = this.getKeys(this.lines[0]);
+    const assignments = keys.map(k => `${k} = ?`).join(', ');
+    this.sql = `INSERT INTO ${this.selectedTable} SET ${assignments};`;
+  }
+
+  generateUpdateRow() {
+    if (!this.lines.length) {
+      alert('Table has no rows to infer columns.');
+      return;
+    }
+
+    const keys = this.getKeys(this.lines[0]);
+    const idKey = keys.find(k => k.toLowerCase() === 'id') || keys[0];
+
+    const otherKeys = keys.filter(k => k !== idKey);
+
+    const setClause = otherKeys.map(k => `${k} = ?`).join(', ');
+
+    this.sql =
+      `UPDATE ${this.selectedTable} SET ${setClause} WHERE ${idKey} = ?;`;
+  }
+
+
+  addTableLike() {
+    this.sql = `CREATE TABLE ${this.selectedTable}_copy AS SELECT * FROM ${this.selectedTable};`;
+    this.executeSql(
+      () => {
+        //
+      }
+    )
+
+  }
+
+
 
 }
-
