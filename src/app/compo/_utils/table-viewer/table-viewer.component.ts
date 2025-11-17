@@ -18,6 +18,19 @@ export class TableViewerComponent {
 
   private myUrl: string;
 
+  selectedRow: any = null;          // la ligne sélectionnée
+  selectedRowIndex: number = null;
+  rowInEdit: any = null;            // copie de ligne en édition
+  isEditing: boolean = false;       // mode édition
+  newRow: any = null;               // nouvelle ligne insérée
+  isInserting: boolean = false;     // mode insertion
+
+  editingIndex: number | null = null;
+  insertingIndex: number | null = null;
+
+  infos = ""
+
+
   constructor(private http: HttpClient) {
     this.myUrl = environment.apiUrl + '/tables/';
   }
@@ -52,6 +65,8 @@ export class TableViewerComponent {
   }
 
   executeSql(fctSuccess: Function = null) {
+    this.infos = ""
+
     this.http.post<any[]>(this.myUrl + 'execute', this.sql, {
       headers: { 'Content-Type': 'text/plain' }
     }).subscribe(
@@ -62,6 +77,8 @@ export class TableViewerComponent {
         if (this.selectedTable) {
           this.selectTable(this.selectedTable)
         }
+      }, error => {
+        this.infos = JSON.stringify(error)
       }
     );
   }
@@ -142,6 +159,163 @@ export class TableViewerComponent {
       }
     )
   }
+
+  ////////////////////////////////
+
+  infoSelectLine() {
+    alert("Veuillez selectionner une ligen svp !")
+  }
+
+  selectRow(row: any, index: number) {
+    this.selectedRow = row;
+    this.selectedRowIndex = index;
+  }
+
+  deleteSelectedRow() {
+    if (!this.selectedRow) {
+      this.infoSelectLine()
+      return;
+    }
+
+    const keys = this.getKeys(this.selectedRow);
+    const idKey = keys.find(k => k.toLowerCase() === 'id') || keys[0];
+
+    if (!confirm(`Delete row with ${idKey} = ${this.selectedRow[idKey]} ?`)) return;
+
+    this.sql = `DELETE FROM ${this.selectedTable} WHERE ${idKey} = ${this.selectedRow[idKey]};`;
+
+    this.executeSql(
+      () => {
+        this.cancelEdit()
+      }
+    )
+  }
+
+  startEditSelectedRow() {
+    // if (this.selectedRowIndex == null) return;
+    if (!this.selectedRow) {
+      this.infoSelectLine()
+      return;
+    }
+
+    this.isEditing = true;
+    this.isInserting = false;
+
+    this.editingIndex = this.selectedRowIndex;
+
+    this.rowInEdit = { ...this.selectedRow }; // copy object
+  }
+
+  saveRow() {
+    if (this.isEditing) {
+      const keys = this.getKeys(this.rowInEdit);
+      const idKey = keys.find(k => k.toLowerCase() === 'id') || keys[0];
+
+      const setClause = keys
+        .filter(k => k !== idKey)
+        .map(k => `${k} = '${this.rowInEdit[k]}'`)
+        .join(', ');
+
+      this.sql = `UPDATE ${this.selectedTable} SET ${setClause} WHERE ${idKey} = ${this.rowInEdit[idKey]};`;
+
+      this.executeSql(
+        () => {
+          //
+        }
+      )
+
+      this.isEditing = false;
+      this.editingIndex = null;
+    }
+
+    if (this.isInserting) {
+      const keys = this.getKeys(this.newRow);
+      const nonIdKeys = keys.filter(k => k.toLowerCase() !== 'id');
+
+      const columns = nonIdKeys.join(', ');
+      const values = nonIdKeys.map(k => `'${this.newRow[k]}'`).join(', ');
+
+      this.sql =
+        `INSERT INTO ${this.selectedTable} (${columns}) VALUES (${values});`;
+
+      this.executeSql();
+
+      this.isInserting = false;
+      this.insertingIndex = null;
+    }
+  }
+
+
+  insertLikeSelectedRow() {
+    if (!this.selectedRow) {
+      this.infoSelectLine()
+      return;
+    }
+
+    this.isEditing = false;
+    this.isInserting = true;
+
+    // clone la ligne sélectionnée
+    this.newRow = { ...this.selectedRow }; // copy object
+
+    // id doit être null
+    const idKey = Object.keys(this.newRow).find(k => k.toLowerCase() === 'id');
+    if (idKey) this.newRow[idKey] = null;
+
+    // On insère visuellement une ligne sous la ligne sélectionnée
+    this.insertingIndex = this.selectedRowIndex + 1;
+    this.lines.splice(this.insertingIndex, 0, this.newRow);
+
+  }
+
+  insertRow() {
+    this.isEditing = false;
+    this.isInserting = true;
+
+    // Si la table n'a aucune ligne, on ne sait pas les colonnes → erreur
+    if (!this.lines || this.lines.length === 0) {
+      alert("La table n'a aucune ligne pour déterminer les colonnes !");
+      return;
+    }
+
+    // Créer une ligne vide avec toutes les colonnes = null
+    const emptyRow: any = {};
+    const keys = this.getKeys(this.lines[0]);
+
+    keys.forEach(k => emptyRow[k] = null);
+
+    // L'ID doit rester null
+    const idKey = keys.find(k => k.toLowerCase() === 'id');
+    if (idKey) emptyRow[idKey] = null;
+
+    // Ajouter la ligne vide au tableau visuel
+    this.insertingIndex = 0; // ou à la fin : this.lines.length
+    this.lines.splice(this.insertingIndex, 0, emptyRow);
+
+    // Stocker comme ligne en insertion
+    this.newRow = emptyRow;
+  }
+
+
+  cancelEdit() {
+
+    if (this.isInserting && this.insertingIndex !== null) {
+      this.lines.splice(this.insertingIndex, 1);  // ✅ bon : supprimer 1 ligne
+    }
+
+    this.isEditing = false;
+    this.isInserting = false;
+    this.editingIndex = null;
+    this.insertingIndex = null;
+    this.newRow = null;
+    this.selectedRow = null
+    this.selectedRowIndex = null
+
+    this.rowInEdit = null;         
+    this.infos = ""
+  }
+
+  ////////////////////////////////
 
   generateDeleteRow() {
     // On prend la première clé comme id par défaut

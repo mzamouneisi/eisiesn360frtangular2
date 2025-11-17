@@ -57,3 +57,7 @@
     height: 300px;
     border: 2px solid black;
 }
+
+.row-selected {
+    background-color: #fff3cd !important; /* jaune clair */
+}

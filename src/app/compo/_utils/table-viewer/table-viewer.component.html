@@ -2,6 +2,9 @@
 <h3 style="margin: 20px;">
     Interface sql DOIT ETRE accessible que par ADMIN
 </h3>
+<div style="width: 100%; margin: 10px;">
+    {{infos}}
+</div>
 <div style="display: flex; margin: 20px; ">
     <button (click)="getTables()">Get All Table Names</button>
     <h5 style="margin-left: 20px;">
@@ -35,13 +38,24 @@
             <!-- Bouton Delete Table -->
             <button class='btn btn-danger' (click)="confirmDeleteTable()">Delete Table</button>
 
-            <!-- Bouton Delete Row -->
-            <button class='btn btn-danger' (click)="generateDeleteRow()">Delete Row</button>
+            <button class="btn btn-warning" (click)="deleteSelectedRow()">Delete Selected Row</button>
+
+            <button class="btn btn-success" (click)="startEditSelectedRow()">Update Selected Row</button>
+
+            <button class="btn btn-info" (click)="insertLikeSelectedRow()">Insert Like Selected</button>
+
+
+            <button class="btn btn-primary" (click)="insertRow()">Insert Empty Row</button>
+
+            <div *ngIf="isEditing || isInserting" style="margin-top: 10px;">
+                <button class="btn btn-primary" (click)="saveRow()">Save</button>
+                <button class="btn btn-secondary" (click)="cancelEdit()">Cancel</button>
+            </div>
 
             <!-- Bouton Insert Row -->
-            <button class='btn btn-primary' (click)="generateInsertRow()">Insert Row</button>
+            <!-- <button class='btn btn-primary' (click)="generateInsertRow()">Insert Row</button> -->
 
-            <button class='btn btn-primary' (click)="generateUpdateRow()">Update Row</button>
+            <!-- <button class='btn btn-primary' (click)="generateUpdateRow()">Update Row</button> -->
 
         </h3>
 
@@ -52,12 +66,28 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let row of lines">
-                    <td *ngFor="let key of getKeys(row)" (click)="colDetails = row[key]" class="cell-content"
-                        [title]="row[key]">
-                        {{ row[key] }}
+                <tr *ngFor="let row of lines; let i = index" (click)="selectRow(row, i)"
+                    [ngClass]="{ 'row-selected': selectedRowIndex === i }">
+
+
+                    <td *ngFor="let key of getKeys(row)" class="cell-content">
+
+                        <!-- Mode édition -->
+                        <input *ngIf="isEditing && i === editingIndex" [(ngModel)]="rowInEdit[key]" />
+
+
+                        <!-- Mode insertion -->
+                        <input *ngIf="isInserting && row === newRow" [(ngModel)]="newRow[key]" />
+
+                        <!-- Mode normal -->
+                        <span *ngIf="!(isEditing && i === editingIndex)">
+                            {{ row[key] }}
+                        </span>
+
+
                     </td>
                 </tr>
+
             </tbody>
         </table>
 
@@ -69,7 +99,9 @@
 <!-- Section SQL -->
 <div style="padding: 10px;">
     <!-- <h3>Execute SQL</h3> -->
-    <button (click)="executeSql()"> <h3>Execute SQL</h3> </button> <br>
+    <button (click)="executeSql()">
+        <h3>Execute SQL</h3>
+    </button> <br>
     <textarea [(ngModel)]="sql" rows="5" cols="100"></textarea><br>
 
     <div *ngIf="sqlResult?.length" class="resize-all">
