@@ -2,6 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
+// Définition d'un type pour les détails de colonne
+interface ColumnDetails {
+  columnName: string;
+  dataType: string; // Ex: 'character varying', 'integer', 'timestamp without time zone', 'boolean'
+  isNullable: boolean;
+}
+
 @Component({
   selector: 'app-table-viewer',
   templateUrl: './table-viewer.component.html',
@@ -30,6 +37,8 @@ export class TableViewerComponent {
 
   infos = ""
 
+  columnMetadata: ColumnDetails[] = [];
+
 
   constructor(private http: HttpClient) {
     this.myUrl = environment.apiUrl + '/tables/';
@@ -49,13 +58,89 @@ export class TableViewerComponent {
 
   selectTable(table: string) {
     this.selectedTable = table;
+    this.lines = []; // Videz les lignes pour un chargement propre
+    this.columnMetadata = []; // Videz les métadonnées
+
+    // 1. Récupérer les lignes de la table
     this.http.get<any[]>(this.myUrl + table).subscribe(
       data => {
-        // console.log("selectTable data : ", data)
-        this.lines = data
-
+        this.lines = data;
       }
     );
+
+    // 2. Récupérer les détails des colonnes
+    this.http.get<ColumnDetails[]>(this.myUrl + table + '/columns').subscribe(
+      data => {
+        this.columnMetadata = data;
+        console.log("columnMetadata : ", this.columnMetadata)
+      }
+    );
+  }
+
+  // Dans TableViewerComponent
+
+  /**
+   * Formatte la valeur pour une requête SQL basée sur son type de colonne.
+   * @param key Le nom de la colonne.
+   * @param value La valeur de la cellule.
+   * @returns La valeur formatée pour la requête SQL (avec/sans quotes, ou 'null').
+   */
+  formatSqlValue(key: string, value: any): any {
+    // 1. Trouvez le type de données de la colonne
+    const metadata = this.columnMetadata.find(col => col.columnName === key);
+
+    // console.log("formatSqlValue : key, value, metadata : ", key, value, metadata)
+
+    let res = null
+
+    // Si pas de metadata (cela ne devrait pas arriver si selectTable a fonctionné)
+    if (!metadata) {
+      res = `'${value}'`; // Par défaut, traitez comme une chaîne
+      // console.log("formatSqlValue : res : ", res)
+      return res;
+    }
+
+    // 2. Gérer le cas 'null'
+    if (! value || (value+"").toLowerCase() === 'null' ) {
+      res = 'null';
+      // console.log("formatSqlValue : res : ", res)
+      return res;
+    }
+
+    // 3. Normaliser le type de données
+    const dataType = metadata.dataType.toLowerCase();
+    // console.log("formatSqlValue : dataType : =/" + dataType + "/", dataType)
+
+    // Exemples de types numériques/booléens (à adapter à votre SGBD)
+    if (dataType.includes('int') || dataType.includes('numeric') || dataType.includes('decimal') || dataType.includes('real')) {
+      // Types numériques
+      // Assurez-vous que la valeur est propre (si elle vient du champ input, elle est déjà string)
+      // On enlève les quotes
+      res = String(value);
+      // console.log("formatSqlValue NUM : res : ", res)
+    }
+
+    else if (dataType.includes('bool') || dataType.includes('boolean')) {
+      // Types booléens
+      // On renvoie 'true' ou 'false' (sans quotes) ou la valeur elle-même si elle est déjà un nombre (0/1)
+      res = String(value).toLowerCase() === 'true' || value === 1 ? true : false;
+      // console.log("formatSqlValue : res : ", res)
+    }
+
+    else if (dataType.includes('char') || dataType.includes('string')) {
+      res = "'" + String(value) + "'";
+      // console.log("formatSqlValue : res : ", res)
+    } else {
+
+      // 4. Par défaut (texte, varchar, date, timestamp, etc.) : entourer de quotes
+      // ATTENTION: Échapper les quotes simples dans la valeur si votre SGBD ne le fait pas automatiquement.
+      // Pour la simplicité ici, on assume que ce n'est pas nécessaire, mais c'est un risque.
+      const escapedValue = String(value).replace(/'/g, "''"); // Échappement classique SQL
+      res = `'${escapedValue}'`;
+      // console.log("formatSqlValue : res : ", res)
+    }
+
+    return res;
   }
 
   deleteTableData(table: string) {
@@ -137,12 +222,6 @@ export class TableViewerComponent {
 
   /////////////////////////////
 
-  confirmDeleteAllRowsOfTable() {
-    if (confirm(`Are you sure you want to delete all rows of table "${this.selectedTable}" ?`)) {
-      this.deleteTableData(this.selectedTable);
-    }
-  }
-
   confirmDeleteTable() {
     if (confirm(`Are you sure you want to delete table "${this.selectedTable}" ?`)) {
       this.deleteTable(this.selectedTable);
@@ -166,9 +245,16 @@ export class TableViewerComponent {
     alert("Veuillez selectionner une ligen svp !")
   }
 
+  idKeySelected = null
+
   selectRow(row: any, index: number) {
     this.selectedRow = row;
     this.selectedRowIndex = index;
+
+    const keys = this.getKeys(this.selectedRow);
+    const idKey = keys.find(k => k.toLowerCase() === 'id') || keys[0];
+
+    this.idKeySelected = this.selectedRow[idKey]
   }
 
   deleteSelectedRow() {
@@ -182,7 +268,11 @@ export class TableViewerComponent {
 
     if (!confirm(`Delete row with ${idKey} = ${this.selectedRow[idKey]} ?`)) return;
 
-    this.sql = `DELETE FROM ${this.selectedTable} WHERE ${idKey} = ${this.selectedRow[idKey]};`;
+    if (!this.selectedRow[idKey]) this.selectedRow[idKey] = null
+
+    let eqaulOrIs = this.selectedRow[idKey] ? '=' : 'is'
+
+    this.sql = `DELETE FROM ${this.selectedTable} WHERE ${idKey} ${eqaulOrIs} ${this.selectedRow[idKey]};`;
 
     this.executeSql(
       () => {
@@ -212,11 +302,18 @@ export class TableViewerComponent {
       const idKey = keys.find(k => k.toLowerCase() === 'id') || keys[0];
 
       const setClause = keys
-        .filter(k => k !== idKey)
-        .map(k => `${k} = '${this.rowInEdit[k]}'`)
+        // .filter(k => k !== idKey)
+        // *** MODIFICATION ICI ***
+        .map(k => `${k} = ${this.formatSqlValue(k, this.rowInEdit[k])}`)
+        // ************************
         .join(', ');
 
-      this.sql = `UPDATE ${this.selectedTable} SET ${setClause} WHERE ${idKey} = ${this.rowInEdit[idKey]};`;
+      if (!this.selectedRow[idKey]) this.selectedRow[idKey] = null
+      if (!this.idKeySelected) this.idKeySelected = null
+
+      let eqaulOrIs = this.idKeySelected ? '=' : 'is'
+
+      this.sql = `UPDATE ${this.selectedTable} SET ${setClause} WHERE ${idKey} ${eqaulOrIs} ${this.idKeySelected};`;
 
       this.executeSql(
         () => {
@@ -230,10 +327,15 @@ export class TableViewerComponent {
 
     if (this.isInserting) {
       const keys = this.getKeys(this.newRow);
-      const nonIdKeys = keys.filter(k => k.toLowerCase() !== 'id');
+      // const nonIdKeys = keys.filter(k => k.toLowerCase() !== 'id');
+      const nonIdKeys = keys;
 
       const columns = nonIdKeys.join(', ');
-      const values = nonIdKeys.map(k => `'${this.newRow[k]}'`).join(', ');
+      // *** MODIFICATION ICI ***
+      const values = nonIdKeys
+        .map(k => this.formatSqlValue(k, this.newRow[k]))
+        .join(', ');
+      // ************************
 
       this.sql =
         `INSERT INTO ${this.selectedTable} (${columns}) VALUES (${values});`;
@@ -311,7 +413,7 @@ export class TableViewerComponent {
     this.selectedRow = null
     this.selectedRowIndex = null
 
-    this.rowInEdit = null;         
+    this.rowInEdit = null;
     this.infos = ""
   }
 

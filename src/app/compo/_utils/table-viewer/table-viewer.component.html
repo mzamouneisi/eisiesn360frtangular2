@@ -7,10 +7,41 @@
 </div>
 <div style="display: flex; margin: 20px; ">
     <button (click)="getTables()">Get All Table Names</button>
-    <h5 style="margin-left: 20px;">
-        {{selectedTable}}
-    </h5>
 </div>
+
+<!-- <h5 style="margin-left: 20px;">
+        {{selectedTable}}
+    </h5> -->
+<!-- <h3 *ngIf="selectedTable">Table: {{ selectedTable }}</h3> -->
+<h3 *ngIf="selectedTable" style="width: 100%; margin-left: 20px;">
+    Table: {{ selectedTable }}
+    <p style="margin-top: 10px;">
+
+        <!-- Bouton Add Table Like -->
+        <button class='btn btn-primary' (click)="addTableLike()">Add Table Like</button>
+
+        <button class="btn btn-success" (click)="startEditSelectedRow()">Update Selected Row</button>
+
+        <button class="btn btn-info" (click)="insertLikeSelectedRow()">Insert Like Selected</button>
+
+        <button class="btn btn-primary" (click)="insertRow()">Insert Empty Row</button>
+
+        <!-- Bouton Delete Table -->
+        <button class='btn btn-danger' (click)="confirmDeleteTable()">Delete Table</button>
+
+        <button class="btn btn-danger" (click)="deleteSelectedRow()">Delete Selected Row</button>
+
+    <div *ngIf="isEditing || isInserting" style="margin-top: 10px;">
+        <button class="btn btn-primary" (click)="saveRow()">Save</button>
+        <button class="btn btn-secondary" (click)="cancelEdit()">Cancel</button>
+    </div>
+
+    <!-- Bouton Insert Row -->
+    <!-- <button class='btn btn-primary' (click)="generateInsertRow()">Insert Row</button> -->
+
+    <!-- <button class='btn btn-primary' (click)="generateUpdateRow()">Update Row</button> -->
+
+</h3>
 
 <!-- Layout principal -->
 <!-- <button (click)="deleteTableData(table); $event.stopPropagation()">🗑️</button> -->
@@ -28,36 +59,6 @@
     <div class="resizer cadre " (mousedown)="startResizing($event)"></div>
 
     <div class="side-right cadre ">
-        <!-- <h3 *ngIf="selectedTable">Table: {{ selectedTable }}</h3> -->
-        <h3 *ngIf="selectedTable">
-            Table: {{ selectedTable }}
-
-            <!-- Bouton Add Table Like -->
-            <button class='btn btn-primary' (click)="addTableLike()">Add Table Like</button>
-
-            <!-- Bouton Delete Table -->
-            <button class='btn btn-danger' (click)="confirmDeleteTable()">Delete Table</button>
-
-            <button class="btn btn-warning" (click)="deleteSelectedRow()">Delete Selected Row</button>
-
-            <button class="btn btn-success" (click)="startEditSelectedRow()">Update Selected Row</button>
-
-            <button class="btn btn-info" (click)="insertLikeSelectedRow()">Insert Like Selected</button>
-
-
-            <button class="btn btn-primary" (click)="insertRow()">Insert Empty Row</button>
-
-            <div *ngIf="isEditing || isInserting" style="margin-top: 10px;">
-                <button class="btn btn-primary" (click)="saveRow()">Save</button>
-                <button class="btn btn-secondary" (click)="cancelEdit()">Cancel</button>
-            </div>
-
-            <!-- Bouton Insert Row -->
-            <!-- <button class='btn btn-primary' (click)="generateInsertRow()">Insert Row</button> -->
-
-            <!-- <button class='btn btn-primary' (click)="generateUpdateRow()">Update Row</button> -->
-
-        </h3>
 
         <table *ngIf="lines && lines.length > 0" class="custom-table" id="res1">
             <thead>
