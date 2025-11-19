@@ -1,5 +1,5 @@
 <!-- Bouton en haut -->
-<h3 style="margin: 20px;">
+<h3 style="margin: 20px; margin-top: 40px;">
     Interface sql DOIT ETRE accessible que par ADMIN
 </h3>
 <div style="width: 100%; margin: 10px;">
@@ -74,11 +74,17 @@
                     <td *ngFor="let key of getKeys(row)" class="cell-content">
 
                         <!-- Mode édition -->
-                        <input *ngIf="isEditing && i === editingIndex" [(ngModel)]="rowInEdit[key]" />
+                        <input *ngIf="isEditing && i === editingIndex"
+                            [type]="getTypeInput(key)" 
+                            [(ngModel)]="rowInEdit[key]" 
+                            [ngModel]="getValueForInput(key, rowInEdit[key])" 
+                            />
 
-
-                        <!-- Mode insertion -->
-                        <input *ngIf="isInserting && row === newRow" [(ngModel)]="newRow[key]" />
+                        <input *ngIf="isInserting && row === newRow" 
+                            [type]="getTypeInput(key)" 
+                            [(ngModel)]="lines[i][key]" 
+                            [ngModel]="getValueForInput(key, lines[i][key])"  
+                            />
 
                         <!-- Mode normal -->
                         <span *ngIf="!(isEditing && i === editingIndex)">

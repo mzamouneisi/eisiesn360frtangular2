@@ -56,6 +56,9 @@ export class TableViewerComponent {
     );
   }
 
+  public mapColType = {}
+  public mapColTypeInput = {}
+
   selectTable(table: string) {
     this.selectedTable = table;
     this.lines = []; // Videz les lignes pour un chargement propre
@@ -65,6 +68,7 @@ export class TableViewerComponent {
     this.http.get<any[]>(this.myUrl + table).subscribe(
       data => {
         this.lines = data;
+        console.log("lines : ", this.lines)
       }
     );
 
@@ -73,9 +77,106 @@ export class TableViewerComponent {
       data => {
         this.columnMetadata = data;
         console.log("columnMetadata : ", this.columnMetadata)
+        if (this.columnMetadata && this.columnMetadata.length) {
+          for (let ct of this.columnMetadata) {
+            let col = (ct.columnName + "").toLowerCase()
+            let typ = (ct.dataType + "").toLowerCase()
+            this.mapColType[col] = typ
+            this.mapColTypeInput[col] = this.getTypeInput(col)
+          }
+
+          console.log("mapColType : ", this.mapColType)
+          console.log("mapColTypeInput : ", this.mapColTypeInput)
+        }
       }
     );
+
+    // 3. TODO : on retravaille lines afin les valeurs des colonnes de type date / timestamp en Date 
   }
+
+  getTypeInput(col: string) {
+    col = (col + "").toLowerCase()
+    let typ = this.mapColType[col] + ""
+    let res = "text"
+    if (typ.includes("date")) {
+      res = "date"
+    } else if (typ.includes("timestamp")) {
+      res = "datetime-local"
+    } else if (typ.includes("int") || typ.includes("number") || typ.includes("decimal")) {
+      res = "number"
+    } else if (typ.includes("bool")) {
+      res = "checkbox"
+    }
+    return res
+  }
+
+  getValueForInput(key: string, value: any): any {
+
+    if (!value) {
+      return null;
+    }
+
+    key = key.toLowerCase()
+
+    // 1. Vérifiez si c'est un champ date/time
+    const type = this.getTypeInput(key);
+    if (type !== 'datetime-local' && type !== 'date' && type !== 'time') {
+      return value; // Pas de formatage nécessaire
+    }
+
+    // 2. Formater la chaîne ISO (ex: "2025-09-09T19:59:59.906+00:00")
+    if (typeof value === 'string') {
+      // Si la valeur est un timestamp avec des millisecondes et/ou un fuseau horaire, 
+      // l'input type="datetime-local" ne prend que la partie YYYY-MM-DDTHH:MM
+
+      // Pour une précision à la minute (standard pour datetime-local)
+      const match = value.match(/(\d{4}-\d{2}-\d{2}T\d{2}:\d{2})/);
+      if (match) {
+        return match[1]; // Retourne 'YYYY-MM-DDTHH:MM'
+        // return this.toDateTimeLocal(value)
+      }
+
+
+
+      // Si vous voulez la seconde (datetime-local supporte aussi les secondes)
+      // const matchWithSeconds = value.match(/(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})/); 
+      // ...
+
+      // Si le format est juste YYYY-MM-DD (pour input type="date")
+      if (type === 'date') {
+        return value.substring(0, 10);
+      }
+    }
+
+    // Si le formatage échoue ou si ce n'est pas une chaîne
+    return value;
+  }
+
+
+  // toDateTimeLocal(iso: string): Date {
+  //   if (!iso) return null;
+
+  //   return new Date(iso);
+
+  // }
+
+  toDateTimeLocal(iso: string): string {
+    if (!iso) return null;
+
+    const d = new Date(iso);
+
+    // Format datetime-local → yyyy-MM-ddTHH:mm
+    const pad = (n: number) => String(n).padStart(2, '0');
+
+    const yyyy = d.getFullYear();
+    const MM = pad(d.getMonth() + 1);
+    const dd = pad(d.getDate());
+    const hh = pad(d.getHours());
+    const mm = pad(d.getMinutes());
+
+    return `${yyyy}-${MM}-${dd}T${hh}:${mm}`;
+  }
+
 
   // Dans TableViewerComponent
 
@@ -101,7 +202,7 @@ export class TableViewerComponent {
     }
 
     // 2. Gérer le cas 'null'
-    if (! value || (value+"").toLowerCase() === 'null' ) {
+    if (!value || (value + "").toLowerCase() === 'null') {
       res = 'null';
       // console.log("formatSqlValue : res : ", res)
       return res;
@@ -281,21 +382,6 @@ export class TableViewerComponent {
     )
   }
 
-  startEditSelectedRow() {
-    // if (this.selectedRowIndex == null) return;
-    if (!this.selectedRow) {
-      this.infoSelectLine()
-      return;
-    }
-
-    this.isEditing = true;
-    this.isInserting = false;
-
-    this.editingIndex = this.selectedRowIndex;
-
-    this.rowInEdit = { ...this.selectedRow }; // copy object
-  }
-
   saveRow() {
     if (this.isEditing) {
       const keys = this.getKeys(this.rowInEdit);
@@ -347,6 +433,20 @@ export class TableViewerComponent {
     }
   }
 
+  startEditSelectedRow() {
+    // if (this.selectedRowIndex == null) return;
+    if (!this.selectedRow) {
+      this.infoSelectLine()
+      return;
+    }
+
+    this.isEditing = true;
+    this.isInserting = false;
+
+    this.editingIndex = this.selectedRowIndex;
+
+    this.rowInEdit = { ...this.selectedRow }; // copy object
+  }
 
   insertLikeSelectedRow() {
     if (!this.selectedRow) {
