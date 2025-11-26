@@ -1,13 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { environment } from 'src/environments/environment';
-
-// Définition d'un type pour les détails de colonne
-interface ColumnDetails {
-  columnName: string;
-  dataType: string; // Ex: 'character varying', 'integer', 'timestamp without time zone', 'boolean'
-  isNullable: boolean;
-}
+import { Relation } from 'src/app/model/Relation';
+import { TableService } from 'src/app/service/table.service';
 
 @Component({
   selector: 'app-table-viewer',
@@ -23,8 +16,6 @@ export class TableViewerComponent {
   colDetails = '';
   colDetails2 = '';
 
-  private myUrl: string;
-
   selectedRow: any = null;          // la ligne sélectionnée
   selectedRowIndex: number = null;
   rowInEdit: any = null;            // copie de ligne en édition
@@ -37,23 +28,21 @@ export class TableViewerComponent {
 
   infos = ""
 
-  columnMetadata: ColumnDetails[] = [];
+  // columnMetadata: ColumnDetails[] = [];
+  columnMetadata: any[] = [];
 
 
-  constructor(private http: HttpClient) {
-    this.myUrl = environment.apiUrl + '/tables/';
+  constructor(private tableService: TableService) {
   }
 
   getTables() {
-    this.http.get<string[]>(this.myUrl).subscribe(
-      data => {
-        // console.log("getTables data : ", data)
-        this.tables = data.sort((a, b) => a.localeCompare(b));
-      },
-      error => {
-        console.log("getTables error : ", error)
+    this.tableService.getTables(
+      (data) => {
+        this.tables = data
+      }, (err) => {
+        this.infos = JSON.stringify(err)
       }
-    );
+    )
   }
 
   public mapColType = {}
@@ -65,29 +54,23 @@ export class TableViewerComponent {
     this.columnMetadata = []; // Videz les métadonnées
 
     // 1. Récupérer les lignes de la table
-    this.http.get<any[]>(this.myUrl + table).subscribe(
+    this.tableService.getLinesOfTable(this.selectedTable,
       data => {
         this.lines = data;
-        console.log("lines : ", this.lines)
+      }, (err) => {
+
       }
     );
 
     // 2. Récupérer les détails des colonnes
-    this.http.get<ColumnDetails[]>(this.myUrl + table + '/columns').subscribe(
-      data => {
-        this.columnMetadata = data;
-        console.log("columnMetadata : ", this.columnMetadata)
-        if (this.columnMetadata && this.columnMetadata.length) {
-          for (let ct of this.columnMetadata) {
-            let col = (ct.columnName + "").toLowerCase()
-            let typ = (ct.dataType + "").toLowerCase()
-            this.mapColType[col] = typ
-            this.mapColTypeInput[col] = this.getTypeInput(col)
-          }
+    this.tableService.getColsOfTable(this.selectedTable,
+      (columnMetadata, mapColType, mapColTypeInput) => {
+        this.columnMetadata = columnMetadata;
+        this.mapColType = mapColType;
+        this.mapColTypeInput = mapColTypeInput;
 
-          console.log("mapColType : ", this.mapColType)
-          console.log("mapColTypeInput : ", this.mapColTypeInput)
-        }
+      }, (err) => {
+
       }
     );
 
@@ -95,19 +78,7 @@ export class TableViewerComponent {
   }
 
   getTypeInput(col: string) {
-    col = (col + "").toLowerCase()
-    let typ = this.mapColType[col] + ""
-    let res = "text"
-    if (typ.includes("date")) {
-      res = "date"
-    } else if (typ.includes("timestamp")) {
-      res = "datetime-local"
-    } else if (typ.includes("int") || typ.includes("number") || typ.includes("decimal")) {
-      res = "number"
-    } else if (typ.includes("bool")) {
-      res = "checkbox"
-    }
-    return res
+    return this.tableService.getTypeInput(col, this.mapColType)
   }
 
   getValueForInput(key: string, value: any): any {
@@ -151,32 +122,6 @@ export class TableViewerComponent {
     // Si le formatage échoue ou si ce n'est pas une chaîne
     return value;
   }
-
-
-  // toDateTimeLocal(iso: string): Date {
-  //   if (!iso) return null;
-
-  //   return new Date(iso);
-
-  // }
-
-  toDateTimeLocal(iso: string): string {
-    if (!iso) return null;
-
-    const d = new Date(iso);
-
-    // Format datetime-local → yyyy-MM-ddTHH:mm
-    const pad = (n: number) => String(n).padStart(2, '0');
-
-    const yyyy = d.getFullYear();
-    const MM = pad(d.getMonth() + 1);
-    const dd = pad(d.getDate());
-    const hh = pad(d.getHours());
-    const mm = pad(d.getMinutes());
-
-    return `${yyyy}-${MM}-${dd}T${hh}:${mm}`;
-  }
-
 
   // Dans TableViewerComponent
 
@@ -245,28 +190,28 @@ export class TableViewerComponent {
   }
 
   deleteTableData(table: string) {
-    this.http.delete(this.myUrl + table).subscribe(() => {
-      if (table === this.selectedTable) this.lines = [];
-    });
+    this.tableService.deleteTableData(table,
+      () => { },
+      () => { }
+    )
   }
 
   executeSql(fctSuccess: Function = null) {
     this.infos = ""
 
-    this.http.post<any[]>(this.myUrl + 'execute', this.sql, {
-      headers: { 'Content-Type': 'text/plain' }
-    }).subscribe(
-      result => {
-        this.sqlResult = result
+    this.tableService.executeSql(this.sql,
+      (sqlResult) => {
+        this.sqlResult = sqlResult
         this.getTables()
-        if (fctSuccess) fctSuccess()
         if (this.selectedTable) {
           this.selectTable(this.selectedTable)
         }
-      }, error => {
-        this.infos = JSON.stringify(error)
+        if(fctSuccess) fctSuccess()
+      },
+      (infos) => {
+        this.infos = infos
       }
-    );
+    )
   }
 
   ///////////
@@ -349,6 +294,11 @@ export class TableViewerComponent {
   idKeySelected = null
 
   selectRow(row: any, index: number) {
+
+    if (this.isInserting || this.isEditing) {
+      return
+    }
+
     this.selectedRow = row;
     this.selectedRowIndex = index;
 
@@ -563,6 +513,35 @@ export class TableViewerComponent {
     )
 
   }
+
+  //////////////////////////////////
+
+  activeTab: "data" | "relations" = "data";
+  relationsData : Relation[] = [];  // contenu JSON des relations pour D3
+
+
+  openRelations() {
+    if (!this.selectedTable) {
+      alert("Veuillez sélectionner une table.");
+      return;
+    }
+
+    this.activeTab = "relations";
+
+    console.log("openRelations : selectedTable : ", this.selectedTable)
+
+    // Charger les relations du backend
+    this.tableService.openRelations(
+      (res) => {
+        this.relationsData = res;
+      },
+      (err) => {
+
+      }
+    )
+
+  }
+
 
 
 

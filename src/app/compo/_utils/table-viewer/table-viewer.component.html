@@ -17,6 +17,8 @@
     Table: {{ selectedTable }}
     <p style="margin-top: 10px;">
 
+        <button class="btn btn-warning" (click)="openRelations()">Relations</button>
+
         <!-- Bouton Add Table Like -->
         <button class='btn btn-primary' (click)="addTableLike()">Add Table Like</button>
 
@@ -60,43 +62,65 @@
 
     <div class="side-right cadre ">
 
-        <table *ngIf="lines && lines.length > 0" class="custom-table" id="res1">
-            <thead>
-                <tr>
-                    <th *ngFor="let key of getKeys(lines[0])">{{ key }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let row of lines; let i = index" (click)="selectRow(row, i)"
-                    [ngClass]="{ 'row-selected': selectedRowIndex === i }">
+        <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+            <button class="btn" [ngClass]="{ 'btn-primary': activeTab === 'data', 'btn-light': activeTab !== 'data' }"
+                (click)="activeTab = 'data'">
+                Data
+            </button>
+
+            <button class="btn"
+                [ngClass]="{ 'btn-primary': activeTab === 'relations', 'btn-light': activeTab !== 'relations' }"
+                (click)="openRelations()">
+                Relations
+            </button>
+        </div>
 
 
-                    <td *ngFor="let key of getKeys(row)" class="cell-content">
+        <div *ngIf="activeTab === 'data'">
 
-                        <!-- Mode édition -->
-                        <input *ngIf="isEditing && i === editingIndex"
-                            [type]="getTypeInput(key)" 
-                            [(ngModel)]="rowInEdit[key]" 
-                            [ngModel]="getValueForInput(key, rowInEdit[key])" 
-                            />
+            <table *ngIf="lines && lines.length > 0" class="custom-table" id="res1">
+                <thead>
+                    <tr>
+                        <th *ngFor="let key of getKeys(lines[0])">{{ key }}</th>
+                    </tr>
+                </thead>
 
-                        <input *ngIf="isInserting && row === newRow" 
-                            [type]="getTypeInput(key)" 
-                            [(ngModel)]="lines[i][key]" 
-                            [ngModel]="getValueForInput(key, lines[i][key])"  
-                            />
+                <tbody>
+                    <tr *ngFor="let row of lines; let i = index" (click)="selectRow(row, i)"
+                        [ngClass]="{ 'row-selected': selectedRowIndex === i }">
 
-                        <!-- Mode normal -->
-                        <span *ngIf="!(isEditing && i === editingIndex)">
-                            {{ row[key] }}
-                        </span>
+                        <td *ngFor="let key of getKeys(row)" class="cell-content">
+
+                            <!-- Mode édition -->
+                            <input *ngIf="isEditing && i === editingIndex" [type]="getTypeInput(key)"
+                                [(ngModel)]="rowInEdit[key]" [ngModel]="getValueForInput(key, rowInEdit[key])" />
+
+                            <input *ngIf="isInserting && row === newRow" [type]="getTypeInput(key)"
+                                [(ngModel)]="lines[i][key]" [ngModel]="getValueForInput(key, lines[i][key])" />
+
+                            <!-- Mode normal -->
+                            <span *ngIf="!(isEditing && i === editingIndex)">
+                                {{ row[key] }}
+                            </span>
+
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+        <div *ngIf="activeTab === 'relations'">
+
+            <h3>Relations de {{ selectedTable }}</h3>
+
+            <app-relations-d3 [data]="relationsData" [selectedTable]="selectedTable">
+            </app-relations-d3>
+
+        </div>
 
 
-                    </td>
-                </tr>
-
-            </tbody>
-        </table>
 
 
     </div>

@@ -1,0 +1,95 @@
+:host {
+  display: block;
+  font-family: Arial, sans-serif;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+}
+
+.title {
+  font-weight: 600;
+}
+
+.chart-container {
+  width: 100%;
+  height: calc(100vh - 100px);
+  border: 1px solid #ddd;
+  background: #fff;
+  overflow: hidden;
+  position: relative;
+}
+
+.node {
+  cursor: grab;
+}
+
+.node circle {
+  stroke: #333;
+  stroke-width: 1;
+}
+
+.node text {
+  pointer-events: none;
+  font-size: 12px;
+}
+
+.link {
+  stroke: #999;
+  stroke-opacity: 0.6;
+}
+
+.link.fk {
+  stroke: #d9534f;
+  stroke-width: 1.8;
+}
+
+/* FK links more visible */
+.tooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.legend {
+  margin-top: 6px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.legend-item {
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend .fk {
+  color: #d9534f;
+}
+
+/* Assurez-vous d'avoir quelque chose comme ça : */
+
+.links .link {
+  stroke: #999;
+  /* Couleur du lien */
+  stroke-opacity: 0.6;
+  transition: stroke-opacity 0.2s;
+  /* Pour l'effet hover */
+}
+
+.links .link.fk {
+  /* Si vous voulez une couleur différente pour les FK */
+  stroke: #555;
+}
+
+/* Le hover est dans votre TS, mais le style du lien par défaut est critique */

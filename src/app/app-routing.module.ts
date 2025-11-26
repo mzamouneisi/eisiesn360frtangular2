@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { LoginComponent } from './auth/components/login/login.component';
 import { AuthGuard } from './auth/guards/auth.guard';
+import { RelationsD3Component } from './compo/_utils/relations-viewer/relations-d3.component';
 import { TableViewerComponent } from './compo/_utils/table-viewer/table-viewer.component';
 import { ActivityAppComponent } from './compo/activity/activity-app/activity-app.component';
 import { ActivityFormComponent } from './compo/activity/activity-form/activity-form.component';
@@ -124,6 +125,8 @@ const routes: Routes = [
   { canActivate: [AuthGuard], path: 'categoryDoc_list', component: DocCategoryListComponent },
   { canActivate: [AuthGuard], path: 'showTables', component: TableViewerComponent },
   { canActivate: [AuthGuard], path: 'connections', component: ConnectionComponent },
+  { path: 'relations-d3/:table', component: RelationsD3Component },
+
 
   // { path: 'esn360/:path', component: MyRoutingSpecComponent },
   // { path: ':path', component: MyRoutingSpecComponent },  // pas de slash initial

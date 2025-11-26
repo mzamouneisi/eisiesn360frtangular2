@@ -134,6 +134,7 @@ import { ConfirmDialogComponent } from './compo/_dialogs/confirm-dialog.componen
 import { CraHistoStatusComponent } from './compo/_dialogs/CraHistoStatusComponent';
 import { InfoDialogComponent } from './compo/_dialogs/info-dialog.component';
 import { SignupDialogComponent } from './compo/_dialogs/signup-dialog/signup-dialog.component';
+import { RelationsD3Component } from './compo/_utils/relations-viewer/relations-d3.component';
 import { TableViewerComponent } from './compo/_utils/table-viewer/table-viewer.component';
 import { DocCategoryAppComponent } from './compo/administratifDocumentation/docCategory/doc-category-app/doc-category-app.component'; // Assurez-vous d'importer MatTabsModule
 import { DocCategoryFormComponent } from './compo/administratifDocumentation/docCategory/doc-category-form/doc-category-form.component';
@@ -267,6 +268,7 @@ export function initApp(http: HttpClient, translate: TranslateService) {
     InscriptionComponent,
     ValidEmailComponent,
     CraHistoStatusComponent,
+    RelationsD3Component,
     
   ],
   imports: [
