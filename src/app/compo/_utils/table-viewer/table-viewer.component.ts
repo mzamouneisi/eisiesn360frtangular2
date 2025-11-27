@@ -69,6 +69,23 @@ export class TableViewerComponent {
         this.mapColType = mapColType;
         this.mapColTypeInput = mapColTypeInput;
 
+        this.columnMetadata = columnMetadata.map(col => ({
+          ...col,
+          columnName: col.columnName.toLowerCase(),
+          dataType: col.dataType.toLowerCase()
+        }));
+
+        // Normaliser les maps
+        this.mapColType = {};
+        for (const k in mapColType) {
+          this.mapColType[k.toLowerCase()] = mapColType[k];
+        }
+
+        this.mapColTypeInput = {};
+        for (const k in mapColTypeInput) {
+          this.mapColTypeInput[k.toLowerCase()] = mapColTypeInput[k];
+        }
+
       }, (err) => {
 
       }
@@ -77,9 +94,9 @@ export class TableViewerComponent {
     // 3. TODO : on retravaille lines afin les valeurs des colonnes de type date / timestamp en Date 
   }
 
-  getTypeInput(col: string) {
-    return this.tableService.getTypeInput(col, this.mapColType)
-  }
+getTypeInput(col: string) {
+  return this.tableService.getTypeInput(col.toLowerCase(), this.mapColType);
+}
 
   getValueForInput(key: string, value: any): any {
 
@@ -133,7 +150,8 @@ export class TableViewerComponent {
    */
   formatSqlValue(key: string, value: any): any {
     // 1. Trouvez le type de données de la colonne
-    const metadata = this.columnMetadata.find(col => col.columnName === key);
+    // const metadata = this.columnMetadata.find(col => col.columnName === key);
+    const metadata = this.columnMetadata.find(col => col.columnName === key.toLowerCase());
 
     // console.log("formatSqlValue : key, value, metadata : ", key, value, metadata)
 
@@ -206,7 +224,7 @@ export class TableViewerComponent {
         if (this.selectedTable) {
           this.selectTable(this.selectedTable)
         }
-        if(fctSuccess) fctSuccess()
+        if (fctSuccess) fctSuccess()
       },
       (infos) => {
         this.infos = infos
@@ -517,7 +535,7 @@ export class TableViewerComponent {
   //////////////////////////////////
 
   activeTab: "data" | "relations" = "data";
-  relationsData : Relation[] = [];  // contenu JSON des relations pour D3
+  relationsData: Relation[] = [];  // contenu JSON des relations pour D3
 
 
   openRelations() {
