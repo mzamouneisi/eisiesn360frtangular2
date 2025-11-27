@@ -34,11 +34,11 @@ export class RelationsD3Component implements OnInit, OnDestroy, OnChanges {
   private nodeGroup: any;
   private zoomBehavior: any;
 
-  focusedTable: string | null = null;
+  @Input() focusedTable: string | null = null;
   tooltipVisible = false;
 
   @Input() data: any;
-  @Input() selectedTable: string;
+  // @Input() selectedTable: string;
   // Propriété pour l'isolation du graphe (via dblclick)
   isolatedTable: string | null = null;
 
@@ -52,7 +52,7 @@ export class RelationsD3Component implements OnInit, OnDestroy, OnChanges {
   ) { }
 
   ngOnInit(): void {
-    this.focusedTable = this.selectedTable || this.route.snapshot.paramMap.get('table');
+    // this.focusedTable = this.selectedTable || this.route.snapshot.paramMap.get('table');
     this.createSvg();
     this.fetchRelationsAndRender();
     window.addEventListener('resize', this.onResize);
@@ -64,13 +64,13 @@ export class RelationsD3Component implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['selectedTable'] && !changes['selectedTable'].firstChange) {
-      this.focusedTable = this.selectedTable;
+    if (changes['focusedTable'] && !changes['focusedTable'].firstChange) {
+      // this.focusedTable = this.selectedTable;
       this.isolatedTable = null;
 
       const relations = this.tableService.relationsData;
       if (relations && Array.isArray(relations)) {
-        const targetId = this.selectedTable;
+        const targetId = this.focusedTable;
         let dataToRender;
 
         if (targetId) {
@@ -165,7 +165,7 @@ export class RelationsD3Component implements OnInit, OnDestroy, OnChanges {
       );
     } else {
       const mapped = this.mapRelationsKeys(relations);
-      const targetId = this.isolatedTable || this.selectedTable || this.focusedTable;
+      const targetId = this.isolatedTable || this.focusedTable;
       const dataToRender = targetId ? this.filterGraph(mapped, targetId) : this.buildGraph(mapped);
       this.render(dataToRender.nodes, dataToRender.links);
     }
