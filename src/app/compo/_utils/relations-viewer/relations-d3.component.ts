@@ -66,7 +66,8 @@ export class RelationsD3Component implements OnInit, OnDestroy, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['focusedTable'] && !changes['focusedTable'].firstChange) {
       // this.focusedTable = this.selectedTable;
-      this.isolatedTable = null;
+      // this.isolatedTable = null;
+      this.isolatedTable = this.focusedTable
 
       const relations = this.tableService.relationsData;
       if (relations && Array.isArray(relations)) {
@@ -325,26 +326,30 @@ export class RelationsD3Component implements OnInit, OnDestroy, OnChanges {
       .style('pointer-events', 'none');
 
     // interactions
-    const self = this;
+    // const this = this;
 
     node.on('dblclick', (event: any, d: any) => {
-      if (self.isolatedTable === d.id) {
-        self.isolatedTable = null;
+      console.log("dblclick node : ", node )
+      console.log("dblclick d : ", d )
+      console.log("dblclick isolatedTable : ", this.isolatedTable )
+      
+      if (this.isolatedTable === d.id) {
+        this.isolatedTable = null;
       } else {
-        self.isolatedTable = d.id;
+        this.isolatedTable = d.id;
       }
 
-      const relationsData = self.tableService.relationsData || [];
-      const targetIdToFilter = self.isolatedTable;
+      const relationsData = this.tableService.relationsData || [];
+      const targetIdToFilter = this.isolatedTable;
 
       let dataToRender;
       if (targetIdToFilter) {
-        dataToRender = self.filterGraph(relationsData, targetIdToFilter);
+        dataToRender = this.filterGraph(relationsData, targetIdToFilter);
       } else {
-        dataToRender = self.buildGraph(relationsData);
+        dataToRender = this.buildGraph(relationsData);
       }
 
-      self.render(dataToRender.nodes, dataToRender.links);
+      this.render(dataToRender.nodes, dataToRender.links);
     });
 
 

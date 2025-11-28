@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Relation } from 'src/app/model/Relation';
 import { TableService } from 'src/app/service/table.service';
 
@@ -7,7 +7,7 @@ import { TableService } from 'src/app/service/table.service';
   templateUrl: './table-viewer.component.html',
   styleUrls: ['./table-viewer.component.css', './table-custom.css'],
 })
-export class TableViewerComponent {
+export class TableViewerComponent implements OnInit {
   tables: string[] = [];
   selectedTable = '';
   lines: any[] = [];
@@ -35,10 +35,32 @@ export class TableViewerComponent {
   constructor(private tableService: TableService) {
   }
 
-  getTables() {
+  ngOnInit(): void {
+    this.getTables(
+      () => {
+        if (this.tables && this.tables.length) {
+          this.selectTable(this.tables[0])
+          let t = 500
+          setTimeout(() => {
+            this.openTabData()
+          }, t+=500);
+          setTimeout(() => {
+            this.openRelations()
+          }, t+=500);
+          setTimeout(() => {
+            this.openTabData()
+          }, t+=500);
+         
+        }
+      }
+    )
+  }
+
+  getTables(fOk: Function = null) {
     this.tableService.getTables(
       (data) => {
         this.tables = data
+        if (fOk) fOk()
       }, (err) => {
         this.infos = JSON.stringify(err)
       }
@@ -94,9 +116,9 @@ export class TableViewerComponent {
     // 3. TODO : on retravaille lines afin les valeurs des colonnes de type date / timestamp en Date 
   }
 
-getTypeInput(col: string) {
-  return this.tableService.getTypeInput(col.toLowerCase(), this.mapColType);
-}
+  getTypeInput(col: string) {
+    return this.tableService.getTypeInput(col.toLowerCase(), this.mapColType);
+  }
 
   getValueForInput(key: string, value: any): any {
 
@@ -220,7 +242,7 @@ getTypeInput(col: string) {
     this.tableService.executeSql(this.sql,
       (sqlResult) => {
         this.sqlResult = sqlResult
-        this.getTables()
+        this.getTables(null)
         if (this.selectedTable) {
           this.selectTable(this.selectedTable)
         }
@@ -487,40 +509,6 @@ getTypeInput(col: string) {
 
   ////////////////////////////////
 
-  generateDeleteRow() {
-    // On prend la première clé comme id par défaut
-    const keys = this.lines && this.lines.length ? this.getKeys(this.lines[0]) : [];
-    const idKey = keys[0] || 'id';
-    this.sql = `DELETE FROM ${this.selectedTable} WHERE ${idKey} = ?;`;
-  }
-
-  generateInsertRow() {
-    if (!this.lines || !this.lines.length) {
-      alert('Table has no rows to infer columns.');
-      return;
-    }
-    const keys = this.getKeys(this.lines[0]);
-    const assignments = keys.map(k => `${k} = ?`).join(', ');
-    this.sql = `INSERT INTO ${this.selectedTable} SET ${assignments};`;
-  }
-
-  generateUpdateRow() {
-    if (!this.lines.length) {
-      alert('Table has no rows to infer columns.');
-      return;
-    }
-
-    const keys = this.getKeys(this.lines[0]);
-    const idKey = keys.find(k => k.toLowerCase() === 'id') || keys[0];
-
-    const otherKeys = keys.filter(k => k !== idKey);
-
-    const setClause = otherKeys.map(k => `${k} = ?`).join(', ');
-
-    this.sql =
-      `UPDATE ${this.selectedTable} SET ${setClause} WHERE ${idKey} = ?;`;
-  }
-
 
   addTableLike() {
     this.sql = `CREATE TABLE ${this.selectedTable}_copy AS SELECT * FROM ${this.selectedTable};`;
@@ -557,6 +545,22 @@ getTypeInput(col: string) {
 
       }
     )
+
+  }
+
+  openTabData() {
+    let fct = "openTabData"
+    if (!this.selectedTable) {
+      alert("Veuillez sélectionner une table.");
+      return;
+    }
+
+    this.activeTab = "data";
+
+    console.log(fct + " : selectedTable : ", this.selectedTable)
+
+    // Charger les relations du backend
+    this.selectTable(this.selectedTable)
 
   }
 

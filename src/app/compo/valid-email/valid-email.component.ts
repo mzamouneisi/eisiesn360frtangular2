@@ -21,7 +21,7 @@ export class ValidEmailComponent implements OnInit {
     private route: ActivatedRoute,
     private http: HttpClient,
     public router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.codeEmail = this.route.snapshot.paramMap.get('code') ?? '';
@@ -50,7 +50,14 @@ export class ValidEmailComponent implements OnInit {
         this.isSuccess = true;
         this.message = '✅ Votre adresse email a été validée avec succès !';
         // Optionnel : redirection après quelques secondes
-        setTimeout(() => this.router.navigate(['/login']), 4000);
+        setTimeout(
+          () => {
+            if (this.router.url !== '/login') {
+              this.router.navigate(['/login']);
+            }
+
+          }
+          , 4000);
       },
       error: (err) => {
         console.error('Erreur validation :', err);

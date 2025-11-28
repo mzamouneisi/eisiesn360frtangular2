@@ -22,15 +22,19 @@ export class AuthGuard implements CanActivate {
   private checkLogin(url: string): boolean {
     //////////console.log("checkLogin url", url)
     if (this.authService.isLoggedIn()) {
-      console.log("checkLogin OK url = ", url )
+      console.log("checkLogin OK url = ", url)
       // return true;
       // this.router.navigate(['/home']);
       // this.router.navigate([ '/#/'+ url ]);
-      return true    ;
+      return true;
     }
     //////////console.log("checkLogin KO")
     this.authService.redirectToUrl = url;
-    this.router.navigate(['/login']);
+    // this.router.navigate(['/login']);
+    if (this.router.url !== '/login') {
+      this.router.navigate(['/login']);
+    }
+
     return false;
   }
 }

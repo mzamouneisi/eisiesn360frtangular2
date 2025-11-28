@@ -121,7 +121,11 @@ export class DataSharingService implements CraStateService, ServiceLocator {
 
   gotoLogin() {
     console.log("navigate to login ")
-    this.router.navigate(['/login']);
+    // this.router.navigate(['/login']);
+    if (this.router.url !== '/login') {
+      this.router.navigate(['/login']);
+    }
+
   }
 
   gotoMyProfile() {
@@ -774,14 +778,14 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     console.log(label, this.nbCallNotifications)
     this.notifyObserversNotificationsBefore(label)
     this.getNotificationsFromServer().subscribe((data) => {
-      // console.log("getNotifications: this, data", this, data)
+      console.log("getNotifications: this, data", this, data)
       this.listNotifications = data.body.result;
       this.majListNotifications();
       console.log("getNotifications ", this.listNotifications)
       this.notifyObserversNotificationsAfter(label, data)
       this.isCallNotifications = false
     }, error => {
-      // console.log("getNotifications: this, error", this, error)
+      console.log("getNotifications: this, error", this, error)
       this.notifyObserversNotificationsError(label, error);
       this.isCallNotifications = false
     })
