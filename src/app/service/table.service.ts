@@ -23,8 +23,9 @@ export class TableService {
   getTables(fOk: Function, fKo: Function) {
     this.http.get<string[]>(this.myUrl).subscribe(
       tables => {
-        console.log("getTables tables : ", tables)
+        tables = tables.map(t => t.toUpperCase())
         tables = tables.sort((a, b) => a.localeCompare(b));
+        console.log("getTables tables : ", tables)
         if (fOk) fOk(tables)
       },
       error => {
@@ -74,6 +75,7 @@ export class TableService {
 
   getColsOfTable(table: string, fOk: Function, fKo: Function) {
     let fct = "getColsOfTable"
+    console.log(fct + " : table : ", table )
     // let columnMetadata: ColumnDetails[] = [];
     let columnMetadata: any[] = [];
     let mapColType = {}
@@ -112,7 +114,7 @@ export class TableService {
     if (typ.includes("DATE")) {
       res = "date"
     } else if (typ.includes("TIMESTAMP")) {
-      res = "DATETIME-LOCAL"
+      res = "datetime-local"
     } else if (typ.includes("INT") || typ.includes("NUMBER") || typ.includes("DECIMAL")) {
       res = "number"
     } else if (typ.includes("BOOL")) {
