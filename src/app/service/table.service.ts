@@ -86,8 +86,8 @@ export class TableService {
         console.log(fct + " columnMetadata : ", columnMetadata)
         if (columnMetadata && columnMetadata.length) {
           for (let ct of columnMetadata) {
-            let col = (ct.columnName + "").toLowerCase()
-            let typ = (ct.dataType + "").toLowerCase()
+            let col = (ct.columnName + "").toUpperCase()
+            let typ = (ct.dataType + "").toUpperCase()
             mapColType[col] = typ
             mapColTypeInput[col] = this.getTypeInput(col, mapColType)
           }
@@ -106,16 +106,16 @@ export class TableService {
   }
 
   getTypeInput(col: string, mapColType: {}) {
-    col = (col + "").toLowerCase()
+    col = (col + "").toUpperCase()
     let typ = mapColType[col] + ""
     let res = "text"
-    if (typ.includes("date")) {
+    if (typ.includes("DATE")) {
       res = "date"
-    } else if (typ.includes("timestamp")) {
-      res = "datetime-local"
-    } else if (typ.includes("int") || typ.includes("number") || typ.includes("decimal")) {
+    } else if (typ.includes("TIMESTAMP")) {
+      res = "DATETIME-LOCAL"
+    } else if (typ.includes("INT") || typ.includes("NUMBER") || typ.includes("DECIMAL")) {
       res = "number"
-    } else if (typ.includes("bool")) {
+    } else if (typ.includes("BOOL")) {
       res = "checkbox"
     }
     return res

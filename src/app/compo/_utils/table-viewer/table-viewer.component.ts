@@ -40,16 +40,17 @@ export class TableViewerComponent implements OnInit {
       () => {
         if (this.tables && this.tables.length) {
           this.selectTable(this.tables[0])
-          let t = 500
+          let t0 = 100
+          let t = t0
           setTimeout(() => {
             this.openTabData()
-          }, t+=500);
+          }, t+=t0);
           setTimeout(() => {
             this.openRelations()
-          }, t+=500);
+          }, t+=t0);
           setTimeout(() => {
             this.openTabData()
-          }, t+=500);
+          }, t+=t0);
          
         }
       }
@@ -93,19 +94,19 @@ export class TableViewerComponent implements OnInit {
 
         this.columnMetadata = columnMetadata.map(col => ({
           ...col,
-          columnName: col.columnName.toLowerCase(),
-          dataType: col.dataType.toLowerCase()
+          columnName: col.columnName.toUpperCase(),
+          dataType: col.dataType.toUpperCase()
         }));
 
         // Normaliser les maps
         this.mapColType = {};
         for (const k in mapColType) {
-          this.mapColType[k.toLowerCase()] = mapColType[k];
+          this.mapColType[k.toUpperCase()] = mapColType[k];
         }
 
         this.mapColTypeInput = {};
         for (const k in mapColTypeInput) {
-          this.mapColTypeInput[k.toLowerCase()] = mapColTypeInput[k];
+          this.mapColTypeInput[k.toUpperCase()] = mapColTypeInput[k];
         }
 
       }, (err) => {
@@ -117,7 +118,7 @@ export class TableViewerComponent implements OnInit {
   }
 
   getTypeInput(col: string) {
-    return this.tableService.getTypeInput(col.toLowerCase(), this.mapColType);
+    return this.tableService.getTypeInput(col.toUpperCase(), this.mapColType);
   }
 
   getValueForInput(key: string, value: any): any {
@@ -126,7 +127,7 @@ export class TableViewerComponent implements OnInit {
       return null;
     }
 
-    key = key.toLowerCase()
+    key = key.toUpperCase()
 
     // 1. Vérifiez si c'est un champ date/time
     const type = this.getTypeInput(key);
@@ -173,7 +174,7 @@ export class TableViewerComponent implements OnInit {
   formatSqlValue(key: string, value: any): any {
     // 1. Trouvez le type de données de la colonne
     // const metadata = this.columnMetadata.find(col => col.columnName === key);
-    const metadata = this.columnMetadata.find(col => col.columnName === key.toLowerCase());
+    const metadata = this.columnMetadata.find(col => col.columnName === key.toUpperCase());
 
     // console.log("formatSqlValue : key, value, metadata : ", key, value, metadata)
 
@@ -187,7 +188,7 @@ export class TableViewerComponent implements OnInit {
     }
 
     // 2. Gérer le cas 'null'
-    if (!value || (value + "").toLowerCase() === 'null') {
+    if (!value || (value + "").toUpperCase() === 'NULL') {
       res = 'null';
       // console.log("formatSqlValue : res : ", res)
       return res;
@@ -262,13 +263,13 @@ export class TableViewerComponent implements OnInit {
 
   getKeysStartWithId(obj: any): string[] {
     const keys = Object.keys(obj);
-    const idKey = keys.find(k => k.toLowerCase() === 'id'); // détecte la clé "id" quelle que soit la casse
+    const idKey = keys.find(k => k.toUpperCase() === 'ID'); // détecte la clé "id" quelle que soit la casse
     return idKey ? [idKey, ...keys.filter(k => k !== idKey)] : keys;
   }
 
   getKeysStartWithIdAndOrdered(obj: any): string[] {
     const keys = Object.keys(obj);
-    const idKey = keys.find(k => k.toLowerCase() === 'id');
+    const idKey = keys.find(k => k.toUpperCase() === 'ID');
     const otherKeys = keys.filter(k => k !== idKey).sort((a, b) => a.localeCompare(b));
     return idKey ? [idKey, ...otherKeys] : otherKeys;
   }
@@ -343,7 +344,7 @@ export class TableViewerComponent implements OnInit {
     this.selectedRowIndex = index;
 
     const keys = this.getKeys(this.selectedRow);
-    const idKey = keys.find(k => k.toLowerCase() === 'id') || keys[0];
+    const idKey = keys.find(k => k.toUpperCase() === 'ID') || keys[0];
 
     this.idKeySelected = this.selectedRow[idKey]
   }
@@ -355,7 +356,7 @@ export class TableViewerComponent implements OnInit {
     }
 
     const keys = this.getKeys(this.selectedRow);
-    const idKey = keys.find(k => k.toLowerCase() === 'id') || keys[0];
+    const idKey = keys.find(k => k.toUpperCase() === 'ID') || keys[0];
 
     if (!confirm(`Delete row with ${idKey} = ${this.selectedRow[idKey]} ?`)) return;
 
@@ -375,7 +376,7 @@ export class TableViewerComponent implements OnInit {
   saveRow() {
     if (this.isEditing) {
       const keys = this.getKeys(this.rowInEdit);
-      const idKey = keys.find(k => k.toLowerCase() === 'id') || keys[0];
+      const idKey = keys.find(k => k.toUpperCase() === 'ID') || keys[0];
 
       const setClause = keys
         // .filter(k => k !== idKey)
@@ -403,7 +404,7 @@ export class TableViewerComponent implements OnInit {
 
     if (this.isInserting) {
       const keys = this.getKeys(this.newRow);
-      // const nonIdKeys = keys.filter(k => k.toLowerCase() !== 'id');
+      // const nonIdKeys = keys.filter(k => k.toUpperCase() !== 'ID');
       const nonIdKeys = keys;
 
       const columns = nonIdKeys.join(', ');
@@ -451,7 +452,7 @@ export class TableViewerComponent implements OnInit {
     this.newRow = { ...this.selectedRow }; // copy object
 
     // id doit être null
-    const idKey = Object.keys(this.newRow).find(k => k.toLowerCase() === 'id');
+    const idKey = Object.keys(this.newRow).find(k => k.toUpperCase() === 'ID');
     if (idKey) this.newRow[idKey] = null;
 
     // On insère visuellement une ligne sous la ligne sélectionnée
@@ -477,7 +478,7 @@ export class TableViewerComponent implements OnInit {
     keys.forEach(k => emptyRow[k] = null);
 
     // L'ID doit rester null
-    const idKey = keys.find(k => k.toLowerCase() === 'id');
+    const idKey = keys.find(k => k.toUpperCase() === 'ID');
     if (idKey) emptyRow[idKey] = null;
 
     // Ajouter la ligne vide au tableau visuel
