@@ -60,7 +60,7 @@ export class TableViewerComponent implements OnInit {
   getTables(fOk: Function = null) {
     this.tableService.getTables(
       (data) => {
-        this.tables = data
+        this.tables = data.map(t => t.toUpperCase());
         if (fOk) fOk()
       }, (err) => {
         this.infos = JSON.stringify(err)
