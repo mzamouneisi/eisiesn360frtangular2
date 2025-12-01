@@ -75,16 +75,22 @@ export class TableService {
 
   getColsOfTable(table: string, fOk: Function, fKo: Function) {
     let fct = "getColsOfTable"
-    console.log(fct + " : table : ", table )
+    console.log(fct + " : table : ", table)
     // let columnMetadata: ColumnDetails[] = [];
     let columnMetadata: any[] = [];
     let mapColType = {}
     let mapColTypeInput = {}
 
-    // this.http.get<ColumnDetails[]>(this.myUrl + table + '/columns').subscribe(
     this.http.get<any[]>(this.myUrl + table + '/columns').subscribe(
       data => {
         columnMetadata = data;
+
+        columnMetadata = columnMetadata.map(col => ({
+          ...col,
+          columnName: col.columnName.toUpperCase(),
+          dataType: col.dataType.toUpperCase()
+        }));
+
         console.log(fct + " columnMetadata : ", columnMetadata)
         if (columnMetadata && columnMetadata.length) {
           for (let ct of columnMetadata) {
@@ -109,7 +115,7 @@ export class TableService {
 
   getTypeInput(col: string, mapColType: {}) {
     col = (col + "").toUpperCase()
-    let typ = mapColType[col] + ""
+    let typ = (mapColType[col] + "").toUpperCase()
     let res = "text"
     if (typ.includes("DATE")) {
       res = "date"

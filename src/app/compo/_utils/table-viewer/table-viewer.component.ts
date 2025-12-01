@@ -91,24 +91,6 @@ export class TableViewerComponent implements OnInit {
         this.columnMetadata = columnMetadata;
         this.mapColType = mapColType;
         this.mapColTypeInput = mapColTypeInput;
-
-        this.columnMetadata = columnMetadata.map(col => ({
-          ...col,
-          columnName: col.columnName.toUpperCase(),
-          dataType: col.dataType.toUpperCase()
-        }));
-
-        // Normaliser les maps
-        this.mapColType = {};
-        for (const k in mapColType) {
-          this.mapColType[k.toUpperCase()] = mapColType[k];
-        }
-
-        this.mapColTypeInput = {};
-        for (const k in mapColTypeInput) {
-          this.mapColTypeInput[k.toUpperCase()] = mapColTypeInput[k];
-        }
-
       }, (err) => {
 
       }
