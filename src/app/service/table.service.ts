@@ -139,10 +139,10 @@ export class TableService {
           this.relationsData = res;
           // 🔥 map pour corriger les noms de colonnes
           this.relationsData = res.map(r => ({
-            table: r.TABLE_NAME,
-            column: r.COLUMN_NAME,
-            target_table: r.TARGET_TABLE,
-            target_pk: r.TARGET_PK
+            table: (r.TABLE_NAME + "").toUpperCase(),
+            column: (r.COLUMN_NAME + "").toUpperCase(),
+            target_table: (r.TARGET_TABLE + "").toUpperCase(),
+            target_pk: (r.TARGET_PK + "").toUpperCase()
           }));
 
           if (fOk) fOk(res)
