@@ -145,7 +145,7 @@ export class TableService {
             target_pk: (r.TARGET_PK + "").toUpperCase()
           }));
 
-          if (fOk) fOk(res)
+          if (fOk) fOk(this.relationsData)
         },
         error: (err) => {
           console.log("openRelations : err : ", err)
