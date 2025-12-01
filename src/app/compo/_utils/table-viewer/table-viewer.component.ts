@@ -45,12 +45,12 @@ export class TableViewerComponent implements OnInit {
           setTimeout(() => {
             this.openTabData()
           }, t+=t0);
-          setTimeout(() => {
-            this.openRelations()
-          }, t+=t0);
-          setTimeout(() => {
-            this.openTabData()
-          }, t+=t0);
+          // setTimeout(() => {
+          //   this.openRelations()
+          // }, t+=t0);
+          // setTimeout(() => {
+          //   this.openTabData()
+          // }, t+=t0);
          
         }
       }

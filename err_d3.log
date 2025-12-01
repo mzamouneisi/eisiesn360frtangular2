@@ -1,0 +1,82 @@
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@angular-devkit/architect@0.1201.4',
+npm WARN EBADENGINE   required: {
+npm WARN EBADENGINE     node: '^12.14.1 || >=14.0.0',
+npm WARN EBADENGINE     npm: '^6.11.0 || ^7.5.6',
+npm WARN EBADENGINE     yarn: '>= 1.13.0'
+npm WARN EBADENGINE   },
+npm WARN EBADENGINE   current: { node: 'v14.20.0', npm: '8.5.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@angular-devkit/build-angular@12.1.4',
+npm WARN EBADENGINE   required: {
+npm WARN EBADENGINE     node: '^12.14.1 || >=14.0.0',
+npm WARN EBADENGINE     npm: '^6.11.0 || ^7.5.6',
+npm WARN EBADENGINE     yarn: '>= 1.13.0'
+npm WARN EBADENGINE   },
+npm WARN EBADENGINE   current: { node: 'v14.20.0', npm: '8.5.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@angular-devkit/build-optimizer@0.1201.4',
+npm WARN EBADENGINE   required: {
+npm WARN EBADENGINE     node: '^12.14.1 || >=14.0.0',
+npm WARN EBADENGINE     npm: '^6.11.0 || ^7.5.6',
+npm WARN EBADENGINE     yarn: '>= 1.13.0'
+npm WARN EBADENGINE   },
+npm WARN EBADENGINE   current: { node: 'v14.20.0', npm: '8.5.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@angular-devkit/build-webpack@0.1201.4',
+npm WARN EBADENGINE   required: {
+npm WARN EBADENGINE     node: '^12.14.1 || >=14.0.0',
+npm WARN EBADENGINE     npm: '^6.11.0 || ^7.5.6',
+npm WARN EBADENGINE     yarn: '>= 1.13.0'
+npm WARN EBADENGINE   },
+npm WARN EBADENGINE   current: { node: 'v14.20.0', npm: '8.5.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@angular-devkit/core@12.1.4',
+npm WARN EBADENGINE   required: {
+npm WARN EBADENGINE     node: '^12.14.1 || >=14.0.0',
+npm WARN EBADENGINE     npm: '^6.11.0 || ^7.5.6',
+npm WARN EBADENGINE     yarn: '>= 1.13.0'
+npm WARN EBADENGINE   },
+npm WARN EBADENGINE   current: { node: 'v14.20.0', npm: '8.5.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@ngtools/webpack@12.1.4',
+npm WARN EBADENGINE   required: {
+npm WARN EBADENGINE     node: '^12.14.1 || >=14.0.0',
+npm WARN EBADENGINE     npm: '^6.11.0 || ^7.5.6',
+npm WARN EBADENGINE     yarn: '>= 1.13.0'
+npm WARN EBADENGINE   },
+npm WARN EBADENGINE   current: { node: 'v14.20.0', npm: '8.5.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: 'chromedriver@137.0.4',
+npm WARN EBADENGINE   required: { node: '>=20' },
+npm WARN EBADENGINE   current: { node: 'v14.20.0', npm: '8.5.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: 'selenium-webdriver@4.38.0',
+npm WARN EBADENGINE   required: { node: '>= 20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v14.20.0', npm: '8.5.0' }
+npm WARN EBADENGINE }
+
+up to date, audited 1555 packages in 10s
+
+126 packages are looking for funding
+  run `npm fund` for details
+
+86 vulnerabilities (5 low, 42 moderate, 36 high, 3 critical)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues possible (including breaking changes), run:
+  npm audit fix --force
+
+Some issues need review, and may require choosing
+a different dependency.
+
+Run `npm audit` for details.
