@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { Relation } from '../model/Relation';
+import { Relation } from '../model/relation';
 import { DataSharingService } from './data-sharing.service';
 import { UtilsService } from './utils.service';
 
@@ -23,7 +23,7 @@ export class TableService {
   getTables(fOk: Function, fKo: Function) {
     this.http.get<string[]>(this.myUrl).subscribe(
       tables => {
-        tables = tables.map(t => t.toUpperCase())
+        tables = tables.map(t => t)
         tables = tables.sort((a, b) => a.localeCompare(b));
         console.log("getTables tables : ", tables)
         if (fOk) fOk(tables)
@@ -87,15 +87,15 @@ export class TableService {
 
         columnMetadata = columnMetadata.map(col => ({
           ...col,
-          columnName: col.columnName.toUpperCase(),
-          dataType: col.dataType.toUpperCase()
+          columnName: col.columnName,
+          dataType: col.dataType
         }));
 
         console.log(fct + " columnMetadata : ", columnMetadata)
         if (columnMetadata && columnMetadata.length) {
           for (let ct of columnMetadata) {
-            let col = (ct.columnName + "").toUpperCase()
-            let typ = (ct.dataType + "").toUpperCase()
+            let col = ct.columnName 
+            let typ = ct.dataType 
             mapColType[col] = typ
             mapColTypeInput[col] = this.getTypeInput(col, mapColType)
           }
@@ -114,7 +114,7 @@ export class TableService {
   }
 
   getTypeInput(col: string, mapColType: {}) {
-    col = (col + "").toUpperCase()
+    col = (col + "")
     let typ = (mapColType[col] + "").toUpperCase()
     let res = "text"
     if (typ.includes("DATE")) {
@@ -139,10 +139,10 @@ export class TableService {
           this.relationsData = res;
           // 🔥 map pour corriger les noms de colonnes
           this.relationsData = res.map(r => ({
-            table: (r.TABLE_NAME + "").toUpperCase(),
-            column: (r.COLUMN_NAME + "").toUpperCase(),
-            target_table: (r.TARGET_TABLE + "").toUpperCase(),
-            target_pk: (r.TARGET_PK + "").toUpperCase()
+            table: r.TABLE_NAME ,
+            column: r.COLUMN_NAME ,
+            target_table: r.TARGET_TABLE ,
+            target_pk: r.TARGET_PK 
           }));
 
           if (fOk) fOk(this.relationsData)

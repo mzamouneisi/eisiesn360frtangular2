@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Relation } from 'src/app/model/Relation';
+import { Relation } from 'src/app/model/relation';
 import { TableService } from 'src/app/service/table.service';
 
 @Component({
@@ -60,7 +60,7 @@ export class TableViewerComponent implements OnInit {
   getTables(fOk: Function = null) {
     this.tableService.getTables(
       (data) => {
-        this.tables = data.map(t => t.toUpperCase());
+        this.tables = data.map(t => t);
         if (fOk) fOk()
       }, (err) => {
         this.infos = JSON.stringify(err)
@@ -100,7 +100,7 @@ export class TableViewerComponent implements OnInit {
   }
 
   getTypeInput(col: string) {
-    return this.tableService.getTypeInput(col.toUpperCase(), this.mapColType);
+    return this.tableService.getTypeInput(col, this.mapColType);
   }
 
   getValueForInput(key: string, value: any): any {
@@ -109,7 +109,7 @@ export class TableViewerComponent implements OnInit {
       return null;
     }
 
-    key = key.toUpperCase()
+    key = key
 
     // 1. Vérifiez si c'est un champ date/time
     const type = this.getTypeInput(key);
@@ -156,7 +156,7 @@ export class TableViewerComponent implements OnInit {
   formatSqlValue(key: string, value: any): any {
     // 1. Trouvez le type de données de la colonne
     // const metadata = this.columnMetadata.find(col => col.columnName === key);
-    const metadata = this.columnMetadata.find(col => col.columnName === key.toUpperCase());
+    const metadata = this.columnMetadata.find(col => col.columnName === key);
 
     // console.log("formatSqlValue : key, value, metadata : ", key, value, metadata)
 
