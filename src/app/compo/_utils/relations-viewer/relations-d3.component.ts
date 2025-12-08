@@ -22,7 +22,7 @@ const NODE_HEIGHT = 50;
 })
 export class RelationsD3Component implements OnInit, OnDestroy, OnChanges {
 
-  @ViewChild('chartContainer', { static: true }) chartContainer!: ElementRef;
+  @ViewChild('chartContainer', { static: false }) chartContainer!: ElementRef;
   @ViewChild('tooltip', { static: true }) tooltipRef!: ElementRef;
 
   private svg: any;
@@ -45,20 +45,56 @@ export class RelationsD3Component implements OnInit, OnDestroy, OnChanges {
   // identifiant unique pour marker (évite collisions si plusieurs SVG)
   private arrowMarkerId = 'arrow-' + Math.floor(Math.random() * 1000000);
 
+  private resizeObserver: ResizeObserver | null = null;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private tableService: TableService
   ) { }
 
+  //   private initializeOnce() {
+  //   // create svg only once
+  //   if (!this.chartContainer) return;
+  //   this.createSvg();
+  //   this.fetchRelationsAndRender();
+
+  //   if ('ResizeObserver' in window) {
+  //     this.resizeObserver = new ResizeObserver(() => this.onResize());
+  //     this.resizeObserver.observe(this.chartContainer.nativeElement);
+  //   }
+  // }
+
   ngOnInit(): void {
     // this.focusedTable = this.selectedTable || this.route.snapshot.paramMap.get('table');
-    this.createSvg();
-    this.fetchRelationsAndRender();
+    // this.createSvg();
+    // this.fetchRelationsAndRender();
     window.addEventListener('resize', this.onResize);
   }
 
+  ngAfterViewInit() {
+    // // attendre un tick pour être sûr que le DOM + CSS sont appliqués
+    // requestAnimationFrame(() => {
+    //   this.createSvg();
+    //   this.fetchRelationsAndRender();
+    // });
+
+    requestAnimationFrame(() => {
+      this.createSvg();
+      this.fetchRelationsAndRender();
+      // ResizeObserver
+      if ('ResizeObserver' in window) {
+        this.resizeObserver = new ResizeObserver(() => this.onResize());
+        this.resizeObserver.observe(this.chartContainer.nativeElement);
+      }
+    });
+  }
+
   ngOnDestroy(): void {
+    // window.removeEventListener('resize', this.onResize);
+    // if (this.simulation) this.simulation.stop();
+
+    if (this.resizeObserver) this.resizeObserver.disconnect();
     window.removeEventListener('resize', this.onResize);
     if (this.simulation) this.simulation.stop();
   }
@@ -80,7 +116,10 @@ export class RelationsD3Component implements OnInit, OnDestroy, OnChanges {
           dataToRender = this.buildGraph(relations);
         }
 
-        this.render(dataToRender.nodes, dataToRender.links);
+        setTimeout(() => {
+          console.log("ngOnChanges : Av call render : dataToRender : ", dataToRender, "targetId : ", targetId)
+          this.render(dataToRender.nodes, dataToRender.links);
+        }, 500);
       }
     }
   }
@@ -101,6 +140,18 @@ export class RelationsD3Component implements OnInit, OnDestroy, OnChanges {
     const rect = container.getBoundingClientRect();
     this.width = rect.width || this.width;
     this.height = rect.height || this.height;
+
+    // si width/height sont à 0, retenter (protection pour build prod)
+    if (!rect.width || !rect.height) {
+      // on retente juste après le rendu
+      setTimeout(() => {
+        const r2 = container.getBoundingClientRect();
+        this.width = r2.width || this.width;
+        this.height = r2.height || this.height;
+        this.createSvg(); // attention : si tu fais récursif, protège-toi d'une boucle infinie
+      }, 50);
+      return;
+    }
 
     // clear container
     container.innerHTML = '';
@@ -129,20 +180,27 @@ export class RelationsD3Component implements OnInit, OnDestroy, OnChanges {
   }
 
   private fetchRelationsAndRender() {
+    let fct ="fetchRelationsAndRender"
     // Récupération via service (le service doit remplir tableService.relationsData)
     const relations = this.tableService.relationsData;
     const dataExists = relations && Array.isArray(relations) && relations.length > 0;
 
+    console.log(fct + " : relations : ", relations, ", dataExists : ", dataExists)
+
     if (!dataExists) {
       this.tableService.openRelations(
         (res: any[]) => {
+          console.log(fct + " : res : ", res)
           // le service doit avoir mis à jour relationsData ; on accepte res aussi
           const currentRelations = (res && Array.isArray(res) && res.length > 0) ? res : (this.tableService.relationsData || []);
+          console.log(fct + " : currentRelations : ", currentRelations)
+
           // Supporte backend qui renvoie majuscules: map automatique
-          const mapped = this.mapRelationsKeys(currentRelations);
+          // const mapped = this.mapRelationsKeys(currentRelations);
 
           // const targetId = this.isolatedTable || this.selectedTable || this.focusedTable;
           const targetId = this.isolatedTable || null;
+          console.log(fct + " : targetId : ", targetId)
 
           // const dataToRender = targetId ? this.filterGraph(mapped, targetId) : this.buildGraph(mapped);
           // this.render(dataToRender.nodes, dataToRender.links);
@@ -152,15 +210,18 @@ export class RelationsD3Component implements OnInit, OnDestroy, OnChanges {
           } else {
             dataToRender = this.buildGraph(currentRelations); // <-- TOUTES LES TABLES
           }
+
+          console.log(fct + " : Av call render : dataToRender : ", dataToRender, "targetId : ", targetId)
           this.render(dataToRender.nodes, dataToRender.links);
 
         },
         (err: any) => {
-          console.error('fetchRelationsAndRender Erreur récupération relations', err);
+          console.error(fct + ' Erreur récupération relations', err);
           // même si erreur, tenter d'afficher ce qu'on a
           const fallback = this.tableService.relationsData || [];
           const mapped = this.mapRelationsKeys(fallback);
           const dataToRender = this.buildGraph(mapped);
+
           this.render(dataToRender.nodes, dataToRender.links);
         }
       );
@@ -168,6 +229,8 @@ export class RelationsD3Component implements OnInit, OnDestroy, OnChanges {
       const mapped = this.mapRelationsKeys(relations);
       const targetId = this.isolatedTable || this.focusedTable;
       const dataToRender = targetId ? this.filterGraph(mapped, targetId) : this.buildGraph(mapped);
+
+      console.log(fct + " : else : Av call render : dataToRender : ", dataToRender, "targetId : ", targetId)
       this.render(dataToRender.nodes, dataToRender.links);
     }
   }
@@ -189,8 +252,10 @@ export class RelationsD3Component implements OnInit, OnDestroy, OnChanges {
    * Construire nodes & links D3 à partir des relations
    */
   private buildGraph(relations: Relation[]) {
+    let fct ="buildGraph"
+    console.log(fct + " : relations : ", relations)
     if (!Array.isArray(relations)) {
-      console.warn("Relations data is not an array, returning empty graph.");
+      console.warn(fct + " : Relations data is not an array, returning empty graph.");
       return { nodes: [], links: [] };
     }
 
@@ -198,14 +263,17 @@ export class RelationsD3Component implements OnInit, OnDestroy, OnChanges {
     const links: any[] = [];
 
     relations.forEach(r => {
+      console.log(fct + " : r : ", r)
       const src = r.table;
       const tgt = r.target_table;
 
       if (!nodeMap.has(src)) nodeMap.set(src, { id: src, tables: [src], columns: [] });
       if (!nodeMap.has(tgt)) nodeMap.set(tgt, { id: tgt, tables: [tgt], columns: [] });
 
+      console.log(fct + " : nodeMap : ", nodeMap)
+
       // link: source -> target
-      links.push({
+      let link = {
         source: src,
         target: tgt,
         table: r.table,
@@ -213,17 +281,25 @@ export class RelationsD3Component implements OnInit, OnDestroy, OnChanges {
         column: r.column,
         target_pk: r.target_pk,
         type: 'fk'
-      });
+      }
+      console.log(fct + " : push link : ", link)
+      links.push(link);
     });
 
     const nodes = Array.from(nodeMap.values());
+    console.log(fct + " : nodes : ", nodes , ", links : ", links )
     return { nodes, links };
   }
 
   private render(nodes: any[], links: any[]) {
 
+    let fct = "render"
+
+    console.log(fct + ' nodes:', nodes.length, 'links:', links.length);
+
     // Si la liste des nœuds est vide, on ne fait rien
     if (!nodes || nodes.length === 0) {
+      console.log(fct + ' END')
       this.linkGroup.selectAll('*').remove();
       this.nodeGroup.selectAll('*').remove();
       if (this.simulation) this.simulation.stop();
@@ -231,15 +307,27 @@ export class RelationsD3Component implements OnInit, OnDestroy, OnChanges {
     }
 
     const targetId = this.isolatedTable || null;
+    console.log(fct + ' targetId : ', targetId)
 
     const centerX = this.width / 2;
     const centerY = this.height * 0.1;
 
+    // NOUVELLE position du nœud focus (aligné à gauche)
+    // Utilisons par exemple 10% de la largeur pour la position X initiale/fixe
+    const centerX_Fixed = this.width * 0.1;
+    const centerY_Fixed = this.height * 0.1;
+
+    // NOUVEAU centre pour la simulation
+    // Utilisons par exemple 10% de la largeur pour attirer le graphe à gauche
+    const forceCenterX = this.width * 0.1;
+    // const forceCenterY = this.height / 2;
+    const forceCenterY = this.height * 0.1;
+
     // Initial positions / fixed for focused node
     nodes.forEach((d: any) => {
       if (d.id === targetId && targetId !== null) {
-        d.fx = centerX;
-        d.fy = centerY;
+        d.fx = centerX_Fixed; // Utilisation de la nouvelle position X à gauche
+        d.fy = centerY_Fixed;
         d.isFixed = true;
       } else {
         d.fx = null;
@@ -261,7 +349,8 @@ export class RelationsD3Component implements OnInit, OnDestroy, OnChanges {
     this.simulation = d3.forceSimulation(nodes)
       .force('link', d3.forceLink(links).id((d: any) => d.id).distance(180).strength(1))
       .force('charge', d3.forceManyBody().strength(-600))
-      .force('center', d3.forceCenter(this.width / 2, this.height / 2))
+      // CHANGEMENT ICI : Déplacement du centre vers la gauche (30% de la largeur)
+      .force('center', d3.forceCenter(forceCenterX, forceCenterY))
       .force('collide', d3.forceCollide().radius(Math.max(NODE_WIDTH, NODE_HEIGHT)));
 
     // ### Définir marker (une seule fois par svg, ici on recrée proprement)
@@ -278,7 +367,8 @@ export class RelationsD3Component implements OnInit, OnDestroy, OnChanges {
       .attr('orient', 'auto')
       .append('path')
       .attr('d', 'M0,-5L10,0L0,5')
-      .attr('fill', '#666');
+      // .attr('fill', '#666');
+      .attr('fill', 'currentColor');
 
     // links: path
     const link = this.linkGroup.selectAll('path')
@@ -329,10 +419,10 @@ export class RelationsD3Component implements OnInit, OnDestroy, OnChanges {
     // const this = this;
 
     node.on('dblclick', (event: any, d: any) => {
-      console.log("dblclick node : ", node )
-      console.log("dblclick d : ", d )
-      console.log("dblclick isolatedTable : ", this.isolatedTable )
-      
+      console.log("dblclick node : ", node)
+      console.log("dblclick d : ", d)
+      console.log("dblclick isolatedTable : ", this.isolatedTable)
+
       if (this.isolatedTable === d.id) {
         this.isolatedTable = null;
       } else {
@@ -348,6 +438,8 @@ export class RelationsD3Component implements OnInit, OnDestroy, OnChanges {
       } else {
         dataToRender = this.buildGraph(relationsData);
       }
+
+      console.log("Av call render : dataToRender : ", dataToRender, "targetIdToFilter : ", targetIdToFilter)
 
       this.render(dataToRender.nodes, dataToRender.links);
     });
@@ -423,13 +515,17 @@ export class RelationsD3Component implements OnInit, OnDestroy, OnChanges {
 
     // relancer simulation proprement
     this.simulation.alpha(1).restart();
-    this.fit();
+    // this.fit();
+
+    console.log(fct + " : END ")
   }
 
   /**
    * Filtre les relations pour n'afficher que la table cible et ses voisins.
    */
   private filterGraph(allRelations: Relation[], targetTableId: string) {
+    let fct = "filterGraph"
+    console.log(fct + " : allRelations : ", allRelations, "targetTableId : ", targetTableId)
     if (!targetTableId || !Array.isArray(allRelations)) {
       return this.buildGraph(allRelations);
     }
@@ -437,11 +533,14 @@ export class RelationsD3Component implements OnInit, OnDestroy, OnChanges {
     const nodesToShow = new Set<string>();
 
     const filteredLinks = allRelations.filter(r => {
+      console.log(fct + " : r : ", r )
       if (r.table === targetTableId || r.target_table === targetTableId) {
         nodesToShow.add(r.table);
         nodesToShow.add(r.target_table);
+        console.log(fct + " return true . r : ", r )
         return true;
       }
+      console.log(fct + " return false . r : ", r )
       return false;
     });
 
@@ -449,14 +548,17 @@ export class RelationsD3Component implements OnInit, OnDestroy, OnChanges {
       id: id,
       tables: [id]
     }));
+    console.log(fct + " filteredNodes : ", filteredNodes )
 
     const validNodeIds = new Set(filteredNodes.map(n => n.id));
+    console.log(fct + " validNodeIds : ", validNodeIds )
 
     const finalLinks = filteredLinks.map(l => ({
       ...l,
       source: l.table,
       target: l.target_table
     })).filter(l => validNodeIds.has(l.source) && validNodeIds.has(l.target));
+    console.log(fct + " finalLinks : ", finalLinks )
 
     return { nodes: filteredNodes, links: finalLinks };
   }
@@ -481,6 +583,25 @@ export class RelationsD3Component implements OnInit, OnDestroy, OnChanges {
 
   private dragEnded(event: any, d: any) {
     if (!event.active) this.simulation.alphaTarget(0);
+
+    // Laisse les nœuds être déplacés librement pour l'utilisateur
+    // Si vous vouliez qu'ils restent là où ils sont placés (mode "sticky"):
+    // d.fx = d.x;
+    // d.fy = d.y;
+
+    // Si le noeud n'est PAS le noeud "focus" (qui est fixé ailleurs dans render)
+    // on retire le fx/fy de l'utilisateur pour le laisser dériver à nouveau (comportement D3 classique)
+    // Cependant, pour un schéma de BDD, on veut souvent qu'il reste fixé
+
+    // Option 1: Le laisser dériver (votre code actuel)
+    // d.fx = null; 
+    // d.fy = null;
+
+    // Option 2: Le fixer là où l'utilisateur l'a mis (souvent mieux pour les schémas)
+    if (this.isolatedTable !== d.id) {
+      d.fx = d.x;
+      d.fy = d.y;
+    }
   }
 
   showTooltip(event: any, html: string) {
@@ -505,11 +626,37 @@ export class RelationsD3Component implements OnInit, OnDestroy, OnChanges {
     this.svg.transition().call(this.zoomBehavior.scaleBy as any, 1 / 1.3);
   }
 
+  // fit() {
+  //   const cx = this.width / 2;
+  //   const cy = this.height / 2;
+  //   // recentre simplement
+  //   this.svg.transition().call(this.zoomBehavior.transform as any, d3.zoomIdentity.translate(0, 0).scale(1).translate(cx - this.width / 2, cy - this.height / 2));
+  // }
+  // Remplacer votre fit() actuel par :
   fit() {
-    const cx = this.width / 2;
-    const cy = this.height / 2;
-    // recentre simplement
-    this.svg.transition().call(this.zoomBehavior.transform as any, d3.zoomIdentity.translate(0, 0).scale(1).translate(cx - this.width / 2, cy - this.height / 2));
+    if (!this.nodeGroup || !this.linkGroup || !this.svg) return;
+
+    const nodesAndLinks = this.zoomG.node().getBBox(); // Bounding box de tout le contenu du groupe de zoom
+
+    if (!nodesAndLinks || (nodesAndLinks.width === 0 && nodesAndLinks.height === 0)) {
+      // Si la bbox est vide ou nulle (graphe vide), recentrer au centre par défaut
+      this.svg.transition().duration(500).call(this.zoomBehavior.transform as any, d3.zoomIdentity);
+      return;
+    }
+
+    const { x, y, width, height } = nodesAndLinks;
+    const padding = 50; // Marge autour du graphe
+    const scaleX = (this.width - 2 * padding) / width;
+    const scaleY = (this.height - 2 * padding) / height;
+    const scale = Math.min(scaleX, scaleY, 1.5); // Limiter le zoom max à 1.5 par exemple
+
+    const translateX = this.width / 2 - scale * (x + width / 2);
+    const translateY = this.height / 2 - scale * (y + height / 2);
+
+    const transform = d3.zoomIdentity.translate(translateX, translateY).scale(scale);
+
+    // Appliquer la transformation
+    this.svg.transition().duration(750).call(this.zoomBehavior.transform as any, transform);
   }
 
   goBack() {

@@ -48,7 +48,9 @@
     padding: 10px;
     resize: both;
     overflow: auto;
-    max-height: 500px;
+    /* max-height: 500px; */
+    height: 600px;
+
 }
 
 .resize-all {
@@ -59,5 +61,6 @@
 }
 
 .row-selected {
-    background-color: #fff3cd !important; /* jaune clair */
+    background-color: #fff3cd !important;
+    /* jaune clair */
 }

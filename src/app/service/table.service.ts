@@ -144,6 +144,7 @@ export class TableService {
             target_table: r.TARGET_TABLE ,
             target_pk: r.TARGET_PK 
           }));
+          console.log("openRelations : relationsData : ", this.relationsData)
 
           if (fOk) fOk(this.relationsData)
         },

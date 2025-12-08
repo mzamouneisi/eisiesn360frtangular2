@@ -1,5 +1,6 @@
 
 const url = "https://esn360.azurewebsites.net"
+// const url = "http://127.0.0.1:8080"
 const app = '/esn360/'
 
 export const environment = {
