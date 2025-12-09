@@ -25,6 +25,8 @@
     resize: vertical;
     overflow: auto;
     max-height: 500px;
+
+    min-width: 20%;
 }
 
 
@@ -41,15 +43,24 @@
 }
 
 .side-right {
-    /* width: 75%; */
-    /* display: flex; */
+
     border: 2px solid black;
     flex: 1;
     padding: 10px;
-    resize: both;
+
+    display: flex;
+    flex-direction: column;
+
+    min-width: 79%;
+    height: 500px;
+
+    /* ou auto si vous préférez */
+    /* overflow: hidden; */
+    /* empêche double-scroll */
+
     overflow: auto;
-    /* max-height: 500px; */
-    height: 600px;
+    /* resize: both; */
+    resize: vertical;
 
 }
 
@@ -63,4 +74,28 @@
 .row-selected {
     background-color: #fff3cd !important;
     /* jaune clair */
+}
+
+/* ------------------ */
+
+/* La zone des onglets : FIXE */
+.tabs-header {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 10px;
+    position: sticky;
+    top: 0;
+    background: white;
+    padding: 10px 0;
+    z-index: 10;
+    border-bottom: 1px solid #ccc;
+}
+
+/* La zone scrollable du contenu */
+.tab-content {
+    /* min-width: 100%; */
+    height: calc(100% - 60px);
+    /* Ajuste selon votre header */
+    overflow-y: auto;
+    padding-right: 10px;
 }

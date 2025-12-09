@@ -83,6 +83,7 @@ export class TableService {
 
     this.http.get<any[]>(this.myUrl + table + '/columns').subscribe(
       data => {
+        console.log(fct + " data : ", data)
         columnMetadata = data;
 
         columnMetadata = columnMetadata.map(col => ({
@@ -92,6 +93,7 @@ export class TableService {
         }));
 
         console.log(fct + " columnMetadata : ", columnMetadata)
+
         if (columnMetadata && columnMetadata.length) {
           for (let ct of columnMetadata) {
             let col = ct.columnName 

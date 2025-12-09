@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Relation } from 'src/app/model/relation';
 import { TableService } from 'src/app/service/table.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-table-viewer',
@@ -31,6 +32,8 @@ export class TableViewerComponent implements OnInit {
   // columnMetadata: ColumnDetails[] = [];
   columnMetadata: any[] = [];
 
+  apiUrl = environment.apiUrl
+
 
   constructor(private tableService: TableService) {
   }
@@ -44,14 +47,14 @@ export class TableViewerComponent implements OnInit {
           let t = t0
           setTimeout(() => {
             this.openTabData()
-          }, t+=t0);
+          }, t += t0);
           // setTimeout(() => {
           //   this.openRelations()
           // }, t+=t0);
           // setTimeout(() => {
           //   this.openTabData()
           // }, t+=t0);
-         
+
         }
       }
     )
@@ -72,6 +75,7 @@ export class TableViewerComponent implements OnInit {
   public mapColTypeInput = {}
 
   selectTable(table: string) {
+    let fct = "selectTable"
     this.selectedTable = table;
     this.lines = []; // Videz les lignes pour un chargement propre
     this.columnMetadata = []; // Videz les métadonnées
@@ -80,21 +84,41 @@ export class TableViewerComponent implements OnInit {
     this.tableService.getLinesOfTable(this.selectedTable,
       data => {
         this.lines = data;
+        console.log(fct + " getLinesOfTable data : ", data)
       }, (err) => {
-
+        console.log(fct + " getLinesOfTable err : ", err)
       }
     );
 
     // 2. Récupérer les détails des colonnes
-    this.tableService.getColsOfTable(this.selectedTable,
-      (columnMetadata, mapColType, mapColTypeInput) => {
-        this.columnMetadata = columnMetadata;
-        this.mapColType = mapColType;
-        this.mapColTypeInput = mapColTypeInput;
-      }, (err) => {
 
-      }
-    );
+      this.tableService.getColsOfTable(this.selectedTable,
+        (columnMetadata, mapColType, mapColTypeInput) => {
+          console.log(fct + " getColsOfTable columnMetadata : ", columnMetadata)
+          this.columnMetadata = columnMetadata;
+          this.mapColType = mapColType;
+          this.mapColTypeInput = mapColTypeInput;
+          console.log(fct + " getColsOfTable mapColType : ", mapColType)
+        }, err => {
+          console.log(fct + " getColsOfTable err : ", err)
+        }
+      );
+
+    // setTimeout(() => {
+
+    //   console.log(fct + " go to call getColsOfTable")
+      
+    //   this.tableService.getColsOfTable(this.selectedTable,
+    //     (columnMetadata, mapColType, mapColTypeInput) => {
+    //       this.columnMetadata = columnMetadata;
+    //       this.mapColType = mapColType;
+    //       this.mapColTypeInput = mapColTypeInput;
+    //       console.log(fct + " getColsOfTable mapColType : ", mapColType)
+    //     }, (err) => {
+    //       console.log(fct + " getColsOfTable err : ", err)
+    //     }
+    //   );
+    // }, 1000);
 
     // 3. TODO : on retravaille lines afin les valeurs des colonnes de type date / timestamp en Date 
   }
