@@ -5,9 +5,10 @@ import { EsnService } from 'src/app/service/esn.service';
 import { UtilsService } from 'src/app/service/utils.service';
 import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
 
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatTabGroup } from '@angular/material/tabs';
 import { ConsultantService } from 'src/app/service/consultant.service';
+import { LoadingDialogComponent } from '../loading-dialog/loading-dialog.component';
 
 @Component({
   selector: 'app-inscription',
@@ -20,6 +21,7 @@ export class InscriptionComponent implements OnInit {
   @ViewChild('tabGroup') tabGroup!: MatTabGroup;
   infos = ""
   errors = ""
+  loadingDialogRef: MatDialogRef<any> | null = null;
 
   constructor(private esnService: EsnService, private router: Router
     , public utils: UtilsService
@@ -150,14 +152,35 @@ export class InscriptionComponent implements OnInit {
     this.dataSharingService.navigateTo("")
   }
 
+  showLoadingDialog(message: string): void {
+    this.loadingDialogRef = this.dialog.open(LoadingDialogComponent, {
+      width: '300px',
+      disableClose: true,
+      data: { message }
+    });
+  }
+
+  closeLoadingDialog(): void {
+    if (this.loadingDialogRef) {
+      this.loadingDialogRef.close();
+      this.loadingDialogRef = null;
+    }
+  }
+
   onSubmit(): void {
     console.log("Formulaire confirmé");
 
     let label2 = "sendMail"
 
+    const msgLoading = label2 + " en cours...";
+    // DEBUT du msg loading
+    this.showLoadingDialog(msgLoading);
+
     this.dataSharingService.sendMailToValidEmailInscription(
-      (data2, to) => {
+      (data2, to, codeEmailToValidate) => {
         console.log(label2 + " data2, to : ", data2, to)
+        // FIN du msg loading
+        this.closeLoadingDialog();
         this.utilsIhm.infoDialog("Un email a bien été envoyé à " + to,
           () => {
             setTimeout(() => {
@@ -168,6 +191,8 @@ export class InscriptionComponent implements OnInit {
       },
       (error) => {
         console.log(label2 + " error : ", error)
+        // FIN du msg loading
+        this.closeLoadingDialog();
         this.utilsIhm.infoDialog(label2 + " Erreur envoie email : " + JSON.stringify(error))
       }
     )

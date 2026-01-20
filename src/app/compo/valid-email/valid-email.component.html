@@ -1,17 +1,31 @@
-<div class="container text-center py-5">
-    <h2 class="mb-3">Validation d'email</h2>
+<div style="margin-top: 30px; margin-left: 20px;">
+    <p>Test affichage component ValidateEmailComponent</p>
+    <p>Code reçu: {{ codeEmail }}</p>
+    <p>Message: {{ message }}</p>
+    <p>Is Loading: {{ isLoading }}</p>
+</div>
 
-    <div *ngIf="isLoading" class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Chargement...</span>
+
+<div style="padding: 40px; text-align: center; font-size: 18px;">
+    <h2>Validation d'email</h2>
+
+    <div *ngIf="isLoading" style="margin: 20px 0;">
+        <p>Validation en cours...</p>
+        <div style="border: 3px solid #f3f3f3; border-radius: 50%; border-top: 3px solid #3498db; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto;"></div>
     </div>
 
-    <div *ngIf="!isLoading">
-        <p [class.text-success]="isSuccess" [class.text-danger]="!isSuccess">
-            {{ message }}
-        </p>
+    <div *ngIf="!isLoading" style="margin: 20px 0;">
+        <p style="font-size: 20px; color: #333;">{{ message }}</p>
 
-        <button *ngIf="!isLoading && isSuccess" class="btn btn-primary mt-3" (click)="router.navigate(['/login'])">
+        <button *ngIf="isSuccess" style="margin-top: 20px; padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;" (click)="router.navigate(['/login'])">
             Se connecter
         </button>
     </div>
 </div>
+
+<style>
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>

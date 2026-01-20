@@ -80,7 +80,7 @@
                         <tr *ngFor="let row of lines; let i = index" (click)="selectRow(row, i)"
                             [ngClass]="{ 'row-selected': selectedRowIndex === i }">
                             <td *ngFor="let key of getKeys(row)" class="cell-content">
-                                <span>{{ row[key] }}</span>
+                                <span (dblclick)="onCellTableDblClick($event)">{{ row[key] }}</span>
                             </td>
                         </tr>
                     </tbody>

@@ -130,7 +130,8 @@ export class MereComponent implements OnInit, AfterViewInit, AfterContentInit {
         this.isUserAdmin = false;
       }
 
-      if (this.userConnected == null) {
+      // Vérifier si on est sur une route publique, sinon rediriger vers login
+      if (this.userConnected == null && !this.dataSharingService.isPublicRoute(this.dataSharingService.router.url)) {
         this.dataSharingService.gotoLogin();
       }
 

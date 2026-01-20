@@ -16,6 +16,14 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
     let url: string = state.url;
+
+    console.log("AuthGuard canActivate url=", url)
+    
+    // Routes publiques qui n'ont pas besoin d'authentification
+    if (this.authService.isPublicRoute(url)) {
+      return true;
+    }
+    
     return this.checkLogin(url);
   }
 

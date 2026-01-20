@@ -8,4 +8,5 @@ export const environment = {
   apiUrl: url + app + 'api',
   divUrl: url + app + 'div',
   extractUrl: url + ':8300',
+  urlFront: 'https://mzamouneisi.github.io/eisiesn360frtangular2',
 };

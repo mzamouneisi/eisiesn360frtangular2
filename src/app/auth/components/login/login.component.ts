@@ -15,6 +15,7 @@ export class LoginComponent implements OnInit {
   credentials: Credentials = new Credentials('', '');
   info = "";
   error = "";
+  showPassword = false;
 
   constructor(private dataSharingService: DataSharingService, private router: Router, private dialog: MatDialog) {
   }
@@ -29,6 +30,8 @@ export class LoginComponent implements OnInit {
     }
     if (!this.credentials.username) this.credentials.username = lastUserName;
     console.log("login ngOnInit fin : credentials : ", this.credentials)
+
+    // this.isLoading = false;  
   }
 
   /**

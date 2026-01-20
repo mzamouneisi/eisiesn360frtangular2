@@ -47,12 +47,19 @@ import { UtilsIhmService } from './utilsIhm.service';
  * @author Saber Ben Khalifa <saber.khalifa@eisi-consulting.fr>
  **/
 
-const URL_FRONT = "https://mzamouneisi.github.io/eisiesn360frtangular2"
-
 @Injectable({
   providedIn: 'root'
 })
 export class DataSharingService implements CraStateService, ServiceLocator {
+
+  // Routes publiques qui ne nécessitent pas d'authentification
+  private readonly PUBLIC_ROUTES: string[] = [
+    '/validateEmail/',
+    '/login',
+    '/inscription',
+    '/',
+    ''
+  ];
 
   headerComponent: HeaderComponent;
 
@@ -91,7 +98,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
   respEsnSaved: Consultant;
   passRespEsnSaved: string;
 
-  constructor(private router: Router
+  constructor(public router: Router
     , private craService: CraService
     , private utils: UtilsService
     , private utilsIhmService: UtilsIhmService
@@ -108,11 +115,6 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     this.getCurrentUserFromLocaleStorage()
 
     console.log("constructor, userConnected", this.userConnected)
-
-    if (this.userConnected == null) {
-      this.gotoLogin();
-    }
-
   }
 
   navigateTo(url) {
@@ -126,6 +128,22 @@ export class DataSharingService implements CraStateService, ServiceLocator {
       this.router.navigate(['/login']);
     }
 
+  }
+
+  public isPublicRoute(url: string): boolean {
+    // Vérifie si l'URL correspond à une route publique
+    for (let route of this.PUBLIC_ROUTES) {
+      if (route === '/' || route === '') {
+        if (url === route) {
+          return true;
+        }
+      } else {
+        if (url.includes(route)) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   gotoMyProfile() {
@@ -463,13 +481,15 @@ export class DataSharingService implements CraStateService, ServiceLocator {
   }
 
   public logout(): void {
+    console.log("DataSharingService logout() called");
     localStorage.removeItem(UtilsService.TOKEN_STORAGE_KEY);
     localStorage.removeItem(UtilsService.TOKEN_STORAGE_USER);
     localStorage.removeItem(UtilsService.TOKEN_STORAGE_USER_CONNECTED);
     localStorage.removeItem(UtilsService.DEFAULT_LOCALE);
     this.isUserLoggedInFct.next(false);
     this.setUserConnected(null)
-    this.router.navigate(["login"]);
+    this.router.navigate(["/login"]);
+    console.log("DataSharingService logout() finished");
   }
 
   findConsultantByUsername(username: string, fctOk: Function, fctKo: Function) {
@@ -980,7 +1000,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
               \n<BR>
               Email : ${to}\n<BR>
               Password : ${this.passRespEsnSaved}\n<BR>
-              url = : ${URL_FRONT}\n<BR>
+              url = : ${environment.urlFront}\n<BR>
               \n<BR>
               Cordialement,\n<BR>
               l'équipe ESN 360 \n<BR>
@@ -1003,18 +1023,21 @@ export class DataSharingService implements CraStateService, ServiceLocator {
 
   /**
  * Envoie un mail contenant un lien de validation d'adresse email.
- * Le lien a la forme : URL_FRONT + "/validEmail/<code_email_to_validate>"
+ * Le lien a la forme : URL_FRONT + "/validateEmail/<code_email_to_validate>"
  * @param fctOk Fonction à exécuter en cas de succès
  * @param fctKo Fonction à exécuter en cas d'erreur
  */
   sendMailToValidEmailInscription(fctOk: Function, fctKo: Function) {
+
+    let label = "sendMailToValidEmailInscription";
+
     const respEsnSavedName = this.respEsnSaved.fullName;
     const respEsnMail = this.respEsnSaved.email;
     const esnSavedName = this.esnSaved.name;
 
     // 🔹 Génération d’un code unique de validation (par ex. UUID ou hash)
-    const codeEmailToValidate = this.utils.generateRandomCode(32); // méthode à implémenter côté utilitaire
-    const validationUrl = `${URL_FRONT}/validEmail/${codeEmailToValidate}`;
+    const codeEmailToValidate = this.utils.generateRandomCode(32);
+    const validationUrl = `${environment.urlFront}/#/validateEmail/${codeEmailToValidate}`;
 
     // 🔹 Construction du mail
     const mail = new Mail();
@@ -1033,14 +1056,28 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     L’équipe <strong>ESN360</strong><br>
   `;
 
+    this.respEsnSaved.password = this.passRespEsnSaved;
+
     // 🔹 Envoi du mail
-    const label = "sendMailToValidEmailInscription";
     console.log("goto " + label);
 
     this.msgService.sendMailSimple(mail, this.IsAddEsnAndResp).subscribe(
       (data) => {
         console.log(label + " data : ", data);
-        if (fctOk) fctOk(data, respEsnMail, codeEmailToValidate);
+        // insertion du code de validation en base, lié au respEsnSaved et avec une date d'expiration 
+        this.consultantService.saveCodeEmailToValidate(this.respEsnSaved, codeEmailToValidate).subscribe(
+          (dataSave) => {
+            console.log("saveCodeEmailToValidate data : ", dataSave);
+
+            if (fctOk) fctOk(data, respEsnMail, codeEmailToValidate);
+
+          }, (errorSave) => {
+            console.error("saveCodeEmailToValidate error : ", errorSave);
+
+            this.errorsSource.value.push(new MyError("Erreur lors de l'enregistrement du code de validation d'email.", JSON.stringify(errorSave)));
+          }
+        );
+
       },
       (error) => {
         console.error(label + " error : ", error);

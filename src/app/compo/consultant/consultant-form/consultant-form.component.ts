@@ -1,4 +1,5 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IMyDpOptions } from "mydatepicker";
 import { Address } from 'src/app/model/address';
@@ -7,6 +8,7 @@ import { EsnService } from 'src/app/service/esn.service';
 import { MsgService } from 'src/app/service/msg.service';
 import { UtilsService } from 'src/app/service/utils.service';
 import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
+import { PasswordValidatorService } from 'src/app/service/password-validator.service';
 import { Constants } from "../../../model/constants/constants";
 import { Consultant } from '../../../model/consultant';
 import { Esn } from '../../../model/esn';
@@ -14,6 +16,7 @@ import { ConsultantService } from '../../../service/consultant.service';
 import { DataSharingService } from "../../../service/data-sharing.service";
 import { SelectComponent } from '../../_reuse/select-consultant/select/select.component';
 import { MereComponent } from '../../_utils/mere-component';
+import { LoadingDialogComponent } from '../../loading-dialog/loading-dialog.component';
 
 @Component({
   selector: 'app-consultant-form',
@@ -47,6 +50,8 @@ export class ConsultantFormComponent extends MereComponent {
   esnId: number = 0;
   consultants: Consultant[];
   esnSavedName = ""
+  loadingDialogRef: MatDialogRef<any> | null = null;
+  passwordErrors: string[] = [];
 
   constructor(private route: ActivatedRoute, private router: Router
     , private consultantService: ConsultantService
@@ -55,6 +60,8 @@ export class ConsultantFormComponent extends MereComponent {
     , public utilsIhmService: UtilsIhmService
     , public dataSharingService: DataSharingService
     , private msgService: MsgService
+    , private dialog: MatDialog
+    , private passwordValidator: PasswordValidatorService
   ) {
     super(utils, dataSharingService);
 
@@ -318,8 +325,12 @@ export class ConsultantFormComponent extends MereComponent {
     }
 
     this.myObj.username = this.myObj.email
-    let pass = this.myObj.password
-    this.dataSharingService.passRespEsnSaved = pass
+    
+    // Sauvegarder le password saisie (en plain text) pour l'email
+    // Le serveur va le hasher et le sauvegarder en BDD
+    this.dataSharingService.passRespEsnSaved = this.myObj.password;
+
+    console.log("Password saisi : /" + this.myObj.password + "/")
 
     //todo check if email exist : a la saisie . invalider le form si exist via une variable isEmailExist.
     // todo : confirmer avec le user son email en lui rappelant : prenom, nom, soc 
@@ -360,9 +371,15 @@ export class ConsultantFormComponent extends MereComponent {
           let label2 = "sendMail"
           this.utilsIhmService.confirmDialog(msg,
             () => {
+              const msgLoading = label2 + " en cours...";
+              // DEBUT du msg loading
+              this.showLoadingDialog(msgLoading);
+
               this.dataSharingService.sendMailToValidEmailInscription(
-                (data2, to) => {
+                (data2, to, codeEmailToValidate) => {
                   this.afterCallServer(label2, data2)
+                  // FIN du msg loading
+                  this.closeLoadingDialog();
                   console.log(label2 + " isError : ", this.isError())
                   if (!this.isError()) {
                     this.utilsIhmService.infoDialog("Un email a bien été envoyé à " + to,
@@ -377,6 +394,8 @@ export class ConsultantFormComponent extends MereComponent {
                   }
                 },
                 (error) => {
+                  // FIN du msg loading
+                  this.closeLoadingDialog();
                   this.addErrorFromErrorOfServer(label2, error);
                   this.utilsIhmService.infoDialog(label2 + " Erreur envoie email : " + JSON.stringify(error))
                 }
@@ -499,13 +518,14 @@ export class ConsultantFormComponent extends MereComponent {
         domaine = parts[1];
       }
     } else {
-      domaine = (this.myObj.esn?.name + ".com").toLowerCase().replace(" ", "-");
+      domaine = (this.myObj.esn?.name + ".com").toLowerCase().replace(/\s+/g, '-');
     }
     console.log("emailFocus Esn : ", this.myObj.esn)
     if (this.utils.isEmpty(this.myObj.email)) {
       console.log("email NULL")
       if (!this.utils.isEmpty(this.myObj.firstName) && !this.utils.isEmpty(this.myObj.lastName) && !this.utils.isEmpty(this.myObj.esn?.name)) {
         this.myObj.email = (this.myObj.firstName + "." + this.myObj.lastName + "@" + domaine).toLowerCase();
+        this.myObj.email = this.myObj.email.toLowerCase().replace(/\s+/g, '-');
         this.myObj.username = this.myObj.email
       }
     }
@@ -513,6 +533,27 @@ export class ConsultantFormComponent extends MereComponent {
 
   emailChange() {
     this.myObj.username = this.myObj.email
+  }
+
+  showLoadingDialog(message: string): void {
+    this.loadingDialogRef = this.dialog.open(LoadingDialogComponent, {
+      width: '300px',
+      disableClose: true,
+      data: { message }
+    });
+  }
+
+  closeLoadingDialog(): void {
+    if (this.loadingDialogRef) {
+      this.loadingDialogRef.close();
+      this.loadingDialogRef = null;
+    }
+  }
+
+  // Validation du password
+  validatePassword(): void {
+    const result = this.passwordValidator.validate(this.myObj.password);
+    this.passwordErrors = result.errors;
   }
 
   //////////////end meths

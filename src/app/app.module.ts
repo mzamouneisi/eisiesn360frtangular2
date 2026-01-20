@@ -126,6 +126,7 @@ import { TradService } from './service/trad.service';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ConsultantArboComponent } from './compo/consultant/consultant-arbo/consultant-arbo.component';
 
 import { MatTabsModule } from '@angular/material/tabs';
@@ -142,10 +143,11 @@ import { DocCategoryListComponent } from './compo/administratifDocumentation/doc
 import { ConnectionComponent } from './compo/connection/connection.component';
 import { EsnArboComponent } from './compo/esn/esn-arbo/esn-arbo.component';
 import { InscriptionComponent } from './compo/inscription/inscription.component';
+import { LoadingDialogComponent } from './compo/loading-dialog/loading-dialog.component';
 import { ProjectAppComponent } from './compo/project/project-app/project-app.component';
 import { ProjectFormComponent } from './compo/project/project-form/project-form.component';
 import { ProjectListComponent } from './compo/project/project-list/project-list.component';
-import { ValidEmailComponent } from './compo/valid-email/valid-email.component';
+import { ValidateEmailComponent } from './compo/valid-email/valid-email.component';
 import { ProjectService } from './service/project.service';
 // import { TabsComponent } from './tabs/tabs.component';
 
@@ -266,9 +268,10 @@ export function initApp(http: HttpClient, translate: TranslateService) {
     ConfirmDialogComponent,
     InfoDialogComponent,
     InscriptionComponent,
-    ValidEmailComponent,
+    ValidateEmailComponent,
     CraHistoStatusComponent,
     RelationsD3Component,
+    LoadingDialogComponent,
     
   ],
   imports: [
@@ -306,6 +309,7 @@ export function initApp(http: HttpClient, translate: TranslateService) {
     MatIconModule,
     MatButtonModule,
     MatTabsModule,
+    MatProgressSpinnerModule,
   ],
   providers: [
     FormsModule,

@@ -161,6 +161,27 @@ export class EsnFormComponent extends MereComponent {
     );
   }
 
+  onFocusSiteWeb() {
+    if (this.myObj.webSite == null || this.myObj.webSite.trim().length == 0) {
+      let dom = this.myObj.name ? this.myObj.name.toLowerCase().replace(/\s+/g, '-') : '';
+      if(dom) {
+        this.myObj.webSite = "http://www." + dom + ".com";
+      }
+    }
+  }
+
+  onFocusEmail() {
+    if (this.myObj.email == null || this.myObj.email.trim().length == 0) {
+      if(this.myObj.webSite) {
+        let tab = this.myObj.webSite.split(/\./)
+        let dom = tab.length >= 2 ? tab[1] + "." + tab[2] : '';
+        if(dom) {
+          this.myObj.email = "contact@" + dom;
+        }
+      }
+    }
+  }
+
   getListCra(consultant: Consultant) {
 
     console.log("listCra ", consultant.listCra)

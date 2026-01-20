@@ -92,22 +92,22 @@ export class TableViewerComponent implements OnInit {
 
     // 2. Récupérer les détails des colonnes
 
-      this.tableService.getColsOfTable(this.selectedTable,
-        (columnMetadata, mapColType, mapColTypeInput) => {
-          console.log(fct + " getColsOfTable columnMetadata : ", columnMetadata)
-          this.columnMetadata = columnMetadata;
-          this.mapColType = mapColType;
-          this.mapColTypeInput = mapColTypeInput;
-          console.log(fct + " getColsOfTable mapColType : ", mapColType)
-        }, err => {
-          console.log(fct + " getColsOfTable err : ", err)
-        }
-      );
+    this.tableService.getColsOfTable(this.selectedTable,
+      (columnMetadata, mapColType, mapColTypeInput) => {
+        console.log(fct + " getColsOfTable columnMetadata : ", columnMetadata)
+        this.columnMetadata = columnMetadata;
+        this.mapColType = mapColType;
+        this.mapColTypeInput = mapColTypeInput;
+        console.log(fct + " getColsOfTable mapColType : ", mapColType)
+      }, err => {
+        console.log(fct + " getColsOfTable err : ", err)
+      }
+    );
 
     // setTimeout(() => {
 
     //   console.log(fct + " go to call getColsOfTable")
-      
+
     //   this.tableService.getColsOfTable(this.selectedTable,
     //     (columnMetadata, mapColType, mapColTypeInput) => {
     //       this.columnMetadata = columnMetadata;
@@ -245,18 +245,25 @@ export class TableViewerComponent implements OnInit {
 
   executeSql(fctSuccess: Function = null) {
     this.infos = ""
+    console.log("executeSql : sql : ", this.sql)
 
     this.tableService.executeSql(this.sql,
       (sqlResult) => {
         this.sqlResult = sqlResult
-        this.getTables(null)
-        if (this.selectedTable) {
-          this.selectTable(this.selectedTable)
+        console.log("executeSql : sqlResult : ", sqlResult)
+        if (!sqlResult.body && sqlResult.header && sqlResult.header.description) {
+          this.infos = sqlResult.header.description
+        } else {
+          this.getTables(null)
+          if (this.selectedTable) {
+            this.selectTable(this.selectedTable)
+          }
+          if (fctSuccess) fctSuccess()
         }
-        if (fctSuccess) fctSuccess()
       },
       (infos) => {
         this.infos = infos
+        console.log("executeSql : infos : ", infos)
       }
     )
   }
@@ -364,13 +371,25 @@ export class TableViewerComponent implements OnInit {
     const keys = this.getKeys(this.selectedRow);
     const idKey = keys.find(k => k.toUpperCase() === 'ID') || keys[0];
 
-    if (!confirm(`Delete row with ${idKey} = ${this.selectedRow[idKey]} ?`)) return;
+    let msg = `Delete row with ${idKey} = ${this.selectedRow[idKey]} ?`
+    if(this.selectedTable.toUpperCase() === 'ESN') {
+      msg += "\nThis will also delete all related data in other tables (RESP_ESN, ESN_PROJECT, CRA, etc.) !"
+    }
+
+    if (!confirm(msg)) return;
 
     if (!this.selectedRow[idKey]) this.selectedRow[idKey] = null
 
     let eqaulOrIs = this.selectedRow[idKey] ? '=' : 'is'
 
-    this.sql = `DELETE FROM ${this.selectedTable} WHERE ${idKey} ${eqaulOrIs} ${this.selectedRow[idKey]};`;
+    let sql = `DELETE FROM ${this.selectedTable} WHERE ${idKey} ${eqaulOrIs} ${this.selectedRow[idKey]};`;
+    if(this.selectedTable.toUpperCase() === 'ESN') {
+      sql = `DELETE FROM consultant WHERE ESN_ID ${eqaulOrIs} ${this.selectedRow[idKey]};`;
+      sql += `\nDELETE FROM activity_type WHERE ESN_ID ${eqaulOrIs} ${this.selectedRow[idKey]};`;
+      sql += `\nDELETE FROM ${this.selectedTable} WHERE ${idKey} ${eqaulOrIs} ${this.selectedRow[idKey]};`;
+    }
+
+    this.sql = sql;
 
     this.executeSql(
       () => {
@@ -571,7 +590,15 @@ export class TableViewerComponent implements OnInit {
 
   }
 
-
-
+  onCellTableDblClick(event: any) {
+    console.log("onCellTableDblClick")
+    // TODO : copier la valeur de la cellule dans le presse-papier. et afficher une notification : cell copied to clipboard. Implementer cela.
+    const text = event.target.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      alert("Cell value copied to clipboard: " + text);
+    }).catch(err => {
+      alert("Failed to copy text: " + err);
+    });
+  }
 
 }

@@ -55,7 +55,7 @@ import { ProfileComponent } from "./compo/profile/profile.component";
 import { ProjectAppComponent } from './compo/project/project-app/project-app.component';
 import { ProjectFormComponent } from './compo/project/project-form/project-form.component';
 import { ProjectListComponent } from './compo/project/project-list/project-list.component';
-import { ValidEmailComponent } from './compo/valid-email/valid-email.component';
+import { ValidateEmailComponent } from './compo/valid-email/valid-email.component';
 
 
 const routes: Routes = [
@@ -67,7 +67,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'logout', component: LoginComponent },
   { path: 'inscription', component: InscriptionComponent },
-  { path: 'validEmail/:code', component: ValidEmailComponent },
+  { path: 'validateEmail/:code', component: ValidateEmailComponent },
   { path: 'loading', component: LoadingPageComponent },
   { path: 'connections', component: ConnectionComponent },  
 

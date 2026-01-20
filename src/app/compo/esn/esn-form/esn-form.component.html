@@ -76,14 +76,14 @@
 
             <div class="form-group">
                 <label for="siteWeb">{{utils.tr('app.compo.esn.form.input.webSite')}}</label>
-                <input type="text"
+                <input type="text" (focus)="onFocusSiteWeb()"
                     placeholder="{{utils.tr('app.form.input.placeholder.prefix')}} {{utils.tr('app.compo.esn.form.input.webSite') | lowercase}}"
                     [(ngModel)]="myObj.webSite" class="form-control" id="siteWeb" name="siteWeb">
             </div>
 
             <div class="form-group">
                 <label for="email">{{utils.tr('app.compo.esn.form.input.email')}}</label>
-                <input type="text"
+                <input type="text" (focus)="onFocusEmail()"
                     placeholder="{{utils.tr('app.form.input.placeholder.prefix')}} {{utils.tr('app.compo.esn.form.input.email') | lowercase}}"
                     [(ngModel)]="myObj.email" class="form-control" id="email" name="email" required #email="ngModel"
                     [pattern]="emailPattern">
