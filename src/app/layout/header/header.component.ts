@@ -121,7 +121,7 @@ export class HeaderComponent extends MereComponent {
 
   showNotificationsAll() {
     this.clearInfos();
-    this.router.navigate(['/notification']);
+    this.dataSharingService.showNotificationsAll();
   }
 
   public getNotifications() {

@@ -33,6 +33,7 @@ import { ConsultantListComponent } from './compo/consultant/consultant-list/cons
 import { CraAppComponent } from './compo/cra/cra-app/cra-app.component';
 import { CraFormCalComponent } from './compo/cra/cra-form/cra-form-cal.component';
 import { CraListComponent } from './compo/cra/cra-list/cra-list.component';
+import { DashBoardComponent } from './compo/dashboard/dashboard.component';
 import { EsnAppComponent } from './compo/esn/esn-app/esn-app.component';
 import { EsnFormComponent } from './compo/esn/esn-form/esn-form.component';
 import { EsnListComponent } from './compo/esn/esn-list/esn-list.component';
@@ -59,9 +60,8 @@ import { ValidateEmailComponent } from './compo/valid-email/valid-email.componen
 
 
 const routes: Routes = [
-  // route publique par défaut -> login
-  // { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: '', component: NotificationComponent },
+  // route publique par défaut -> rediriger vers home (dashboard)
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
 
   // routes publiques
   { path: 'login', component: LoginComponent },
@@ -73,7 +73,7 @@ const routes: Routes = [
   { path: 'connections', component: ConnectionComponent },  
 
   // routes protégées (après)
-  { canActivate: [AuthGuard], path: 'home', component: NotificationComponent },
+  { canActivate: [AuthGuard], path: 'home', component: DashBoardComponent },
   { canActivate: [AuthGuard], path: 'notification', component: NotificationComponent },
 
   { canActivate: [AuthGuard], path: 'my-profile', component: ProfileComponent },

@@ -71,9 +71,11 @@ export class DataSharingService implements CraStateService, ServiceLocator {
 
   private infosSource = new BehaviorSubject<string[]>([]);
   private errorsSource = new BehaviorSubject<MyError[]>([]);
+  private esnCurrentReadySource = new BehaviorSubject<Esn>(null);
 
   infos$ = this.infosSource.asObservable();
   errors$ = this.errorsSource.asObservable();
+  esnCurrentReady$ = this.esnCurrentReadySource.asObservable();
 
   // listInfos: Array<string> = [];
   // listErrors: MyError[] = [];
@@ -519,6 +521,8 @@ export class DataSharingService implements CraStateService, ServiceLocator {
    */
   getConsultantConnectedAndHisInfos(username: string, caller: any) {
 
+    console.log("getConsultantConnectedAndHisInfos username:", username)
+
     this.setUserConnected(null)
     this.consultantService.getConsultantAndHisInfos(username).subscribe(
       data => {
@@ -526,7 +530,9 @@ export class DataSharingService implements CraStateService, ServiceLocator {
           this.setUserConnected(data.body.result)
           console.log("findConsultantByUsername userConnected : ", this.userConnected)
           this.esnCurrent = this.userConnected?.esn
+          console.log("getConsultantConnectedAndHisInfos esnCurrent : ", this.esnCurrent)
           this.idEsnCurrent = this.esnCurrent?.id
+          console.log("getConsultantConnectedAndHisInfos idEsnCurrent : ", this.idEsnCurrent)
 
           this.majEsnOnConsultant(() => { }, (error) => {
             this.addErrorTxt(JSON.stringify(error))
@@ -1161,5 +1167,10 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     );
   }
 
-
+  /**
+   * Émettre le signal que esnCurrent est prêt
+   */
+  notifyEsnCurrentReady(esn: Esn): void {
+    this.esnCurrentReadySource.next(esn);
+  }
 }

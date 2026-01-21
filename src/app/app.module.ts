@@ -141,6 +141,7 @@ import { DocCategoryAppComponent } from './compo/administratifDocumentation/docC
 import { DocCategoryFormComponent } from './compo/administratifDocumentation/docCategory/doc-category-form/doc-category-form.component';
 import { DocCategoryListComponent } from './compo/administratifDocumentation/docCategory/doc-category-list/doc-category-list.component';
 import { ConnectionComponent } from './compo/connection/connection.component';
+import { DashBoardComponent } from './compo/dashboard/dashboard.component';
 import { EsnArboComponent } from './compo/esn/esn-arbo/esn-arbo.component';
 import { InscriptionComponent } from './compo/inscription/inscription.component';
 import { LoadingDialogComponent } from './compo/loading-dialog/loading-dialog.component';
@@ -238,6 +239,7 @@ export function initApp(http: HttpClient, translate: TranslateService) {
     SelectConsultantComponent,
     MsgNotificationsComponent,
     NotificationComponent,
+    DashBoardComponent,
     Test2Component,
     MzDatePickerComponent,
     MzDatePickerDebFinComponent,

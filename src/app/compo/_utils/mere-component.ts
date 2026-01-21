@@ -102,7 +102,7 @@ export class MereComponent implements OnInit, AfterViewInit, AfterContentInit {
                 (esn) => {
 
                   this.esnCurrent = this.userConnected?.esn
-                  // console.log("*** esnCurrent 2 = ", this.esnCurrent)
+                  console.log("*** esnCurrent 2 = ", this.esnCurrent)
                   // this.esnCurrent = this.userConnected?.esn 
                   this.dataSharingService.esnCurrent = this.esnCurrent
                   this.dataSharingService.idEsnCurrent = this.esnCurrent?.id
@@ -117,6 +117,9 @@ export class MereComponent implements OnInit, AfterViewInit, AfterContentInit {
                   if (!this.esnName) this.esnName = this.userConnected?.esn?.name;
                   if (this.esnName) this.userConnected.esnName = this.esnName
                   // console.log("*** esnName = ", this.esnName)
+                  
+                  // Notifier que esnCurrent est prêt
+                  this.dataSharingService.notifyEsnCurrentReady(this.esnCurrent);
                 }, (error) => {
                   this.addErrorTxt(JSON.stringify(error))
                 }
