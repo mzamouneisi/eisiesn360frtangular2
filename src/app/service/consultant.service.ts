@@ -107,9 +107,10 @@ export class ConsultantService {
     return this.http.get<GenericResponse>(this.consultantUrl + "/esnOfConsId/" + idCons);
   }
 
-  findConsultantByUsername(username: string): Observable<GenericResponse> {
+  findConsultantByUsername(username: string, isPub: boolean = false): Observable<GenericResponse> {
     console.log("findConsultantByUsername username:", username)
-    return this.http.post<GenericResponse>(this.consultantUrl + "/findByUsername", username);
+    let url = isPub ? this.consultantUrlPub : this.consultantUrl
+    return this.http.post<GenericResponse>(url + "/findByUsername", username);
   }
 
   getConsultantAndHisInfos(username: string): Observable<GenericResponse> {
@@ -139,6 +140,47 @@ export class ConsultantService {
       return this.savePost(consultant, true);
     }
     throw new Error('consultant or codeEmailToValidate is null');
+  }
+
+  /**
+   * Sauvegarde le code de réinitialisation du password pour un email
+   */
+  saveCodeResetPassword(email: string, codeResetPassword: string, fctOnSuccess: Function, fctOnError: Function): void {
+    const label = "saveCodeResetPassword";
+    const url = `${this.consultantUrlPub}/resetPassword`;
+
+    console.log(label + ": Sauvegarde du code pour email: " + email);
+
+    this.findConsultantByUsername(email, true).subscribe(
+      data => {
+        console.log(label + ": Consultant trouvé: ", data);
+        const consultant: Consultant = data.body.result;
+        if (consultant) {
+          consultant.codeEmailToValidate = codeResetPassword;
+          this.savePost(consultant, true).subscribe(
+            saveData => {
+              let msg = "Code de réinitialisation sauvegardé avec succès pour l'email: " + email;
+              console.log(label + ": " + msg);
+              if (fctOnSuccess) fctOnSuccess(saveData, msg);
+            },
+            error => {
+              let msg = "Erreur lors de la sauvegarde du code de réinitialisation pour l'email: " + email;
+              console.log(label + ": " + msg, error);
+              if (fctOnError) fctOnError(error, msg);
+            }
+          );
+        } else {
+          let msg = "Aucun consultant trouvé pour l'email: " + email;
+          console.log(label + ": " + msg);
+          if (fctOnError) fctOnError(null, msg);
+        }
+      },
+      error => {
+        let msg = "Erreur lors de la recherche du consultant: " + email;
+        console.log(label + ": " + msg, error);
+        if (fctOnError) fctOnError(error, msg);
+      }
+    );
   }
 
   /***

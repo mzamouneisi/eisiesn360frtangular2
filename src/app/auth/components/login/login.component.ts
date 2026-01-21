@@ -16,6 +16,9 @@ export class LoginComponent implements OnInit {
   info = "";
   error = "";
   showPassword = false;
+  showForgotPasswordForm = false;
+  forgotPasswordEmail = "";
+  isLoadingResetEmail = false;
 
   constructor(private dataSharingService: DataSharingService, private router: Router, private dialog: MatDialog) {
   }
@@ -45,6 +48,65 @@ export class LoginComponent implements OnInit {
     this.dataSharingService.IsAddEsnAndResp = true
     // this.dataSharingService.navigateTo("inscription");
     this.router.navigate(["inscription"]);
+  }
+
+  /**
+   * Toggle le formulaire "Mot de passe oublié"
+   */
+  toggleForgotPasswordForm(): void {
+    this.showForgotPasswordForm = !this.showForgotPasswordForm;
+    if (this.showForgotPasswordForm) {
+      // Pré-remplir avec l'email du login s'il existe
+      if (!this.forgotPasswordEmail && this.credentials.username) {
+        this.forgotPasswordEmail = this.credentials.username;
+      }
+    }
+    this.error = '';
+    this.info = '';
+  }
+
+  /**
+   * Envoie un email de reset du password
+   */
+  resetPassword(): void {
+    const label = 'resetPassword';
+    
+    if (!this.forgotPasswordEmail) {
+      this.error = 'Email requis';
+      console.error(label + ': Email manquant');
+      return;
+    }
+
+    console.log(label + ': START - Email: ' + this.forgotPasswordEmail);
+    this.isLoadingResetEmail = true;
+    this.error = '';
+    this.info = '';
+
+    this.dataSharingService.sendResetPasswordEmail(this.forgotPasswordEmail, {
+      next: (response) => {
+        console.log(label + ': ✅ Email de reset envoyé avec succès');
+        this.isLoadingResetEmail = false;
+        this.info = '✅ Un lien de réinitialisation a été envoyé à ' + this.forgotPasswordEmail;
+        this.forgotPasswordEmail = '';
+        
+        // Fermer le formulaire après 3 secondes
+        setTimeout(() => {
+          this.showForgotPasswordForm = false;
+          this.info = '';
+        }, 3000);
+      },
+      error: (error) => {
+        console.error(label + ': ❌ Erreur lors de l\'envoi du mail');
+        console.error(label + ': Error: ', error);
+        this.isLoadingResetEmail = false;
+        
+        if (error.status === 404) {
+          this.error = '❌ Aucun utilisateur trouvé avec cet email.';
+        } else {
+          this.error = '⚠️ Erreur lors de l\'envoi du mail. Veuillez réessayer.';
+        }
+      }
+    });
   }
 
   goToSignup00() {

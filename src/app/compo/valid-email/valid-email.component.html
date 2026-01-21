@@ -1,25 +1,74 @@
-<div style="margin-top: 30px; margin-left: 20px;">
-    <p>Test affichage component ValidateEmailComponent</p>
-    <p>Code reçu: {{ codeEmail }}</p>
-    <p>Message: {{ message }}</p>
-    <p>Is Loading: {{ isLoading }}</p>
-</div>
-
-
-<div style="padding: 40px; text-align: center; font-size: 18px;">
-    <h2>Validation d'email</h2>
+<div style="padding: 40px; text-align: center; font-size: 18px; max-width: 500px; margin: 0 auto;">
+    <h2 *ngIf="validationType === 'inscription'">Validation de votre email</h2>
+    <h2 *ngIf="validationType === 'resetPassword'">Réinitialisation de votre mot de passe</h2>
 
     <div *ngIf="isLoading" style="margin: 20px 0;">
-        <p>Validation en cours...</p>
+        <p>Traitement en cours...</p>
         <div style="border: 3px solid #f3f3f3; border-radius: 50%; border-top: 3px solid #3498db; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto;"></div>
     </div>
 
-    <div *ngIf="!isLoading" style="margin: 20px 0;">
+    <div *ngIf="!isLoading && !showPasswordForm" style="margin: 20px 0;">
         <p style="font-size: 20px; color: #333;">{{ message }}</p>
 
-        <button *ngIf="isSuccess" style="margin-top: 20px; padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;" (click)="router.navigate(['/login'])">
+        <button *ngIf="isSuccess && validationType === 'inscription'" style="margin-top: 20px; padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;" (click)="router.navigate(['/login'])">
             Se connecter
         </button>
+
+        <!-- Pour resetPassword: Afficher le bouton pour ouvrir le formulaire -->
+        <button *ngIf="validationType === 'resetPassword' && !isSuccess" style="margin-top: 20px; padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;" (click)="showPasswordForm = true">
+            Entrer votre nouveau mot de passe
+        </button>
+    </div>
+
+    <!-- Formulaire de reset password -->
+    <div *ngIf="showPasswordForm && validationType === 'resetPassword'" style="margin-top: 30px; padding: 20px; border: 1px solid #ddd; border-radius: 5px; background: #f9f9f9;">
+        <h4>Réinitialisez votre mot de passe</h4>
+
+        <div class="form-group" style="text-align: left; margin-bottom: 15px;">
+            <label style="font-weight: bold;">Email (identifiant):</label>
+            <div style="padding: 8px; background-color: #e8f5e9; border: 1px solid #4caf50; border-radius: 3px; margin-top: 5px;">
+                <strong style="color: #2e7d32;">{{ email }}</strong>
+            </div>
+        </div>
+
+        <div class="form-group" style="text-align: left; margin-bottom: 15px;">
+            <label for="newPassword" style="font-weight: bold;">Nouveau mot de passe:</label>
+            <input id="newPassword" type="password" [(ngModel)]="newPassword" (ngModelChange)="validateNewPassword()" 
+                style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 3px;"
+                placeholder="Entrez votre nouveau mot de passe" required>
+        </div>
+
+        <div class="form-group" style="text-align: left; margin-bottom: 15px;">
+            <label for="confirmPassword" style="font-weight: bold;">Confirmer le mot de passe:</label>
+            <input id="confirmPassword" type="password" [(ngModel)]="confirmPassword" 
+                style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 3px;"
+                placeholder="Confirmez votre nouveau mot de passe" required>
+        </div>
+
+        <!-- Validation errors -->
+        <div *ngIf="passwordErrors && passwordErrors.length > 0" style="margin-bottom: 15px; text-align: left;">
+            <div *ngFor="let error of passwordErrors" style="color: #d32f2f; margin: 5px 0; font-size: 14px;">
+                ❌ {{ error }}
+            </div>
+        </div>
+
+        <!-- Confirmation match -->
+        <div *ngIf="newPassword && confirmPassword !== newPassword" style="color: #d32f2f; margin-bottom: 15px; font-size: 14px;">
+            ❌ Les mots de passe ne correspondent pas
+        </div>
+
+        <div *ngIf="newPassword && confirmPassword === newPassword && (!passwordErrors || passwordErrors.length === 0)" style="color: #4caf50; margin-bottom: 15px; font-size: 14px;">
+            ✅ Les mots de passe correspondent et sont valides
+        </div>
+
+        <div style="text-align: center;">
+            <button style="padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 10px; font-size: 16px;" 
+                (click)="submitNewPassword()" 
+                [disabled]="!newPassword || newPassword !== confirmPassword || (passwordErrors && passwordErrors.length > 0) || isSubmittingPassword">
+                <span *ngIf="!isSubmittingPassword">Mettre à jour le mot de passe</span>
+                <span *ngIf="isSubmittingPassword">Mise à jour en cours...</span>
+            </button>
+        </div>
     </div>
 </div>
 

@@ -68,6 +68,7 @@ const routes: Routes = [
   { path: 'logout', component: LoginComponent },
   { path: 'inscription', component: InscriptionComponent },
   { path: 'validateEmail/:code', component: ValidateEmailComponent },
+  { path: 'resetPassword/:code', component: ValidateEmailComponent },
   { path: 'loading', component: LoadingPageComponent },
   { path: 'connections', component: ConnectionComponent },  
 

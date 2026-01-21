@@ -55,6 +55,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
   // Routes publiques qui ne nécessitent pas d'authentification
   private readonly PUBLIC_ROUTES: string[] = [
     '/validateEmail/',
+    '/resetPassword/',
     '/login',
     '/inscription',
     '/',
@@ -1082,6 +1083,80 @@ export class DataSharingService implements CraStateService, ServiceLocator {
       (error) => {
         console.error(label + " error : ", error);
         if (fctKo) fctKo(error);
+      }
+    );
+  }
+
+  /**
+   * Envoie un email de réinitialisation du password
+   */
+  sendResetPasswordEmail(email: string, callbacks: any): void {
+    const label = "sendResetPasswordEmail";
+
+    console.log(label + ": START - Email: " + email);
+
+    // Générer un code unique de réinitialisation
+    const codeResetPassword = this.utils.generateRandomCode(32);
+    const resetPasswordUrl = `${environment.urlFront}/#/resetPassword/${codeResetPassword}`;
+
+    console.log(label + ": Code de reset généré");
+    console.log(label + ": URL de reset: " + resetPasswordUrl);
+
+    // Construction du mail
+    const mail = new Mail();
+    mail.subject = `ESN360 : Réinitialisation de votre mot de passe`;
+    mail.to = email;
+    mail.msg = `
+    Bonjour,<br><br>
+    Vous avez demandé la réinitialisation de votre mot de passe pour la plateforme <strong>ESN360</strong>.<br><br>
+    Cliquez sur le lien suivant pour réinitialiser votre mot de passe :<br><br>
+    👉 <a href="${resetPasswordUrl}" target="_blank">${resetPasswordUrl}</a><br><br>
+    <strong>Ce lien expire dans 24 heures.</strong><br><br>
+    Si vous n'avez pas demandé cette réinitialisation, ignorez cet email.<br><br>
+    Cordialement,<br>
+    L'équipe <strong>ESN360</strong><br>
+  `;
+
+    console.log(label + ": Mail construit, envoi en cours...");
+
+    // Envoi du mail
+    this.msgService.sendMailSimple(mail, true).subscribe(
+      (data) => {
+        console.log(label + ": ✅ Mail envoyé avec succès");
+        console.log(label + ": Response: ", data);
+
+        // Sauvegarder le code de reset en base de données lié à l'email
+        this.consultantService.saveCodeResetPassword(email, codeResetPassword,
+          (data, mesg) => {
+            console.log(label + ": Code de reset sauvegardé en BDD pour l'email. avec data, mesg : ", codeResetPassword, email, data, mesg);
+            if (callbacks && callbacks.next) {
+              callbacks.next(data);
+            }
+          }, (errorSave, mesg) => {
+            console.log(label + ": Code de reset sauvegardé ERROR en BDD pour l'email. avec error, mesg : ", codeResetPassword, email, errorSave, mesg);
+            this.errorsSource.value.push(new MyError(
+              "Erreur lors de la sauvegarde du code de réinitialisation.",
+              JSON.stringify(errorSave)
+            ));
+
+            if (callbacks && callbacks.error) {
+              callbacks.error(errorSave);
+            }
+          }
+        );
+      },
+      (error) => {
+        console.error(label + ": ❌ Erreur lors de l'envoi du mail");
+        console.error(label + ": Error: ", error);
+
+        this.errorsSource.value.push(new MyError(
+          "❌ Erreur lors de l'envoi du mail de réinitialisation.",
+          JSON.stringify(error)
+        ));
+
+        if (callbacks && callbacks.error) {
+          callbacks.error(error);
+        }
       }
     );
   }

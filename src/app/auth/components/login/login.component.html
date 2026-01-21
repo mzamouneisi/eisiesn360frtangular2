@@ -41,9 +41,41 @@
                                 <span class="ml-1">Log in</span>
                             </button>
 
+                            <button type="button" class="btn btn-info mx-2" id="btn-forgot-password" (click)="toggleForgotPasswordForm()">
+                                <span class="ml-1">Mot de passe oublié ?</span>
+                            </button>
+
                             <button type="button" class="btn btn-light mx-2" id="btn-signup" (click)="goToSignup()">
                                 <span class="ml-1">Inscription</span>
                             </button>
+                        </div>
+
+                        <!-- Formulaire Mot de passe oublié -->
+                        <div *ngIf="showForgotPasswordForm" class="mt-4 p-3 border border-warning rounded">
+                            <h5 class="text-center mb-3">Réinitialiser votre mot de passe</h5>
+                            
+                            <div class="form-group">
+                                <label for="resetEmail">Email:</label>
+                                <input id="resetEmail" class="form-control" type="email" 
+                                    placeholder="Entrez votre email" name="resetEmail"
+                                    [(ngModel)]="forgotPasswordEmail" #resetEmail="ngModel" required>
+                                <div [hidden]="resetEmail.valid || resetEmail.pristine" class="text-danger">
+                                    Email valide requis
+                                </div>
+                            </div>
+
+                            <div class="text-center">
+                                <button type="button" class="btn btn-success mx-2" id="btn-send-reset-email" 
+                                    (click)="resetPassword()" 
+                                    [disabled]="!resetEmail || !resetEmail.valid || isLoadingResetEmail">
+                                    <span *ngIf="!isLoadingResetEmail" class="ml-1">Envoyer le lien</span>
+                                    <span *ngIf="isLoadingResetEmail" class="ml-1">Envoi en cours...</span>
+                                </button>
+                                <button type="button" class="btn btn-secondary mx-2" id="btn-cancel-reset" 
+                                    (click)="toggleForgotPasswordForm()" [disabled]="isLoadingResetEmail">
+                                    <span class="ml-1">Annuler</span>
+                                </button>
+                            </div>
                         </div>
 
                     </form>
