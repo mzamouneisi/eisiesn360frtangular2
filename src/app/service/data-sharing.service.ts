@@ -74,12 +74,14 @@ export class DataSharingService implements CraStateService, ServiceLocator {
   private esnCurrentReadySource = new BehaviorSubject<Esn>(null);
   private currentCraSource = new BehaviorSubject<Cra>(null);
   private listCraSource = new BehaviorSubject<Cra[]>([]);
+  private userConnectedSource = new BehaviorSubject<Consultant>(null);
 
   infos$ = this.infosSource.asObservable();
   errors$ = this.errorsSource.asObservable();
   esnCurrentReady$ = this.esnCurrentReadySource.asObservable();
   currentCra$ = this.currentCraSource.asObservable();
   listCra$ = this.listCraSource.asObservable();
+  userConnected$ = this.userConnectedSource.asObservable();
 
   // listInfos: Array<string> = [];
   // listErrors: MyError[] = [];
@@ -118,6 +120,12 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     console.log("data-sharing constructor deb")
     this.notificationUrl = environment.apiUrl + "/notifications";
     this.getCurrentUserFromLocaleStorage()
+
+    // Push initial userConnected value to observers
+    if (this.userConnected) {
+      this.userConnectedSource.next(this.userConnected);
+      this.isUserLoggedInFct.next(true);
+    }
 
     console.log("constructor, userConnected", this.userConnected)
   }
@@ -697,7 +705,9 @@ export class DataSharingService implements CraStateService, ServiceLocator {
   }
 
   setUserConnected(user: Consultant) {
-    this.userConnected = user
+    this.userConnected = user;
+    this.userConnectedSource.next(user);
+    this.isUserLoggedInFct.next(!!user);
   }
 
   majManagerOfUserCurent() {

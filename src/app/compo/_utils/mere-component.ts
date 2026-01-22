@@ -74,7 +74,17 @@ export class MereComponent implements OnInit, AfterViewInit, AfterContentInit {
 
     this.subscriptions.push(
       this.dataSharingService.infos$.subscribe(infos => this.listInfos = infos),
-      this.dataSharingService.errors$.subscribe(errors => this.listErrors = errors)
+      this.dataSharingService.errors$.subscribe(errors => this.listErrors = errors),
+      // Keep UI fields (esnName, userConnectedName, role) in sync when user changes
+      this.dataSharingService.userConnected$.subscribe(user => {
+        this.userConnected = user;
+        this.getCurentUserName();
+        this.esnCurrent = user?.esn || this.esnCurrent;
+        this.idEsnCurrent = this.esnCurrent?.id ?? this.idEsnCurrent;
+        this.esnName = user?.esnName || user?.esn?.name || this.esnName;
+        this.isUserAdmin = user?.admin;
+        if (user) this.isUserLoggedIn = true;
+      })
     );
 
     //setAdminConsultant 
