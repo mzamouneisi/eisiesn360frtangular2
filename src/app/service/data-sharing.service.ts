@@ -931,14 +931,16 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     return this.http.post<GenericResponse>(this.notificationUrl, notification);
   }
 
-  addNotification(notification: Notification) {
+  addNotification(notification: Notification, fctOk : Function, fctKo : Function) {
     let label = "add notification";
     this.notifyObserversNotificationsBefore(label)
     this.addNotificationServer(notification).subscribe((data) => {
       // this.notifyObserversNotificationsAfter(label, data)
       this.getNotifications()
+      if (fctOk) fctOk(data);
     }, error => {
       this.notifyObserversNotificationsError(label, error);
+      if (fctKo) fctKo(error);
     })
   }
 
@@ -950,14 +952,16 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     return this.http.put<GenericResponse>(this.notificationUrl, notification);
   }
 
-  saveNotification(notification: Notification) {
+  saveNotification(notification: Notification, fctOk : Function, fctKo : Function) {
     let label = "save notification";
     this.notifyObserversNotificationsBefore(label)
     this.saveNotificationServer(notification).subscribe((data) => {
       // this.notifyObserversNotificationsAfter(label, data)
       this.getNotifications()
+      if (fctOk) fctOk(data);
     }, error => {
       this.notifyObserversNotificationsError(label, error);
+      if (fctKo) fctKo(error);
     })
   }
 
@@ -969,14 +973,16 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     return this.http.delete<GenericResponse>(this.notificationUrl + "/deleteById/" + id);
   }
 
-  deleteNotification(id: number) {
+  deleteNotification(id: number, fctOk : Function, fctKo : Function) {
     let label = "delete notification id=" + id;
     this.notifyObserversNotificationsBefore(label)
     this.deleteNotificationServer(id).subscribe((data) => {
       // this.notifyObserversNotificationsAfter(label, data)
       this.getNotifications()
+      if (fctOk) fctOk(data);
     }, error => {
       this.notifyObserversNotificationsError(label, error);
+      if (fctKo) fctKo(error);
     })
   }
 

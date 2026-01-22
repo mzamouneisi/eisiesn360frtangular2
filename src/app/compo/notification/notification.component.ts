@@ -134,8 +134,8 @@ export class NotificationComponent extends MereComponent implements AfterViewIni
     this.dataSharingService.getNotifications();
   }
 
-  saveNotification(notification: Notification) {
-    this.dataSharingService.saveNotification(notification);
+  saveNotification(notification: Notification, fctOk?: Function, fctKo?: Function) {
+    this.dataSharingService.saveNotification(notification, fctOk, fctKo);
   }
 
   changeViewed(notification: Notification) {
@@ -161,7 +161,7 @@ export class NotificationComponent extends MereComponent implements AfterViewIni
     let mythis = this;
     this.utilsIhm.confirmYesNo("Voulez vous vraiment supprimer la ligne avec date=" + notification.createdDate, mythis
       , () => {
-        mythis.dataSharingService.deleteNotification(notification.id);
+        mythis.dataSharingService.deleteNotification(notification.id, null, null );
       }
       , () => { }
     );
@@ -239,6 +239,12 @@ export class NotificationComponent extends MereComponent implements AfterViewIni
       this.addErrorTxt("CRA non trouvé dans la notification");
       return;
     }
+
+    // Update current CRA via service to notify all subscribers
+    this.dataSharingService.notifyCraUpdated(notification.cra);
+
+    let cra = this.dataSharingService.getCurrentCra();
+    console.log(label + " - Current CRA après notifyCraUpdated: ", cra);
     
     console.log(label + " - notification.cra: ", notification.cra);
 
@@ -255,31 +261,25 @@ export class NotificationComponent extends MereComponent implements AfterViewIni
           ()=>{
             console.log(label + " - callback noteFraisService.majNotification OK");
             
-            this.saveNotification(notification);
-            this.dataSharingService.fromNotif = true;
+            this.saveNotification(notification, (data)=>{
+              console.log(label + " - callback saveNotification OK: ", data);
+              this.dataSharingService.fromNotif = true;
+              
+              console.log(label + " - appel dataSharingService.showCra");
+              this.dataSharingService.showCra(cra);
+              // this.dataSharingService.showCra(this.dataSharingService.getCurrentCra());
+              console.log(label + " END - showCra appelé");
+
+            }, (error)=>{
+              console.error(label + " - ERREUR saveNotification: ", error);
+            });
             
-            console.log(label + " - appel dataSharingService.showCra");
-            this.dataSharingService.showCra(notification.cra);
-            console.log(label + " END - showCra appelé");
           }
         )
       }, 
       true 
     );
     
-    // Fallback: si les callbacks ne se déclenchent pas, on affiche le CRA après 2s
-    setTimeout(() => {
-      console.log(label + " - fallback timeout: vérification de l'affichage");
-      const currentCra = this.dataSharingService.getCurrentCra();
-      console.log(label + " - fallback: currentCra=", currentCra);
-      
-      if (!currentCra || currentCra.id !== notification.cra.id) {
-        console.log(label + " - fallback: appel direct de showCra");
-        this.saveNotification(notification);
-        this.dataSharingService.fromNotif = true;
-        this.dataSharingService.showCra(currentCra);
-      }
-    }, 1500);
   }
 
   showFee(notification: Notification) {

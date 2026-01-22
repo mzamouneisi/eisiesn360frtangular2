@@ -1191,6 +1191,11 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
 
   canValidateCraOrConge() {
 
+    // console.log("canValidateCraOrConge this.hasRoleManagerValidate()=",this.hasRoleManagerValidate())
+    // console.log("canValidateCraOrConge this.currentCra.validByManager=", this.currentCra.validByManager)
+    // console.log("canValidateCraOrConge this.isTimeToModify()=", this.isTimeToModify())
+    // console.log("canValidateCraOrConge this.isCraOfManagerRole()=", this.isCraOfManagerRole())
+
     return this.hasRoleManagerValidate() && !this.currentCra.validByManager && this.isTimeToModify() && !this.isCraOfManagerRole();
 
   }
@@ -1493,7 +1498,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
         let craDayActivities: CraDayActivity[] = craDay.craDayActivities;
 
         for (let craDayActivity of craDayActivities) {
-          if (!craDayActivity.activity.type.congeDay) {
+          if ( craDayActivity.activity.type && !craDayActivity.activity.type.congeDay) {
             this.utilsIhm.info("isCraValid : Oops,verify your Conges plz. All days must be conge type.", null, null);
             this.currentCra.validByConsultant = null;
             this.currentCra.dateValidationConsultant = null;

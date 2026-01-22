@@ -174,16 +174,11 @@ export class UtilsService {
   }
 
   getDateLastMonthFirstDay(): Date {
-    let now = new Date();
-    let prec = new Date();
-    prec.setDate(1);
-    prec.setMonth(now.getMonth() - 1)
-    if (now.getMonth() < 11) prec.setFullYear(now.getFullYear())
-    else prec.setFullYear(now.getFullYear() - 1)
-
-    prec = this.setTime0ToDate(prec)
-
-    return prec;
+    const now = new Date();
+    // Create date for first day of last month
+    // JavaScript automatically handles year rollover when month is -1
+    const lastMonthFirstDay = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    return this.setTime0ToDate(lastMonthFirstDay);
   }
 
   formatDateToDateHeure(date: Date): string {
