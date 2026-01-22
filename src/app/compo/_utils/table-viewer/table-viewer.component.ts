@@ -91,20 +91,34 @@ export class TableViewerComponent implements OnInit {
     );
 
     // 2. Récupérer les détails des colonnes
-    console.log(fct + " calling getColsOfTable for table: " + this.selectedTable);
-    
+
     this.tableService.getColsOfTable(this.selectedTable,
       (columnMetadata, mapColType, mapColTypeInput) => {
-        console.log(fct + " getColsOfTable SUCCESS columnMetadata : ", columnMetadata)
+        console.log(fct + " getColsOfTable columnMetadata : ", columnMetadata)
         this.columnMetadata = columnMetadata;
         this.mapColType = mapColType;
         this.mapColTypeInput = mapColTypeInput;
-        console.log(fct + " getColsOfTable SUCCESS mapColType : ", mapColType)
-        console.log(fct + " this.columnMetadata now = ", this.columnMetadata)
+        console.log(fct + " getColsOfTable mapColType : ", mapColType)
       }, err => {
-        console.log(fct + " getColsOfTable ERROR : ", err)
+        console.log(fct + " getColsOfTable err : ", err)
       }
     );
+
+    // setTimeout(() => {
+
+    //   console.log(fct + " go to call getColsOfTable")
+
+    //   this.tableService.getColsOfTable(this.selectedTable,
+    //     (columnMetadata, mapColType, mapColTypeInput) => {
+    //       this.columnMetadata = columnMetadata;
+    //       this.mapColType = mapColType;
+    //       this.mapColTypeInput = mapColTypeInput;
+    //       console.log(fct + " getColsOfTable mapColType : ", mapColType)
+    //     }, (err) => {
+    //       console.log(fct + " getColsOfTable err : ", err)
+    //     }
+    //   );
+    // }, 1000);
 
     // 3. TODO : on retravaille lines afin les valeurs des colonnes de type date / timestamp en Date 
   }
@@ -534,7 +548,7 @@ export class TableViewerComponent implements OnInit {
 
   //////////////////////////////////
 
-  activeTab: "data" | "relations" = "data";
+  activeTab: "data" | "relations" | "structure" | "sql" = "data";
   relationsData: Relation[] = [];  // contenu JSON des relations pour D3
 
 

@@ -64,6 +64,18 @@
                 (click)="openRelations()">
                 Relations
             </button>
+
+            <button class="btn"
+                [ngClass]="{ 'btn-primary': activeTab === 'structure', 'btn-light': activeTab !== 'structure' }"
+                (click)="activeTab = 'structure'">
+                Structure
+            </button>
+
+            <button class="btn"
+                [ngClass]="{ 'btn-primary': activeTab === 'sql', 'btn-light': activeTab !== 'sql' }"
+                (click)="activeTab = 'sql'">
+                Sql
+            </button>
         </div>
 
         <div class="tab-content">
@@ -93,76 +105,73 @@
                 </app-relations-d3>
             </div>
 
+            <!-- Onglet STRUCTURE -->
+            <div *ngIf="activeTab === 'structure'">
+                <div style="margin: 10px 0; height: 500px; overflow-y: auto;">
+                    <h3 style="margin-left: 10px;">Column Metadata for Table: {{ selectedTable }}</h3>
+                    <table class="table table-bordered table-sm" style="width: 100px; background: white;">
+                        <thead class="table-light" style="position: sticky; top: 0; z-index: 2;">
+                            <tr>
+                                <th style="width: 60%;">Colonne</th>
+                                <th style="width: 40%;">Type</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr *ngFor="let col of columnMetadata ">
+                                <td>{{ col.columnName }}</td>
+                                <td>{{ col.dataType }}</td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+            <!-- Onglet SQL -->
+            <div *ngIf="activeTab === 'sql'">
+                <div style="padding: 10px;">
+
+                    <button (click)="executeSql()">
+                        <h3>Execute SQL</h3>
+                    </button>
+                    <br>
+
+                    <textarea [(ngModel)]="sql" rows="5" cols="100"></textarea><br>
+
+                    <div *ngIf="sqlResult?.length" class="resize-all">
+                        <h4>Result:</h4>
+
+                        <table border="1" class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th *ngFor="let key of getKeys(sqlResult[0])">{{ key }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let row of sqlResult">
+                                    <td *ngFor="let key of getKeys(row)" (click)="colDetails2 = row[key]" class="cell-content"
+                                        [title]="row[key]">
+                                        {{ row[key] }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <textarea *ngIf="colDetails2" [(ngModel)]="colDetails2" rows="5" cols="100" style="width: 100%;">
+                    </textarea>
+                    <br>
+
+                </div>
+            </div>
+
         </div>
 
     </div>
 
 </div>
 
-<!-- Structure des colonnes -->
-<!-- <ul class="list-group cadre" style="margin: 10px 0; min-height: 20px;">
-    <li class="list-group-item" *ngFor="let col of mapColType | keyvalue">
-        <strong>{{ col.key }}</strong> : <span>{{ col.value }}</span>
-    </li>
-</ul> -->
-
-<div class="cadre" style="margin: 10px 0; height: 300px; overflow-y: auto; resize: vertical;">
-
-    <table class="table table-bordered table-sm" style="width: 100px; background: white;">
-        <thead class="table-light" style="position: sticky; top: 0; z-index: 2;">
-            <tr>
-                <th style="width: 60%;">Colonne</th>
-                <th style="width: 40%;">Type</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            <tr *ngFor="let col of columnMetadata ">
-                <td>{{ col.columnName }}</td>
-                <td>{{ col.dataType }}</td>
-            </tr>
-        </tbody>
-
-    </table>
-
-</div>
-
-
+<!-- Section métadonnées colonnes -->
 <textarea *ngIf="colDetails" [(ngModel)]="colDetails" rows="5" cols="100" style="width: 100%;">
 </textarea><br>
-
-<!-- Section SQL -->
-<div style="padding: 10px;">
-
-    <button (click)="executeSql()">
-        <h3>Execute SQL</h3>
-    </button>
-    <br>
-
-    <textarea [(ngModel)]="sql" rows="5" cols="100"></textarea><br>
-
-    <div *ngIf="sqlResult?.length" class="resize-all">
-        <h4>Result:</h4>
-
-        <table border="1" class="custom-table">
-            <thead>
-                <tr>
-                    <th *ngFor="let key of getKeys(sqlResult[0])">{{ key }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let row of sqlResult">
-                    <td *ngFor="let key of getKeys(row)" (click)="colDetails2 = row[key]" class="cell-content"
-                        [title]="row[key]">
-                        {{ row[key] }}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <textarea *ngIf="colDetails2" [(ngModel)]="colDetails2" rows="5" cols="100" style="width: 100%;">
-    </textarea>
-    <br>
-
-</div>

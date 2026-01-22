@@ -83,19 +83,18 @@ export class TableService {
 
     this.http.get<any[]>(this.myUrl + table + '/columns').subscribe(
       data => {
-        console.log(fct + " data reçue: ", data)
-        
-        if (data && data.length) {
-          columnMetadata = data;
+        console.log(fct + " data : ", data)
+        columnMetadata = data;
 
-          columnMetadata = columnMetadata.map(col => ({
-            ...col,
-            columnName: col.columnName,
-            dataType: col.dataType
-          }));
+        columnMetadata = columnMetadata.map(col => ({
+          ...col,
+          columnName: col.columnName,
+          dataType: col.dataType
+        }));
 
-          console.log(fct + " columnMetadata: ", columnMetadata)
+        console.log(fct + " columnMetadata : ", columnMetadata)
 
+        if (columnMetadata && columnMetadata.length) {
           for (let ct of columnMetadata) {
             let col = ct.columnName 
             let typ = ct.dataType 
@@ -103,20 +102,14 @@ export class TableService {
             mapColTypeInput[col] = this.getTypeInput(col, mapColType)
           }
 
+          if (fOk) fOk(columnMetadata, mapColType, mapColTypeInput)
+
           console.log(fct + " mapColType : ", mapColType)
           console.log(fct + " mapColTypeInput : ", mapColTypeInput)
-        } else {
-          console.log(fct + " ATTENTION: data est vide ou null")
-        }
-        
-        // TOUJOURS appeler le callback, même si vide
-        if (fOk) {
-          console.log(fct + " appel du callback fOk avec columnMetadata: ", columnMetadata)
-          fOk(columnMetadata, mapColType, mapColTypeInput)
         }
       },
       error => {
-        console.log(fct + " ERREUR HTTP: ", error)
+        console.log(fct + " error : ", error)
         if (fKo) fKo(error)
       }
     );

@@ -45,15 +45,7 @@ export class HeaderComponent extends MereComponent {
 
     this.language = this.utils.getLocale();
     this.dataSharingService.setHeaderComponent(this);
-    
-    // Écouter quand esnCurrent est prêt pour mettre à jour esnName immédiatement
-    this.dataSharingService.esnCurrentReady$.subscribe((esn) => {
-      if (esn) {
-        console.log("HeaderComponent: esnCurrentReady event, esn = ", esn);
-        this.esnName = esn.name || this.userConnected?.esnName;
-        console.log("HeaderComponent: esnName mis à jour = ", this.esnName);
-      }
-    });
+    // this.dataSharingService.addInfosObservers(this);
 
     setTimeout(
       () => {
@@ -64,14 +56,24 @@ export class HeaderComponent extends MereComponent {
         } )
         this.consultantService.majAdminConsultant(this.userConnected)
         this.getNbNotifications()
-      }, 1000
+      }, 2000
     )
 
     this.setClock();
+    
+    // this.dataSharingService.isUserLoggedInFct.subscribe(value => {
+    //   this.isUserLoggedIn = value;
+    //   if(this.isUserLoggedIn) {
+    //     this.userConnected = this.dataSharingService.userConnected
+    //     // this.setEsnInUserConnected();
+    //   }else {
+        
+    //   }
+    // });
 
   }
 
-  setClock() {
+  private setClock() {
     setInterval(
       () => {
         let dateHeure = this.utils.formatDateToDateHeure(new Date);

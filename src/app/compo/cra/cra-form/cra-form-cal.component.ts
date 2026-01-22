@@ -156,7 +156,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
   ) {
     super(utils, dataSharingService);
     console.log("DBG: cra-form-cal: constructot: currentCra: ", this.currentCra)
-    console.log("cra list findAll Constr : dataSharingService.listCra:", this.dataSharingService.listCra)
+    console.log("cra list findAll Constr : dataSharingService.listCra:", this.dataSharingService.getListCra())
   }
 
   // getCurrentCra() {
@@ -170,10 +170,10 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
 
   ngOnInit(): void {
 
-    console.log("ngOnInit deb dataSharingService.listCra, dataSharingService.fromNotif", this.dataSharingService.listCra, this.dataSharingService.fromNotif);
+    console.log("ngOnInit deb dataSharingService.listCra, dataSharingService.fromNotif", this.dataSharingService.getListCra(), this.dataSharingService.fromNotif);
 
     // eviter d'entrer si on vient de nulle part
-    if (!this.dataSharingService.listCra && !this.dataSharingService.fromNotif) {
+    if (!this.dataSharingService.getListCra() && !this.dataSharingService.fromNotif) {
       this.gotoCraList();
     }
 
@@ -190,15 +190,15 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     this.viewDate = this.utils.getDate(this.viewDate);
     console.log("ngOnInit viewDate finalement : ", this.viewDate)
 
-    console.log("cra list findAll av call initParams : dataSharingService.listCra:", this.dataSharingService.listCra)
+    console.log("cra list findAll av call initParams : dataSharingService.listCra:", this.dataSharingService.getListCra())
 
     this.initParams();
 
-    console.log("cra list findAll ap call initParams : dataSharingService.listCra:", this.dataSharingService.listCra)
+    console.log("cra list findAll ap call initParams : dataSharingService.listCra:", this.dataSharingService.getListCra())
 
     this.dataSharingService.addService(this);
 
-    console.log("cra list findAll ap call addService : dataSharingService.listCra:", this.dataSharingService.listCra)
+    console.log("cra list findAll ap call addService : dataSharingService.listCra:", this.dataSharingService.getListCra())
 
     console.log("ngOnInit isAdd : ", this.isAdd)
     console.log("ngOnInit currentCraUser : ", this.currentCraUser)
@@ -222,7 +222,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
 
     this.statusHistoJsonToTab()
 
-    console.log("cra list findAll ap call majCra : dataSharingService.listCra:", this.dataSharingService.listCra)
+    console.log("cra list findAll ap call majCra : dataSharingService.listCra:", this.dataSharingService.getListCra())
     console.log("cra list findAll ap call majCra : currentCra:", this.currentCra)
 
     // this.showCra(this.currentCra)
@@ -323,8 +323,16 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     if (this.currentCra == null) {
       console.log("DBG: initParams: currentCra = null")
       if (this.isAdd != "true") {
-        this.currentCra = this.dataSharingService.currentCra;
-        console.log("DBG: initParams: dataSharingService.currentCra : ", this.currentCra)
+        // Essayer de récupérer le CRA depuis le state de la route
+        const navigationExtras = this.router.getCurrentNavigation()?.extras;
+        if (navigationExtras?.state?.cra) {
+          this.currentCra = navigationExtras.state.cra;
+          console.log("DBG: initParams: CRA récupéré du state de la route : ", this.currentCra)
+        } else {
+          // Sinon, récupérer depuis le service
+          this.currentCra = this.dataSharingService.getCurrentCra();
+          console.log("DBG: initParams: dataSharingService.currentCra : ", this.currentCra)
+        }
       }
     }
 
@@ -451,7 +459,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
         } else {
 
           // this.getCurrentCraFromContext();
-          this.currentCra = this.dataSharingService.currentCra;
+          this.currentCra = this.dataSharingService.getCurrentCra();
           console.log("*************** findAllActivities get cra from dataSharingService : ", this.currentCra);
 
           if (!this.currentCra) {
@@ -585,7 +593,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
      * si existe un cra validee , afficher le
      */
 
-    let craInDateView: Cra = this.craService.getCraInDate(this.viewDate, this.dataSharingService.listCra);
+    let craInDateView: Cra = this.craService.getCraInDate(this.viewDate, this.dataSharingService.getListCra());
     console.log(label + " craInDateView", craInDateView)
 
     if (craInDateView != null) {
@@ -1157,10 +1165,13 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
   }
 
   addToList(cra: Cra) {
-    if (cra && this.dataSharingService.listCra) {
-      const exists = this.dataSharingService.listCra.some(item => item.id === cra.id);
+    const list = this.dataSharingService.getListCra();
+    if (cra && list) {
+      const exists = list.some(item => item.id === cra.id);
       if (!exists) {
-        this.dataSharingService.listCra.push(cra)
+        list.push(cra);
+        // Notifier les subscribers de la mise à jour
+        this.dataSharingService.setListCra(list);
         // this.myList00 
         // this.setMyList(this.dataSharingService.listCra)
       }

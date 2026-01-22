@@ -72,18 +72,20 @@ export class DataSharingService implements CraStateService, ServiceLocator {
   private infosSource = new BehaviorSubject<string[]>([]);
   private errorsSource = new BehaviorSubject<MyError[]>([]);
   private esnCurrentReadySource = new BehaviorSubject<Esn>(null);
+  private currentCraSource = new BehaviorSubject<Cra>(null);
+  private listCraSource = new BehaviorSubject<Cra[]>([]);
 
   infos$ = this.infosSource.asObservable();
   errors$ = this.errorsSource.asObservable();
   esnCurrentReady$ = this.esnCurrentReadySource.asObservable();
+  currentCra$ = this.currentCraSource.asObservable();
+  listCra$ = this.listCraSource.asObservable();
 
   // listInfos: Array<string> = [];
   // listErrors: MyError[] = [];
   // listInfosObservers: MereComponent[] = [];
-  listCra: Cra[];
   isAdd: string;
   typeCra: string;
-  currentCra: Cra;
   currentFee: NoteFrais;
   fromNotif: boolean;
   isDisableSearchStrInput: boolean = false;
@@ -313,6 +315,34 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     this.craContext.next(null)
   }
 
+  /***
+   * Get the current CRA value
+   */
+  getCurrentCra(): Cra {
+    return this.currentCraSource.value;
+  }
+
+  /***
+   * Notify subscribers when CRA is updated
+   */
+  notifyCraUpdated(cra: Cra): void {
+    this.currentCraSource.next(cra);
+  }
+
+  /***
+   * Get the current list of CRA
+   */
+  getListCra(): Cra[] {
+    return this.listCraSource.value;
+  }
+
+  /***
+   * Set and notify subscribers of new CRA list
+   */
+  setListCra(list: Cra[]): void {
+    this.listCraSource.next(list);
+  }
+
   showCra(cra: Cra) {
     console.log("showCra deb", cra)
     if (!cra) {
@@ -320,11 +350,15 @@ export class DataSharingService implements CraStateService, ServiceLocator {
       return
     }
 
-    this.currentCra = cra;
+    this.currentCraSource.next(cra);
     this.isAdd = "";
     this.typeCra = cra.type;
 
-    this.router.navigate(["/cra_form"])
+    console.log("showCra avant navigate to cra_form", cra)
+    this.router.navigate(["/cra_form"], { 
+      queryParams: { id: cra.id },
+      state: { cra: cra }
+    })
     console.log("showCra fin", cra)
   }
 
@@ -344,7 +378,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
   showCraViaLoading(cra: Cra, tms = 500, isReturnIfSameCra = false) {
 
     if (isReturnIfSameCra) {
-      let lastCra: Cra = this.currentCra;
+      let lastCra: Cra = this.currentCraSource.value;
       if (lastCra && lastCra.id == cra.id) {
         return;
       }
@@ -672,7 +706,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
 
   mapAct = new Map<number, Activity>();
   majListCra() {
-    this.majListCraParam(this.listCra)
+    this.majListCraParam(this.listCraSource.value)
   }
 
   majListCraParam(list: Cra[]) {
@@ -724,7 +758,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
             this.consultantService.mapConsul[consultantId] = consul;
             cra.consultant = consul;
             console.log("majCra act : ", consul);
-            console.log("majCra listCra : ", this.listCra);
+            console.log("majCra listCra : ", this.listCraSource.value);
             this.consultantService.majAdminConsultant(cra.consultant)
             if (fct) fct()
           }, error => {
@@ -846,8 +880,9 @@ export class DataSharingService implements CraStateService, ServiceLocator {
 
   getCraInListCraById(craId: number) {
     // console.log("getCraInListCraById : craId, this.listCra = ", craId, this.listCra)
-    if (this.listCra) {
-      for (let cra of this.listCra) {
+    const list = this.listCraSource.value;
+    if (list) {
+      for (let cra of list) {
         if (cra.id == craId) {
           return cra
         }

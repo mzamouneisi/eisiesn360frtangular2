@@ -220,29 +220,66 @@ export class NotificationComponent extends MereComponent implements AfterViewIni
 
     setTimeout(() => {
       this.dataSharingService.showCra(notification.cra);
-    }, 5000);
+    }, 1500);
 
   }
 
   showCra(notification: Notification) {
-    console.log("showCra", notification)
+    const label = "showCra";
+    console.log(label + " START - notification: ", notification);
+    
+    if (!notification) {
+      console.error(label + " ERROR - notification est null");
+      this.addErrorTxt("Notification null");
+      return;
+    }
+    
+    if (!notification.cra) {
+      console.error(label + " ERROR - notification.cra est null");
+      this.addErrorTxt("CRA non trouvé dans la notification");
+      return;
+    }
+    
+    console.log(label + " - notification.cra: ", notification.cra);
 
     this.clearInfos();
     notification.viewed = true;
+    
+    console.log(label + " - appel craService.majNotification");
     this.craService.majNotification(notification,
       ()=>{
+        console.log(label + " - callback craService.majNotification OK");
+        
+        console.log(label + " - appel noteFraisService.majNotification");
         this.noteFraisService.majNotification(notification, 
           ()=>{
+            console.log(label + " - callback noteFraisService.majNotification OK");
+            
             this.saveNotification(notification);
             this.dataSharingService.fromNotif = true;
+            
+            console.log(label + " - appel dataSharingService.showCra");
             this.dataSharingService.showCra(notification.cra);
+            console.log(label + " END - showCra appelé");
           }
         )
-      }, true 
-    )
-
-    // setTimeout(() => {
-    // }, 5000);
+      }, 
+      true 
+    );
+    
+    // Fallback: si les callbacks ne se déclenchent pas, on affiche le CRA après 2s
+    setTimeout(() => {
+      console.log(label + " - fallback timeout: vérification de l'affichage");
+      const currentCra = this.dataSharingService.getCurrentCra();
+      console.log(label + " - fallback: currentCra=", currentCra);
+      
+      if (!currentCra || currentCra.id !== notification.cra.id) {
+        console.log(label + " - fallback: appel direct de showCra");
+        this.saveNotification(notification);
+        this.dataSharingService.fromNotif = true;
+        this.dataSharingService.showCra(currentCra);
+      }
+    }, 1500);
   }
 
   showFee(notification: Notification) {

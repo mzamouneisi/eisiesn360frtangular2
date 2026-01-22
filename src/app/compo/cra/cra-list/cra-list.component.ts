@@ -78,12 +78,12 @@ export class CraListComponent extends MereComponent {
         // this.info00 = ''
         this.myList = data.body.result;
         this.myList00 = this.myList;
-        this.dataSharingService.listCra = this.myList;
+        this.dataSharingService.setListCra(this.myList);
 
         this.dataSharingService.majListCra();
 
         console.log("cra list findAll myList:", this.myList)
-        console.log("cra list findAll dataSharingService.listCra:", this.dataSharingService.listCra)
+        console.log("cra list findAll dataSharingService.listCra:", this.dataSharingService.getListCra())
 
         // //////////console.log("**********"+JSON.stringify(this.myList))
         if (!this.isError() && this.myList && this.myList.length > 0) this.myList = this.myList.sort((a, b) => this.compareCraDesc(a, b))

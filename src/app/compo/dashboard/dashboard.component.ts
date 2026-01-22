@@ -24,7 +24,7 @@ export class DashBoardComponent implements OnInit {
     { title: 'Consultants', route: '/consultant_app', feature: 'CONSULTANT_MANAGEMENT' },
     { title: 'CRA', route: '/cra_app', feature: 'CRA_MANAGEMENT' },
     { title: 'Documents List', route: '/admindoc_list', feature: 'IDENTITY_DOCUMENT_MANAGEMENT' },
-    // { title: 'Mon Profil', route: '/my-profile', feature: null }
+    { title: 'Mon Profil', route: '/my-profile', feature: null }
   ];
 
   constructor(
@@ -121,7 +121,7 @@ export class DashBoardComponent implements OnInit {
     this.updateSectionCount('Documents List', 0);
 
     // Mon Profil - pas de comptage
-    // this.updateSectionCount('Mon Profil', 0);
+    this.updateSectionCount('Mon Profil', 0);
   }
 
   private updateSectionCount(title: string, count: number): void {
