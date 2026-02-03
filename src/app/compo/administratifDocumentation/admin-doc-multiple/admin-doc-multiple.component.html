@@ -16,10 +16,10 @@
             <div [hidden]="myObj.category" class="badge badge-danger">Selectionner une catégorie</div>
 
             <div *ngIf="showAddingCategoryName" class="form-group">
-                <label for="category_name">Préciser la catégorie :</label>
-                <input type="text" [(ngModel)]="myObj.category_name" class="form-control" id="category_name" name="category_name" placeholder="Titre du document" required #category_name="ngModel">
+                <label for="categoryName">Préciser la catégorie :</label>
+                <input type="text" [(ngModel)]="myObj.categoryName" class="form-control" id="categoryName" name="categoryName" placeholder="Titre du document" required #categoryName="ngModel">
             </div>
-            <div *ngIf="showAddingCategoryName" [hidden]="myObj.category_name" class="badge badge-danger">Entrez le nom du categorie</div>
+            <div *ngIf="showAddingCategoryName" [hidden]="myObj.categoryName" class="badge badge-danger">Entrez le nom du categorie</div>
 
             <div class="form-group">
                 <label for="title">Titre :</label>

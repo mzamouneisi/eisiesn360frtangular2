@@ -23,11 +23,11 @@ export class UtilsIhmService {
   public confirmYesNo(msg: string, myThis: Object, yesFct: Function, noFct: Function) {
     return this.confirm(msg
       , function (result: any) {
-        if (result == "ok") { if (yesFct) yesFct.call(myThis) }
-        else { if (noFct) noFct.call(myThis) }
+        if (result == "ok") { if (yesFct) yesFct(myThis) }
+        else { if (noFct) noFct(myThis) }
       }
       , function (annulation: any) {
-        if (noFct) noFct.call(myThis)
+        if (noFct) noFct(myThis)
       }
     );
   }

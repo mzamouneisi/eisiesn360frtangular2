@@ -21,8 +21,7 @@ export class Document{
 
     files: FileUpload[] = [];
     //listNotification: Notification[] = [];
-    category_name: string;
-    created_date: Date;
-    last_modified_date: Date;
+    categoryName: string;
+    lastModifiedDate: Date;
 
 }

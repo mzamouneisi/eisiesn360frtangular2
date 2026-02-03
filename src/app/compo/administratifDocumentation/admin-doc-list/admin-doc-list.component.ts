@@ -471,8 +471,8 @@ export class AdminDocListComponent extends MereComponent {
     }
     this.myObj.listConsultant = this.selectedConsultants
     this.myObj.files = this.listSelectedFiles;
-    this.myObj.created_date = new Date();
-    this.myObj.last_modified_date = new Date();
+    this.myObj.createdDate = new Date();
+    this.myObj.lastModifiedDate = new Date();
     this.myObj.consultant = this.manager;
     this.myObj.valid = true;
     console.log(this.myObj);

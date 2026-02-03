@@ -96,8 +96,8 @@ export class TableService {
 
         if (columnMetadata && columnMetadata.length) {
           for (let ct of columnMetadata) {
-            let col = ct.columnName 
-            let typ = ct.dataType 
+            let col = ct.columnName
+            let typ = ct.dataType
             mapColType[col] = typ
             mapColTypeInput[col] = this.getTypeInput(col, mapColType)
           }
@@ -140,12 +140,14 @@ export class TableService {
           console.log("openRelations : res : ", res)
           this.relationsData = res;
           // 🔥 map pour corriger les noms de colonnes
-          this.relationsData = res.map(r => ({
-            table: r.TABLE_NAME ,
-            column: r.COLUMN_NAME ,
-            target_table: r.TARGET_TABLE ,
-            target_pk: r.TARGET_PK 
-          }));
+          if (res && res.length) {
+            this.relationsData = res.map(r => ({
+              table: r.TABLE_NAME,
+              column: r.COLUMN_NAME,
+              target_table: r.TARGET_TABLE,
+              target_pk: r.TARGET_PK
+            }));
+          }
           console.log("openRelations : relationsData : ", this.relationsData)
 
           if (fOk) fOk(this.relationsData)

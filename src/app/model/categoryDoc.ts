@@ -5,8 +5,8 @@ export class CategoryDoc {
     id: number;
     name: string;
     management_name: Feature;
-    created_date: Date;
-    last_modified_date: Date;
+    createdDate: Date;
+    lastModifiedDate: Date;
     showingDocumentList: boolean = false;
     documentList: Document[]=[];
     enabled_for_admin: boolean = true;

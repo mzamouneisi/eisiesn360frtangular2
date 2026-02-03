@@ -30,7 +30,7 @@
                     </li>
 
                     <li class="nav-item " [appAuthorization] feature="ESN_MANAGEMENT" permission="VIEW">
-                        <a routerLink="#" class="nav-link " id="addEsnDemo" (click)="addEsnDemo();">
+                        <a href="javascript:void(0)" class="nav-link " id="addEsnDemo" (click)="addEsnDemo(); $event.preventDefault();">
                             <span class="pcoded-micon"> <i class="feather icon-home"></i></span>
                             <span class="pcoded-mtext">Add Esn demo</span>
                         </a>

@@ -125,7 +125,7 @@
                         <th scope="col">#</th>
                         <th scope="col">Document</th>
                         <th scope="col">Catégorie</th>
-                        <th scope="col" *ngIf="selectedDocument.category_name">Nom Catégorie</th>
+                        <th scope="col" *ngIf="selectedDocument.categoryName">Nom Catégorie</th>
                         <th scope="col">Créer par</th>
                     </tr>
                 </thead>
@@ -134,7 +134,7 @@
                         <td>{{ selectedDocument.id }}</td>
                         <td>{{ selectedDocument.title }}</td>
                         <td>{{ selectedDocument.category.name}}</td>
-                        <td *ngIf="selectedDocument.category_name">{{ selectedDocument.category_name}}</td>
+                        <td *ngIf="selectedDocument.categoryName">{{ selectedDocument.categoryName}}</td>
                         <!-- <td>{{ selectedDocument.created_by.fullName }}</td> -->
                     </tr>
                 </tbody>

@@ -174,8 +174,8 @@ export class AdminDocFormComponent extends MereComponent {
   }
 
   onSubmit() {
-    this.myObj.created_date = new Date();
-    this.myObj.last_modified_date = new Date();
+    this.myObj.createdDate = new Date();
+    this.myObj.lastModifiedDate = new Date();
     this.myObj.consultant = this.connectedUser;
     this.myObj.files = this.listSelectedFiles
 

@@ -59,22 +59,24 @@ export class MenuComponent extends MereComponent {
 
     let mythis = this;
     mythis.utilsIhm.confirmYesNo("Voulez vous vraiment ajouter une Esn Demo", mythis
-      , () => {
+      , function () {
         ////////////////////
-        this.beforeCallServer("addEsnDemo");
-        this.esnService.addEsnDemo().subscribe(
+        let label = "addEsnDemo"
+        mythis.beforeCallServer(label);
+        mythis.esnService.addEsnDemo().subscribe(
           data => {
-            this.afterCallServer("addEsnDemo", data)
+            mythis.afterCallServer(label, data)
             console.log(JSON.stringify(data))
     
-            if (!this.isError()) {
-              this.addInfo("l'Esn Demo a bien \u00e9t\u00e9 ajout\u00e9e", false)
+            if (!mythis.isError()) {
+              // mythis.addInfo("l'Esn Demo a bien ete ajoutee", false)
+              mythis.utilsIhm.infoDialog("L'Esn Demo a bien été ajoutée", null);
             }
-            this.router.navigate(["/esn_app"]);
+            mythis.router.navigate(["/esn_app"]);
     
           }, error => {
-            this.afterCallServer("addEsnDemo", error);
-            this.addErrorFromErrorOfServer("addEsnDemo", error);
+            mythis.afterCallServer(label, error);
+            mythis.addErrorFromErrorOfServer(label, error);
             ////console.log(error);
             // this.addError(error)
           }

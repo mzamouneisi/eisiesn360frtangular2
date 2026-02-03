@@ -372,7 +372,7 @@ export class TableViewerComponent implements OnInit {
     const idKey = keys.find(k => k.toUpperCase() === 'ID') || keys[0];
 
     let msg = `Delete row with ${idKey} = ${this.selectedRow[idKey]} ?`
-    if(this.selectedTable.toUpperCase() === 'ESN') {
+    if (this.selectedTable.toUpperCase() === 'ESN') {
       msg += "\nThis will also delete all related data in other tables (RESP_ESN, ESN_PROJECT, CRA, etc.) !"
     }
 
@@ -383,9 +383,13 @@ export class TableViewerComponent implements OnInit {
     let eqaulOrIs = this.selectedRow[idKey] ? '=' : 'is'
 
     let sql = `DELETE FROM ${this.selectedTable} WHERE ${idKey} ${eqaulOrIs} ${this.selectedRow[idKey]};`;
-    if(this.selectedTable.toUpperCase() === 'ESN') {
-      sql = `DELETE FROM consultant WHERE ESN_ID ${eqaulOrIs} ${this.selectedRow[idKey]};`;
+    if (this.selectedTable.toUpperCase() === 'ESN') {
+      sql = `\nDELETE FROM activity WHERE consultant_id in (select id from consultant where ESN_ID ${eqaulOrIs} ${this.selectedRow[idKey]});`;
       sql += `\nDELETE FROM activity_type WHERE ESN_ID ${eqaulOrIs} ${this.selectedRow[idKey]};`;
+      sql += `\nDELETE FROM project WHERE client_id in (select id from client where ESN_ID ${eqaulOrIs} ${this.selectedRow[idKey]});`;
+      sql += `\nDELETE FROM client WHERE ESN_ID ${eqaulOrIs} ${this.selectedRow[idKey]};`;
+      sql += `\nUPDATE consultant SET ADMIN_CONSULTANT_ID = NULL WHERE ESN_ID ${eqaulOrIs} ${this.selectedRow[idKey]};`;
+      sql += `\nDELETE FROM consultant WHERE ESN_ID ${eqaulOrIs} ${this.selectedRow[idKey]};`;
       sql += `\nDELETE FROM ${this.selectedTable} WHERE ${idKey} ${eqaulOrIs} ${this.selectedRow[idKey]};`;
     }
 

@@ -128,10 +128,10 @@ export class AdminDocMultipleComponent extends MereComponent {
     if (this.consultantFileUploadList.length != 0) {
       for (let consultantFileUpload of this.consultantFileUploadList) {
         let document: Document = new Document();
-        document.created_date = new Date();
-        document.last_modified_date = new Date();
+        document.createdDate = new Date();
+        document.lastModifiedDate = new Date();
         // document.created_by = this.manager;
-        document.category_name = this.myObj.category_name;
+        document.categoryName = this.myObj.categoryName;
         document.title = this.myObj.title;
         document.category = this.myObj.category
         document.expired_date = this.myObj.expired_date;
