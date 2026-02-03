@@ -23,6 +23,7 @@ export class Activity {
   consultant: Consultant;
   consultantId:number
   consultantFullName:String
+  esnId:number
 
   project: Project;
   projectId:number

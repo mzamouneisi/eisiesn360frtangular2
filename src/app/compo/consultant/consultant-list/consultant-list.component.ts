@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DataSharingService } from 'src/app/service/data-sharing.service';
 import { EsnService } from 'src/app/service/esn.service';
 import { UtilsService } from 'src/app/service/utils.service';
@@ -29,10 +29,12 @@ export class ConsultantListComponent extends MereComponent {
     roleForm: FormGroup;
     roles: string[];
     roleFilter: string = "";
+    isMyConsultantsView: boolean = false;
 
     constructor(private consultantService: ConsultantService
         , private esnService: EsnService
         , private router: Router
+        , private route: ActivatedRoute
         , public utils: UtilsService
         , protected utilsIhm: UtilsIhmService
         , public dataSharingService: DataSharingService) {
@@ -51,7 +53,10 @@ export class ConsultantListComponent extends MereComponent {
     }
 
     ngOnInit() {
-        this.findAll();
+        this.route.queryParamMap.subscribe(params => {
+            this.isMyConsultantsView = params.get('myConsultants') === 'true';
+            this.findAll();
+        });
     }
 
     getTitle() {
@@ -59,11 +64,40 @@ export class ConsultantListComponent extends MereComponent {
         if (this.myList != null) nbElement = this.myList.length
         //let t = this.title + " (" + nbElement + ")"
         let t = this.utils.tr("List") + " " + this.utils.tr("Consultant") + " (" + nbElement + ")"
+        if (this.isMyConsultantsView) {
+            t = this.utils.tr("Mes Consultants") + " (" + nbElement + ")";
+        }
         return t
     }
 
     findAll() {
         this.beforeCallServer("findAll")
+        if (this.isMyConsultantsView && this.dataSharingService.userConnected) {
+            const user = this.dataSharingService.userConnected;
+            const esnId = user?.esn?.id || user?.esnId;
+            this.consultantService.findAllByEsn(esnId).subscribe(
+                data => {
+                    this.afterCallServer("findAll", data)
+                    console.log("data : ", data)
+                    // Filter consultants where adminConsultantId = userConnected.id, include manager himself
+                    const allConsultants = data.body.result || [];
+                    this.myList = allConsultants.filter(c => c.adminConsultantId === user.id || c.id === user.id);
+                    console.log("myList : ", this.myList)
+                    this.myList00 = this.myList;
+
+                    // this.dataSharingService.addEsnInConsultantList(this.myList )
+                    this.esnService.majEsnOnConsultants(this.myList, ()=>{} , (error)=>{
+                        this.addErrorTxt(JSON.stringify(error))
+                    })
+
+                }, error => {
+                    this.addErrorFromErrorOfServer("findAll", error);
+                    ////console.log(error);
+                }
+            );
+            return;
+        }
+
         this.consultantService.findAll().subscribe(
             data => {
                 this.afterCallServer("findAll", data)

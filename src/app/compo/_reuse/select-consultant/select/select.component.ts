@@ -85,8 +85,9 @@ export class SelectComponent implements OnInit {
   }
 
   setObjInCaller(objSel: any){
-    if(objSel) {
-      if(this.objCaller && this.onChangeCaller) this.objCaller[ this.onChangeCaller] (objSel);
+    // Permettre l'appel même si objSel est null (pour le cas du consultant null)
+    if(this.objCaller && this.onChangeCaller) {
+      this.objCaller[this.onChangeCaller](objSel);
     }
   }
 

@@ -709,7 +709,7 @@ export class TradService {
       "en": "Back to list",
     },
     "app.compo.activity.select.consultant.title": {
-      "fr": "Les activit\u00e9s du consultant",
+      "fr": "Les activités du consultant",
       "en": "Consultant Activities",
     },
     "app.compo.activity.list.table.thead.name": {
@@ -797,7 +797,7 @@ export class TradService {
       "en": "Back to list",
     },
     "app.compo.activity.multiple.table.thead.activity": {
-      "fr": "Activit\u00e9",
+      "fr": "Activité",
       "en": "Activity",
     },
     "app.compo.activity.multiple.table.thead.consultant": {

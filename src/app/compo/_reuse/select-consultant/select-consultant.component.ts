@@ -18,49 +18,83 @@ export class SelectConsultantComponent extends MereComponent {
 	elementSelected: Consultant;
 
 	@Input() title: string = "Consultant:";
-
-	//methode output a declencher
 	@Output() onSelectElement = new EventEmitter<any>();
 
 	@ViewChild('compoSelectConsultant', { static: false }) compoSelectConsultant: SelectComponent;
 
-	constructor(private consultantService: ConsultantService
-		, public utils: UtilsService
-		, public dataSharingService: DataSharingService
-		, private utilsIhm: UtilsIhmService
+	constructor(
+		private consultantService: ConsultantService,
+		public utils: UtilsService,
+		public dataSharingService: DataSharingService,
+		private utilsIhm: UtilsIhmService
 	) {
 		super(utils, dataSharingService);
 	}
 
 	ngOnInit() {
-		this.beforeCallServer(this.title)
-		this.consultantService.findAll().subscribe(
+		this.loadConsultants();
+	}
+
+	private loadConsultants(): void {
+		this.beforeCallServer(this.title);
+		const role = this.dataSharingService.userConnected?.role;
+		const userId = this.dataSharingService.userConnected?.id;
+		const esnId = this.getEsnId();
+
+		switch (role) {
+			case 'MANAGER':
+				this.loadManagerConsultants(esnId, userId);
+				break;
+			case 'RESPONSIBLE_ESN':
+				this.loadEsnConsultants(esnId);
+				break;
+			default:
+				this.loadAllConsultants();
+		}
+	}
+
+	private loadManagerConsultants(esnId: number, userId: number): void {
+		this.consultantService.findAllByEsn(esnId).subscribe(
 			data => {
-				this.afterCallServer(this.title, data)
-				console.log("data", data)
-				this.myList = data.body.result;
-			}, error => {
-				this.addErrorFromErrorOfServer(this.title, error);
-			}
+				this.afterCallServer(this.title, data);
+				const allConsultants = data.body.result || [];
+				this.myList = [null, ...allConsultants.filter(c => c.adminConsultantId === userId || c.id === userId)];
+			},
+			error => this.addErrorFromErrorOfServer(this.title, error)
 		);
 	}
 
-	setMyList(myList: any[]) {
+	private loadEsnConsultants(esnId: number): void {
+		this.consultantService.findAllByEsn(esnId).subscribe(
+			data => {
+				this.afterCallServer(this.title, data);
+				this.myList = [null, ...(data.body.result || [])];
+			},
+			error => this.addErrorFromErrorOfServer(this.title, error)
+		);
+	}
+
+	private loadAllConsultants(): void {
+		this.consultantService.findAll().subscribe(
+			data => {
+				this.afterCallServer(this.title, data);
+				this.myList = [null, ...(data.body.result || [])];
+			},
+			error => this.addErrorFromErrorOfServer(this.title, error)
+		);
+	}
+
+	setMyList(myList: Consultant[]): void {
 		this.myList = myList;
 	}
 
-	getElementLabel(element: Consultant) {
-		let s = "";
-		if (element != null) s = element.firstName + " " + element.lastName;
-		return s;
+	getElementLabel(element: Consultant): string {
+		return element ? `${element.firstName} ${element.lastName}` : "-- Tous les consultants --";
 	}
 
-
-	onSelectConsultant(c: Consultant) {
-		this.elementSelected = c;
-
+	onSelectConsultant(consultant: Consultant): void {
+		this.elementSelected = consultant;
 		this.onSelectElement.emit();
-
 	}
 
 }

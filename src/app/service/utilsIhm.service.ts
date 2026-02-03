@@ -44,11 +44,13 @@ export class UtilsIhmService {
   public confirmDialog(msg: string, fctYes: Function, fctNo: Function) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '400px',
+      autoFocus: false,
+      restoreFocus: false,
       data: {
         title: 'Confirmation',
         message: msg,
-        disableClose: true,
-        autoFocus: false
+        disableClose: true ,
+        autoFocus: true
       }
     });
 

@@ -93,6 +93,11 @@ export class DataSharingService implements CraStateService, ServiceLocator {
   isDisableSearchStrInput: boolean = false;
   activityTypes: ActivityType[];
   projects: Project[];
+  missionActivityWarningShown: boolean = false;
+  clientWarningShown: boolean = false;
+  projectWarningShown: boolean = false;
+  managerWarningShown: boolean = false;
+  consultantWarningShown: boolean = false;
 
   redirectToUrl: string = '';
   authorization: string;
@@ -104,6 +109,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
   esnSaved: Esn;
   respEsnSaved: Consultant;
   passRespEsnSaved: string;
+  consultantSelected: Consultant;
 
   constructor(public router: Router
     , private craService: CraService
@@ -183,6 +189,11 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     }
 
     // this.currentUser = DataSharingService.currentUser;
+
+    if (this.userConnected) {
+      let esn = this.userConnected.esn;
+      this.esnCurrentReadySource.next(esn);
+    }
 
     return this.userConnected
   }
@@ -363,7 +374,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     this.typeCra = cra.type;
 
     console.log("showCra avant navigate to cra_form", cra)
-    this.router.navigate(["/cra_form"], { 
+    this.router.navigate(["/cra_form"], {
       queryParams: { id: cra.id },
       state: { cra: cra }
     })
@@ -510,7 +521,6 @@ export class DataSharingService implements CraStateService, ServiceLocator {
 
           this.getConsultantConnectedAndHisInfos(credentials.username, caller);
 
-
         } else {
           if (caller) {
             caller.error = "ERROR : res=" + JSON.stringify(res)
@@ -576,7 +586,12 @@ export class DataSharingService implements CraStateService, ServiceLocator {
           this.idEsnCurrent = this.esnCurrent?.id
           console.log("getConsultantConnectedAndHisInfos idEsnCurrent : ", this.idEsnCurrent)
 
-          this.majEsnOnConsultant(() => { }, (error) => {
+          this.majEsnOnConsultant(() => {
+            if (this.userConnected) {
+              let esn = this.userConnected.esn;
+              this.esnCurrentReadySource.next(esn);
+            }
+          }, (error) => {
             this.addErrorTxt(JSON.stringify(error))
           })
           console.log("findConsultantByUsername userConnected.esn : ", this.userConnected.esn)
@@ -781,6 +796,50 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     }
   }
 
+  majConsultantInActivity(activity: Activity, fct: Function ) {
+
+    // console.log("majConsultantInActivity activity : ", activity);
+    if (activity == null) {
+      return;
+    }
+
+    let consultant = activity.consultant;
+    let consultantId = activity.consultantId;
+    if (consultantId != null && consultant == null) {
+      let consul = this.consultantService.mapConsul[consultantId];
+      if (consul != null) {
+        activity.consultant = consul;
+        this.consultantService.majAdminConsultant(activity.consultant)
+        if (fct) fct(activity)
+      } else {
+        this.consultantService.findById(consultantId).subscribe(
+          data => {
+            consul = data.body.result;
+            this.consultantService.mapConsul[consultantId] = consul;
+            activity.consultant = consul;
+            console.log("majActivity act : ", consul);
+            this.consultantService.majAdminConsultant(activity.consultant)
+            if (fct) fct(activity)
+          }, error => {
+            console.log("majActivity ERROR : ", error);
+          }
+        );
+      }
+    } else {
+      this.consultantService.majAdminConsultant(activity.consultant)
+    }
+  }
+
+  majConsultantInActivityList(allActivities: Activity[], fct: Function) {
+    if (allActivities == null) {
+      return;
+    } 
+    for (let activity of allActivities) {
+      this.majConsultantInActivity(activity, fct);
+    }
+  }
+
+
   majActivityInCraDayActivity(craDayActivities: CraDayActivity) {
 
     // console.log("majActivityInCraDayActivity craDayActivities : ", craDayActivities);
@@ -941,7 +1000,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     return this.http.post<GenericResponse>(this.notificationUrl, notification);
   }
 
-  addNotification(notification: Notification, fctOk : Function, fctKo : Function) {
+  addNotification(notification: Notification, fctOk: Function, fctKo: Function) {
     let label = "add notification";
     this.notifyObserversNotificationsBefore(label)
     this.addNotificationServer(notification).subscribe((data) => {
@@ -962,7 +1021,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     return this.http.put<GenericResponse>(this.notificationUrl, notification);
   }
 
-  saveNotification(notification: Notification, fctOk : Function, fctKo : Function) {
+  saveNotification(notification: Notification, fctOk: Function, fctKo: Function) {
     let label = "save notification";
     this.notifyObserversNotificationsBefore(label)
     this.saveNotificationServer(notification).subscribe((data) => {
@@ -983,7 +1042,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     return this.http.delete<GenericResponse>(this.notificationUrl + "/deleteById/" + id);
   }
 
-  deleteNotification(id: number, fctOk : Function, fctKo : Function) {
+  deleteNotification(id: number, fctOk: Function, fctKo: Function) {
     let label = "delete notification id=" + id;
     this.notifyObserversNotificationsBefore(label)
     this.deleteNotificationServer(id).subscribe((data) => {

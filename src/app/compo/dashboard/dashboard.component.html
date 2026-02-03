@@ -7,7 +7,7 @@
         <span class="count">{{ s.count || 0 }}</span>
       </div>
       <div class="card-actions">
-        <a [routerLink]="s.route">→ Accéder</a>
+        <a [routerLink]="s.route" [queryParams]="s.queryParams">→ Accéder</a>
       </div>
     </div>
   </div>

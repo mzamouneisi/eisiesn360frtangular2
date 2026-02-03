@@ -34,6 +34,11 @@ export class MsgService {
     return this.http.get<GenericResponse>(this.msgUrl);
   }
 
+  //notifications pour un consultant
+  public findAllByIdConsultant(idConsultant: number): Observable<GenericResponse> {
+    return this.http.post<GenericResponse>(this.msgUrl + "by_consultant", idConsultant);
+  }
+
   public findById(id: number): Observable<GenericResponse> {
     return this.http.get<GenericResponse>(this.msgUrl + id);
   }
@@ -61,7 +66,7 @@ export class MsgService {
     return this.http.get<GenericResponse>(this.msgUrl + "to_consultant/" + idConsultant);
   }
 
-  public sendMailSimple(mail: Mail, isPub : boolean = false): Observable<GenericResponse> {
+  public sendMailSimple(mail: Mail, isPub: boolean = false): Observable<GenericResponse> {
     let url = isPub ? this.msgUrlPub : this.msgUrl
     return this.http.post<GenericResponse>(url + "sendMailSimple", mail);
   }

@@ -1,11 +1,4 @@
-
-<!-- mes activites: -->
-<app-activity-list [consultant]="currentUser" ></app-activity-list>
-
-<div *ngIf="!isConsultant()" style="margin-left: 25px;" >
-	<app-select-consultant #selectConsultantCompo (onSelectElement)="onSelectConsultant()" title="{{utils.tr(selectConsultantLabel)}}"> </app-select-consultant>
-
-	<app-activity-list #listActivityOfMyConsultant [consultant]="selectConsultantCompo.elementSelected" *ngIf="selectConsultantCompo.elementSelected" ></app-activity-list>
-
- </div>
-
+<div *ngIf="canViewActivities()">
+	<!-- Liste des activités -->
+	<app-activity-list #activityList></app-activity-list>
+</div>

@@ -1,18 +1,29 @@
-<!-- <infors #infors></infors> -->
-<app-add-multiple-activity #addMultipleActivityComponent></app-add-multiple-activity>
+<!-- Bloc 1 list activity DEBUT -->
 <div class="card my-5">
     <div class="card-body">
         <div style="display: flex; justify-content: center; align-items: center; " class="">
             <h3 id="title_list" class="card-title text-center py-3">{{getTitle()}}</h3>
-            <button class='btn btn-primary' style="height: 40px; text-align: center; margin-left: 10px;" (click)="findAll()">Refresh</button>
+            <button class='btn btn-primary' style="height: 40px; text-align: center; margin-left: 10px;"
+                (click)="findAll()">Refresh</button>
         </div>
     </div>
 
-    <div class="right" style="width: 40%;" name="searchDiv">
-        <input id="searchStr" #searchStrInput class="form-control left" style="width: 90%;" type="text"
-            placeholder="search" name="searchStr" [(ngModel)]="searchStr" (keyup)="search()"
-            (mouseover)="enableInputSearchStr()" [readonly]="dataSharingService.isDisableSearchStrInput">
-        <button class="right" style="width: 10%; height: 40px; text-align: center;" (click)="clearSearch()">X</button>
+    <div style="display: flex; gap: 10px; align-items: center;">
+        <!-- Filtre par consultant pour RESPONSIBLE_ESN et MANAGER -->
+        <div *ngIf="canFilterByConsultant()" style="width: 50%; margin-left:20px; margin-bottom: 20px;">
+            <app-select-consultant #selectConsultantCompo (onSelectElement)="onSelectConsultant()"
+                title="{{utils.tr(selectConsultantLabel)}}"></app-select-consultant>
+        </div>
+
+        <!-- Filtre par texte -->
+        <div style="flex: 1; display: flex; margin-right: 20px; width: 50%;" name="searchDiv">
+            <input id="searchStr" #searchStrInput class="form-control" style="flex: 1;" type="text" placeholder="search"
+                name="searchStr" [(ngModel)]="searchStr" (keyup)="search()" (mouseover)="enableInputSearchStr()"
+                [readonly]="dataSharingService.isDisableSearchStrInput">
+            <button style="width: 40px; height: 40px; text-align: center; margin-left: 5px;"
+                (click)="clearSearch()">X</button>
+        </div>
+
     </div>
 
     <table class="table table-bordered table-striped">
@@ -81,14 +92,13 @@
                 (click)="addActivity()">{{utils.tr('app.compo.activity.list.button.add')}}</a>
         </li>
 
-        <!-- <button type="button" class="btn btn-outline-success" [appAuthorization] feature="ACTIVITY_MANAGEMENT" permission="CREATE" (click)="openModalPopup(addMultipleActivityComponent.addMultipleActivityView)">
-              {{utils.tr('app.compo.activity.list.button.addMultiple')}}
-      </button> -->
     </div>
 
 </div>
+<!-- Bloc 1 list activity FIN -->
 
 
-
-<app-activity-form #myObjEditView [myObj]="myObj" [consultantSelected]="consultant" *ngIf="myObj != null"
-    [appAuthorization] feature="ACTIVITY_MANAGEMENT" permission="UPDATE"></app-activity-form>
+<!-- Bloc 2 list activity By consultant DEBUT -->
+<!-- <app-activity-form  #myObjEditView [myObj]="myObj" [consultantSelected]="consultant" *ngIf="myObj != null"
+    [appAuthorization] feature="ACTIVITY_MANAGEMENT" permission="UPDATE"></app-activity-form> -->
+<!-- Bloc 2 list activity By consultant FIN -->
