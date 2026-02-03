@@ -127,7 +127,7 @@ export class HeaderComponent extends MereComponent {
   public getNotifications() {
     // //////////console.log("getListNotifications")
 
-    if (this.notificationCompo) this.notificationCompo.getNotifications();
+    if (this.notificationCompo) this.notificationCompo.getNotifications(null, null);
     this.notifications = this.notificationCompo ? this.notificationCompo.myList : new Array();
     if (!this.notifications) this.notifications = new Array();
     return this.notifications;

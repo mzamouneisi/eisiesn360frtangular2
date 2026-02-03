@@ -74,6 +74,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
   private esnCurrentReadySource = new BehaviorSubject<Esn>(null);
   private currentCraSource = new BehaviorSubject<Cra>(null);
   private listCraSource = new BehaviorSubject<Cra[]>([]);
+  private listNotificationsSource = new BehaviorSubject<Notification[]>([]);
   private userConnectedSource = new BehaviorSubject<Consultant>(null);
 
   infos$ = this.infosSource.asObservable();
@@ -81,6 +82,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
   esnCurrentReady$ = this.esnCurrentReadySource.asObservable();
   currentCra$ = this.currentCraSource.asObservable();
   listCra$ = this.listCraSource.asObservable();
+  listNotifications$ = this.listNotificationsSource.asObservable();
   userConnected$ = this.userConnectedSource.asObservable();
 
   // listInfos: Array<string> = [];
@@ -620,7 +622,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
             );
           }
 
-          this.getNotifications();
+          this.getNotifications(null, null);
 
 
           this.router.navigate(['/home']);
@@ -796,7 +798,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     }
   }
 
-  majConsultantInActivity(activity: Activity, fct: Function ) {
+  majConsultantInActivity(activity: Activity, fct: Function) {
 
     // console.log("majConsultantInActivity activity : ", activity);
     if (activity == null) {
@@ -833,7 +835,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
   majConsultantInActivityList(allActivities: Activity[], fct: Function) {
     if (allActivities == null) {
       return;
-    } 
+    }
     for (let activity of allActivities) {
       this.majConsultantInActivity(activity, fct);
     }
@@ -873,15 +875,16 @@ export class DataSharingService implements CraStateService, ServiceLocator {
 
 
   notificationUrl: string;
-  listNotifications: Notification[];
   listObserversNotifications: MereComponent[] = []
   notifInfo = "";
   notifErrors: MyError[] = []
 
+  public getListNotifications(): Notification[] {
+    return this.listNotificationsSource.value;
+  }
 
-
-  public getListNotifications() {
-    return this.listNotifications;
+  public setListNotifications(list: Notification[]): void {
+    this.listNotificationsSource.next(list);
   }
 
   /***
@@ -895,34 +898,40 @@ export class DataSharingService implements CraStateService, ServiceLocator {
   nbCallNotifications = 0
   isCallNotifications = false
 
-  public getNotifications() {
+  public getNotifications(fctOk: Function, fctKo: Function) {
     let label = "loading Notifications ...";
 
     if (!this.isCallNotifications) {
       this.isCallNotifications = true
     } else {
       console.log(label, "En cours ...")
+      if (fctOk) fctOk(this.getListNotifications());
       return
     }
     this.nbCallNotifications++
     console.log(label, this.nbCallNotifications)
+
     this.notifyObserversNotificationsBefore(label)
     this.getNotificationsFromServer().subscribe((data) => {
       console.log("getNotifications: this, data", this, data)
-      this.listNotifications = data.body.result;
+      this.setListNotifications(data.body.result || []);
       this.majListNotifications();
-      console.log("getNotifications ", this.listNotifications)
+      console.log("getNotifications ", this.getListNotifications())
       this.notifyObserversNotificationsAfter(label, data)
       this.isCallNotifications = false
+      if (fctOk) fctOk(this.getListNotifications());
     }, error => {
       console.log("getNotifications: this, error", this, error)
       this.notifyObserversNotificationsError(label, error);
       this.isCallNotifications = false
+      if (fctKo) fctKo(error);
     })
   }
 
   majListNotifications() {
-    for (let notif of this.listNotifications) {
+    const notifs = this.getListNotifications();
+    if (!notifs) return;
+    for (let notif of notifs) {
       let cra = notif.cra
       if (cra != null) {
         this.majCra(cra);
@@ -980,7 +989,7 @@ export class DataSharingService implements CraStateService, ServiceLocator {
       if (cli) {
         console.log("notifyObserversNotificationsAfter cli : ", cli)
         cli.afterCallServer(label, data)
-        cli["updateNotifications"](this.listNotifications);
+        cli["updateNotifications"](this.getListNotifications());
       }
     }
   }
@@ -1005,8 +1014,8 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     this.notifyObserversNotificationsBefore(label)
     this.addNotificationServer(notification).subscribe((data) => {
       // this.notifyObserversNotificationsAfter(label, data)
-      this.getNotifications()
-      if (fctOk) fctOk(data);
+      this.getNotifications(fctOk, fctKo)
+      // if (fctOk) fctOk(data);
     }, error => {
       this.notifyObserversNotificationsError(label, error);
       if (fctKo) fctKo(error);
@@ -1026,8 +1035,8 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     this.notifyObserversNotificationsBefore(label)
     this.saveNotificationServer(notification).subscribe((data) => {
       // this.notifyObserversNotificationsAfter(label, data)
-      this.getNotifications()
-      if (fctOk) fctOk(data);
+      this.getNotifications(fctOk, fctKo)
+      // if (fctOk) fctOk(data);
     }, error => {
       this.notifyObserversNotificationsError(label, error);
       if (fctKo) fctKo(error);
@@ -1047,8 +1056,8 @@ export class DataSharingService implements CraStateService, ServiceLocator {
     this.notifyObserversNotificationsBefore(label)
     this.deleteNotificationServer(id).subscribe((data) => {
       // this.notifyObserversNotificationsAfter(label, data)
-      this.getNotifications()
-      if (fctOk) fctOk(data);
+      this.getNotifications(fctOk, fctKo)
+      // if (fctOk) fctOk(data);
     }, error => {
       this.notifyObserversNotificationsError(label, error);
       if (fctKo) fctKo(error);

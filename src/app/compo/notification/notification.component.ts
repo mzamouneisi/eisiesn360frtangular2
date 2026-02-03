@@ -60,7 +60,7 @@ export class NotificationComponent extends MereComponent implements AfterViewIni
 
   ngOnInit() {
     // if(!this.myList) this.updateNotifications(this.dataSharingService.getListNotifications()); 
-    this.getNotifications();
+    this.getNotifications(null, null );
   }
 
   ngAfterViewInit(): void {
@@ -83,7 +83,7 @@ export class NotificationComponent extends MereComponent implements AfterViewIni
   refresh() {
     if (this.refreshEverySec < this.refreshEverySecMin) this.refreshEverySec = this.refreshEverySecMin;
     if (!this.refreshStarted) {
-      this.refreshLoopId = setInterval(() => { this.getNotifications(); }, 1000 * this.refreshEverySec);
+      this.refreshLoopId = setInterval(() => { this.getNotifications(null, null); }, 1000 * this.refreshEverySec);
       this.refreshStarted = true;
     } else {
       if (this.refreshLoopId) clearInterval(this.refreshLoopId);
@@ -126,12 +126,12 @@ export class NotificationComponent extends MereComponent implements AfterViewIni
     this.myList = myList;
   }
 
-  getNotifications() {
-    this.dataSharingService.getNotifications();
+  getNotifications(fctOk: Function, fctKo: Function) {
+    this.dataSharingService.getNotifications(fctOk, fctKo);
   }
 
   findAll() {
-    this.dataSharingService.getNotifications();
+    this.dataSharingService.getNotifications(null, null);
   }
 
   saveNotification(notification: Notification, fctOk?: Function, fctKo?: Function) {

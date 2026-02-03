@@ -406,7 +406,7 @@ export class NotefraisListComponent extends MereComponent {
     this.dataSharingService.addNotificationServer(notification).subscribe((data) => {
       this.afterCallServer("sendNotification", data)
       let result = data.body.result;
-      this.dataSharingService.getNotifications();
+      this.dataSharingService.getNotifications(null, null);
       
     }, error => {
       this.addErrorFromErrorOfServer("sendNotification", error);

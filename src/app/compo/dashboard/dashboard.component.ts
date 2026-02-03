@@ -7,6 +7,7 @@ import { Client } from 'src/app/model/client';
 import { Consultant } from 'src/app/model/consultant';
 import { Cra } from 'src/app/model/cra';
 import { Esn } from 'src/app/model/esn';
+import { Notification } from 'src/app/model/notification';
 import { Project } from 'src/app/model/project';
 import { ActivityService } from 'src/app/service/activity.service';
 import { ClientService } from 'src/app/service/client.service';
@@ -105,13 +106,19 @@ export class DashBoardComponent implements OnInit {
             idConsultant = 0; // pour admin, récupérer toutes les notifications
         }
 
-        this.msgService.findAllByIdConsultant(idConsultant).subscribe({
-            next: (resp) => {
-                this.listNotifications = resp && resp.body && resp.body.result ? resp.body.result : [];
+        console.log('DashboardComponent: Loading Notifications for consultantId = ', idConsultant);
+        this.dataSharingService.isCallNotifications = false // force refresh
+        this.dataSharingService.getNotifications(
+            (listNotif) => {
+                console.log('DashboardComponent: Loaded Notif, count = ', listNotif?.length);
+                const listNotifications = listNotif as Notification[];
+                this.listNotifications = this.dataSharingService.getListNotifications() || listNotifications;
                 this.updateSectionCount('Notifications', this.listNotifications.length);
-            },
-            error: () => this.updateSectionCount('Notifications', 0)
-        });
+            }, (error) => {
+                console.log('DashboardComponent: Error loading Notifications', error);
+                this.updateSectionCount('Notifications', JSON.stringify(error));
+            }
+        );
 
         // ESN (pour tous les rôles)
         this.esnService.findAll().subscribe({
@@ -150,10 +157,10 @@ export class DashBoardComponent implements OnInit {
         // Pour ADMIN et CONSULTANT: juste les listes de base
         if (role === 'ADMIN' || role === 'CONSULTANT') {
             // Pour ADMIN, utiliser findAllAll() pour récupérer TOUS les clients sans restriction d'ESN
-            const clientObservable = role === 'ADMIN' 
+            const clientObservable = role === 'ADMIN'
                 ? this.clientService.findAllAll()
                 : this.clientService.findAll(this.esnId);
-            
+
             clientObservable.subscribe({
                 next: (resp) => {
                     this.listClient = resp && resp.body && resp.body.result ? resp.body.result : [];
@@ -250,8 +257,8 @@ export class DashBoardComponent implements OnInit {
                 // Test 3: Si ya au moins un projet et au moins un consultant de type CONSULTANT et aucune activité de type MISSION, proposer d'en créer une
                 const hasConsultantRole = this.listConsultant.some(c => c.role === 'CONSULTANT');
                 // Vérifier via typeName (propriété disponible) ou type.name
-                const hasMissionActivity = this.listActivity.some(a => 
-                    (a.typeName && a.typeName === 'MISSION') || 
+                const hasMissionActivity = this.listActivity.some(a =>
+                    (a.typeName && a.typeName === 'MISSION') ||
                     (a.type && a.type.name === 'MISSION')
                 );
 
@@ -333,7 +340,7 @@ export class DashBoardComponent implements OnInit {
                     this.updateSectionCount('Mes Consultants', myConsultants.length);
 
                     // Test hiérarchique dans loadClientAndCheckHierarchy: vérifier si consultant CONSULTANT existe
-                    if (!this.listConsultant.some(c => c.role === 'CONSULTANT') && 
+                    if (!this.listConsultant.some(c => c.role === 'CONSULTANT') &&
                         !this.dataSharingService.consultantWarningShown &&
                         this.listProject.length > 0) {
                         this.dataSharingService.consultantWarningShown = true;
@@ -366,7 +373,7 @@ export class DashBoardComponent implements OnInit {
         });
     }
 
-    private updateSectionCount(title: string, count: number): void {
+    private updateSectionCount(title: string, count: any): void {
         const section = this.sections.find(s => s.title === title);
         if (section) {
             section.count = count;

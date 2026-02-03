@@ -1,7 +1,7 @@
 <h3 class="card-title text-center py-3">{{title}}</h3>
 
 <div style="text-align: center;">
-    <button (click)="getNotifications()" id="btn-notif-refresh" class='btn btn-primary mr-1'>Refresh
+    <button (click)="getNotifications(null, null)" id="btn-notif-refresh" class='btn btn-primary mr-1'>Refresh
     </button>
     <input type="checkbox" [(ngModel)]="refreshStarted" id="refreshStarted" name="refreshStarted" (click)="refresh()" />
     Every

@@ -1268,7 +1268,7 @@ export class CraFormCalComponent extends MereComponent implements CraObserver {
     this.beforeCallServer("sendNotification")
     this.dataSharingService.addNotificationServer(notification).subscribe((data) => {
       this.afterCallServer("sendNotification", data)
-      this.dataSharingService.getNotifications();
+      this.dataSharingService.getNotifications(null, null);
 
     }, error => {
       this.addErrorFromErrorOfServer("sendNotification", error);

@@ -51,7 +51,7 @@ export class CraListComponent extends MereComponent {
 
     console.log("cla-list ngOnInit userConnected", this.userConnected)
 
-    this.dataSharingService.getNotifications();
+    this.dataSharingService.getNotifications(null, null);
 
     this.findAll();
 
