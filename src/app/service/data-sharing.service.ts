@@ -2,6 +2,7 @@
 
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, of } from "rxjs";
+import { catchError, map, tap } from 'rxjs/operators';
 import { Credentials } from '../auth/credentials';
 import { TokenService } from '../auth/services/token.service';
 import { MereComponent } from '../compo/_utils/mere-component';
@@ -885,6 +886,54 @@ export class DataSharingService implements CraStateService, ServiceLocator {
 
   public setListNotifications(list: Notification[]): void {
     this.listNotificationsSource.next(list);
+  }
+
+  /**
+   * GESTION SIMPLIFIÉE DES NOTIFICATIONS
+   * 
+   * Utilisation dans les composants :
+   * 
+   * 1. S'abonner aux notifications :
+   *    this.dataSharingService.listNotifications$.subscribe(notifications => {
+   *      this.notifications = notifications;
+   *    });
+   * 
+   * 2. Charger les notifications au démarrage :
+   *    this.dataSharingService.loadNotifications().subscribe();
+   * 
+   * 3. Rafraîchir les notifications :
+   *    this.dataSharingService.refreshNotifications();
+   * 
+   * Les notifications sont automatiquement mises à jour pour tous les abonnés
+   * via l'observable listNotifications$
+   */
+
+  /**
+   * Charge les notifications de manière simple
+   * Les composants peuvent s'abonner via listNotifications$ 
+   */
+  public loadNotifications(): Observable<Notification[]> {
+    return this.getNotificationsFromServer().pipe(
+      tap((resp) => {
+        const notifications = resp?.body?.result || [];
+        this.setListNotifications(notifications);
+        this.majListNotifications();
+        console.log('DataSharingService: Notifications loaded, count =', notifications.length);
+      }),
+      map((resp) => resp?.body?.result || []),
+      catchError((error) => {
+        console.error('DataSharingService: Error loading notifications', error);
+        this.setListNotifications([]);
+        return of([]);
+      })
+    );
+  }
+
+  /**
+   * Recharge les notifications (utile pour les rafraîchissements)
+   */
+  public refreshNotifications(): void {
+    this.loadNotifications().subscribe();
   }
 
   /***
