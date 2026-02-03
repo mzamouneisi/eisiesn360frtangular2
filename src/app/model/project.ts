@@ -2,6 +2,7 @@ import { Activity } from './activity';
 import { Client } from './client';
 
 export class Project {
+  createdDate: Date;
   id: number;
   name: string;
   description: string;

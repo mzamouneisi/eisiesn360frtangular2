@@ -6,6 +6,7 @@ import { NoteFrais } from "./noteFrais";
 import { Project } from './project';
 
 export class Activity {
+  createdDate: Date;
   id: number;
   name: string;
   description: string;

@@ -4,6 +4,7 @@ import { Client } from "./client";
 import { Consultant } from "./consultant";
 
 export class Esn {
+  createdDate: Date;
   id: number;
   name: string;
   metier: string;

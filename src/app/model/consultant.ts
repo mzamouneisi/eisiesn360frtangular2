@@ -7,6 +7,7 @@ import { Msg } from './msg';
 import { NoteFrais } from './noteFrais';
 
 export class Consultant {
+    createdDate: Date;
     id: number;
     //------------person----------------
     firstName: string;

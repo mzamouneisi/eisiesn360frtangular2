@@ -92,3 +92,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 .cdk-global-overlay-wrapper, .cdk-overlay-container { z-index: 9999!important; } 
+
+.bg_gradient {
+	background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}

@@ -8,7 +8,62 @@
       </div>
       <div class="card-actions">
         <a [routerLink]="s.route" [queryParams]="s.queryParams">→ Accéder</a>
+        <button class="chart-btn" (click)="showChart(s); $event.stopPropagation()" title="Afficher le graphique">
+          📈
+        </button>
       </div>
     </div>
   </div>
 </div>
+
+<div id="dboard_graphiques">
+   <!-- div pour afficher les graphiques -->
+   <div class="charts-section" *ngIf="selectedSection">
+     <div class="chart-display">
+       <div class="chart-header">
+         <h3>📊 Évolution - {{ selectedSection.title }}</h3>
+         <button class="close-btn" (click)="closeChart()">✕</button>
+       </div>
+       <div class="chart-content">
+         <p class="chart-info">Graphique temporel pour: <strong>{{ selectedSection.title }}</strong></p>
+         <p class="chart-info">Nombre actuel: <strong>{{ selectedSection.count || 0 }}</strong></p>
+         
+         <!-- Affichage des données du graphique -->
+         <div *ngIf="chartData" class="chart-data">
+           <div class="chart-stats">
+             <div class="stat-item">
+               <span class="stat-label">Total:</span>
+               <span class="stat-value">{{ chartData.currentTotal }}</span>
+             </div>
+             <div class="stat-item">
+               <span class="stat-label">Nombre de jours:</span>
+               <span class="stat-value">{{ chartData.totalDays }}</span>
+             </div>
+           </div>
+           
+           <div class="chart-visualization">
+             <h4>Évolution cumulative</h4>
+             <div class="chart-timeline">
+               <div class="timeline-item" *ngFor="let label of chartData.labels; let i = index">
+                 <div class="timeline-date">{{ label }}</div>
+                 <div class="timeline-bar">
+                   <div class="bar-daily" 
+                        [style.height.px]="chartData.dailyCount[i] * 3"
+                        [title]="'Ajouts: ' + chartData.dailyCount[i]">
+                   </div>
+                   <div class="bar-label">{{ chartData.dailyCount[i] }}</div>
+                 </div>
+                 <div class="timeline-cumul">Total: {{ chartData.cumulativeCount[i] }}</div>
+               </div>
+             </div>
+           </div>
+         </div>
+         
+         <div *ngIf="!chartData || chartData.totalDays === 0" class="placeholder-chart">
+           <p>📈 Aucune donnée disponible</p>
+           <p>Pas encore de données avec createdDate pour {{ selectedSection.title }}</p>
+         </div>
+       </div>
+     </div>
+   </div>
+ </div>

@@ -26,6 +26,9 @@ import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
     styleUrls: ['./dashboard.component.css']
 })
 export class DashBoardComponent implements OnInit {
+    selectedSection: any = null;
+    chartData: any = null;
+
     sections: Array<{ title: string; route: string; feature?: Feature | null; count?: number; roles?: string[]; queryParams?: any }> = [
         { title: 'Notifications', route: '/notification' },
         { title: 'Consultants', route: '/consultant_app', feature: 'CONSULTANT_MANAGEMENT', roles: ['ADMIN', 'RESPONSIBLE_ESN'] },
@@ -116,7 +119,8 @@ export class DashBoardComponent implements OnInit {
                 this.updateSectionCount('Notifications', this.listNotifications.length);
             }, (error) => {
                 console.log('DashboardComponent: Error loading Notifications', error);
-                this.updateSectionCount('Notifications', JSON.stringify(error));
+                this.listNotifications = this.dataSharingService.getListNotifications() || [];
+                this.updateSectionCount('Notifications', this.listNotifications.length + ' : ' + JSON.stringify(error));
             }
         );
 
@@ -387,5 +391,116 @@ export class DashBoardComponent implements OnInit {
             if (!s.feature) return true; // always visible (e.g., profile)
             return this.authz.hasPermission(s.feature, 'VIEW');
         });
+    }
+
+    showChart(section: any): void {
+        this.selectedSection = section;
+        this.chartData = this.generateChartData(section.title);
+    }
+
+    closeChart(): void {
+        this.selectedSection = null;
+        this.chartData = null;
+    }
+
+    /**
+     * Génère les données du graphique basées sur la propriété createdDate
+     */
+    private generateChartData(sectionTitle: string): any {
+        let dataList: any[] = [];
+        
+        // Récupérer les données correspondantes à la section
+        switch(sectionTitle) {
+            case 'Notifications':
+                dataList = this.listNotifications;
+                break;
+            case 'Consultants':
+            case 'Mes Consultants':
+                dataList = this.listConsultant;
+                break;
+            case 'Esn':
+                dataList = this.listEsn;
+                break;
+            case 'Clients':
+                dataList = this.listClient;
+                break;
+            case 'Projets':
+                dataList = this.listProject;
+                break;
+            case 'Activités':
+                dataList = this.listActivity;
+                break;
+            case 'CRA':
+                dataList = this.listCra;
+                break;
+            case 'Documents':
+                dataList = this.listDocument;
+                break;
+            default:
+                dataList = [];
+        }
+
+        // Grouper par date de création
+        const dateGroups = this.groupByCreatedDate(dataList);
+        
+        // Convertir en format de graphique avec dates et counts cumulés
+        const chartData = this.convertToChartFormat(dateGroups);
+        
+        return chartData;
+    }
+
+    /**
+     * Groupe les données par date de création
+     */
+    private groupByCreatedDate(dataList: any[]): Map<string, number> {
+        const groups = new Map<string, number>();
+        
+        dataList.forEach(item => {
+            if (item.createdDate) {
+                const date = new Date(item.createdDate);
+                const dateKey = date.toISOString().split('T')[0]; // Format YYYY-MM-DD
+                groups.set(dateKey, (groups.get(dateKey) || 0) + 1);
+            }
+        });
+        
+        return groups;
+    }
+
+    /**
+     * Convertit les groupes de dates en format de graphique avec cumul
+     */
+    private convertToChartFormat(dateGroups: Map<string, number>): any {
+        // Trier les dates
+        const sortedDates = Array.from(dateGroups.keys()).sort();
+        
+        const labels: string[] = [];
+        const data: number[] = [];
+        const cumulativeData: number[] = [];
+        let cumulative = 0;
+        
+        sortedDates.forEach(date => {
+            const count = dateGroups.get(date) || 0;
+            cumulative += count;
+            
+            labels.push(this.formatDate(date));
+            data.push(count);
+            cumulativeData.push(cumulative);
+        });
+        
+        return {
+            labels: labels,
+            dailyCount: data,
+            cumulativeCount: cumulativeData,
+            totalDays: labels.length,
+            currentTotal: cumulative
+        };
+    }
+
+    /**
+     * Formate une date pour l'affichage
+     */
+    private formatDate(dateStr: string): string {
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
     }
 }

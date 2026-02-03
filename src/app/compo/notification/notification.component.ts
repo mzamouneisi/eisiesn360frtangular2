@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Document } from 'src/app/model/document';
@@ -15,7 +15,8 @@ import { MereComponent } from '../_utils/mere-component';
 @Component({
   selector: 'app-notification',
   templateUrl: './notification.component.html',
-  styleUrls: ['./notification.component.css']
+  styleUrls: ['./notification.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NotificationComponent extends MereComponent implements AfterViewInit {
 
@@ -52,6 +53,7 @@ export class NotificationComponent extends MereComponent implements AfterViewIni
     , private noteFraisService : NoteFraisService
     , private dialog: MatDialog
     , private modal: NgbModal
+    , private cdr: ChangeDetectorRef
   ) {
     super(utils, dataSharingService);
     dataSharingService.addObserverNotifications(this)
@@ -81,14 +83,37 @@ export class NotificationComponent extends MereComponent implements AfterViewIni
   }
 
   refresh() {
-    if (this.refreshEverySec < this.refreshEverySecMin) this.refreshEverySec = this.refreshEverySecMin;
-    if (!this.refreshStarted) {
-      this.refreshLoopId = setInterval(() => { this.getNotifications(null, null); }, 1000 * this.refreshEverySec);
-      this.refreshStarted = true;
-    } else {
-      if (this.refreshLoopId) clearInterval(this.refreshLoopId);
+    // Assurer un minimum de temps entre chaque refresh
+    this.refreshEverySec = Math.max(this.refreshEverySec, this.refreshEverySecMin);
+    
+    // Toggle le refresh
+    if (this.refreshStarted) {
+      // Arrêter le refresh
+      clearInterval(this.refreshLoopId);
       this.refreshStarted = false;
+    } else {
+      // Démarrer le refresh silencieux (sans recharger toute la page)
+      this.refreshLoopId = setInterval(() => {
+        this.refreshNotificationsSilently();
+      }, this.refreshEverySec * 1000);
+      this.refreshStarted = true;
     }
+  }
+
+  /**
+   * Rafraîchit uniquement les notifications sans recharger tout l'écran
+   */
+  private refreshNotificationsSilently() {
+    this.dataSharingService.getNotifications(
+      (listNotif) => {
+        // Mise à jour silencieuse - pas de message, pas de rechargement
+        // updateNotifications sera appelé automatiquement via l'observer
+      },
+      (error) => {
+        // Erreur silencieuse - ne pas afficher d'erreur pour un refresh automatique
+        console.warn('Refresh automatique des notifications échoué:', error);
+      }
+    );
   }
 
   isMyListEmpty() {
@@ -100,26 +125,27 @@ export class NotificationComponent extends MereComponent implements AfterViewIni
    * @param listAll called by dataSharingService, after calling it
    */
   updateNotifications(listAll: Notification[]) {
+    // Filtrer les notifications si nécessaire
+    const newList = this.isOnlyNotViewed 
+      ? (listAll || []).filter(n => !n.viewed)
+      : listAll;
 
-    // ////////console.log("isOnlyNotViewed="+this.isOnlyNotViewed)
-    if (this.isOnlyNotViewed) {
-      this.myList = []
-      if (listAll) {
-        for (let n of listAll) {
-          if (!n.viewed) {
-            this.myList.push(n)
-          }
-        }
-      }
-    } else {
-      this.myList = listAll;
-    }
+    // Simple assignment - Angular détectera les changements via trackBy
+    this.myList = newList || [];
 
     this.getNbElement();
     this.setTitle();
-
     this.myList00 = this.myList;
+    
+    // Marquer pour vérification au lieu de forcer une détection complète
+    this.cdr.markForCheck();
+  }
 
+  /**
+   * TrackBy function pour optimiser le rendu de la liste
+   */
+  trackByNotificationId(index: number, notification: Notification): any {
+    return notification?.id || index;
   }
 
   setMyList(myList: any[]) {

@@ -73,7 +73,8 @@ export class MenuComponent extends MereComponent {
             this.router.navigate(["/esn_app"]);
     
           }, error => {
-            this.addErrorFromErrorOfServer("getEsns", error);
+            this.afterCallServer("addEsnDemo", error);
+            this.addErrorFromErrorOfServer("addEsnDemo", error);
             ////console.log(error);
             // this.addError(error)
           }

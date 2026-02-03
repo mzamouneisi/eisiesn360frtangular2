@@ -3,6 +3,7 @@ import { Consultant } from "./consultant";
 import { FileUpload } from "./FileUpload";
 
 export class Document{
+    createdDate: Date;
     id: number;
     title: string;
     for_all_users: boolean = false;

@@ -3,6 +3,7 @@ import { Esn } from "./esn";
 import { Project } from "./project";
 
 export class Client {
+    createdDate: Date;
 	  id: number;
     name: string;
     email: string;

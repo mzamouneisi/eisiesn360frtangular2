@@ -5,6 +5,7 @@ import { Notification } from './notification';
 import { PayementMode } from './payementMode';
 
 export class NoteFrais {
+  createdDate: Date;
   id: number;
   amount: number;
   brand_name: string;
