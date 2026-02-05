@@ -56,13 +56,16 @@ export class NotificationComponent extends MereComponent implements AfterViewIni
     , private cdr: ChangeDetectorRef
   ) {
     super(utils, dataSharingService);
-    dataSharingService.addObserverNotifications(this)
-
   }
 
   ngOnInit() {
-    // if(!this.myList) this.updateNotifications(this.dataSharingService.getListNotifications()); 
-    this.getNotifications(null, null );
+    // S'abonner aux notifications via le BehaviorSubject
+    this.dataSharingService.listNotifications$.subscribe(notifications => {
+      this.updateNotifications(notifications);
+    });
+    
+    // Charger les notifications initiales
+    this.getNotifications(null, null);
   }
 
   ngAfterViewInit(): void {

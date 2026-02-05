@@ -55,7 +55,7 @@ export class JwtTokenInterceptor implements HttpInterceptor {
       this.dataSharingService.addError(new MyError(msgTitle, msgBody))
       this.dataSharingService.redirectToUrl = this.router.url;
       this.utils.showNotification("error", err.error.message)
-      this.dataSharingService.notifyObserversNotificationsError("Erreur 401", new MyError("Erreur 401", err.error.message));
+      this.dataSharingService.addError(new MyError("Erreur 401", err.error.message));
       this.dataSharingService.logout();
       // this.router.navigate(['/login']);
       if (this.router.url !== '/login') {

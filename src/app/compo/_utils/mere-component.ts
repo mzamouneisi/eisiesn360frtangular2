@@ -20,7 +20,7 @@ export class MereComponent implements OnInit, AfterViewInit, AfterContentInit {
   listInfos: Array<string> = [];
   listErrors: MyError[];
 
-  private subscriptions: Subscription[] = [];
+  protected subscriptions: Subscription[] = [];
 
   //pagination
   currentPage: number = 1;
@@ -84,6 +84,15 @@ export class MereComponent implements OnInit, AfterViewInit, AfterContentInit {
         this.esnName = user?.esnName || user?.esn?.name || this.esnName;
         this.isUserAdmin = user?.admin;
         if (user) this.isUserLoggedIn = true;
+      }),
+      // S'abonner aux mises à jour de esnCurrent pour mettre à jour esnName
+      this.dataSharingService.esnCurrentReady$.subscribe(esn => {
+        if (esn) {
+          this.esnCurrent = esn;
+          this.idEsnCurrent = esn.id;
+          this.esnName = esn.name;
+          console.log("*** esnName mis à jour via esnCurrentReady$:", this.esnName);
+        }
       })
     );
 

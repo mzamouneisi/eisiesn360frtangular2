@@ -48,7 +48,7 @@
                 <div style="text-align: center; margin-right: 20px; margin-bottom: 22px;" class="pcoded-micon left"
                     id="header-menu-user" (click)="menuUserConnected()"><i class="feather icon-settings"></i>
                     <!-- {{dataSharingService?.userConnected?.esn?.name | uppercase }} -->
-                    {{esnName | uppercase }}
+                    {{displayEsnName | uppercase }}
 
                     <br> <span id="loginName">{{userConnectedName}}</span>
                     <br> <span id="role">{{userConnected?.role }}</span>

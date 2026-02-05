@@ -1,10 +1,9 @@
-import { Component, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { MereComponent } from 'src/app/compo/_utils/mere-component';
 import { NotificationComponent } from 'src/app/compo/notification/notification.component';
 import { UserConnectedComponent } from 'src/app/compo/user-connected/user-connected.component';
-import { MyError } from 'src/app/resource/MyError';
 import { ConsultantService } from 'src/app/service/consultant.service';
 import { EsnService } from 'src/app/service/esn.service';
 import { UtilsIhmService } from 'src/app/service/utilsIhm.service';
@@ -24,6 +23,9 @@ export class HeaderComponent extends MereComponent {
   dateStr = ""
   timeStr = ""
 
+  // Propriété pour l'affichage du nom de l'ESN (mis à jour automatiquement)
+  displayEsnName: string = '';
+
   // @ViewChild('infors', {static: false}) infors: MereComponent;
 
   @ViewChild('notificationCompo', { static: false }) notificationCompo: NotificationComponent;
@@ -31,10 +33,11 @@ export class HeaderComponent extends MereComponent {
   constructor(private router: Router
     , public utils: UtilsService
     , public dataSharingService: DataSharingService
-    , private esnService : EsnService
-    , private consultantService : ConsultantService
+    , private esnService: EsnService
+    , private consultantService: ConsultantService
     , private utilsIhm: UtilsIhmService
     , public dialog: MatDialog
+    , private cdr: ChangeDetectorRef
   ) {
     super(utils, dataSharingService);
   }
@@ -47,29 +50,32 @@ export class HeaderComponent extends MereComponent {
     this.dataSharingService.setHeaderComponent(this);
     // this.dataSharingService.addInfosObservers(this);
 
-    setTimeout(
-      () => {
-        console.log("UserConnected : ", this.userConnected)
+    // S'abonner aux changements de l'ESN pour mettre à jour l'affichage
+    this.subscriptions.push(
+      this.dataSharingService.esnCurrentReady$.subscribe(esn => {
+        if (esn?.name) {
+          this.displayEsnName = esn.name;
+        }
+      }),
+      this.dataSharingService.userConnected$.subscribe(user => {
+        // Mettre à jour displayEsnName quand userConnected change
 
-        this.esnService.majEsnOnConsultant(this.userConnected , ()=>{}, (error)=>{
-          this.addError(new MyError("", JSON.stringify(error)))
-        } )
+        if (this.userConnected?.esn) {
+          this.dataSharingService.notifyEsnCurrentReady(this.userConnected.esn);
+        }
+
+        const esnName = user?.esnName || user?.esn?.name;
+
+        if (esnName) {
+          this.displayEsnName = esnName;
+        }
+
         this.consultantService.majAdminConsultant(this.userConnected)
         this.getNbNotifications()
-      }, 2000
-    )
+      })
+    );
 
     this.setClock();
-    
-    // this.dataSharingService.isUserLoggedInFct.subscribe(value => {
-    //   this.isUserLoggedIn = value;
-    //   if(this.isUserLoggedIn) {
-    //     this.userConnected = this.dataSharingService.userConnected
-    //     // this.setEsnInUserConnected();
-    //   }else {
-        
-    //   }
-    // });
 
   }
 
@@ -83,36 +89,6 @@ export class HeaderComponent extends MereComponent {
       }, 1000
     );
   }
-
-  // setEsnInUserConnected() {
-
-  //   if(this.esnName && this.userConnected && this.userConnected.esn) {
-  //     return 
-  //   }
-
-  //   let nMax = 5
-  //   let n = 1;
-  //   var x = setInterval(
-  //     () => {
-  //       // console.log("setInterval esnName : " , this.esnName)
-  //       // console.log("setInterval userConnected : " , this.userConnected)
-
-  //       if (!this.esnName && this.userConnected?.role != "ADMIN" && n < nMax) {
-  //         n++;
-  //         this.esnService.majEsnOnConsultant(this.userConnected);
-  //         this.esnName = this.userConnected?.esnName;
-  //         if (!this.esnName) this.esnName = this.userConnected?.esn?.name;
-  //         console.log("setInterval n, esnName : " , n, this.esnName)
-  //       } else {
-  //         this.dataSharingService.esnCurrent = this.userConnected?.esn
-  //         this.dataSharingService.idEsnCurrent = this.userConnected?.esn?.id 
-  //         clearInterval(x);
-  //         x = null;
-  //         console.log("setInterval exit ", this.esnName);
-  //       }
-  //     }, 3000
-  //   );
-  // }
 
   showCalendar() {
     this.utilsIhm.openCalendarModal()
@@ -155,7 +131,7 @@ export class HeaderComponent extends MereComponent {
       dialogConfig.autoFocus = true;
       dialogConfig.width = "580px";
       dialogConfig.height = "570px";
-  
+
       let dialogRef = this.dialog.open(UserConnectedComponent, dialogConfig);
 
     }
