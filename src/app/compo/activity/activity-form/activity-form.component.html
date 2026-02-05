@@ -7,7 +7,7 @@
         }}</label>
 
       <app-select #compoSelectActivityType [objectName]="'ActivityType'" [selectId]="'activity-type'"
-        [myList]="activityTypes" [initObj]="myObj.type"  [objCaller]="this" onChangeCaller="onSelectActivityType"
+        [myList]="activityTypes" [initObj]="myObj.type" [objCaller]="this" onChangeCaller="onSelectActivityType"
         [ObjectPropName]="'name'"></app-select>
 
       <div *ngIf="myObj.type != null">
@@ -15,7 +15,7 @@
           {{ utils.tr('app.compo.activity.form.input.project') }}
 
           <app-select #compoSelectProject [objectName]="'Project'" [selectId]="'project'" [myList]="projects"
-            [initObj]="myObj.project"  [objCaller]="this" onChangeCaller="onSelectProject"
+            [initObj]="myObj.project" [objCaller]="this" onChangeCaller="onSelectProject"
             [ObjectPropName]="'name'"></app-select>
 
         </div>
@@ -31,7 +31,7 @@
             [onChangeCallerDeb]="'onStartDateChanged'" placeHolderFin="Choix date fin" [myDatePickerFin]="myObj.dateFin"
             [onChangeCallerFin]="'onEndDateChanged'" [objCaller]="this"></app-mz-date-picker-deb-fin>
 
-            <!-- <mat-form-field appearance="fill">
+          <!-- <mat-form-field appearance="fill">
               <mat-label>{{ utils.tr('app.compo.activity.form.input.startDate') }}</mat-label>
               <input id="pickerDeb" matInput [matDatepicker]="pickerDeb" [(ngModel)]="myObj.dateDeb" (dateChange)="onChangeDateDebFin()">
               <mat-datepicker-toggle matSuffix [for]="pickerDeb"></mat-datepicker-toggle>
@@ -45,7 +45,7 @@
               <mat-datepicker #pickerFin></mat-datepicker>
             </mat-form-field> -->
 
-          
+
 
           <div [hidden]="myObj.dateDeb" class="badge badge-danger">
             DateDeb is required
@@ -72,6 +72,15 @@
           <textarea name="description" id="description" class="form-control" [(ngModel)]="myObj.description" rows="3"
             #description="ngModel">
         </textarea>
+        </div>
+
+        <div class="form-group" *ngIf="isActivityLabelVisible">
+          <label for="name">TJM</label>
+          <input type="text" [(ngModel)]="myObj.tjm" class="form-control" id="tjm" name="tjm" required
+            #tjm="ngModel" />
+          <div [hidden]="myObj.type?.name == 'MISSION' && tjm.valid" class="badge badge-danger">
+            TJM is required
+          </div>
         </div>
 
         <div class="form-group">

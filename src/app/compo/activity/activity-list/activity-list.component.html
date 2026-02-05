@@ -10,7 +10,7 @@
 
     <div style="display: flex; gap: 10px; align-items: center;">
         <!-- Filtre par consultant pour RESPONSIBLE_ESN et MANAGER -->
-        <div *ngIf="canFilterByConsultant()" style="width: 50%; margin-left:20px; margin-bottom: 20px;">
+        <div *ngIf="canFilterByConsultant" style="width: 50%; margin-left:20px; margin-bottom: 20px;">
             <app-select-consultant #selectConsultantCompo (onSelectElement)="onSelectConsultant()"
                 title="{{utils.tr(selectConsultantLabel)}}"></app-select-consultant>
         </div>
@@ -69,7 +69,7 @@
                 </td>
                 <td>
                     <!-- <button (click)="edit(element)" class='btn btn-info'>Edit</button> -->
-                    <button (click)="showForm2(element)" class='btn btn-primary' [appAuthorization]
+                    <button (click)="showForm(element)" class='btn btn-primary' [appAuthorization]
                         feature="ACTIVITY_MANAGEMENT" id="btn-update-activity-{{i}}"
                         permission="UPDATE">{{utils.tr('Edit')}}
                     </button>

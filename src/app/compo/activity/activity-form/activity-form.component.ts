@@ -91,6 +91,8 @@ export class ActivityFormComponent extends MereComponent {
       this.isAdd = this.route.snapshot.queryParamMap.get("isAdd");
     }
 
+    console.log("initByActivity isAdd=", this.isAdd);
+
     if (this.isForCurentUser == null) {
       this.isForCurentUser = this.route.snapshot.queryParamMap.get(
         "isForCurentUser"

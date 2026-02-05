@@ -34,6 +34,9 @@ export class ActivityListComponent extends MereComponent {
   /** Track if consultant filter was explicitly selected by user */
   consultantFilterApplied: boolean = false;
 
+  /** Indicates if the current user can filter by consultant */
+  canFilterByConsultant: boolean = false;
+
   managedConsultants: Consultant[] = [];
   projects: Project[];
 
@@ -63,6 +66,10 @@ export class ActivityListComponent extends MereComponent {
 
   ngOnInit() {
     console.log("ngOnInit DEB ")
+    // Initialiser canFilterByConsultant
+    const role = this.userConnected?.role;
+    this.canFilterByConsultant = role === 'RESPONSIBLE_ESN' || role === 'MANAGER';
+    
     // Réinitialiser le consultant à null et marquer que aucun filtre n'a été appliqué
     this.consultant = null;
     this.consultantFilterApplied = false;
@@ -81,11 +88,6 @@ export class ActivityListComponent extends MereComponent {
     // this.getConsultants();
     this.getActivityTypes();
 
-  }
-
-  canFilterByConsultant(): boolean {
-    const role = this.userConnected?.role;
-    return role === 'RESPONSIBLE_ESN' || role === 'MANAGER';
   }
 
   onSelectConsultant() {
@@ -320,62 +322,95 @@ export class ActivityListComponent extends MereComponent {
   }
 
   showForm(myObj: Activity) {
+    // Navigation vers le formulaire d'édition
+    this.clearInfos();
+    
+    console.log("showForm - myObj:", myObj);
+    
+    // Toujours charger les objets complets depuis le serveur
+    let isGetType = false;
+    let isGetProject = false;
+    let isGetConsultant = false;
 
-    var n = 0, nMax = 5
-
-    var x = setInterval(
-      () => {
-        if ((!myObj.type || !myObj.project) && n < nMax) {
-          n++;
-          this.showFormPure(myObj)
-        } else {
-          clearInterval(x);
-          x = null
-        }
-      }, 2000
-    )
-
-  }
-
-  showForm2(myObj: Activity) {
-
-    this.showFormPure(myObj)
-
-    var n = 0, nMax = 1
-
-    var x = setInterval(
-      () => {
-        if (n < nMax) {
-          n++;
-          this.showFormPure(myObj)
-        } else {
-          clearInterval(x);
-          x = null
-        }
-      }, 2000
-    )
-
-  }
-
-  showFormPure(myObj: Activity) {
-    this.myObj = myObj;
-    console.log("showFormPure", myObj)
-    if (this.myObjEditView != null) {
-      this.myObjEditView.myObj = this.myObj
-      this.myObjEditView.isAdd = 'false';
-      this.myObjEditView.activityTypes = this.activityTypes
-      this.myObjEditView.projects = this.projects
-
-      this.myObjEditView.ngOnInit()
-
-      this.myObjEditView.selectProject(myObj.project)
-
-      this.myObjEditView.selectActivityType(myObj.type)
+    // Charger le type si typeId existe
+    console.log("showForm - loading related entities for activity typeId:", myObj.typeId);
+    if (myObj.typeId) {
+      this.activityTypeService.findById(myObj.typeId).subscribe(
+        data => {
+          console.log("showForm activityTypeService.findById : id, data : ", myObj.typeId, data);
+          if (data.body && data.body.result) {
+            myObj.type = data.body.result;
+          }
+          isGetType = true;
+        }, error => {
+          console.log("showForm error loading type:", error);
+          isGetType = true;
+        });
+    } else {
+      isGetType = true; // Pas de typeId, pas besoin de charger
     }
 
+    // Charger le project si projectId existe
+    console.log("showForm - loading related entities for activity projectId:", myObj.projectId);
+    if (myObj.projectId) {
+      this.projectService.findById(myObj.projectId).subscribe(
+        data => {
+          console.log("showForm projectService.findById : id, data : ", myObj.projectId, data);
+          if (data.body && data.body.result) {
+            myObj.project = data.body.result;
+          }
+          isGetProject = true;
+        }, error => {
+          console.log("showForm error loading project:", error);
+          isGetProject = true;
+        });
+    } else {
+      isGetProject = true; // Pas de projectId, pas besoin de charger
+    }
+
+    // Charger le consultant si consultantId existe
+    console.log("showForm - loading related entities for activity consultantId:", myObj.consultantId);
+    if (myObj.consultantId) {
+      this.consultantService.findById(myObj.consultantId).subscribe(
+        data => {
+          console.log("showForm consultantService.findById : id, data : ", myObj.consultantId, data);
+          if (data.body && data.body.result) {
+            myObj.consultant = data.body.result;
+          }
+          isGetConsultant = true;
+        }, error => {
+          console.log("showForm error loading consultant:", error);
+          isGetConsultant = true;
+        });
+    } else {
+      isGetConsultant = true; // Pas de consultantId, pas besoin de charger
+    }
+
+    // Attendre que toutes les données soient chargées avant de naviguer
+    let attempts = 0;
+    const maxAttempts = 20;
+    const checkInterval = setInterval(() => {
+      console.log("showForm - waiting for data:", { isGetType, isGetProject, isGetConsultant, attempts });
+      if ((isGetType && isGetProject && isGetConsultant) || attempts >= maxAttempts) {
+        clearInterval(checkInterval);
+        console.log("showForm - navigating with myObj:", myObj);
+        
+        // Passer le consultant dans dataSharingService
+        console.log("showForm - setting consultant in dataSharingService:", myObj.consultant);
+        if (myObj.consultant) {
+          this.dataSharingService.userSelectedActivity = myObj.consultant;
+          this.dataSharingService.consultantSelected = myObj.consultant;
+        }
+        
+        // Stocker l'activité complète dans le service
+        this.activityService.setActivity(myObj);
+        
+        // Naviguer vers le formulaire
+        this.router.navigate(['/activity_form']);
+      }
+      attempts++;
+    }, 200);
   }
-
-
 
   delete(myObj) {
     let myThis = this;

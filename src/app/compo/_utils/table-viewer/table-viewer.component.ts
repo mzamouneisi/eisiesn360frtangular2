@@ -384,7 +384,11 @@ export class TableViewerComponent implements OnInit {
 
     let sql = `DELETE FROM ${this.selectedTable} WHERE ${idKey} ${eqaulOrIs} ${this.selectedRow[idKey]};`;
     if (this.selectedTable.toUpperCase() === 'ESN') {
-      sql = `\nDELETE FROM activity WHERE consultant_id in (select id from consultant where ESN_ID ${eqaulOrIs} ${this.selectedRow[idKey]});`;
+      sql = `\nDELETE FROM NOTIFICATION WHERE CRA_ID in (select c.id from CRA c JOIN CONSULTANT cons ON c.consultant_id = cons.id where ESN_ID ${eqaulOrIs} ${this.selectedRow[idKey]});`;
+      sql += `\nDELETE FROM CRA_DAY_ACTIVITY WHERE ACTIVITY_ID in (select id from activity where consultant_id in (select id from consultant where ESN_ID ${eqaulOrIs} ${this.selectedRow[idKey]}));`;
+      sql += `\nDELETE FROM CRA_DAY WHERE CRA_ID in (select c.id from CRA c JOIN CONSULTANT cons ON c.consultant_id = cons.id where ESN_ID ${eqaulOrIs} ${this.selectedRow[idKey]});`;
+      sql += `\nDELETE FROM CRA WHERE consultant_id in (select id from consultant where ESN_ID ${eqaulOrIs} ${this.selectedRow[idKey]});`;
+      sql += `\nDELETE FROM activity WHERE consultant_id in (select id from consultant where ESN_ID ${eqaulOrIs} ${this.selectedRow[idKey]});`;
       sql += `\nDELETE FROM activity_type WHERE ESN_ID ${eqaulOrIs} ${this.selectedRow[idKey]};`;
       sql += `\nDELETE FROM project WHERE client_id in (select id from client where ESN_ID ${eqaulOrIs} ${this.selectedRow[idKey]});`;
       sql += `\nDELETE FROM client WHERE ESN_ID ${eqaulOrIs} ${this.selectedRow[idKey]};`;
