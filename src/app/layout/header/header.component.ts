@@ -60,18 +60,29 @@ export class HeaderComponent extends MereComponent {
       this.dataSharingService.userConnected$.subscribe(user => {
         // Mettre à jour displayEsnName quand userConnected change
 
-        if (this.userConnected?.esn) {
-          this.dataSharingService.notifyEsnCurrentReady(this.userConnected.esn);
-        }
+        this.userConnected = user
 
-        const esnName = user?.esnName || user?.esn?.name;
+        this.dataSharingService.majEsnOnConsultant(
+          (esn) => {
+            this.userConnected.esn = esn;
+            this.userConnected.esnName = esn?.name;
+            this.dataSharingService.notifyEsnCurrentReady(this.userConnected.esn);
 
-        if (esnName) {
-          this.displayEsnName = esnName;
-        }
+            const esnName = user?.esnName || user?.esn?.name;
 
-        this.consultantService.majAdminConsultant(this.userConnected)
-        this.getNbNotifications()
+            if (esnName) {
+              this.displayEsnName = esnName;
+            }
+
+            this.consultantService.majAdminConsultant(this.userConnected)
+            this.getNbNotifications()
+          },
+          (error) => {
+            console.error("Erreur lors de la mise à jour de l'ESN du consultant :", error);
+          }
+        )
+
+
       })
     );
 

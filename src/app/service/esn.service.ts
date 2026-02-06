@@ -79,20 +79,22 @@ export class EsnService {
   }
 
   majEsnOnConsultant(myObj: Consultant, fct : Function = null, fctErr : Function ) {
-    // console.log("majEsnOnConsultant myObj, esnId, myObj.esn : ", myObj, myObj.esnId, myObj.esn)
+    console.log("majEsnOnConsultant myObj, esnId, myObj.esn : ", myObj, myObj.esnId, myObj.esn)
     if (myObj && myObj.esnId && !myObj.esn) {
+      console.log("majEsnOnConsultant DEB find esn by id=" + myObj.esnId);
       let esnId = myObj.esnId
-      let label = "find esn by id=" + esnId;
+      let label = "majEsnOnConsultant find esn by id=" + esnId;
+      console.log(label)
       this.findById(esnId).subscribe(
         data => {
-          // console.log("setEsnOnConsultant : data :", data)
+          console.log("majEsnOnConsultant setEsnOnConsultant : data :", data)
           myObj.esn = data.body != null ? data.body.result : null;
-          // console.log("setEsnOnConsultant : myObj.esn :", myObj.esn)
+          console.log("majEsnOnConsultant setEsnOnConsultant : myObj.esn :", myObj.esn)
           myObj.esnName = myObj.esn?.name
-          if(fct) fct.call(myObj.esn)
+          if(fct) fct(myObj.esn)
         },
         error => {
-          console.log("ERROR setEsnOnConsultant consultant, err", myObj, error)
+          console.log("majEsnOnConsultant ERROR setEsnOnConsultant consultant, err", myObj, error)
           fctErr(error)
         }
       );
